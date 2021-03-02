@@ -1,6 +1,6 @@
 # AMPA PWA (ampa-pwa)
 
-PWA de getió del AMPA
+PWA de gestió del AMPA
 
 ## Install the dependencies
 

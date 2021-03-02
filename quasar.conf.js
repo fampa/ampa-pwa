@@ -92,7 +92,7 @@ module.exports = configure(function (/* ctx */) {
       // iconSet: 'material-icons', // Quasar icon set
       // lang: 'en-US', // Quasar language pack
 
-      // For special cases outside of where the auto-import stategy can have an impact
+      // For special cases outside of where the auto-import strategy can have an impact
       // (like functional components as one of the examples),
       // you can manually specify Quasar components/directives to be available everywhere:
       //
@@ -126,7 +126,7 @@ module.exports = configure(function (/* ctx */) {
       manifest: {
         name: 'AMPA PWA',
         short_name: 'AMPA PWA',
-        description: 'PWA de getió del AMPA',
+        description: 'PWA de gestió del AMPA',
         display: 'standalone',
         orientation: 'portrait',
         background_color: '#ffffff',
