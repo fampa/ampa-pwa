@@ -11,6 +11,8 @@ import { defineComponent, ref } from 'vue'
 
 import NewsCard from 'components/NewsCard.vue'
 import { Article } from '@/models/Article'
+import { useQuery } from '@vue/apollo-composable'
+import gql from 'graphql-tag'
 
 export default defineComponent({
   name: 'PageIndex',
@@ -20,15 +22,39 @@ export default defineComponent({
       {
         id: 1,
         status: 'PUBLISHED',
-        titleCat: 'Títol',
-        titleEs: 'Título',
-        contentCat: 'Contingut',
-        contentEs: 'Contenido',
-        createdAt: new Date()
+        createdAt: new Date(),
+        translations: [
+          {
+            id: 1,
+            title: 'Títol',
+            content: 'Contingut',
+            slug: 'slug',
+            language: 'CA'
+          }
+        ]
       }
     ])
 
-    return { articles }
+    const { result } = useQuery(gql`
+      query getArticles {
+        articles {
+          id
+          translations {
+            title
+            slug
+            language
+            content
+          }
+        }
+      }
+    `)
+
+    console.log('result', result.value)
+
+    return {
+      articles,
+      result
+    }
   }
 })
 </script>

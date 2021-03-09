@@ -1,14 +1,12 @@
 import { Member } from './Member'
+import { Translation } from './Translation'
 
 export interface Article {
     id: number
     status: string
-    titleCat: string
-    titleEs: string
-    contentCat: string
-    contentEs: string
-    createdAt: Date
+    translations: Translation[]
     image?: string
     author?: Member
     updatedAt?: Date
+    createdAt?: Date
 }
