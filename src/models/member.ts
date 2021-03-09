@@ -5,4 +5,6 @@ export interface Member {
     email: string
     isAdmin: boolean
     familyId: number
+    createdAt?: Date
+    updatedAt?: Date
 }
