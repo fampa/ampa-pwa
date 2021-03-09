@@ -1,49 +1,34 @@
 <template>
   <q-page class="row items-center justify-evenly">
-    <example-component
-      title="Example component"
-      active
-      :todos="todos"
-      :meta="meta"
-    ></example-component>
+    <div v-for="article in articles" :key="article.id">
+      <news-card :article="article"></news-card>
+    </div>
   </q-page>
 </template>
 
 <script lang="ts">
-import { Todo, Meta } from 'components/models'
-import ExampleComponent from 'components/CompositionComponent.vue'
 import { defineComponent, ref } from 'vue'
+
+import NewsCard from 'components/NewsCard.vue'
+import { Article } from '@/models/Article'
 
 export default defineComponent({
   name: 'PageIndex',
-  components: { ExampleComponent },
+  components: { NewsCard },
   setup () {
-    const todos = ref<Todo[]>([
+    const articles = ref<Article[]>([
       {
         id: 1,
-        content: 'ct1'
-      },
-      {
-        id: 2,
-        content: 'ct2'
-      },
-      {
-        id: 3,
-        content: 'ct3'
-      },
-      {
-        id: 4,
-        content: 'ct4'
-      },
-      {
-        id: 5,
-        content: 'ct5'
+        status: 'PUBLISHED',
+        titleCat: 'Títol',
+        titleEs: 'Título',
+        contentCat: 'Contingut',
+        contentEs: 'Contenido',
+        createdAt: new Date()
       }
     ])
-    const meta = ref<Meta>({
-      totalCount: 1200
-    })
-    return { todos, meta }
+
+    return { articles }
   }
 })
 </script>
