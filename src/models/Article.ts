@@ -10,3 +10,7 @@ export interface Article {
     updatedAt?: Date
     createdAt?: Date
 }
+
+export interface ArticleData {
+    articles: Article[];
+}
