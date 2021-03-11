@@ -1,5 +1,11 @@
 <template>
   <q-page class="row items-center justify-evenly">
+    <div v-if="articlesLoading">
+      Loading...
+    </div>
+    <div v-if="articlesError">
+      {{articlesError}}
+    </div>
     <div v-if="articles">
       <div v-for="article in articles" :key="article.id">
         <news-card :article="article"></news-card>
@@ -17,9 +23,11 @@ export default defineComponent({
   name: 'PageIndex',
   components: { NewsCard },
   setup () {
-    const { articles } = getArticles()
+    const { articles, articlesLoading, articlesError } = getArticles()
     return {
-      articles
+      articles,
+      articlesLoading,
+      articlesError
     }
   }
 })

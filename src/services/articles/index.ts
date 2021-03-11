@@ -18,5 +18,5 @@ export const getArticles = () => {
         }
         `)
   const articles = useResult(result, null, data => data.articles)
-  return { articles, loading, error }
+  return { articles, articlesLoading: loading, articlesError: error }
 }

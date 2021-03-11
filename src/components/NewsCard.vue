@@ -5,7 +5,7 @@
         Title: {{
           article.translations.find(t=>t.language === language)?.title ?
           article.translations.find(t=>t.language === language)?.title :
-          article.translations.find(t=>t.language === fallbackLocale)?.title
+          article.translations.find(t=>t.language === fallbackLanguage)?.title
         }}
     </div>
 </template>
@@ -25,7 +25,7 @@ export default defineComponent({
       type: String,
       default: 'ca'
     },
-    fallbackLocale: {
+    fallbackLanguage: {
       type: String,
       default: 'es'
     }
