@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import { Member } from './Member'
 import { Translation } from './Translation'
 
@@ -7,8 +8,8 @@ export interface Article {
     translations: Translation[]
     image?: string
     author?: Member
-    updatedAt?: Date
-    createdAt?: Date
+    created_at?: Date
+    updated_at?: Date
 }
 
 export interface ArticleData {

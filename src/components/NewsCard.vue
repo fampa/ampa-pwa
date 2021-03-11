@@ -2,6 +2,7 @@
     <div>
         News card {{article.id}} <br>
         Status: {{article.status}} <br>
+        Date: {{ article.created_at }} <br>
         Title: {{
           article.translations.find(t=>t.language === language)?.title ?
           article.translations.find(t=>t.language === language)?.title :

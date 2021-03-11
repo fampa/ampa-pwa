@@ -5,9 +5,12 @@ import { ArticleData } from '@/models/Article'
 export const getArticles = () => {
   const { result, loading, error } = useQuery<ArticleData>(gql`
         query getArticles {
-            articles {
+            articles(order_by: {created_at: desc}) {
               id
               status
+              image
+              created_at
+              updated_at
               translations {
                   title
                   slug
