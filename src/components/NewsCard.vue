@@ -1,18 +1,25 @@
 <template>
     <q-card class="news-card">
       <q-img
-        v-if="article.image"
         :src="article.image"
-        style="height: 200px;"
+        class="image-placeholder"
         fit="cover"
-      />
+      >
+      </q-img>
       <q-card-section>
-        <div class="text-h6">
+        <div class="text-h6 titular">
           {{
             article.translations.find(t=>t.language === language)?.title ?
             article.translations.find(t=>t.language === language)?.title :
             article.translations.find(t=>t.language === fallbackLanguage)?.title
           }}
+          <q-tooltip>
+            {{
+              article.translations.find(t=>t.language === language)?.title ?
+              article.translations.find(t=>t.language === language)?.title :
+              article.translations.find(t=>t.language === fallbackLanguage)?.title
+            }}
+          </q-tooltip>
         </div>
         <div class="text-subtitle2">{{date.formatDate(article.created_at, 'DD-MM-YYYY')}}</div>
       </q-card-section>
@@ -47,5 +54,14 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-
+.image-placeholder {
+  height: 200px;
+  background: linear-gradient($primary, $accent);
+}
+.titular {
+  display: inline-block;
+  height: 65px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 </style>
