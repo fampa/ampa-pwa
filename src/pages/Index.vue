@@ -1,5 +1,5 @@
 <template>
-  <q-page class="row items-center justify-evenly">
+  <q-page class="bg-grey-2 q-pa-md">
     <div v-if="articlesLoading">
       Loading...
     </div>
@@ -7,8 +7,10 @@
       {{articlesError}}
     </div>
     <div v-else-if="articles">
-      <div v-for="article in articles" :key="article.id">
-        <news-card :article="article"></news-card>
+      <div class="row items-start">
+        <div class="col-12 col-sm-6 col-md-4 q-pa-sm" v-for="article in articles" :key="article.id">
+          <news-card :article="article"></news-card>
+        </div>
       </div>
     </div>
   </q-page>
