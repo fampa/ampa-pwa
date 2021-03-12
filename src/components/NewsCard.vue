@@ -21,7 +21,7 @@
             }}
           </q-tooltip>
         </div>
-        <div class="text-subtitle2">{{date.formatDate(article.created_at, 'DD-MM-YYYY')}}</div>
+        <div class="text-subtitle2">{{date.formatDate(article.created_at, 'DD/MM/YYYY')}}</div>
       </q-card-section>
     </q-card>
 </template>
