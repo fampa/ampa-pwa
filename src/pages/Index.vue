@@ -33,13 +33,14 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import NewsCard from 'components/NewsCard.vue'
-import { getArticles } from 'src/services/articles'
+import { ArticlesService } from 'src/services/articles'
 
 export default defineComponent({
   name: 'PageIndex',
   components: { NewsCard },
   setup () {
-    const { articles, articlesLoading, articlesError } = getArticles()
+    const articlesService = new ArticlesService()
+    const { articles, articlesLoading, articlesError } = articlesService.getAll()
     return {
       articles,
       articlesLoading,
