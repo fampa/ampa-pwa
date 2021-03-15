@@ -1,6 +1,8 @@
-import { createHttpLink, InMemoryCache } from '@apollo/client/core'
+import { createHttpLink, InMemoryCache, NormalizedCacheObject } from '@apollo/client/core'
 import type { ApolloClientOptions } from '@apollo/client/core/ApolloClient'
 import type { BootFileParams } from '@quasar/app'
+import { CachePersistor } from 'apollo-cache-persist'
+import { PersistentStorage, PersistedData } from 'apollo-cache-persist/types'
 
 // bootFileParams is { app, router, ...}
 // eslint-disable-next-line @typescript-eslint/require-await
@@ -8,6 +10,22 @@ export async function getClientOptions (
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   bootFileParams?: BootFileParams<unknown>
 ): Promise<ApolloClientOptions<unknown>> {
+  const SCHEMA_VERSION = '1'
+  const SCHEMA_VERSION_KEY = 'apollo-schema-version'
+  const cache = new InMemoryCache({})
+
+  const persistor = new CachePersistor({
+    cache,
+    storage: window.localStorage as PersistentStorage<PersistedData<NormalizedCacheObject>>
+  })
+
+  const currentVersion = window.localStorage.getItem(SCHEMA_VERSION_KEY)
+  if (currentVersion === SCHEMA_VERSION) {
+    await persistor.restore()
+  } else {
+    await persistor.purge()
+    window.localStorage.setItem(SCHEMA_VERSION_KEY, SCHEMA_VERSION)
+  }
   return Object.assign(
     // General options.
     {
@@ -15,7 +33,7 @@ export async function getClientOptions (
         uri: process.env.GRAPHQL_URI || 'http://api.example.com'
       }),
 
-      cache: new InMemoryCache({})
+      cache: cache
     },
 
     // Specific Quasar mode options.

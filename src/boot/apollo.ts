@@ -8,6 +8,7 @@ let apolloClient: ApolloClient<unknown>
 // bootFileParams is { app, router, ...}
 export default boot(async (bootFileParams: BootFileParams<unknown>) => {
   const options = await getClientOptions(bootFileParams)
+
   apolloClient = new ApolloClient(options)
 })
 
