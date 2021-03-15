@@ -59,7 +59,6 @@ export default defineComponent({
   background: linear-gradient($primary, $accent);
 }
 .titular {
-  display: inline-block;
   height: 65px;
   overflow: hidden;
   display: -webkit-box;
