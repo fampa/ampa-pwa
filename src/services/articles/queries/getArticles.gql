@@ -1,0 +1,15 @@
+query getArticles {
+    articles(order_by: {created_at: desc}) {
+    id
+    status
+    image
+    created_at
+    updated_at
+    translations {
+        title
+        slug
+        language
+        content
+    }
+    }
+}
