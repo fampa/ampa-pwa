@@ -14,7 +14,7 @@
     "@quasar/extras": "^1.0.0",
     "@vue/apollo-composable": "^4.0.0-alpha.12",
     "@vue/composition-api": "^1.0.0-rc.4",
-    "apollo-cache-persist": "^0.1.1",
+    "apollo3-cache-persist": "^0.9.1",
     "core-js": "^3.6.5",
     "quasar": "^2.0.0-beta.1",
     "vue-i18n": "^9.0.0-beta.0"
