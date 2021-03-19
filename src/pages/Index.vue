@@ -1,6 +1,5 @@
 <template>
   <q-page class="bg-grey-2 q-pa-md">
-    {{language}}
     <div v-if="loading">
       <div class="row items-start">
         <div class="col-12 col-sm-6 col-md-4 q-pa-sm" v-for="(item, index) in [1,2,3,4,5,6]" :key="index">
@@ -24,7 +23,7 @@
     <div v-else-if="articles">
       <div class="row items-start">
         <div class="col-12 col-sm-6 col-md-4 q-pa-sm" v-for="article in articles" :key="article.id">
-          <news-card :article="article"></news-card>
+          <news-card :article="article" :language="language"></news-card>
         </div>
       </div>
     </div>
