@@ -1,5 +1,6 @@
 <template>
   <q-page class="bg-grey-2 q-pa-md">
+    {{language}}
     <div v-if="loading">
       <div class="row items-start">
         <div class="col-12 col-sm-6 col-md-4 q-pa-sm" v-for="(item, index) in [1,2,3,4,5,6]" :key="index">
@@ -31,7 +32,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, computed } from 'vue'
+import { useStore } from 'src/services/store'
 import NewsCard from 'components/NewsCard.vue'
 import { ArticlesService } from 'src/services/articles'
 
@@ -40,11 +42,14 @@ export default defineComponent({
   components: { NewsCard },
   setup () {
     const articlesService = new ArticlesService()
+    const store = useStore()
+    const language = computed(() => store.state.settings.language)
     const { articles, loading, error } = articlesService.getAll()
     return {
       articles,
       loading,
-      error
+      error,
+      language
     }
   }
 })
