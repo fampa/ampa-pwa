@@ -1,6 +1,6 @@
 <template>
   <q-page class="bg-grey-2 q-pa-md">
-    <div v-if="articlesLoading">
+    <div v-if="loading">
       <div class="row items-start">
         <div class="col-12 col-sm-6 col-md-4 q-pa-sm" v-for="(item, index) in [1,2,3,4,5,6]" :key="index">
           <q-card class="news-card">
@@ -17,8 +17,8 @@
         </div>
       </div>
     </div>
-    <div v-else-if="articlesError">
-      {{articlesError}}
+    <div v-else-if="error">
+      {{error}}
     </div>
     <div v-else-if="articles">
       <div class="row items-start">
@@ -40,11 +40,11 @@ export default defineComponent({
   components: { NewsCard },
   setup () {
     const articlesService = new ArticlesService()
-    const { articles, articlesLoading, articlesError } = articlesService.getAll()
+    const { articles, loading, error } = articlesService.getAll()
     return {
       articles,
-      articlesLoading,
-      articlesError
+      loading,
+      error
     }
   }
 })

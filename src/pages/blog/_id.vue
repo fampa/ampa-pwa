@@ -1,7 +1,9 @@
 <template>
   <q-page padding>
     Article
-    {{ result }}
+    <div v-if="article">
+      {{ article.translations[0].title }}
+    </div>
     {{ error }}
   </q-page>
 </template>
@@ -17,23 +19,11 @@ export default defineComponent({
     const articlesService = new ArticlesService()
     const route = useRoute()
     const id = Number(route.params.id)
-    console.log(id)
 
-    const { result, loading, error } = articlesService.getById(id)
-
-    // watch(
-    //   () => route.params,
-    //   newParams => {
-    //     console.log(newParams)
-    //     const { result, loading, error } = articlesService.getById(Number(newParams.id))
-    //     article.value = result.value
-    //     articleLoading.value = loading.value
-    //     articleError.value = error.value
-    //   }
-    // )
+    const { article, loading, error } = articlesService.getById(id)
 
     return {
-      result,
+      article,
       loading,
       error
     }

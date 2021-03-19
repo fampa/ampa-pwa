@@ -12,6 +12,14 @@ export interface Article {
     updated_at?: Date
 }
 
-export interface ArticleData {
+export interface ArticlesData {
     articles: Article[];
+}
+
+export interface ArticleVars {
+    id: number;
+}
+
+export interface ArticleData {
+    articles_by_pk: Article
 }
