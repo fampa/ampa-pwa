@@ -1,10 +1,12 @@
 export interface SettingsStateInterface {
-  language: string;
+  language: string
+  fallbackLanguage: string
 }
 
 function state (): SettingsStateInterface {
   return {
-    language: 'ca'
+    language: 'ca',
+    fallbackLanguage: 'es'
   }
 }
 
