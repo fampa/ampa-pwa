@@ -4,6 +4,9 @@ import { createStore } from 'vuex'
 import settings from './settings'
 import { SettingsStateInterface } from './settings/state'
 
+import user from './user'
+import { UserStateInterface } from './user/state'
+
 /*
  * If not building with SSR mode, you can
  * directly export the Store instantiation;
@@ -14,15 +17,15 @@ import { SettingsStateInterface } from './settings/state'
  */
 
 export interface StateInterface {
-  // Define your own store structure, using submodules if needed
-  settings: SettingsStateInterface;
-  // Declared as unknown to avoid linting issue. Best to strongly type as per the line above.
+  settings: SettingsStateInterface
+  user: UserStateInterface
 }
 
 export default store(function (/* { ssrContext } */) {
   const Store = createStore<StateInterface>({
     modules: {
-      settings
+      settings,
+      user
     },
 
     // enable strict mode (adds overhead!)
