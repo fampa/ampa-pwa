@@ -38,7 +38,7 @@
               <img :src="$store.state.user.user.photoURL ? $store.state.user.user.photoURL : '/icons/icon-128x128.png'">
             </q-avatar>
             <div class="text-weight-bold">{{$store.state.user.user.email}}</div>
-            <div v-if="isAdmin">
+            <div v-if="$store.state.user.user.isAdmin">
               <q-badge color="primary">
                   Administrador
               </q-badge>
@@ -64,18 +64,20 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, computed } from 'vue'
 import { i18n } from 'src/boot/i18n'
 
 const translate = i18n.global
 
-const items = [
-  {
-    title: translate.t('home'),
-    icon: 'las la-home',
-    to: '/'
-  }
-]
+const items = computed(() => {
+  return [
+    {
+      title: translate.t('home'),
+      icon: 'las la-home',
+      to: '/'
+    }
+  ]
+})
 
 export default defineComponent({
   name: 'MainLayout',

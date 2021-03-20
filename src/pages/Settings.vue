@@ -5,6 +5,9 @@
         <q-item-label header>{{$t('settingsPage.general')}}</q-item-label>
 
         <q-item clickable v-ripple>
+          <q-item-section avatar>
+            <q-icon name="las la-language"></q-icon>
+          </q-item-section>
           <q-item-section>
             <q-item-label>{{$t('settingsPage.language')}}</q-item-label>
             <q-item-label caption>
@@ -26,9 +29,13 @@
         <q-separator />
 
         <q-item-label header>{{$t('settingsPage.notifications')}}</q-item-label>
-        <!-- <q-item>
-            <push-toggle :label="$t('settingsPage.push')" @childState="onChildEmit" @pushToken="pushChange" />
-        </q-item> -->
+        <q-item>
+          <q-item-section avatar>
+            <q-icon name="las la-sms"></q-icon>
+          </q-item-section>
+          WIP
+            <!-- <push-toggle :label="$t('settingsPage.push')" @childState="onChildEmit" @pushToken="pushChange" /> -->
+        </q-item>
       </q-list>
   </q-page>
 </template>
