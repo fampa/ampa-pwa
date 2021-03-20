@@ -3,7 +3,7 @@ import { MutationTree } from 'vuex'
 import { UserStateInterface } from './state'
 
 const mutation: MutationTree<UserStateInterface> = {
-  setLanguage (state: UserStateInterface, payload: Member) {
+  setUser (state: UserStateInterface, payload: Member) {
     state.user = payload
   }
 }

@@ -3,6 +3,8 @@
 
 export default {
   home: 'Inicio',
+  login: 'Entrar',
+  logout: 'Salir',
   settings: 'Preferencias',
   settingsPage: {
     general: 'Preferencias generales',

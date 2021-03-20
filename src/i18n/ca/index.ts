@@ -3,6 +3,8 @@
 
 export default {
   home: 'Inici',
+  login: 'Entrar',
+  logout: 'Eixir',
   settings: 'Preferències',
   settingsPage: {
     general: 'Preferències generals',

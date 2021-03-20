@@ -33,12 +33,31 @@
       bordered
     >
     <q-img class="absolute-top" src="~assets/img/material.png" style="height: 150px">
-          <div v-if="$store.state.user.user" class="absolute-bottom bg-transparent">
+      <div class="buttons">
+        <q-btn
+          flat
+          v-if="user"
+          text-color="white"
+          @click="$store.dispatch('user/logout')"
+          :label="$t('logout')"
+          class="float-right login"
+        />
+        <q-btn
+          flat
+          v-if="!user"
+          text-color="white"
+          to="/login"
+          @click="toggleLeftDrawer"
+          :label="$t('login')"
+          class="float-right login"
+        />
+      </div>
+          <div v-if="user" class="absolute-bottom bg-transparent">
             <q-avatar size="56px" class="q-mb-sm">
-              <img :src="$store.state.user.user.photoURL ? $store.state.user.user.photoURL : '/icons/icon-128x128.png'">
+              <img :src="user.photoURL ? user.photoURL : '/icons/icon-128x128.png'">
             </q-avatar>
-            <div class="text-weight-bold">{{$store.state.user.user.email}}</div>
-            <div v-if="$store.state.user.user.isAdmin">
+            <div class="text-weight-bold">{{user.email}}</div>
+            <div v-if="user.isAdmin">
               <q-badge color="primary">
                   Administrador
               </q-badge>
@@ -66,27 +85,32 @@
 <script lang="ts">
 import { defineComponent, ref, computed } from 'vue'
 import { i18n } from 'src/boot/i18n'
-
-const translate = i18n.global
-
-const items = computed(() => {
-  return [
-    {
-      title: translate.t('home'),
-      icon: 'las la-home',
-      to: '/'
-    }
-  ]
-})
+import { useStore } from 'src/services/store'
 
 export default defineComponent({
   name: 'MainLayout',
 
   setup () {
     const leftDrawerOpen = ref(false)
+    const translate = i18n.global
+    const store = useStore()
+    const user = computed(() => {
+      return store.state.user.user
+    })
+
+    const items = computed(() => {
+      return [
+        {
+          title: translate.t('home'),
+          icon: 'las la-home',
+          to: '/'
+        }
+      ]
+    })
 
     return {
       items,
+      user,
       leftDrawerOpen,
       toggleLeftDrawer () {
         leftDrawerOpen.value = !leftDrawerOpen.value
@@ -95,3 +119,12 @@ export default defineComponent({
   }
 })
 </script>
+
+<style lang="scss" scoped>
+.buttons {
+  position: absolute;
+  padding: 16px;
+  background: transparent;
+  right: 0;
+}
+</style>

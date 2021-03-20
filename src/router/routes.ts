@@ -13,6 +13,11 @@ const routes: RouteRecordRaw[] = [
     children: [{ path: '', component: () => import('pages/Settings.vue') }]
   },
   {
+    path: '/login',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [{ path: '', component: () => import('pages/Login.vue') }]
+  },
+  {
     path: '/blog/:id/:slug?',
     component: () => import('layouts/MainLayout.vue'),
     children: [{ path: '', component: () => import('pages/blog/_id/_slug.vue') }]
