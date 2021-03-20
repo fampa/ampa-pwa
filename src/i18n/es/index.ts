@@ -3,5 +3,6 @@
 
 export default {
   home: 'Inicio',
-  settings: 'Preferències'
+  settings: 'Preferències',
+  updatedAt: 'Actualizado el {date}'
 }

@@ -23,9 +23,7 @@
     <div v-else-if="articles">
       <div class="row items-start">
         <div class="col-12 col-sm-6 col-md-4 q-pa-sm" v-for="article in articles" :key="article.id">
-          <router-link :to="`/blog/${article.id}`">
-            <news-card :article="article"></news-card>
-          </router-link>
+          <news-card :article="article"></news-card>
         </div>
       </div>
     </div>

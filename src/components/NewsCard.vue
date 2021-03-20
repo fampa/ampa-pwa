@@ -1,4 +1,5 @@
 <template>
+  <router-link :to="`/blog/${article.id}/${slug}`">
     <q-card class="news-card">
       <div class="img-container">
         <q-img
@@ -14,9 +15,10 @@
             {{title}}
           </q-tooltip>
         </div>
-        <div class="text-subtitle2">{{date.formatDate(article.created_at, 'DD/MM/YYYY')}}</div>
+        <div class="text-subtitle2">{{formatedDate}}</div>
       </q-card-section>
     </q-card>
+  </router-link>
 </template>
 
 <script lang="ts">
@@ -44,10 +46,20 @@ export default defineComponent({
         return props.article.translations.find(t => t.language === fallbackLanguage.value)?.title
       }
     })
+    const slug = computed(() => {
+      if (props.article.translations.find(t => t.language === language.value)?.slug) {
+        return props.article.translations.find(t => t.language === language.value)?.slug
+      } else {
+        return props.article.translations.find(t => t.language === fallbackLanguage.value)?.slug
+      }
+    })
+    const formatedDate = computed(() => date.formatDate(props.article.created_at, 'DD/MM/YYYY'))
     return {
       ...toRefs(props),
       date,
-      title
+      title,
+      formatedDate,
+      slug
     }
   }
 })
