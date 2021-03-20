@@ -31,9 +31,22 @@
       v-model="leftDrawerOpen"
       show-if-above
       bordered
-      class="bg-grey-1"
     >
-      <q-list>
+    <q-img class="absolute-top" src="~assets/img/material.png" style="height: 150px">
+          <div v-if="$store.state.user.user" class="absolute-bottom bg-transparent">
+            <q-avatar size="56px" class="q-mb-sm">
+              <img :src="$store.state.user.user.photoURL ? $store.state.user.user.photoURL : '/icons/icon-128x128.png'">
+            </q-avatar>
+            <div class="text-weight-bold">{{$store.state.user.user.email}}</div>
+            <div v-if="isAdmin">
+              <q-badge color="primary">
+                  Administrador
+              </q-badge>
+            </div>
+          </div>
+        </q-img>
+    <q-scroll-area style="height: calc(100% - 150px); margin-top: 150px; border-right: 1px solid #ddd">
+      <q-list padding>
         <q-item v-for="(item, index) in items" :key="index" clickable v-ripple :to="item.to">
           <q-item-section avatar>
             <q-icon :name="item.icon" />
@@ -41,6 +54,7 @@
           <q-item-section>{{item.title}}</q-item-section>
         </q-item>
       </q-list>
+    </q-scroll-area>
     </q-drawer>
 
     <q-page-container>
