@@ -2,11 +2,7 @@
   <q-page padding>
     Article
     <div v-if="article">
-      {{
-        article.translations.find(t=>t.language === language)?.title ?
-        article.translations.find(t=>t.language === language)?.title :
-        article.translations.find(t=>t.language === fallbackLanguage)?.title
-      }}
+      {{title}}
     </div>
     {{ error }}
   </q-page>
@@ -26,6 +22,13 @@ export default defineComponent({
     const id = Number(route.params.id)
     const store = useStore()
     const language = computed(() => store.state.settings.language)
+    const title = computed(() => {
+      if (article.value?.translations.find(t => t.language === language.value)?.title) {
+        return article.value?.translations.find(t => t.language === language.value)?.title
+      } else {
+        return article.value?.translations.find(t => t.language === fallbackLanguage.value)?.title
+      }
+    })
     const fallbackLanguage = computed(() => store.state.settings.fallbackLanguage)
     const { article, loading, error } = articlesService.getById(id)
 
@@ -34,7 +37,8 @@ export default defineComponent({
       loading,
       error,
       language,
-      fallbackLanguage
+      fallbackLanguage,
+      title
     }
   }
 })

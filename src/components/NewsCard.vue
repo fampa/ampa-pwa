@@ -9,17 +9,9 @@
       </div>
       <q-card-section class="card-section">
         <div class="text-h6 titular">
-          {{
-            article.translations.find(t=>t.language === language)?.title ?
-            article.translations.find(t=>t.language === language)?.title :
-            article.translations.find(t=>t.language === fallbackLanguage)?.title
-          }}
+          {{title}}
           <q-tooltip>
-            {{
-              article.translations.find(t=>t.language === language)?.title ?
-              article.translations.find(t=>t.language === language)?.title :
-              article.translations.find(t=>t.language === fallbackLanguage)?.title
-            }}
+            {{title}}
           </q-tooltip>
         </div>
         <div class="text-subtitle2">{{date.formatDate(article.created_at, 'DD/MM/YYYY')}}</div>
@@ -45,7 +37,18 @@ export default defineComponent({
     const store = useStore()
     const language = computed(() => store.state.settings.language)
     const fallbackLanguage = computed(() => store.state.settings.fallbackLanguage)
-    return { ...toRefs(props), date, language, fallbackLanguage }
+    const title = computed(() => {
+      if (props.article.translations.find(t => t.language === language.value)?.title) {
+        return props.article.translations.find(t => t.language === language.value)?.title
+      } else {
+        return props.article.translations.find(t => t.language === fallbackLanguage.value)?.title
+      }
+    })
+    return {
+      ...toRefs(props),
+      date,
+      title
+    }
   }
 })
 </script>
