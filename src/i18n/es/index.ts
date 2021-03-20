@@ -3,6 +3,11 @@
 
 export default {
   home: 'Inicio',
-  settings: 'Preferències',
+  settings: 'Preferencias',
+  settingsPage: {
+    general: 'Preferencias generales',
+    language: 'Idioma',
+    notifications: 'Notificaciones'
+  },
   updatedAt: 'Actualizado el {date}'
 }

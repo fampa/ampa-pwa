@@ -4,5 +4,10 @@
 export default {
   home: 'Inici',
   settings: 'Preferències',
+  settingsPage: {
+    general: 'Preferències generals',
+    language: 'Idioma',
+    notifications: 'Notificacions'
+  },
   updatedAt: 'Actualitzat el {date}'
 }

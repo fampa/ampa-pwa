@@ -1,5 +1,6 @@
 import { store } from 'quasar/wrappers'
 import { createStore } from 'vuex'
+import createPersistedState from 'vuex-persistedstate'
 
 import settings from './settings'
 import { SettingsStateInterface } from './settings/state'
@@ -27,6 +28,7 @@ export default store(function (/* { ssrContext } */) {
       settings,
       user
     },
+    plugins: [createPersistedState()],
 
     // enable strict mode (adds overhead!)
     // for dev mode and --debug builds only
