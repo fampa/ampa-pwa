@@ -5,11 +5,10 @@ query getArticles {
     image
     created_at
     updated_at
-    translations {
-        title
-        slug
-        language
-        content
-    }
+        translations {
+            title
+            slug
+            language
+        }
     }
 }

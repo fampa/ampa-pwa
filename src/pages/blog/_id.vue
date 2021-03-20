@@ -2,16 +2,21 @@
   <q-page padding>
     Article
     <div v-if="article">
-      {{ article.translations[0].title }}
+      {{
+        article.translations.find(t=>t.language === language)?.title ?
+        article.translations.find(t=>t.language === language)?.title :
+        article.translations.find(t=>t.language === fallbackLanguage)?.title
+      }}
     </div>
     {{ error }}
   </q-page>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, computed } from 'vue'
 import { ArticlesService } from 'src/services/articles'
 import { useRoute } from 'vue-router'
+import { useStore } from 'src/services/store'
 
 export default defineComponent({
   name: 'NewsDetails',
@@ -19,13 +24,17 @@ export default defineComponent({
     const articlesService = new ArticlesService()
     const route = useRoute()
     const id = Number(route.params.id)
-
+    const store = useStore()
+    const language = computed(() => store.state.settings.language)
+    const fallbackLanguage = computed(() => store.state.settings.fallbackLanguage)
     const { article, loading, error } = articlesService.getById(id)
 
     return {
       article,
       loading,
-      error
+      error,
+      language,
+      fallbackLanguage
     }
   }
 })

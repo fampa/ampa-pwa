@@ -1,1 +1,5 @@
 // app global css in SCSS form
+a, a:visited, a:hover {
+    text-decoration: none;
+    color: inherit;
+}
