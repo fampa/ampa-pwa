@@ -24,9 +24,7 @@ self.addEventListener('activate', function (event) {
 })
 
 registerRoute(
-  ({ url }) => url.origin === 'https://fonts.googleapis.com' ||
-             url.origin === 'https://fonts.gstatic.com' ||
-             url.origin === 'https://firebasestorage.googleapis.com/',
+  /^http:\/\/firebasestorage\.googleapis\.com/,
   new StaleWhileRevalidate()
 )
 
