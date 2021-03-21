@@ -57,17 +57,7 @@ module.exports = configure(function (/* ctx */) {
     // Full list of options: https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-build
     build: {
       vueRouterMode: 'history', // available values: 'hash', 'history'
-      // env: require('dotenv').config().parsed,
-      env: {
-        GRAPHQL_URI: process.env.GRAPHQL_URI,
-        FIREBASE_API_KEY: process.env.FIREBASE_API_KEY,
-        FIREBASE_AUTH_DOMAIN: process.env.FIREBASE_AUTH_DOMAIN,
-        FIREBASE_PROJECT_ID: process.env.FIREBASE_PROJECT_ID,
-        FIREBASE_STORAGE_BUCKET: process.env.FIREBASE_STORAGE_BUCKET,
-        FIREBASE_MESSAGING_SENDER_ID: process.env.FIREBASE_MESSAGING_SENDER_ID,
-        FIREBASE_APP_ID: process.env.FIREBASE_APP_ID,
-        FIREBASE_MEASUREMENT_ID: process.env.FIREBASE_MEASUREMENT_ID
-      },
+      env: require('dotenv').config().parsed,
       // transpile: false,
 
       // Add dependencies for transpiling with Babel (Array of string/regex)
