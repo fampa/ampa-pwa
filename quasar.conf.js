@@ -144,11 +144,11 @@ module.exports = configure(function (/* ctx */) {
       manifest: {
         name: 'AMPA PWA',
         short_name: 'AMPA PWA',
-        description: 'PWA de gestió del AMPA',
+        description: 'PWA del AMPA',
         display: 'standalone',
         orientation: 'portrait',
         background_color: '#ffffff',
-        theme_color: '#027be3',
+        theme_color: '#ff8000',
         icons: [
           {
             src: 'icons/icon-128x128.png',
