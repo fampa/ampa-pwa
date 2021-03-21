@@ -142,8 +142,8 @@ module.exports = configure(function (/* ctx */) {
       },
 
       manifest: {
-        name: 'AMPA PWA',
-        short_name: 'AMPA PWA',
+        name: 'AMPA APP',
+        short_name: 'AMPA APP',
         description: 'PWA del AMPA',
         display: 'standalone',
         orientation: 'portrait',
