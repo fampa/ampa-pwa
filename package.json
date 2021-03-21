@@ -7,7 +7,7 @@
   "private": true,
   "scripts": {
     "dev": "quasar dev",
-    "build": "yarn && cd functions && yarn && cd .. && quasar build -m pwa && npm run build:functions",
+    "build": "yarn && cd functions && yarn install --ignore-engines && cd .. && quasar build -m pwa && npm run build:functions",
     "build:functions":"cd functions && npm run build && cd ..",
     "deploy": "npm run build && firebase deploy",
     "lint": "eslint --ext .js,.ts,.vue ./",
