@@ -8,7 +8,7 @@
 import { precacheAndRoute } from 'workbox-precaching'
 import { registerRoute } from 'workbox-routing'
 import { ExpirationPlugin } from 'workbox-expiration'
-import { CacheFirst, StaleWhileRevalidate } from 'workbox-strategies'
+import { CacheFirst } from 'workbox-strategies'
 
 self.addEventListener('message', e => {
   if (e.data === 'skipWaiting') {
@@ -37,7 +37,7 @@ registerRoute(
   ({ url }) => url.origin === 'https://fonts.googleapis.com' ||
              url.origin === 'https://fonts.gstatic.com' ||
              url.origin === 'https://firebasestorage.googleapis.com/',
-  new StaleWhileRevalidate()
+  new CacheFirst()
 )
 
 self.addEventListener('push', (event) => {
