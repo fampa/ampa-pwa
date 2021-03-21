@@ -10,6 +10,21 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const { configure } = require('quasar/wrappers')
 
+const DotEnv = require('dotenv')
+const parsedEnv = DotEnv.config().parsed
+const envParser = function () {
+  // Let's stringify our variables
+  // eslint-disable-next-line no-undef
+  for (key in parsedEnv) {
+    // eslint-disable-next-line no-undef
+    if (typeof parsedEnv[key] === 'string') {
+      // eslint-disable-next-line no-undef
+      parsedEnv[key] = JSON.stringify(parsedEnv[key])
+    }
+  }
+  return parsedEnv
+}
+
 module.exports = configure(function (/* ctx */) {
   return {
     // https://quasar.dev/quasar-cli/supporting-ts
@@ -57,7 +72,7 @@ module.exports = configure(function (/* ctx */) {
     // Full list of options: https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-build
     build: {
       vueRouterMode: 'history', // available values: 'hash', 'history'
-      env: require('dotenv').config().parsed,
+      env: envParser(),
       // transpile: false,
 
       // Add dependencies for transpiling with Babel (Array of string/regex)
