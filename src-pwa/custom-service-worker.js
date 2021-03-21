@@ -8,7 +8,10 @@
 import { precacheAndRoute } from 'workbox-precaching'
 import { registerRoute } from 'workbox-routing'
 import { ExpirationPlugin } from 'workbox-expiration'
-import { CacheFirst } from 'workbox-strategies'
+import { CacheFirst, StaleWhileRevalidate } from 'workbox-strategies'
+
+// Use with precache injection
+precacheAndRoute(self.__WB_MANIFEST)
 
 self.addEventListener('message', e => {
   if (e.data === 'skipWaiting') {
@@ -37,7 +40,7 @@ registerRoute(
   ({ url }) => url.origin === 'https://fonts.googleapis.com' ||
              url.origin === 'https://fonts.gstatic.com' ||
              url.origin === 'https://firebasestorage.googleapis.com/',
-  new CacheFirst()
+  new StaleWhileRevalidate()
 )
 
 self.addEventListener('push', (event) => {
@@ -81,6 +84,3 @@ self.addEventListener('notificationclick', function (event) {
     })
   )
 })
-
-// Use with precache injection
-precacheAndRoute(self.__WB_MANIFEST)
