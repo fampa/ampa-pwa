@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable no-undef */
 /*
  * This file (which will be your service worker)
  * is picked up by the build system ONLY if
@@ -9,6 +8,7 @@
 import { precacheAndRoute } from 'workbox-precaching'
 import { registerRoute } from 'workbox-routing'
 import { ExpirationPlugin } from 'workbox-expiration'
+import { CacheFirst } from 'workbox-strategies'
 
 self.addEventListener('message', e => {
   if (e.data === 'skipWaiting') {
@@ -55,6 +55,7 @@ self.addEventListener('notificationclick', function (event) {
   const url = event.click_action
   event.notification.close() // Android needs explicit close.
   event.waitUntil(
+    // eslint-disable-next-line no-undef
     clients.matchAll({ type: 'window' }).then(windowClients => {
       // Check if there is already a window/tab open with the target URL
       for (let i = 0; i < windowClients.length; i++) {
@@ -66,9 +67,10 @@ self.addEventListener('notificationclick', function (event) {
         }
       }
       // If not, then open the target URL in a new window/tab.
+      // eslint-disable-next-line no-undef
       if (clients.openWindow) {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-        return clients.openWindow(url)
+        // eslint-disable-next-line no-undef
+        clients.openWindow(url)
       }
     })
   )
