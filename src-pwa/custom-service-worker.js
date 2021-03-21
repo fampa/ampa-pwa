@@ -7,6 +7,8 @@
  */
 
 import { precacheAndRoute } from 'workbox-precaching'
+import { registerRoute } from 'workbox-routing'
+import { ExpirationPlugin } from 'workbox-expiration'
 
 self.addEventListener('message', e => {
   if (e.data === 'skipWaiting') {
@@ -18,6 +20,19 @@ self.addEventListener('message', e => {
 self.addEventListener('activate', function (event) {
   event.waitUntil(self.clients.claim())
 })
+
+registerRoute(
+  ({ request }) => request.destination === 'image',
+  new CacheFirst({
+    cacheName: 'images',
+    plugins: [
+      new ExpirationPlugin({
+        maxEntries: 60,
+        maxAgeSeconds: 30 * 24 * 60 * 60 // 30 Days
+      })
+    ]
+  })
+)
 
 self.addEventListener('push', (event) => {
   const title = 'AMPA'
