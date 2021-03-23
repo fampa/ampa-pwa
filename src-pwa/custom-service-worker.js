@@ -6,28 +6,11 @@
  */
 
 import { precacheAndRoute } from 'workbox-precaching'
-// import { registerRoute } from 'workbox-routing'
-// import { StaleWhileRevalidate } from 'workbox-strategies'
-import {
-  pageCache,
-  imageCache,
-  staticResourceCache,
-  googleFontsCache,
-  offlineFallback
-} from 'workbox-recipes'
+import { registerRoute } from 'workbox-routing'
+import { StaleWhileRevalidate } from 'workbox-strategies'
 
 // Use with precache injection
 precacheAndRoute(self.__WB_MANIFEST)
-
-pageCache()
-
-googleFontsCache()
-
-staticResourceCache()
-
-imageCache()
-
-offlineFallback()
 
 self.addEventListener('message', e => {
   if (e.data === 'skipWaiting') {
@@ -39,6 +22,11 @@ self.addEventListener('message', e => {
 self.addEventListener('activate', function (event) {
   event.waitUntil(self.clients.claim())
 })
+
+registerRoute(
+  /^https:\/\/firebasestorage\.googleapis\.com\/.*/,
+  new StaleWhileRevalidate()
+)
 
 self.addEventListener('push', (event) => {
   const title = 'AMPA'
