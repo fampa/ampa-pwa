@@ -42,7 +42,6 @@ register(process.env.SERVICE_WORKER_FILE, {
           label: translate.t('update'),
           handler: () => {
             registration.waiting.postMessage('skipWaiting')
-            window.location.reload()
           }
         }]
     })
