@@ -1,6 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 import { register } from 'register-service-worker'
 import { Notify } from 'quasar'
+import { i18n } from 'src/boot/i18n'
+
+const translate = i18n.global
 // The ready(), registered(), cached(), updatefound() and updated()
 // events passes a ServiceWorkerRegistration instance in their arguments.
 // ServiceWorkerRegistration: https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorkerRegistration
@@ -32,11 +35,11 @@ register(process.env.SERVICE_WORKER_FILE, {
     // console.log('New content is available; please refresh.')
     return Notify.create({
       timeout: 0,
-      message: 'Nova versió disponible. Actualitza polsant el botó',
+      message: translate.t('newVersion'),
       actions: [
         {
-          icon: 'fal fa-sync-alt',
-          label: 'ACTUALITZA',
+          icon: 'las la-sync',
+          label: translate.t('update'),
           handler: () => {
             return registration.waiting.postMessage('skipWaiting')
           }
