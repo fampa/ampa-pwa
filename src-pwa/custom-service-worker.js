@@ -14,7 +14,7 @@ precacheAndRoute(self.__WB_MANIFEST)
 
 self.addEventListener('message', e => {
   if (e.data === 'skipWaiting') {
-    console.log('skipWaiting called')
+    // console.log('skipWaiting called')
     self.skipWaiting()
     window.location.reload()
   }
