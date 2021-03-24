@@ -33,7 +33,7 @@ register(process.env.SERVICE_WORKER_FILE, {
 
   updated (registration) { // registration -> a ServiceWorkerRegistration instance
     // console.log('New content is available; please refresh.')
-    return Notify.create({
+    Notify.create({
       timeout: 0,
       message: translate.t('newVersion'),
       actions: [
@@ -45,6 +45,18 @@ register(process.env.SERVICE_WORKER_FILE, {
             window.location.reload()
           }
         }]
+    })
+
+    const newWorker = registration.installing
+
+    let refreshing
+
+    newWorker.addEventListener('statechange', () => {
+      if (newWorker.state === 'activated') {
+        if (refreshing) return
+        window.location.reload()
+        refreshing = true
+      }
     })
   },
 
