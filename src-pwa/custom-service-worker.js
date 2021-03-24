@@ -16,6 +16,7 @@ self.addEventListener('message', e => {
   if (e.data === 'skipWaiting') {
     console.log('skipWaiting called')
     self.skipWaiting()
+    location.reload()
   }
 })
 
@@ -36,7 +37,6 @@ self.addEventListener('push', (event) => {
     icon: event.data.notification.icon || '/statics/icons/icon-512x512.png',
     badge: event.data.notification.badge || '/statics/icons/icon-128x128.png',
     image: event.data.notification.image || '',
-    sound: event.data.notification.sound || '/statics/sounds/notificacio.mp3',
     timestamp: event.data.notification.timestamp || Date.parse(new Date()),
     vibrate: event.data.notification.vibrate || [200, 100, 200, 100, 200, 100, 200],
     tag: event.data.notification.tag || 'ampa-tag',

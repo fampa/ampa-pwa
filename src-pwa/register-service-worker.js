@@ -29,7 +29,7 @@ register(process.env.SERVICE_WORKER_FILE, {
   },
 
   updated (registration) { // registration -> a ServiceWorkerRegistration instance
-    console.log('New content is available; please refresh.')
+    // console.log('New content is available; please refresh.')
     return Notify.create({
       timeout: 0,
       message: 'Nova versió disponible. Actualitza polsant el botó',
