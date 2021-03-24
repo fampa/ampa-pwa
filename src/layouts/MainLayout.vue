@@ -104,6 +104,11 @@ export default defineComponent({
           title: translate.t('home'),
           icon: 'las la-home',
           to: '/'
+        },
+        {
+          title: translate.t('personalData'),
+          icon: 'las la-user',
+          to: '/user'
         }
       ]
     })

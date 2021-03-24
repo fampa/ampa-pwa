@@ -6,6 +6,7 @@ export default {
   login: 'Entrar',
   logout: 'Eixir',
   newVersion: 'Nova versió disponible. Actualitza polsant el botó',
+  personalData: 'Dades personals',
   settings: 'Preferències',
   settingsPage: {
     general: 'Preferències generals',

@@ -6,6 +6,7 @@ export default {
   login: 'Entrar',
   logout: 'Salir',
   newVersion: 'Nueva versión disponible. Actualice pulsando el botón',
+  personalData: 'Datos personales',
   settings: 'Preferencias',
   settingsPage: {
     general: 'Preferencias generales',
