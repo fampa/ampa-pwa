@@ -16,7 +16,7 @@ self.addEventListener('message', e => {
   if (e.data === 'skipWaiting') {
     console.log('skipWaiting called')
     self.skipWaiting()
-    location.reload()
+    window.location.reload()
   }
 })
 
