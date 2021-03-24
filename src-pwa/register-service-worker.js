@@ -42,20 +42,9 @@ register(process.env.SERVICE_WORKER_FILE, {
           label: translate.t('update'),
           handler: () => {
             registration.waiting.postMessage('skipWaiting')
+            window.location.reload()
           }
         }]
-    })
-
-    const newWorker = registration.installing
-
-    let refreshing
-
-    newWorker.addEventListener('statechange', () => {
-      if (newWorker.state === 'activated') {
-        if (refreshing) return
-        window.location.reload()
-        refreshing = true
-      }
     })
   },
 
