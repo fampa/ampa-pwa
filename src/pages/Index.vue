@@ -28,11 +28,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, watch } from 'vue'
+import { defineComponent, watchEffect } from 'vue'
 // import { useStore } from 'src/services/store'
 import NewsCard from 'components/NewsCard.vue'
 import { ArticlesService } from 'src/services/articles'
 import { useQuasar } from 'quasar'
+// import { onError } from '@apollo/client/link/error'
 
 export default defineComponent({
   name: 'PageIndex',
@@ -42,11 +43,10 @@ export default defineComponent({
     // const store = useStore()
     const $q = useQuasar()
     const { articles, loading, error } = articlesService.getAll()
-    watch(
-      () => error,
-      (error /* , prevError */) => {
-        /* ... */
-        $q.notify({
+    watchEffect(
+      () => {
+        // console.error('watch', error)
+        return $q.notify({
           type: 'negative',
           message: error.value.toString()
         })

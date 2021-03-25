@@ -17,15 +17,12 @@
       </q-img>
       <div class="content" v-html="content"></div>
     </div>
-    <div v-if="error">
-      {{error}}
-    </div>
   </q-page>
 </template>
 
 <script lang="ts">
-import { defineComponent, computed } from 'vue'
-import { date } from 'quasar'
+import { defineComponent, computed, watchEffect } from 'vue'
+import { date, useQuasar } from 'quasar'
 import { ArticlesService } from 'src/services/articles'
 import { useRoute } from 'vue-router'
 import { useStore } from 'src/services/store'
@@ -58,11 +55,19 @@ export default defineComponent({
     const formatedUpdatedDate = computed(() => date.formatDate(article.value?.updated_at, 'DD/MM/YYYY, HH:mm'))
 
     const { article, loading, error } = articlesService.getById(id)
-
+    const $q = useQuasar()
+    watchEffect(
+      () => {
+        // console.error('watch', error)
+        return $q.notify({
+          type: 'negative',
+          message: error.value.toString()
+        })
+      }
+    )
     return {
       article,
       loading,
-      error,
       title,
       formatedDate,
       formatedUpdatedDate,
