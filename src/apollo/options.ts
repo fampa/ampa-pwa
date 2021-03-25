@@ -26,7 +26,7 @@ export async function getClientOptions (
       cache: cache,
       defaultOptions: {
         // apollo options applied to all queries in components
-        $query: {
+        query: {
           fetchPolicy: 'cache-and-network'
         }
       }
