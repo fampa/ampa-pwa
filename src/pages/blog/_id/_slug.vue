@@ -63,7 +63,7 @@ export default defineComponent({
 
     watchEffect(
       () => {
-        if (error) {
+        if (error.value) {
           $q.notify({
             type: 'negative',
             message: translate.t('errorNetwork')

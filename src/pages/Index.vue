@@ -46,7 +46,8 @@ export default defineComponent({
     const { articles, loading, error } = articlesService.getAll()
     watchEffect(
       () => {
-        if (error) {
+        if (error.value) {
+          console.log(error)
           $q.notify({
             type: 'negative',
             message: translate.t('errorNetwork')
