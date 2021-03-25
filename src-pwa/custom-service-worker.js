@@ -8,6 +8,7 @@
 import { precacheAndRoute } from 'workbox-precaching'
 import { registerRoute } from 'workbox-routing'
 import { StaleWhileRevalidate } from 'workbox-strategies'
+import { pageCache } from 'workbox-recipes'
 
 // Use with precache injection
 precacheAndRoute(self.__WB_MANIFEST)
@@ -22,6 +23,8 @@ self.addEventListener('message', e => {
 self.addEventListener('activate', function (event) {
   event.waitUntil(self.clients.claim())
 })
+
+pageCache()
 
 registerRoute(
   /^https:\/\/firebasestorage\.googleapis\.com\/.*/,
