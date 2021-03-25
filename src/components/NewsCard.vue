@@ -1,5 +1,5 @@
 <template>
-  <router-link :to="`/blog/${article.id}/${slug}`">
+  <router-link class="card" :to="`/blog/${article.id}/${slug}`">
     <q-card class="news-card">
       <div class="img-container">
         <q-img

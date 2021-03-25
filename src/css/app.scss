@@ -1,5 +1,14 @@
 // app global css in SCSS form
-a, a:visited, a:hover {
+a, a:visited{
+    text-decoration: none;
+    color: $primary;
+}
+
+a:hover {
+    color: $accent;
+}
+
+a.card {
     text-decoration: none;
     color: inherit;
 }
