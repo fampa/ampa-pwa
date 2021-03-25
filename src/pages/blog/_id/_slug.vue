@@ -26,6 +26,7 @@ import { date, useQuasar } from 'quasar'
 import { ArticlesService } from 'src/services/articles'
 import { useRoute } from 'vue-router'
 import { useStore } from 'src/services/store'
+import { i18n } from 'src/boot/i18n'
 
 export default defineComponent({
   name: 'NewsDetails',
@@ -55,13 +56,17 @@ export default defineComponent({
     const formatedUpdatedDate = computed(() => date.formatDate(article.value?.updated_at, 'DD/MM/YYYY, HH:mm'))
 
     const { article, loading, error } = articlesService.getById(id)
+
     const $q = useQuasar()
+
+    const translate = i18n.global
+
     watchEffect(
       () => {
         if (error) {
           $q.notify({
             type: 'negative',
-            message: error.value.toString()
+            message: translate.t('errorNetwork')
           })
         }
       }

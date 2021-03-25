@@ -33,7 +33,7 @@ import { defineComponent, watchEffect } from 'vue'
 import NewsCard from 'components/NewsCard.vue'
 import { ArticlesService } from 'src/services/articles'
 import { useQuasar } from 'quasar'
-// import { onError } from '@apollo/client/link/error'
+import { i18n } from 'src/boot/i18n'
 
 export default defineComponent({
   name: 'PageIndex',
@@ -42,13 +42,14 @@ export default defineComponent({
     const articlesService = new ArticlesService()
     // const store = useStore()
     const $q = useQuasar()
+    const translate = i18n.global
     const { articles, loading, error } = articlesService.getAll()
     watchEffect(
       () => {
         if (error) {
           $q.notify({
             type: 'negative',
-            message: error.value.toString()
+            message: translate.t('errorNetwork')
           })
         }
       }

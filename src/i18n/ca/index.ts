@@ -2,6 +2,7 @@
 // so you can safely delete all default props below
 
 export default {
+  errorNetwork: 'No tens connexió a internet',
   home: 'Inici',
   login: 'Entrar',
   logout: 'Eixir',
