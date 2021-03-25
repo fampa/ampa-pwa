@@ -17,7 +17,7 @@
       </q-img>
       <div class="content" v-html="content"></div>
     </div>
-    <div v-else-if="error">
+    <div v-if="error">
       {{error}}
     </div>
   </q-page>

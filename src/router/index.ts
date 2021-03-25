@@ -35,7 +35,10 @@ export default route<StateInterface>(function (/* { store, ssrContext } */) {
     //     return { x: 0, y: 0 }
     //   }
     // },
-    scrollBehavior: () => ({ x: 0, y: 0 }),
+    scrollBehavior: () => {
+      document.getElementById('app')?.scrollIntoView()
+      return null
+    },
     routes,
 
     // Leave this as is and make changes in quasar.conf.js instead!
