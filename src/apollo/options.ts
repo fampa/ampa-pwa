@@ -23,7 +23,13 @@ export async function getClientOptions (
         uri: process.env.GRAPHQL_URI || 'http://api.example.com'
       }),
 
-      cache: cache
+      cache: cache,
+      defaultOptions: {
+        // apollo options applied to all queries in components
+        $query: {
+          fetchPolicy: 'cache-and-network'
+        }
+      }
     },
 
     // Specific Quasar mode options.
