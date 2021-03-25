@@ -6,6 +6,9 @@
       <q-skeleton type="text" />
       <q-skeleton type="text" />
     </div>
+    <div class="article" v-else-if="!article">
+      404. Article no trobat
+    </div>
     <div class="article" v-else-if="article">
       <h1 class="text-h4">{{title}}</h1>
       <div class="subtitle">{{formatedDate}}. <span class="updated" v-if="article.created_at !== article.updated_at">{{$t('updatedAt', {date: formatedUpdatedDate})}}</span></div>
