@@ -45,11 +45,12 @@ export default defineComponent({
     const { articles, loading, error } = articlesService.getAll()
     watchEffect(
       () => {
-        // console.error('watch', error)
-        return $q.notify({
-          type: 'negative',
-          message: error.value.toString()
-        })
+        if (error) {
+          $q.notify({
+            type: 'negative',
+            message: error.value.toString()
+          })
+        }
       }
     )
     return {
