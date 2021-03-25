@@ -5,13 +5,18 @@
  * quasar.conf > pwa > workboxPluginMode is set to "InjectManifest"
  */
 
-import { precacheAndRoute } from 'workbox-precaching'
-import { registerRoute } from 'workbox-routing'
+import { precacheAndRoute, createHandlerBoundToURL } from 'workbox-precaching'
+import { registerRoute, NavigationRoute } from 'workbox-routing'
 import { StaleWhileRevalidate } from 'workbox-strategies'
 import { pageCache } from 'workbox-recipes'
 
 // Use with precache injection
 precacheAndRoute(self.__WB_MANIFEST)
+
+// Cache routes on a SPA
+const handler = createHandlerBoundToURL('/index.html')
+const navigationRoute = new NavigationRoute(handler)
+registerRoute(navigationRoute)
 
 self.addEventListener('message', e => {
   if (e.data === 'skipWaiting') {
