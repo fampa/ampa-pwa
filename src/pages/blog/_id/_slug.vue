@@ -1,5 +1,5 @@
 <template>
-  <q-page padding>
+  <q-page padding class="q-pa-md">
     <div v-if="loading">
       <q-skeleton type="text" height="60px" />
       <q-skeleton height="200px" square />
