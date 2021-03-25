@@ -6,7 +6,7 @@
           <q-card class="news-card">
             <q-skeleton height="200px" square />
             <q-card-section>
-              <div class="text-h6 titular">
+              <div class="text-h6 title">
                 <q-skeleton type="text" />
               </div>
               <div class="text-subtitle2">

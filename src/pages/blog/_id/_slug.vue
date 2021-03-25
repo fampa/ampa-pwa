@@ -10,8 +10,8 @@
       404. Article no trobat
     </div>
     <div class="article" v-else-if="article">
-      <h1 class="text-h4">{{title}}</h1>
-      <div class="subtitle">{{formatedDate}}. <span class="updated" v-if="article.created_at !== article.updated_at">{{$t('updatedAt', {date: formatedUpdatedDate})}}</span></div>
+      <h1 class="text-h4 title">{{title}}</h1>
+      <div class="subtitle"><strong>{{formatedDate}}</strong>. <span class="updated" v-if="article.created_at !== article.updated_at">{{$t('updatedAt', {date: formatedUpdatedDate})}}</span></div>
       <q-img
         fit="cover"
         v-if="article.image"
@@ -90,6 +90,7 @@ export default defineComponent({
 }
 .subtitle {
   opacity: 0.6;
+  margin-top: 0.5rem;
   margin-bottom: 1rem;
 }
 .updated {

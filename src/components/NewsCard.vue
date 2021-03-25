@@ -86,4 +86,7 @@ export default defineComponent({
   -webkit-line-clamp: 2;
   text-overflow: ellipsis;
 }
+.text-subtitle2 {
+  opacity: 0.7;
+}
 </style>
