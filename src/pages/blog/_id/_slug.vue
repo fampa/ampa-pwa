@@ -13,7 +13,6 @@
       <h1 class="text-h4">{{title}}</h1>
       <div class="subtitle">{{formatedDate}}. <span class="updated" v-if="article.created_at !== article.updated_at">{{$t('updatedAt', {date: formatedUpdatedDate})}}</span></div>
       <q-img
-        class="image"
         fit="cover"
         v-if="article.image"
         :src="article.image">
@@ -86,21 +85,19 @@ export default defineComponent({
 })
 </script>
 <style scoped lang="scss">
-.image {
-  height: 200px;
-}
 .text-h4 {
   margin-bottom: 0;
 }
 .subtitle {
   opacity: 0.6;
+  margin-bottom: 1rem;
 }
 .updated {
   font-style: italic;
   font-size: 0.9em;
 }
 .content {
-  margin-top: 2rem;
+  margin-top: 1rem;
   text-align: justify;
   hyphens: auto;
 }
