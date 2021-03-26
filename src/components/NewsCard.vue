@@ -1,6 +1,6 @@
 <template>
   <router-link class="card" :to="`/blog/${article.id}/${slug}`">
-    <q-card class="news-card">
+    <q-card class="news-card" v-ripple>
       <div class="img-container">
         <q-img
           :src="article.image"

@@ -75,10 +75,15 @@
       </q-list>
     </q-scroll-area>
     </q-drawer>
-
-    <q-page-container>
-      <router-view />
-    </q-page-container>
+      <q-page-container>
+        <transition
+          appear
+          enter-active-class="animated fadeInLeft"
+          leave-active-class="animated fadeOutLeft"
+        >
+          <router-view />
+        </transition>
+      </q-page-container>
   </q-layout>
 </template>
 
