@@ -1,6 +1,7 @@
 <template>
   <q-page padding class="bg-grey-2">
     <h1 class="text-h4">{{$t('personalData')}}</h1>
+    WIP
   </q-page>
 </template>
 
