@@ -1,4 +1,8 @@
 <template>
+<transition
+            appear
+            enter-active-class="animated fadeInLeft"
+            leave-active-class="animated fadeOutLeft">
   <q-page padding class="q-pa-md">
     <div v-if="loading">
       <q-skeleton type="text" height="60px" />
@@ -20,6 +24,7 @@
       <div class="content" v-html="content"></div>
     </div>
   </q-page>
+</transition>
 </template>
 
 <script lang="ts">

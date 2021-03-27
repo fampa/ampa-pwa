@@ -1,4 +1,8 @@
 <template>
+<transition
+            appear
+            enter-active-class="animated fadeOutLeft"
+            leave-active-class="animated fadeInRight">
   <q-page class="bg-grey-2 q-pa-md">
     <div v-if="loading">
       <div class="row items-start">
@@ -35,6 +39,7 @@
       </q-infinite-scroll>
     </div>
   </q-page>
+</transition>
 </template>
 
 <script lang="ts">
@@ -62,7 +67,7 @@ export default defineComponent({
     const { articles, loading, error, fetchMore } = articlesService.getAll(data.page, data.pageSize)
 
     const onLoad = async () => {
-      console.log('onLoad')
+      // console.log('onLoad')
       data.page++
       await fetchMore({
         variables: {
