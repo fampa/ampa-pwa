@@ -26,7 +26,7 @@
       </div>
     </div>
     <div v-else-if="articles">
-      <q-infinite-scroll @load="onLoad">
+      <q-infinite-scroll :offset="100" @load="onLoad">
         <div class="row items-start">
           <div
             class="col-12 col-sm-6 col-md-4 q-pa-sm"
@@ -36,6 +36,11 @@
             <news-card :article="article"></news-card>
           </div>
         </div>
+        <template v-if="loading" v-slot:loading>
+          <div class="row justify-center q-my-md">
+            <q-spinner-dots color="primary" size="40px" />
+          </div>
+        </template>
       </q-infinite-scroll>
     </div>
   </q-page>
