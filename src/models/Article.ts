@@ -16,8 +16,13 @@ export interface ArticlesData {
     articles: Article[];
 }
 
+export interface ArticlesVars {
+    offset: number
+    limit: number
+}
+
 export interface ArticleVars {
-    id: number;
+    id: number
 }
 
 export interface ArticleData {

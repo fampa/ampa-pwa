@@ -1,7 +1,11 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+// import { Article } from '@/models/Article'
 import { createHttpLink, InMemoryCache } from '@apollo/client/core'
 import type { ApolloClientOptions } from '@apollo/client/core/ApolloClient'
 import type { BootFileParams } from '@quasar/app'
 import { persistCache, LocalStorageWrapper } from 'apollo3-cache-persist'
+import { offsetLimitPagination } from '@apollo/client/utilities'
 
 // bootFileParams is { app, router, ...}
 // eslint-disable-next-line @typescript-eslint/require-await
@@ -9,7 +13,15 @@ export async function getClientOptions (
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   bootFileParams?: BootFileParams<unknown>
 ): Promise<ApolloClientOptions<unknown>> {
-  const cache = new InMemoryCache({})
+  const cache = new InMemoryCache({
+    typePolicies: {
+      Query: {
+        fields: {
+          articles: offsetLimitPagination()
+        }
+      }
+    }
+  })
 
   await persistCache({
     cache,
@@ -26,10 +38,10 @@ export async function getClientOptions (
       cache: cache,
       defaultOptions: {
         watchQuery: {
-          fetchPolicy: 'cache-and-network'
+          fetchPolicy: 'cache-first'
         },
         query: {
-          fetchPolicy: 'cache-and-network'
+          fetchPolicy: 'cache-first'
         }
       }
     },

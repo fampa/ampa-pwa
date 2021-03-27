@@ -1,5 +1,5 @@
-query getArticles {
-    articles(order_by: {created_at: desc}) {
+query getArticles($offset: Int, $limit: Int) {
+    articles(offset: $offset, limit: $limit, order_by: {created_at: desc}) {
     id
     status
     image

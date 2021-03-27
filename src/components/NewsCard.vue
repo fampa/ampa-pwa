@@ -40,17 +40,17 @@ export default defineComponent({
     const language = computed(() => store.state.settings.language)
     const fallbackLanguage = computed(() => store.state.settings.fallbackLanguage)
     const title = computed(() => {
-      if (props.article.translations.find(t => t.language === language.value)?.title) {
-        return props.article.translations.find(t => t.language === language.value)?.title
+      if (props.article?.translations?.find(t => t.language === language.value)?.title) {
+        return props.article?.translations?.find(t => t.language === language.value)?.title
       } else {
-        return props.article.translations.find(t => t.language === fallbackLanguage.value)?.title
+        return props.article?.translations?.find(t => t.language === fallbackLanguage.value)?.title
       }
     })
     const slug = computed(() => {
-      if (props.article.translations.find(t => t.language === language.value)?.slug) {
-        return props.article.translations.find(t => t.language === language.value)?.slug
+      if (props.article?.translations?.find(t => t.language === language.value)?.slug) {
+        return props.article?.translations?.find(t => t.language === language.value)?.slug
       } else {
-        return props.article.translations.find(t => t.language === fallbackLanguage.value)?.slug
+        return props.article?.translations?.find(t => t.language === fallbackLanguage.value)?.slug
       }
     })
     const formatedDate = computed(() => date.formatDate(props.article.created_at, 'DD/MM/YYYY'))

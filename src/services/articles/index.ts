@@ -2,13 +2,13 @@ import { useQuery, useResult } from '@vue/apollo-composable'
 // import gql from 'graphql-tag'
 import getArticles from './queries/getArticles.gql'
 import getArticleById from './queries/getArticleById.gql'
-import { ArticleData, ArticlesData, ArticleVars } from '@/models/Article'
+import { ArticleData, ArticlesData, ArticleVars, ArticlesVars } from '@/models/Article'
 
 export class ArticlesService {
-  getAll = () => {
-    const { result, loading, error } = useQuery<ArticlesData>(getArticles)
+  getAll = (offset: number, limit: number) => {
+    const { result, loading, error, fetchMore } = useQuery<ArticlesData, ArticlesVars>(getArticles, { offset, limit })
     const articles = useResult(result, null, data => data.articles)
-    return { articles, loading, error }
+    return { articles, loading, error, fetchMore }
   }
 
   getById = (id: number) => {
