@@ -26,8 +26,6 @@ export default route<StateInterface>(function (/* { store, ssrContext } */) {
         : createWebHashHistory
 
   const Router = createRouter({
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
     scrollBehavior: (to, from, savedPosition) => {
       if (savedPosition) {
         return savedPosition
@@ -35,10 +33,6 @@ export default route<StateInterface>(function (/* { store, ssrContext } */) {
         return { left: 0, top: 0 }
       }
     },
-    // scrollBehavior: () => {
-    //   document.getElementById('app')?.scrollIntoView()
-    //   return null
-    // },
     routes,
 
     // Leave this as is and make changes in quasar.conf.js instead!
