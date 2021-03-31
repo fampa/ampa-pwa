@@ -1,7 +1,7 @@
 <template>
   <q-page class="flex flex-center bg-grey-2">
     <div class="text-center">
-      <img alt="Nexe" src="icons/icon-128x128.png">
+      <img alt="AMPA" src="icons/icon-128x128.png">
       <div id="firebaseui-auth-container"></div>
     </div>
   </q-page>
