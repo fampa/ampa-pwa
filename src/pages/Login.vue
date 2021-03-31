@@ -63,7 +63,15 @@ export default {
         ui = new firebaseui.auth.AuthUI(firebase.auth())
         // The start method will wait until the DOM is loaded.
       }
+
+      // avoids duplicated ui on cached page
+      const firebaseUi = document.getElementsByClassName('firebaseui-container')
+      if (firebaseUi[0]) {
+        firebaseUi[0].remove()
+      }
+
       ui.start('#firebaseui-auth-container', uiConfig)
+
       if (ui.isPendingRedirect()) {
         console.log('pending redirect')
         // $q.loading.show()
