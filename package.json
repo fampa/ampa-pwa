@@ -9,7 +9,7 @@
     "dev": "quasar dev",
     "generate:icons": "icongenie generate -i src/assets/icon.png",
     "build": "yarn && npm run build:functions && quasar build -m pwa",
-    "build:functions":"cd functions && yarn install --ignore-engines && cd ..",
+    "build:functions": "cd functions && yarn install --ignore-engines && cd ..",
     "deploy": "npm run build && firebase deploy --only hosting",
     "deploy:functions": "npm run build:functions && firebase deploy --only functions",
     "lint": "eslint --ext .js,.ts,.vue ./",

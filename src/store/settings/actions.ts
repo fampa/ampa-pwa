@@ -2,11 +2,25 @@ import { ActionTree } from 'vuex'
 import { StateInterface } from '../index'
 import { SettingsStateInterface } from './state'
 import { i18n } from 'src/boot/i18n'
+import { Quasar } from 'quasar'
 
 const actions: ActionTree<SettingsStateInterface, StateInterface> = {
-  setLanguage ({ commit }, payload: string) {
+  async setLanguage ({ commit }, payload: string) {
     i18n.global.locale = payload
+    const langIso = payload // ... some logic to determine it (use Cookies Plugin?)
 
+    try {
+      await import(
+      /* webpackInclude: /(de|en-US)\.js$/ */
+        'quasar/lang/' + langIso
+      )
+        .then(lang => {
+          Quasar.lang.set(lang.default)
+        })
+    } catch (err) {
+    // Requested Quasar Language Pack does not exist,
+    // let's not break the app, so catching error
+    }
     commit('setLanguage', payload)
   }
 }
