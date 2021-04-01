@@ -38,10 +38,12 @@ export async function getClientOptions (
       cache: cache,
       defaultOptions: {
         watchQuery: {
-          fetchPolicy: 'cache-first'
+          fetchPolicy: 'cache-and-network',
+          nextFetchPolicy: 'cache-first'
         },
         query: {
-          fetchPolicy: 'cache-first'
+          fetchPolicy: 'cache-and-network',
+          nextFetchPolicy: 'cache-first'
         }
       }
     },
