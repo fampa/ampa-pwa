@@ -10,15 +10,16 @@ export default boot(async ({ store }) => {
 
   try {
     await import(
-    /* webpackInclude: /(de|en-US)\.js$/ */
+    /* webpackInclude: /(ca|es)\.js$/ */
       // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
       'quasar/lang/' + langIso
     )
       .then(lang => {
-        console.log('lang', lang)
+        // console.log('lang', lang)
         Quasar.lang.set(lang.default)
       })
   } catch (err) {
+    console.log(err)
   // Requested Quasar Language Pack does not exist,
   // let's not break the app, so catching error
   }

@@ -11,10 +11,11 @@ const actions: ActionTree<SettingsStateInterface, StateInterface> = {
 
     try {
       await import(
-      /* webpackInclude: /(de|en-US)\.js$/ */
+      /* webpackInclude: /(es|ca)\.js$/ */
         'quasar/lang/' + langIso
       )
         .then(lang => {
+          // console.log('lang', lang)
           Quasar.lang.set(lang.default)
         })
     } catch (err) {
