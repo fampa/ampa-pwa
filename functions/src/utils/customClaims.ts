@@ -1,6 +1,6 @@
 import * as admin from 'firebase-admin'
 
-const updateClaims = (uid: string, isAdmin?: boolean) => {
+export const updateClaims = (uid: string, isAdmin?: boolean) => {
   const defaultRole = isAdmin ? 'admin' : 'user'
   const roles = isAdmin ? ['user', 'admin'] : ['user']
   return admin.auth().setCustomUserClaims(uid, {
@@ -11,5 +11,3 @@ const updateClaims = (uid: string, isAdmin?: boolean) => {
     }
   })
 }
-
-export default updateClaims
