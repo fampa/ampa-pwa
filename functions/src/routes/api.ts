@@ -10,7 +10,7 @@ export const appApi: express.Application = express()
 
 admin.initializeApp()
 
-import updateClaims from '../utils/customClaims'
+import { updateClaims } from '../utils/customClaims'
 
 interface User {
   id: string,
