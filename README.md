@@ -40,6 +40,6 @@ If your firebase functions have permission issues (403 error):
 - Click the checkbox next to the function on which you want to grant access.
 - Click Show Info Panel in the top right corner to show the Permissions tab.
 - Click Add member.
-- In the New members field, type allUsers.
+- In the New members field, type `allUsers`.
 - Select the role Cloud Functions > Cloud Functions Invoker from the Select a role drop-down menu.
 - Click Save.
