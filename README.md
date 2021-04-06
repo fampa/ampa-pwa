@@ -9,7 +9,7 @@ Copy or rename `.env.example` file to `.env`, and `env.json.example` to `env.jso
 ## Install the dependencies
 
 ```bash
-cd functions yarn && cd .. && yarn
+cd functions && yarn && cd .. && yarn
 ```
 
 ### Start the app in development mode (hot-code reloading, error reporting, etc.)
