@@ -1,6 +1,8 @@
 import * as hbs from 'nodemailer-express-handlebars'
 import * as nodemailer from 'nodemailer'
 import * as express from 'express'
+import * as functions from 'firebase-functions'
+import 'firebase-functions'
 import SMTPTransport = require('nodemailer/lib/smtp-transport')
 
 interface MailObject {
@@ -16,11 +18,11 @@ module.exports = function (app: express.Application) {
     const obj = req.body as MailObject
 
     const transportOptions: SMTPTransport.Options = {
-      host: process.env.SMTP_SERVICE_HOST,
-      port: Number(process.env.SMTP_SERVICE_PORT),
+      host: functions.config().env.smtp.host as string,
+      port: Number(functions.config().env.smtp.port),
       auth: {
-        user: process.env.SMTP_USER_NAME,
-        pass: process.env.SMTP_USER_PASSWORD
+        user: functions.config().env.smtp.username as string,
+        pass: functions.config().env.smtp.password as string
       }
     }
 
@@ -40,8 +42,8 @@ module.exports = function (app: express.Application) {
     transport.use('compile', hbs(options))
 
     const message = {
-      from: process.env.SMTP_USER_NAME, // Sender address
-      to: process.env.SMTP_USER_NAME,
+      from: functions.config().env.smtp.username as string, // Sender address
+      to: functions.config().env.smtp.username as string,
       replyTo: obj.email, // List of recipients
       subject: obj.subject,
       // text: obj.message,

@@ -93,9 +93,9 @@
             <div class="content" style="box-sizing: border-box; display: block; Margin: 0 auto; max-width: 580px; padding: 10px;">
 
               <!-- START CENTERED WHITE CONTAINER -->
-              <span class="preheader" style="color: transparent; display: none; height: 0; max-height: 0; max-width: 0; opacity: 0; overflow: hidden; mso-hide: all; visibility: hidden; width: 0;">AMPA {{process.env.SCHOOL_NAME}}</span>
+              <span class="preheader" style="color: transparent; display: none; height: 0; max-height: 0; max-width: 0; opacity: 0; overflow: hidden; mso-hide: all; visibility: hidden; width: 0;">AMPA {{functions.config().env.template.schoolName}}</span>
               <!-- LOGO -->
-          <div style="text-align: center; margin-bottom: 10px;"><a href="{{process.env.SITE_URL}}" target="_blank"><img width="203px" height="103px" src="{{process.env.EMAIL_LOGO_URL}}" alt="AMPA" /></a></div>
+          <div style="text-align: center; margin-bottom: 10px;"><a href="{{functions.config().env.template.siteUrl}}" target="_blank"><img width="203px" height="103px" src="{{functions.config().env.template.emailLogoUrl}}" alt="AMPA" /></a></div>
               <table class="main" style="border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt; width: 100%; background: #ffffff; border-radius: 3px;">
 
                 <!-- START MAIN CONTENT AREA -->

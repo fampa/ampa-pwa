@@ -1,15 +1,15 @@
 import { GraphQLClient } from 'graphql-request'
+import * as functions from 'firebase-functions'
+import 'firebase-functions'
 // import * as fetch from 'node-fetch'
 
 // global.Headers = fetch.Headers
 
 export default async function graphqlClient (query: any, variables: any) {
-  const endpoint = process.env.GRAPHQL_URI || 'https://db.monjo.xyz'
+  const endpoint = functions.config().env.graphql.url as string
   const headers = new Headers()
 
-  if (process.env.HASURA_ADMIN_SECRET) {
-    headers.append('x-hasura-admin-secret', process.env.HASURA_ADMIN_SECRET)
-  }
+  headers.append('x-hasura-admin-secret', functions.config().env.graphql.adminSecret as string)
 
   const graphQLClient = new GraphQLClient(endpoint, {
     headers: headers
