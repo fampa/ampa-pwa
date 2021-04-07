@@ -15,7 +15,7 @@
         "email": ""
     },
     "graphql": {
-        "url": "",
+        "url": "<without /v1/graphql>",
         "adminSecret": ""
     }
 }
