@@ -1,11 +1,13 @@
 import { GraphQLClient } from 'graphql-request'
 import * as functions from 'firebase-functions'
 import 'firebase-functions'
-// import * as fetch from 'node-fetch'
+import * as fetch from 'node-fetch'
 
-// global.Headers = fetch.Headers
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+/* @ts-expect-error */
+global.Headers = fetch.Headers
 
-export default async function graphqlClient (query: string, variables: Record<string, unknown>) {
+export async function graphqlClient (query: string, variables: Record<string, unknown>) {
   const endpoint = functions.config().env.graphql.url as string
   const headers = new Headers()
 

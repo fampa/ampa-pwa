@@ -2,7 +2,7 @@ import * as admin from 'firebase-admin'
 import * as functions from 'firebase-functions'
 import 'firebase-functions'
 import { gql } from 'graphql-request'
-import graphqlClient from '../utils/graphql'
+import { graphqlClient } from '../utils/graphql'
 import express = require('express')
 import cors = require('cors')
 export const appApi: express.Application = express()
