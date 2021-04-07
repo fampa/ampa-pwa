@@ -37,7 +37,7 @@ export const userCreated = async (user: admin.auth.UserRecord) => {
     functions.logger.log('isNotTheFirst', isNotTheFirst)
     await updateClaims(user.uid)
   } else {
-    functions.logger.log('the first!')
+    functions.logger.log('the first is admin!')
     await updateClaims(user.uid, true)
     isAdmin = true
   }
