@@ -8,7 +8,7 @@
   "scripts": {
     "dev": "quasar dev",
     "generate:icons": "icongenie generate -i src/assets/icon.png",
-    "pre:build": "firebase functions:config:set env=\"$(cat env.json)\"",
+    "pre:build": "firebase functions:config:set env=\"$(cat functions-config.json)\"",
     "build": "yarn && npm run build:functions && quasar build -m pwa",
     "build:functions": "npm run pre:build && cd functions && yarn install --ignore-engines && cd ..",
     "deploy": "npm run build && firebase deploy --only hosting",

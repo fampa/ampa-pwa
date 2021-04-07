@@ -4,7 +4,7 @@ PWA de gestió del AMPA
 
 ## Set environmental variables
 
-Copy or rename `.env.example` file to `.env`, and `env.json.example` to `env.json`, and fill the variables.
+Copy or rename `.env.example` file to `.env`, and `functions-config.json.example` to `unctions-config.json`, and fill the variables.
 
 ## Install the dependencies
 
