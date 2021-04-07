@@ -4,8 +4,7 @@ import 'firebase-functions'
 import { gql } from 'graphql-request'
 import graphqlClient from '../utils/graphql'
 import express = require('express')
-import * as cors from 'cors'
-
+import cors = require('cors')
 export const appApi: express.Application = express()
 
 admin.initializeApp()
@@ -45,10 +44,10 @@ appApi.post('/refresh-token', (req: express.Request, res: express.Response) => {
       return graphqlClient(mutation, variables).catch((error) => console.error(error))
     })
     .then((newUser) => {
-      console.log('newUser', newUser)
+      functions.logger.log('NewUser', newUser)
       return res.status(200).send('success')
     }).catch((error) => {
-      console.error('REFRESH ERROR', error)
+      functions.logger.error('REFRESH ERROR', error)
       return res.status(400).send(error)
     })
 })

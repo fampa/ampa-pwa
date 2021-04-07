@@ -1,6 +1,14 @@
 {
   "extends": "@quasar/app/tsconfig-preset",
   "compilerOptions": {
+    "module": "commonjs",
+    "noImplicitReturns": true,
+    "noUnusedLocals": true,
+    "outDir": "lib",
+    "sourceMap": true,
+    "strict": true,
+    "target": "es2017",
+    "noImplicitAny": false,
     "baseUrl": ".",
     "paths": {
       "@/*": [
@@ -8,7 +16,12 @@
       ]
     },
   },
-  "exclude": [
+  "include": [
+    "src",
     "functions"
+  ],
+  "exclude": [
+    "node_modules",
+    "functions/node_modules"
   ]
 }

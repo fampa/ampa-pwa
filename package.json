@@ -13,7 +13,7 @@
     "build:functions": "npm run pre:build && cd functions && yarn install --ignore-engines && cd ..",
     "deploy": "npm run build && firebase deploy --only hosting",
     "deploy:functions": "npm run build:functions && firebase deploy --only functions",
-    "lint": "eslint --ext .js,.ts,.vue ./",
+    "lint": "eslint --ext .js,.ts,.vue ./ --fix",
     "test": "echo \"No test specified\" && exit 0"
   },
   "dependencies": {
@@ -31,6 +31,7 @@
   "devDependencies": {
     "@ejez/quasar-app-extension-apollo": "^2.0.0-alpha.7",
     "@quasar/app": "^3.0.0-beta.1",
+    "@types/cors": "^2.8.10",
     "@types/node": "^10.17.15",
     "@typescript-eslint/eslint-plugin": "^4.9.0",
     "@typescript-eslint/parser": "^4.9.0",
