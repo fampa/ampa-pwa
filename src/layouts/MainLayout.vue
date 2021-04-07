@@ -131,5 +131,6 @@ export default defineComponent({
   padding: 16px;
   background: transparent;
   right: 0;
+  z-index: 999;
 }
 </style>
