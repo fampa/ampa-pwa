@@ -4,18 +4,13 @@ import { updateClaims } from './customClaims'
 
 export const userCreated = async (user: admin.auth.UserRecord) => {
   functions.logger.log('user created', user.toJSON())
-  await admin
-    .auth()
-    .listUsers(1)
-    .then(async (listUsersResult) => {
-      const isNotTheFirst = listUsersResult.users[0]
-      functions.logger.log('listUsersResult', listUsersResult.users[0])
-      if (isNotTheFirst) {
-        functions.logger.log('isNotTheFirst', isNotTheFirst)
-        await updateClaims(user.uid)
-      } else {
-        functions.logger.log('the first!', isNotTheFirst)
-        await updateClaims(user.uid, true)
-      }
-    })
+  const listUsers = await admin.auth().listUsers(2)
+  const isNotTheFirst = listUsers.users.length > 1
+  if (isNotTheFirst) {
+    functions.logger.log('isNotTheFirst', isNotTheFirst)
+    await updateClaims(user.uid)
+  } else {
+    functions.logger.log('the first!')
+    await updateClaims(user.uid, true)
+  }
 }
