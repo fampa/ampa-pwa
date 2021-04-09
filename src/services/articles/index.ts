@@ -3,6 +3,7 @@ import { useQuery, useResult } from '@vue/apollo-composable'
 import getArticles from './queries/getArticles.gql'
 import getArticleById from './queries/getArticleById.gql'
 import { ArticleData, ArticlesData, ArticleVars, ArticlesVars } from '@/models/Article'
+import { apolloClient } from 'src/boot/apollo'
 
 export class ArticlesService {
   getAll = (offset: number, limit: number) => {
@@ -19,5 +20,9 @@ export class ArticlesService {
     const article = useResult(result, null, data => data.articles_by_pk)
 
     return { article, loading, error }
+  }
+
+  clearCache = async () => {
+    await apolloClient.clearStore()
   }
 }

@@ -48,7 +48,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, watchEffect, reactive } from 'vue'
+import { defineComponent, watchEffect, reactive, onUnmounted } from 'vue'
 // import { useStore } from 'src/services/store'
 import NewsCard from 'components/NewsCard.vue'
 import { ArticlesService } from 'src/services/articles'
@@ -89,6 +89,11 @@ export default defineComponent({
           message: translate.t('errorNetwork')
         })
       }
+    })
+
+    onUnmounted(async () => {
+      const articlesService = new ArticlesService()
+      await articlesService.clearCache()
     })
 
     return {
