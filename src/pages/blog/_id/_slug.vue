@@ -29,7 +29,7 @@
 
 <script lang="ts">
 import { defineComponent, computed, watchEffect } from 'vue'
-import { date, useQuasar } from 'quasar'
+import { date, Notify } from 'quasar'
 import { ArticlesService } from 'src/services/articles'
 import { useRoute } from 'vue-router'
 import { useStore } from 'src/services/store'
@@ -64,14 +64,12 @@ export default defineComponent({
 
     const { article, loading, error } = articlesService.getById(id)
 
-    const $q = useQuasar()
-
     const translate = i18n.global
 
     watchEffect(
       () => {
         if (error.value) {
-          $q.notify({
+          Notify.create({
             type: 'negative',
             message: translate.t('errorNetwork')
           })

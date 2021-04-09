@@ -52,7 +52,7 @@ import { defineComponent, watchEffect, reactive, onUnmounted } from 'vue'
 // import { useStore } from 'src/services/store'
 import NewsCard from 'components/NewsCard.vue'
 import { ArticlesService } from 'src/services/articles'
-import { useQuasar } from 'quasar'
+import { Notify } from 'quasar'
 import { i18n } from 'src/boot/i18n'
 
 export default defineComponent({
@@ -61,7 +61,7 @@ export default defineComponent({
   setup () {
     const articlesService = new ArticlesService()
     // const store = useStore()
-    const $q = useQuasar()
+
     const translate = i18n.global
 
     const data = reactive({
@@ -84,7 +84,7 @@ export default defineComponent({
     watchEffect(() => {
       if (error.value) {
         console.log(error)
-        $q.notify({
+        Notify.create({
           type: 'negative',
           message: translate.t('errorNetwork')
         })
