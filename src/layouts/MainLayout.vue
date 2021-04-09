@@ -72,6 +72,28 @@
           </q-item-section>
           <q-item-section>{{item.title}}</q-item-section>
         </q-item>
+        <div v-if="user">
+          <q-item v-for="(item, index) in userItems" :key="index" clickable v-ripple :to="item.to">
+            <q-item-section avatar>
+              <q-icon :name="item.icon" />
+            </q-item-section>
+            <q-item-section>{{item.title}}</q-item-section>
+          </q-item>
+          <div v-if="user.isAdmin">
+            <q-separator />
+            <q-item>
+              <q-item-section>
+                  <q-item-label overline>ADMIN</q-item-label>
+              </q-item-section>
+            </q-item>
+            <q-item v-for="(item, index) in adminItems" :key="index" clickable v-ripple :to="item.to">
+              <q-item-section avatar>
+                <q-icon :name="item.icon" />
+              </q-item-section>
+              <q-item-section>{{item.title}}</q-item-section>
+            </q-item>
+          </div>
+        </div>
       </q-list>
     </q-scroll-area>
     </q-drawer>
@@ -104,7 +126,12 @@ export default defineComponent({
           title: translate.t('home'),
           icon: 'las la-home',
           to: '/'
-        },
+        }
+      ]
+    })
+
+    const userItems = computed(() => {
+      return [
         {
           title: translate.t('personalData'),
           icon: 'las la-user',
@@ -113,8 +140,20 @@ export default defineComponent({
       ]
     })
 
+    const adminItems = computed(() => {
+      return [
+        {
+          title: translate.t('admin.users'),
+          icon: 'las la-users',
+          to: '/admin/users'
+        }
+      ]
+    })
+
     return {
       items,
+      userItems,
+      adminItems,
       user,
       leftDrawerOpen,
       toggleLeftDrawer () {

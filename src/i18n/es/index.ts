@@ -2,6 +2,9 @@
 // so you can safely delete all default props below
 
 export default {
+  admin: {
+    users: 'Gestión de usuarios'
+  },
   errorNetwork: 'No tienes conexión a internet',
   home: 'Inicio',
   login: 'Entrar',
