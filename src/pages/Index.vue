@@ -52,7 +52,7 @@ import { defineComponent, watchEffect, reactive } from 'vue'
 // import { useStore } from 'src/services/store'
 import NewsCard from 'components/NewsCard.vue'
 import { ArticlesService } from 'src/services/articles'
-import { Notify } from 'quasar'
+// import { useQuasar } from 'quasar'
 import { i18n } from 'src/boot/i18n'
 
 export default defineComponent({
@@ -83,11 +83,12 @@ export default defineComponent({
 
     watchEffect(() => {
       if (error.value) {
-        console.log(error)
-        Notify.create({
-          type: 'negative',
-          message: translate.t('errorNetwork')
-        })
+        console.error(error, translate.t('errorNetwork'))
+        // const $q = useQuasar()
+        // $q.notify({
+        //   type: 'negative',
+        //   message: translate.t('errorNetwork')
+        // })
       }
     })
 

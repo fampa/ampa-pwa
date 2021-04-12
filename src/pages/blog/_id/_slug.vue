@@ -29,7 +29,7 @@
 
 <script lang="ts">
 import { defineComponent, computed, watchEffect } from 'vue'
-import { date, Notify } from 'quasar'
+import { date } from 'quasar'
 import { ArticlesService } from 'src/services/articles'
 import { useRoute } from 'vue-router'
 import { useStore } from 'src/services/store'
@@ -68,11 +68,13 @@ export default defineComponent({
 
     watchEffect(
       () => {
+        // const $q = useQuasar()
         if (error.value) {
-          Notify.create({
-            type: 'negative',
-            message: translate.t('errorNetwork')
-          })
+          console.error(translate.t('errorNetwork'))
+          // $q.notify({
+          //   type: 'negative',
+          //   message: translate.t('errorNetwork')
+          // })
         }
       }
     )
