@@ -4,7 +4,7 @@
 import { createHttpLink, InMemoryCache } from '@apollo/client/core'
 import type { ApolloClientOptions } from '@apollo/client/core/ApolloClient'
 import type { BootFileParams } from '@quasar/app'
-import { persistCache, LocalStorageWrapper } from 'apollo3-cache-persist'
+import { persistCache, SessionStorageWrapper } from 'apollo3-cache-persist'
 import { offsetLimitPagination } from '@apollo/client/utilities'
 
 // bootFileParams is { app, router, ...}
@@ -25,7 +25,7 @@ export async function getClientOptions (
 
   await persistCache({
     cache,
-    storage: new LocalStorageWrapper(window.localStorage)
+    storage: new SessionStorageWrapper(window.sessionStorage)
   })
 
   return Object.assign(
