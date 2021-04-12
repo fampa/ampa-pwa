@@ -5,7 +5,8 @@ export interface Member {
     email: string
     familyId: number
     photoURL?: string
-    isAdmin?: boolean
+    isadmin?: boolean
+    phone?: string
     createdAt?: Date
     updatedAt?: Date
 }

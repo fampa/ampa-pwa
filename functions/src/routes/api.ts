@@ -6,22 +6,16 @@ import { graphqlClient } from '../utils/graphql'
 import express = require('express')
 import cors = require('cors')
 export const appApi: express.Application = express()
+import { Member } from '../../../src/models/Member'
 
 admin.initializeApp()
 
 import { updateClaims } from '../utils/customClaims'
 
-interface User {
-  id: string,
-  uid: string,
-  isadmin: boolean,
-  email: string
-}
-
 appApi.use(cors({ origin: true }))
 
 appApi.post('/refresh-token', (req: express.Request, res: express.Response) => {
-  const user = req.body as User
+  const user = req.body as admin.auth.UserRecord
   console.log(user)
   if (!user) return
 
@@ -54,9 +48,9 @@ appApi.post('/refresh-token', (req: express.Request, res: express.Response) => {
 
 appApi.post('/webhook/change-claims', (req: express.Request, res: express.Response) => {
   const response = async () => {
-    const user = req.body.event.data.new as User
+    const user = req.body.event.data.new as Member
     const isAdmin = !!user.isadmin
-    await updateClaims(user.id, isAdmin)
+    await updateClaims(user.id.toString(), isAdmin)
     console.log(`user ${user.email} admin state:`, isAdmin)
     res.json({ data: { isAdmin: isAdmin } })
   }
