@@ -41,7 +41,7 @@ register(process.env.SERVICE_WORKER_FILE, {
           icon: 'las la-sync',
           label: translate.t('update'),
           handler: () => {
-            registration.waiting.postMessage('skipWaiting')
+            registration?.waiting?.postMessage('skipWaiting')
             window.location.reload()
           }
         }]
