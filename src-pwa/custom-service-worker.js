@@ -36,6 +36,11 @@ registerRoute(
   new StaleWhileRevalidate()
 )
 
+registerRoute(
+  /^https:\/\/images\.unsplash\.com\/.*/,
+  new StaleWhileRevalidate()
+)
+
 self.addEventListener('push', (event) => {
   const title = 'AMPA'
   const options = {
