@@ -38,7 +38,7 @@
           flat
           v-if="user"
           text-color="white"
-          @click="$store.dispatch('user/logout') && toggleLeftDrawer"
+          @click="logout"
           :label="$t('logout')"
           class="float-right login"
         />
@@ -150,15 +150,23 @@ export default defineComponent({
       ]
     })
 
+    const toggleLeftDrawer = () => {
+      leftDrawerOpen.value = !leftDrawerOpen.value
+    }
+
+    const logout = async () => {
+      await store.dispatch('user/logout')
+      toggleLeftDrawer()
+    }
+
     return {
       items,
       userItems,
       adminItems,
       user,
       leftDrawerOpen,
-      toggleLeftDrawer () {
-        leftDrawerOpen.value = !leftDrawerOpen.value
-      }
+      logout,
+      toggleLeftDrawer
     }
   }
 })
