@@ -7,9 +7,9 @@ export default {
   },
   errorNetwork: 'No tens connexió a internet',
   firebaseui: {
-    google: 'Entra amb Google',
-    email: 'Entra amb Email',
-    phone: 'Entra amb telèfon'
+    google: 'Entra o registra\'t amb Google',
+    email: 'Entra o registra\'t amb Email',
+    phone: 'Entra o registra\'t amb telèfon'
   },
   home: 'Inici',
   login: 'Entrar',

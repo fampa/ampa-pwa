@@ -122,3 +122,9 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+.firebaseui-idp-button, .firebaseui-tenant-button {
+  max-width: 255px;
+}
+</style>

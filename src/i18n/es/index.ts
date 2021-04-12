@@ -7,9 +7,9 @@ export default {
   },
   errorNetwork: 'No tienes conexión a internet',
   firebaseui: {
-    google: 'Entra con Google',
-    email: 'Entra con Email',
-    phone: 'Entra con teléfono'
+    google: 'Entra o regístrate con Google',
+    email: 'Entra o regístrate con Email',
+    phone: 'Entra o regístrate con teléfono'
   },
   home: 'Inicio',
   login: 'Entrar',
