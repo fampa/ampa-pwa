@@ -6,6 +6,11 @@ export default {
     users: 'Gestión de usuarios'
   },
   errorNetwork: 'No tienes conexión a internet',
+  firebaseui: {
+    google: 'Entra con Google',
+    email: 'Entra con Email',
+    phone: 'Entra con teléfono'
+  },
   home: 'Inicio',
   login: 'Entrar',
   logout: 'Salir',
