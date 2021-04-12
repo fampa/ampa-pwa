@@ -38,7 +38,7 @@
           flat
           v-if="user"
           text-color="white"
-          @click="$store.dispatch('user/logout')"
+          @click="$store.dispatch('user/logout') && toggleLeftDrawer"
           :label="$t('logout')"
           class="float-right login"
         />
@@ -57,7 +57,7 @@
               <img :src="user.photoURL ? user.photoURL : '/icons/icon-128x128.png'">
             </q-avatar>
             <div class="text-weight-bold">{{user.email}}</div>
-            <div v-if="user.isAdmin">
+            <div v-if="user.isadmin">
               <q-badge color="primary">
                   Administrador
               </q-badge>
@@ -79,7 +79,7 @@
             </q-item-section>
             <q-item-section>{{item.title}}</q-item-section>
           </q-item>
-          <div v-if="user.isAdmin">
+          <div v-if="user.isadmin">
             <q-separator />
             <q-item>
               <q-item-section>
