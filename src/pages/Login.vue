@@ -125,6 +125,6 @@ export default {
 
 <style lang="scss">
 .firebaseui-idp-button, .firebaseui-tenant-button {
-  max-width: 258px;
+  max-width: 260px;
 }
 </style>
