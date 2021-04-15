@@ -1,7 +1,13 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 // import { Article } from '@/models/Article'
-import { createHttpLink, InMemoryCache, ApolloLink, concat, Observable } from '@apollo/client/core'
+import {
+  createHttpLink,
+  InMemoryCache,
+  from,
+  ApolloLink,
+  Observable
+} from '@apollo/client/core'
 import type { ApolloClientOptions } from '@apollo/client/core/ApolloClient'
 import type { BootFileParams } from '@quasar/app'
 import { persistCache, LocalStorageWrapper } from 'apollo3-cache-persist'
@@ -54,6 +60,13 @@ export async function getClientOptions (
               .catch(err => {
                 observer.error(err)
               })
+          } else {
+            const subscriber = {
+              next: observer.next.bind(observer),
+              error: observer.error.bind(observer),
+              complete: observer.complete.bind(observer)
+            }
+            forward(operation).subscribe(subscriber)
           }
         })
       })
@@ -63,12 +76,13 @@ export async function getClientOptions (
     uri: process.env.GRAPHQL_URI || 'http://api.example.com'
   })
 
-  const link = concat(authMiddleware, httpLink)
-
   return Object.assign(
     // General options.
     {
-      link: link,
+      link: from([
+        authMiddleware,
+        httpLink
+      ]),
       cache: cache,
       defaultOptions: {
         watchQuery: {
