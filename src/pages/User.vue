@@ -11,16 +11,26 @@
 import { useRoute } from 'vue-router'
 import { MembersService } from 'src/services/members'
 import { useStore } from 'src/services/store'
+import { computed } from 'vue'
 
 export default {
   name: 'PagePersonalData',
   setup () {
     const store = useStore()
-    const currentUserId = store.state.user.user?.id.toString() || ''
+    const currentUserId = computed(() => store.state.user.user?.uid || '')
     const membersService = new MembersService()
     const route = useRoute()
-    const id = route.params?.id?.toString() || currentUserId
-    const { member, loading, error } = membersService.getById(id)
+    const id = computed(() => {
+      if (route.params && route.params.id) {
+        return route.params.id.toString()
+      } else {
+        return currentUserId.value.toString()
+      }
+    })
+
+    const { member, loading, error } = membersService.getById(id.value)
+
+    console.log('member', member.value)
 
     return {
       member,

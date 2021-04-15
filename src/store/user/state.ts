@@ -1,11 +1,15 @@
 import { Member } from '@/models/Member'
+import firebase from 'firebase/app'
+import 'firebase/auth'
 
 export interface UserStateInterface {
-  user: Member | null
+  member: Member | null
+  user: firebase.UserInfo | null
 }
 
 function state (): UserStateInterface {
   return {
+    member: null,
     user: null
   }
 }
