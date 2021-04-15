@@ -1,23 +1,25 @@
 <template>
   <q-page padding class="bg-grey-2">
     <h1 class="text-h4">{{$t('personalData')}}</h1>
-    WIP
+    {{ member }}
   </q-page>
 </template>
 
 <script lang="ts">
-import { useStore } from 'src/services/store'
+import { useRoute } from 'vue-router'
+import { MembersService } from 'src/services/members'
 export default {
   name: 'PagePersonalData',
   setup () {
-    const store = useStore()
-
-    const setLanguage = async (lang: string) => {
-      await store.dispatch('settings/setLanguage', lang)
-    }
+    const membersService = new MembersService()
+    const route = useRoute()
+    const id = route.params.id.toString()
+    const { member, loading, error } = membersService.getById(id)
 
     return {
-      setLanguage
+      member,
+      loading,
+      error
     }
   }
 }
