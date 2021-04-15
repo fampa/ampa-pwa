@@ -1,0 +1,16 @@
+query members {
+  members {
+    id
+    firstname
+    lastname
+    isadmin
+    email
+    phone
+    created_at
+    updated_at
+    family {
+      id
+      name
+    }
+  }
+}

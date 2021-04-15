@@ -1,0 +1,19 @@
+query memberById($id: String!) {
+  members_by_pk(id: $id) {
+    id
+    firstname
+    lastname
+    email
+    phone
+    family {
+      id
+      name
+      children {
+        id
+        firstname
+        lastname
+        birthyear
+      }
+    }
+  }
+}

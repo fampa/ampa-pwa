@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 export interface Member {
     id: number
     firstName: string
@@ -9,4 +10,21 @@ export interface Member {
     phone?: string
     createdAt?: Date
     updatedAt?: Date
+}
+
+export interface MembersData {
+    members: Member[];
+}
+
+export interface MembersVars {
+    offset: number
+    limit: number
+}
+
+export interface MemberVars {
+    id: number
+}
+
+export interface MemberData {
+    members_by_pk: Member
 }
