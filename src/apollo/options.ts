@@ -1,11 +1,13 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 // import { Article } from '@/models/Article'
-import { createHttpLink, InMemoryCache } from '@apollo/client/core'
+import { createHttpLink, InMemoryCache, ApolloLink, concat, Observable } from '@apollo/client/core'
 import type { ApolloClientOptions } from '@apollo/client/core/ApolloClient'
 import type { BootFileParams } from '@quasar/app'
 import { persistCache, LocalStorageWrapper } from 'apollo3-cache-persist'
 import { offsetLimitPagination } from '@apollo/client/utilities'
+import firebase from 'firebase/app'
+import 'firebase/auth'
 
 // bootFileParams is { app, router, ...}
 // eslint-disable-next-line @typescript-eslint/require-await
@@ -28,13 +30,45 @@ export async function getClientOptions (
     storage: new LocalStorageWrapper(window.localStorage)
   })
 
+  const authMiddleware = new ApolloLink(
+    (operation, forward) =>
+      new Observable(observer => {
+        firebase.auth().onAuthStateChanged(function (user) {
+          if (user) {
+            user.getIdToken(true)
+              .then(token => {
+                operation.setContext({
+                  headers: {
+                    authorization: token ? `Bearer ${token}` : ''
+                  }
+                })
+              })
+              .then(() => {
+                const subscriber = {
+                  next: observer.next.bind(observer),
+                  error: observer.error.bind(observer),
+                  complete: observer.complete.bind(observer)
+                }
+                forward(operation).subscribe(subscriber)
+              })
+              .catch(err => {
+                observer.error(err)
+              })
+          }
+        })
+      })
+  )
+
+  const httpLink = createHttpLink({
+    uri: process.env.GRAPHQL_URI || 'http://api.example.com'
+  })
+
+  const link = concat(authMiddleware, httpLink)
+
   return Object.assign(
     // General options.
     {
-      link: createHttpLink({
-        uri: process.env.GRAPHQL_URI || 'http://api.example.com'
-      }),
-
+      link: link,
       cache: cache,
       defaultOptions: {
         watchQuery: {
