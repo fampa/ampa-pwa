@@ -12,7 +12,7 @@ export class MembersService {
     return { members, loading, error, fetchMore }
   }
 
-  getById = (id: number) => {
+  getById = (id: string) => {
     const { result, loading, error } = useQuery<MemberData, MemberVars>(
       getMemberById,
       { id }

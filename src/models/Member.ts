@@ -22,7 +22,7 @@ export interface MembersVars {
 }
 
 export interface MemberVars {
-    id: number
+    id: string
 }
 
 export interface MemberData {
