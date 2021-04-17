@@ -19,6 +19,7 @@ const config = {
 // bootFileParams is { app, router, ...}
 export default boot((context: BootFileParams<unknown>) => {
   firebase.initializeApp(config)
+
   // monitor user
   const firebaseUser = ref<firebase.User | null>(null)
   const isAdmin = ref<boolean>(false)
@@ -38,5 +39,3 @@ export default boot((context: BootFileParams<unknown>) => {
     context.store.commit('user/setUser', firebaseUser.value)
   })
 })
-
-export { firebase }

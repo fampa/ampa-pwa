@@ -39,7 +39,7 @@ export default {
 
       firebaseUILoader.then((firebaseui) => {
         const uiConfig = {
-          signInSuccessUrl: route.query.redirect?.toString() || '/',
+          signInSuccessUrl: route.query && route.query.next ? route.query.next.toString() : '/',
           callbacks: {
             uiShown: function () {
             // return $q.loading.hide()
