@@ -57,7 +57,7 @@
               <img :src="user.photoURL ? user.photoURL : '/icons/icon-128x128.png'">
             </q-avatar>
             <div class="text-weight-bold">{{user.email}}</div>
-            <div v-if="user.isadmin">
+            <div v-if="isAdmin">
               <q-badge color="primary">
                   Administrador
               </q-badge>
@@ -79,7 +79,7 @@
             </q-item-section>
             <q-item-section>{{item.title}}</q-item-section>
           </q-item>
-          <div v-if="user.isadmin">
+          <div v-if="isAdmin">
             <q-separator />
             <q-item>
               <q-item-section>
@@ -159,6 +159,8 @@ export default defineComponent({
       toggleLeftDrawer()
     }
 
+    const isAdmin = computed(() => store.getters['users/isAdmin'])
+
     return {
       items,
       userItems,
@@ -166,7 +168,8 @@ export default defineComponent({
       user,
       leftDrawerOpen,
       logout,
-      toggleLeftDrawer
+      toggleLeftDrawer,
+      isAdmin
     }
   }
 })
