@@ -159,7 +159,7 @@ export default defineComponent({
       toggleLeftDrawer()
     }
 
-    const isAdmin = computed(() => store.getters['users/isAdmin'])
+    const isAdmin = computed(() => store.state.user.isAdmin)
 
     return {
       items,

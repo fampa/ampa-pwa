@@ -20,27 +20,22 @@ const config = {
 export default boot((context: BootFileParams<unknown>) => {
   firebase.initializeApp(config)
   // monitor user
+  const firebaseUser = ref<firebase.User | null>(null)
+  const isAdmin = ref<boolean>(false)
   firebase.auth().onAuthStateChanged(async function (user) {
     if (user) {
-      const uid = ref<string>('')
-      const displayName = ref<string|null>('')
-      const email = ref<string|null>('')
-      const emailVerified = ref<boolean>(false)
-      const photoURL = ref<string|null>('')
-
-      const token = await user.getIdToken(true)
       const tokenResult = await user.getIdTokenResult(true)
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      const hasuraClaim = tokenResult.claims ? tokenResult.claims['https://hasura.io/jwt/claims'] : null
-      const isAdmin = hasuraClaim ? hasuraClaim['x-hasura-default-role'] === 'admin' : false
-      uid.value = user.uid
-      displayName.value = user.displayName
-      email.value = user.email
-      emailVerified.value = user.emailVerified
-      photoURL.value = user.photoURL
-
-      await context.store.dispatch('user/setUser', { uid, displayName, email, emailVerified, photoURL, token, isAdmin })
+      // console.log('tokenResult', tokenResult)
+      const hasuraClaim = tokenResult?.claims ? tokenResult.claims['https://hasura.io/jwt/claims'] as Record<string, unknown> : null
+      const firebaseUserIsAdmin = hasuraClaim ? hasuraClaim['x-hasura-default-role'] === 'admin' : false
+      isAdmin.value = firebaseUserIsAdmin
+      firebaseUser.value = user
+    } else {
+      isAdmin.value = false
+      firebaseUser.value = null
     }
+    context.store.commit('user/setAdmin', isAdmin.value)
+    context.store.commit('user/setUser', firebaseUser.value)
   })
 })
 
