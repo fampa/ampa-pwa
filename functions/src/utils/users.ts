@@ -10,15 +10,15 @@ const addUser = async (user: admin.auth.UserRecord, isAdmin: boolean) => {
     email: user.email,
     firstname: user.displayName,
     phone: user.phoneNumber,
-    isadmin: false
+    isAdmin: false
   }
 
   if (isAdmin) {
-    variables.isadmin = true
+    variables.isAdmin = true
   }
 
-  const query = gql`mutation addMember($uid: String!, $email: String!, $firstname: String, $phone: String, $isadmin: Boolean) {
-      insert_members(objects: {id: $uid, email: $email, firstname: $firstname, phone: $phone, isadmin: $isadmin}, on_conflict: {constraint: members_pkey, update_columns: [email, phone]}) {
+  const query = gql`mutation addMember($uid: String!, $email: String!, $firstname: String, $phone: String, $isAdmin: Boolean) {
+      insert_members(objects: {id: $uid, email: $email, firstname: $firstname, phone: $phone, isAdmin: $isAdmin}, on_conflict: {constraint: members_pkey, update_columns: [email, phone]}) {
         affected_rows
       }
     }

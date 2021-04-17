@@ -49,7 +49,7 @@ appApi.post('/refresh-token', (req: express.Request, res: express.Response) => {
 appApi.post('/webhook/change-claims', (req: express.Request, res: express.Response) => {
   const response = async () => {
     const user = req.body.event.data.new as Member
-    const isAdmin = !!user.isadmin
+    const isAdmin = !!user.isAdmin
     await updateClaims(user.id.toString(), isAdmin)
     console.log(`user ${user.email} admin state:`, isAdmin)
     res.json({ data: { isAdmin: isAdmin } })

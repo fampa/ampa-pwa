@@ -4,7 +4,7 @@ import 'firebase/auth'
 
 export interface UserStateInterface {
   member: Member | null
-  user: firebase.UserInfo | null
+  user: firebase.User | null
 }
 
 function state (): UserStateInterface {

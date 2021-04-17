@@ -1,8 +1,8 @@
 query memberById($id: String!) {
   members_by_pk(id: $id) {
     id
-    firstname
-    lastname
+    firstName
+    lastName
     email
     phone
     family {
@@ -10,9 +10,9 @@ query memberById($id: String!) {
       name
       children {
         id
-        firstname
-        lastname
-        birthyear
+        firstName
+        lastName
+        birthYear
       }
     }
   }

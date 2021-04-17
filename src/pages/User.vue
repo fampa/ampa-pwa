@@ -3,6 +3,7 @@
     <h1 class="text-h4">{{$t('personalData')}}</h1>
     <div v-if="member">
       {{ member }}
+      <q-input outlined v-model="member.firstName" label="Nom" />
     </div>
   </q-page>
 </template>
@@ -29,8 +30,6 @@ export default {
     })
 
     const { member, loading, error } = membersService.getById(id.value)
-
-    console.log('member', member.value)
 
     return {
       member,

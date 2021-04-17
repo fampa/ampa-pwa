@@ -32,14 +32,14 @@ export default boot((context: BootFileParams<unknown>) => {
       const tokenResult = await user.getIdTokenResult(true)
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       const hasuraClaim = tokenResult.claims ? tokenResult.claims['https://hasura.io/jwt/claims'] : null
-      const isadmin = hasuraClaim ? hasuraClaim['x-hasura-default-role'] === 'admin' : false
+      const isAdmin = hasuraClaim ? hasuraClaim['x-hasura-default-role'] === 'admin' : false
       uid.value = user.uid
       displayName.value = user.displayName
       email.value = user.email
       emailVerified.value = user.emailVerified
       photoURL.value = user.photoURL
 
-      await context.store.dispatch('user/setUser', { uid, displayName, email, emailVerified, photoURL, token, isadmin })
+      await context.store.dispatch('user/setUser', { uid, displayName, email, emailVerified, photoURL, token, isAdmin })
     }
   })
 })

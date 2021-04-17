@@ -1,13 +1,13 @@
 query members {
   members {
     id
-    firstname
-    lastname
-    isadmin
+    firstName
+    lastName
+    isAdmin
     email
     phone
-    created_at
-    updated_at
+    createdAt
+    updatedAt
     family {
       id
       name
