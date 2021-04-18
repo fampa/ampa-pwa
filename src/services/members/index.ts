@@ -4,6 +4,8 @@ import getMembers from './queries/getMembers.gql'
 import getMemberById from './queries/getMemberById.gql'
 import { MemberData, MembersData, MemberVars, MembersVars } from '@/models/Member'
 import { apolloClient } from 'src/boot/apollo'
+// import { key } from 'src/services/store'
+// import { inject } from 'vue'
 
 export class MembersService {
   getAll = (offset: number, limit: number) => {
@@ -18,7 +20,6 @@ export class MembersService {
       { id }
     )
     const member = useResult(result, null, data => data.members_by_pk)
-
     return { member, loading, error }
   }
 

@@ -7,8 +7,8 @@ import {
 } from 'vue-router'
 import { StateInterface } from '../store'
 import routes from './routes'
-// import firebase from 'firebase/app'
-// import 'firebase/auth'
+import firebase from 'firebase/app'
+import 'firebase/auth'
 
 /*
  * If not building with SSR mode, you can
@@ -19,7 +19,7 @@ import routes from './routes'
  * with the Router instance.
  */
 
-export default route<StateInterface>(function ({ store }) {
+export default route<StateInterface>(function (/* { store } */) {
   const createHistory =
     process.env.SERVER
       ? createMemoryHistory
@@ -46,47 +46,41 @@ export default route<StateInterface>(function ({ store }) {
   })
 
   Router.beforeEach((to, from, next) => {
-    const requiresAuth = to.matched.some(x => x.meta.requiresAuth)
-    const currentUser = store.state.user.user
+    firebase.auth().onAuthStateChanged(async function (user) {
+      // console.log('user', user)
+      const requireScope = to.matched.some(record => record.meta.requiresScope)
+      const requireAuth = to.matched.some(record => record.meta.requiresAuth)
+      if (requireAuth || requireScope) {
+        if (!user) { // there is no user
+          // console.log('no user')
+          return next({ path: '/login', query: { next: to.fullPath } })
+        } else if (!user.emailVerified && to.path !== '/verifyEmail' && to.path !== '/completeAccount') {
+          return next('/verifyEmail')
+        } else { // there is user. Let's check permissions
+          if (requireScope) {
+            const permissionRequired = to.matched.find(record => record.meta.requiresScope)?.meta.requiresScope as string
+            // console.log('scope required', permissionRequired)
 
-    if (requiresAuth && !currentUser) next({ path: '/login', query: { next: to.fullPath } })
-    else if (!requiresAuth && !currentUser) next()
-    else next()
-    // firebase.auth().onAuthStateChanged(async function (user) {
-    //   console.log('user', user)
-    //   const requireScope = to.matched.some(record => record.meta.requiresScope)
-    //   const requireAuth = to.matched.some(record => record.meta.requiresAuth)
-    //   if (requireAuth || requireScope) {
-    //     if (!user) { // there is no user
-    //       console.log('no user')
-    //       return next({ path: '/login', query: { next: to.fullPath } })
-    //     } else if (!user.emailVerified && to.path !== '/verifyEmail' && to.path !== '/completeAccount') {
-    //       return next('/verifyEmail')
-    //     } else { // there is user. Let's check permissions
-    //       if (requireScope) {
-    //         const permissionRequired = to.matched.find(record => record.meta.requiresScope)?.meta.requiresScope as string
-    //         // console.log('scope required', permissionRequired)
-
-    //         const tokenResult = await user.getIdTokenResult(true)
-    //         // console.log('tokenResult', tokenResult)
-    //         const hasuraClaim = tokenResult?.claims ? tokenResult.claims['https://hasura.io/jwt/claims'] as Record<string, unknown> : null
-    //         const permissionsGranted = hasuraClaim ? hasuraClaim['x-hasura-default-role'] as string : null
-    //         const hasPermission = permissionsGranted && permissionsGranted.includes(permissionRequired)
-    //         if (hasPermission) {
-    //           return next()
-    //         } else {
-    //           return next({
-    //             path: '/'
-    //           })
-    //         }
-    //       } else {
-    //         return next() // requiresAuth passed
-    //       }
-    //     }
-    //   } else {
-    //     return next() // make sure to always call next()!
-    //   }
-    // })
+            const tokenResult = await user.getIdTokenResult(true)
+            // console.log('tokenResult', tokenResult)
+            const hasuraClaim = tokenResult?.claims ? tokenResult.claims['https://hasura.io/jwt/claims'] as Record<string, unknown> : null
+            const permissionsGranted = hasuraClaim ? hasuraClaim['x-hasura-default-role'] as string : null
+            const hasPermission = permissionsGranted && permissionsGranted.includes(permissionRequired)
+            if (hasPermission) {
+              return next()
+            } else {
+              return next({
+                path: '/'
+              })
+            }
+          } else {
+            return next() // requiresAuth passed
+          }
+        }
+      } else {
+        return next() // make sure to always call next()!
+      }
+    })
   })
 
   return Router

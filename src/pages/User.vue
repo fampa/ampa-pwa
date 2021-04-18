@@ -11,21 +11,25 @@
 <script lang="ts">
 import { useRoute } from 'vue-router'
 import { MembersService } from 'src/services/members'
-import { useStore } from 'src/services/store'
 import { computed } from 'vue'
+import firebase from 'firebase/app'
+import 'firebase/auth'
 
 export default {
   name: 'PagePersonalData',
   setup () {
-    const store = useStore()
-    const currentUserId = computed(() => store.state.user.user?.uid || '')
+    const currentUserId = computed(() => {
+      return firebase.auth().currentUser?.uid
+    })
+
     const membersService = new MembersService()
     const route = useRoute()
     const id = computed(() => {
-      if (route.params && route.params.id) {
-        return route.params.id.toString()
+      const params = route.params?.id?.toString()
+      if (params) {
+        return params
       } else {
-        return currentUserId.value.toString()
+        return currentUserId.value || ''
       }
     })
 
