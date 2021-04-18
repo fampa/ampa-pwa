@@ -20,6 +20,7 @@ const actions: ActionTree<UserStateInterface, StateInterface> = {
     await firebase.auth().signOut()
     await articlesService.clearCache()
     commit('setUser', null)
+    window.location.reload()
   }
 }
 
