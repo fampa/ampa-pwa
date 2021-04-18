@@ -45,14 +45,13 @@ export default route<StateInterface>(function (/* { store } */) {
     )
   })
 
+  // eslint-disable-next-line @typescript-eslint/require-await
   Router.beforeEach((to, from, next) => {
     firebase.auth().onAuthStateChanged(async function (user) {
-      // console.log('user', user)
       const requireScope = to.matched.some(record => record.meta.requiresScope)
       const requireAuth = to.matched.some(record => record.meta.requiresAuth)
       if (requireAuth || requireScope) {
         if (!user) { // there is no user
-          // console.log('no user')
           return next({ path: '/login', query: { next: to.fullPath } })
         } else if (!user.emailVerified && to.path !== '/verifyEmail' && to.path !== '/completeAccount') {
           return next('/verifyEmail')
