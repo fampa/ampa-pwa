@@ -61,7 +61,8 @@ export default {
             },
             {
               provider: firebase.auth.PhoneAuthProvider.PROVIDER_ID,
-              fullLabel: translate.t('firebaseui.phone')
+              fullLabel: translate.t('firebaseui.phone'),
+              defaultCountry: 'ES'
             }
             // firebase.auth.FacebookAuthProvider.PROVIDER_ID,
             // firebase.auth.TwitterAuthProvider.PROVIDER_ID,
