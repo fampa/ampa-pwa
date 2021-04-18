@@ -11,9 +11,18 @@ export default {
     email: 'Entra o registra\'t amb Email',
     phone: 'Entra o registra\'t amb telèfon'
   },
+  forms: {
+    required: 'Aquest camp és necessari'
+  },
   home: 'Inici',
   login: 'Entrar',
   logout: 'Eixir',
+  member: {
+    firstName: 'Nom',
+    lastName: 'Cognoms',
+    email: 'Correu electrònic',
+    phone: 'Telèfon'
+  },
   newVersion: 'Nova versió disponible. Actualitza polsant el botó',
   personalData: 'Dades personals',
   settings: 'Preferències',

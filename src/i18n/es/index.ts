@@ -11,9 +11,18 @@ export default {
     email: 'Entra o regístrate con Email',
     phone: 'Entra o regístrate con teléfono'
   },
+  forms: {
+    required: 'Este campo es necesario'
+  },
   home: 'Inicio',
   login: 'Entrar',
   logout: 'Salir',
+  member: {
+    firstName: 'Nombre',
+    lastName: 'Apellidos',
+    email: 'Correo electrónico',
+    phone: 'Teléfono'
+  },
   newVersion: 'Nueva versión disponible. Actualice pulsando el botón',
   personalData: 'Datos personales',
   settings: 'Preferencias',
