@@ -8,5 +8,15 @@
     "GRHAFTHF",
     "JCQX",
     "fampa"
-  ]
+  ],
+  "files.watcherExclude": {
+    "**/.git/objects/**": true,
+    "**/.git/subtree-cache/**": true,
+    "**/node_modules/**": true,
+    "**/.hg/store/**": true,
+    "**/dist/*/**": true,
+    "**/.quasar/*/**": true,
+    "**/.fiirebase/*/**": true,
+    "**/.github/*/**": true
+  }
 }
