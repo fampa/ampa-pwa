@@ -17,7 +17,7 @@ export interface Member {
 }
 
 export interface MembersData {
-  members: Member[];
+  members: Member[]
 }
 
 export interface MembersVars {
