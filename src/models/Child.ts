@@ -9,5 +9,5 @@ export interface Child {
 }
 
 export interface ChildrenData {
-  members: Child[];
+  members: Child[]
 }
