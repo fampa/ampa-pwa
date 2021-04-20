@@ -1,6 +1,5 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-// import { Article } from '@/models/Article'
+import type { ApolloClientOptions } from '@apollo/client'
+// import { createHttpLink, InMemoryCache } from '@apollo/client'
 import {
   createHttpLink,
   InMemoryCache,
@@ -8,19 +7,13 @@ import {
   ApolloLink,
   Observable
 } from '@apollo/client/core'
-import type { ApolloClientOptions } from '@apollo/client/core/ApolloClient'
-import type { BootFileParams } from '@quasar/app'
-import { persistCache, LocalStorageWrapper } from 'apollo3-cache-persist'
+/* import type { BootFileParams } from '@quasar/app' */
 import { offsetLimitPagination } from '@apollo/client/utilities'
+import { persistCache, LocalStorageWrapper } from 'apollo3-cache-persist'
 import firebase from 'firebase/app'
 import 'firebase/auth'
 
-// bootFileParams is { app, router, ...}
-// eslint-disable-next-line @typescript-eslint/require-await
-export async function getClientOptions (
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  bootFileParams?: BootFileParams<unknown>
-): Promise<ApolloClientOptions<unknown>> {
+export async function getClientOptions(/* {app, router, ...}: Partial<BootFileParams<unknown>> */) {
   const cache = new InMemoryCache({
     typePolicies: {
       Query: {
@@ -76,7 +69,7 @@ export async function getClientOptions (
     uri: process.env.GRAPHQL_URI || 'http://api.example.com'
   })
 
-  return Object.assign(
+  return <ApolloClientOptions<unknown>>Object.assign(
     // General options.
     {
       link: from([
@@ -97,43 +90,65 @@ export async function getClientOptions (
     },
 
     // Specific Quasar mode options.
-    process.env.MODE === 'spa' ? {
-      //
-    } : {},
-    process.env.MODE === 'ssr' ? {
-      //
-    } : {},
-    process.env.MODE === 'pwa' ? {
-      //
-    } : {},
-    process.env.MODE === 'bex' ? {
-      //
-    } : {},
-    process.env.MODE === 'cordova' ? {
-      //
-    } : {},
-    process.env.MODE === 'capacitor' ? {
-      //
-    } : {},
-    process.env.MODE === 'electron' ? {
-      //
-    } : {},
+    process.env.MODE === 'spa'
+      ? {
+          //
+        }
+      : {},
+    process.env.MODE === 'ssr'
+      ? {
+          //
+        }
+      : {},
+    process.env.MODE === 'pwa'
+      ? {
+          //
+        }
+      : {},
+    process.env.MODE === 'bex'
+      ? {
+          //
+        }
+      : {},
+    process.env.MODE === 'cordova'
+      ? {
+          //
+        }
+      : {},
+    process.env.MODE === 'capacitor'
+      ? {
+          //
+        }
+      : {},
+    process.env.MODE === 'electron'
+      ? {
+          //
+        }
+      : {},
 
     // dev/prod options.
-    process.env.DEV ? {
-      //
-    } : {},
-    process.env.PROD ? {
-      //
-    } : {},
+    process.env.DEV
+      ? {
+          //
+        }
+      : {},
+    process.env.PROD
+      ? {
+          //
+        }
+      : {},
 
     // For ssr mode, when on server.
-    process.env.MODE === 'ssr' && process.env.SERVER ? {
-      ssrMode: true
-    } : {},
+    process.env.MODE === 'ssr' && process.env.SERVER
+      ? {
+          ssrMode: true,
+        }
+      : {},
     // For ssr mode, when on client.
-    process.env.MODE === 'ssr' && process.env.CLIENT ? {
-      ssrForceFetchDelay: 100
-    } : {}
+    process.env.MODE === 'ssr' && process.env.CLIENT
+      ? {
+          ssrForceFetchDelay: 100,
+        }
+      : {}
   ) as ApolloClientOptions<unknown>
 }

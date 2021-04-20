@@ -30,7 +30,7 @@
     "vuex-persistedstate": "^4.0.0-beta.3"
   },
   "devDependencies": {
-    "@ejez/quasar-app-extension-apollo": "^2.0.0-alpha.7",
+    "@ejez/quasar-app-extension-apollo": "^2.0.0-alpha.10",
     "@quasar/app": "^3.0.0-beta.13",
     "@types/cors": "^2.8.10",
     "@types/node": "^10.17.15",

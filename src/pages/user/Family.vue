@@ -46,7 +46,7 @@ import { computed, ref, watchEffect, onMounted } from 'vue'
 import firebase from 'firebase/app'
 import 'firebase/auth'
 import { Child } from '@/models/Child'
-import { QForm } from 'quasar'
+import type { QForm } from 'quasar'
 
 export default {
   name: 'PagePersonalData',

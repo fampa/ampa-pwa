@@ -7,3 +7,4 @@
 .eslintrc.js
 /src-ssr
 /functions/lib
+/src/extensions
