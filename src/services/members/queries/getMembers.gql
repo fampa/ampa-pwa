@@ -6,6 +6,7 @@ query members {
     isAdmin
     email
     phone
+    nif
     createdAt
     updatedAt
     family {

@@ -3,28 +3,28 @@ import { Member } from './Member'
 import { Translation } from './Translation'
 
 export interface Article {
-    id: number
-    status: string
-    translations: Translation[]
-    image?: string
-    author?: Member
-    created_at?: Date
-    updated_at?: Date
+  id: number
+  status: string
+  translations: Translation[]
+  image?: string
+  author?: Member
+  created_at?: Date
+  updated_at?: Date
 }
 
 export interface ArticlesData {
-    articles: Article[];
+  articles: Article[];
 }
 
 export interface ArticlesVars {
-    offset: number
-    limit: number
+  offset: number
+  limit: number
 }
 
 export interface ArticleVars {
-    id: number
+  id: number
 }
 
 export interface ArticleData {
-    articles_by_pk: Article
+  articles_by_pk: Article
 }

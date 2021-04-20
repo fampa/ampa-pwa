@@ -66,14 +66,14 @@
         </q-img>
     <q-scroll-area style="height: calc(100% - 150px); margin-top: 150px; border-right: 1px solid #ddd">
       <q-list padding>
-        <q-item v-for="(item, index) in items" :key="index" clickable v-ripple :to="item.to">
+        <q-item v-for="(item, index) in items" :key="index" clickable v-ripple :to="item.to" exact>
           <q-item-section avatar>
             <q-icon :name="item.icon" />
           </q-item-section>
           <q-item-section>{{item.title}}</q-item-section>
         </q-item>
         <div v-if="user">
-          <q-item v-for="(item, index) in userItems" :key="index" clickable v-ripple :to="item.to">
+          <q-item v-for="(item, index) in userItems" :key="index" clickable v-ripple :to="item.to" exact>
             <q-item-section avatar>
               <q-icon :name="item.icon" />
             </q-item-section>
@@ -136,6 +136,11 @@ export default defineComponent({
           title: translate.t('personalData'),
           icon: 'las la-user',
           to: '/user'
+        },
+        {
+          title: translate.t('member.familyData'),
+          icon: 'las la-child',
+          to: '/user/family'
         }
       ]
     })

@@ -21,7 +21,10 @@ const routes: RouteRecordRaw[] = [
     path: '/user',
     component: () => import('layouts/MainLayout.vue'),
     meta: { requiresAuth: true },
-    children: [{ path: '', component: () => import('pages/User.vue') }]
+    children: [
+      { path: '', component: () => import('pages/user/Index.vue') },
+      { path: 'family', component: () => import('pages/user/Family.vue') }
+    ]
   },
   {
     path: '/blog/:id/:slug?',

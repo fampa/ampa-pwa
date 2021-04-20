@@ -98,6 +98,10 @@ module.exports = {
     '@typescript-eslint/no-unsafe-call': 'off',
 
     // allow debugger during development only
-    'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off'
+    'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
+
+    // https://github.com/eslint/eslint/issues/13956
+    "indent": "off",
+    "@typescript-eslint/indent": ["error", 2]
   }
 }

@@ -5,6 +5,7 @@ query memberById($id: String!) {
     lastName
     email
     phone
+    nif
     family {
       id
       name
@@ -12,7 +13,7 @@ query memberById($id: String!) {
         id
         firstName
         lastName
-        birthYear
+        birthDate
       }
     }
   }
