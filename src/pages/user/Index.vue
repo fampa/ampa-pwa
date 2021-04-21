@@ -51,14 +51,16 @@ export default {
       }
     })
 
-    const { member, loading, error } = membersService.getById(id.value)
+    const result = membersService.getById(id.value)
+
+    const member = result.data.value?.members_by_pk
 
     watchEffect(() => {
-      firstName.value = member.value?.firstName
-      lastName.value = member.value?.lastName
-      email.value = member.value?.email
-      phone.value = member.value?.phone
-      nif.value = member.value?.nif
+      firstName.value = member?.firstName
+      lastName.value = member?.lastName
+      email.value = member?.email
+      phone.value = member?.phone
+      nif.value = member?.nif
     })
 
     const memberForm = ref<HTMLFormElement | null>(null)
@@ -82,8 +84,6 @@ export default {
       email,
       phone,
       nif,
-      loading,
-      error,
       submitForm,
       emailPattern,
       phonePattern,

@@ -29,10 +29,10 @@ module.exports = configure(function (/* ctx */) {
     // --> boot files are part of "main.js"
     // https://quasar.dev/quasar-cli/boot-files
     boot: [
-      'i18n',
-      'apollo',
-      'store',
       'firebase',
+      'store',
+      'i18n',
+      'urql',
       'quasar-lang-pack'
     ],
 

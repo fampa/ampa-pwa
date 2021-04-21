@@ -72,10 +72,11 @@ export default {
       }
     })
 
-    const { member, loading, error } = membersService.getById(id.value)
+    const result = membersService.getById(id.value)
+    const member = result.data.value?.members_by_pk
 
     watchEffect(() => {
-      children.value = member.value?.family?.children || []
+      children.value = member?.family?.children || []
     })
 
     const datePattern = /^-?[\d]+\/[0-1]\d\/[0-3]\d$/
@@ -120,8 +121,6 @@ export default {
       children,
       addChild,
       datePattern,
-      loading,
-      error,
       submitForm
     }
   }
