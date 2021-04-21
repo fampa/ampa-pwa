@@ -4,7 +4,6 @@ import { useQuery } from '@urql/vue'
 import getArticles from './queries/getArticles.gql'
 import getArticleById from './queries/getArticleById.gql'
 import { ArticleData, ArticlesData, ArticleVars, ArticlesVars } from '@/models/Article'
-import { apolloClient } from 'src/boot/apollo'
 
 export class ArticlesService {
   getAll = (offset: number, limit: number) => {
@@ -25,7 +24,7 @@ export class ArticlesService {
     return result
   }
 
-  clearCache = async () => {
-    await apolloClient.clearStore()
+  clearCache = () => {
+    console.log('TODO clear cache')
   }
 }
