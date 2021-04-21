@@ -8,8 +8,8 @@ export interface Article {
   translations: Translation[]
   image?: string
   author?: Member
-  created_at?: Date
-  updated_at?: Date
+  createdAt?: Date
+  updatedAt?: Date
 }
 
 export interface ArticlesData {

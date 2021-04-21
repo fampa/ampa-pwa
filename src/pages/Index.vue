@@ -48,12 +48,13 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, watchEffect, reactive } from 'vue'
+import { defineComponent, watchEffect, reactive, ref } from 'vue'
 // import { useStore } from 'src/services/store'
 import NewsCard from 'components/NewsCard.vue'
 import { ArticlesService } from 'src/services/articles'
+import { Article } from '@/models/Article'
 // import { useQuasar } from 'quasar'
-import { i18n } from 'src/boot/i18n'
+// import { i18n } from 'src/boot/i18n'
 
 export default defineComponent({
   name: 'PageIndex',
@@ -62,40 +63,47 @@ export default defineComponent({
     const articlesService = new ArticlesService()
     // const store = useStore()
 
-    const translate = i18n.global
+    // const translate = i18n.global
 
     const data = reactive({
       page: 0,
       pageSize: 6
     })
 
-    const { articles, loading, error, fetchMore } = articlesService.getAll(data.page, data.pageSize)
+    const loading = ref<boolean>(false)
+    const error = ref<unknown>(null)
+    const articles = ref<Article[]>([])
 
-    const onLoad = async () => {
+    const result = articlesService.getAll(data.page, data.pageSize)
+
+    const onLoad = () => {
       // console.log('onLoad')
       data.page++
-      await fetchMore({
+      /* await fetchMore({
         variables: {
           offset: (data.page * data.pageSize)
         }
-      })
+      }) */
     }
 
     watchEffect(() => {
-      if (error.value) {
+      console.log(articles)
+      loading.value = result.fetching.value
+      error.value = result.error.value
+      articles.value = result.data.value?.articles as Article[]
+      /* if (error.value) {
         console.error(error, translate.t('errorNetwork'))
         // const $q = useQuasar()
         // $q.notify({
         //   type: 'negative',
         //   message: translate.t('errorNetwork')
         // })
-      }
+      } */
     })
 
     return {
       articles,
       loading,
-      error,
       onLoad
     }
   }

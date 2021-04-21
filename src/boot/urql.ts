@@ -1,8 +1,7 @@
 import { boot } from 'quasar/wrappers'
-import { createClient } from '@urql/vue'
-import firebase from 'firebase/app'
-import 'firebase/auth'
+import { createClient, dedupExchange, cacheExchange, fetchExchange } from '@urql/vue'
 import type { Client } from '@urql/vue'
+// import { authExchange } from '@urql/exchange-auth'
 // import { ApolloClient } from '@apollo/client/core'
 // import { getClientOptions } from 'src/extensions/apollo/conf'
 // import type { BootFileParams } from '@quasar/app'
@@ -13,19 +12,16 @@ import type { Client } from '@urql/vue'
 let client: Client
 
 export default boot((/* bootFileParams: BootFileParams<unknown> */) => {
-  // const options = await getClientOptions()
-  // apolloClient = new ApolloClient(options)
-  firebase.auth().onAuthStateChanged(async function (user) {
-    let token = ''
-    if (user) token = await user.getIdToken(true)
-    client = createClient({
-      url: process.env.GRAPHQL_URI || '',
-      fetchOptions: () => {
-        return {
-          headers: { authorization: token ? `Bearer ${token}` : '' }
-        }
-      }
-    })
+  client = createClient({
+    url: process.env.GRAPHQL_URI || '',
+    exchanges: [
+      dedupExchange,
+      cacheExchange,
+      // authExchange({
+      /* config */
+      // }),
+      fetchExchange
+    ]
   })
 })
 

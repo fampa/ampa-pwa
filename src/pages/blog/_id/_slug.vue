@@ -15,7 +15,7 @@
     </div>
     <div class="article" v-else-if="article">
       <h1 class="text-h4 title">{{title}}</h1>
-      <div class="subtitle"><strong>{{formatedDate}}</strong>. <span class="updated" v-if="article.created_at !== article.updated_at">{{$t('updatedAt', {date: formatedUpdatedDate})}}</span></div>
+      <div class="subtitle"><strong>{{formatedDate}}</strong>. <span class="updated" v-if="article.createdAt !== article.updatedAt">{{$t('updatedAt', {date: formatedUpdatedDate})}}</span></div>
       <q-img
         fit="cover"
         v-if="article.image"
@@ -28,12 +28,13 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, watchEffect } from 'vue'
+import { defineComponent, computed, watchEffect, ref } from 'vue'
 import { date } from 'quasar'
 import { ArticlesService } from 'src/services/articles'
 import { useRoute } from 'vue-router'
 import { useStore } from 'src/services/store'
 import { i18n } from 'src/boot/i18n'
+import { Article } from '@/models/Article'
 
 export default defineComponent({
   name: 'NewsDetails',
@@ -41,6 +42,10 @@ export default defineComponent({
     const articlesService = new ArticlesService()
     const route = useRoute()
     const id = Number(route.params.id)
+    const result = articlesService.getById(id)
+    const loading = ref<boolean>(false)
+    const error = ref<unknown>(null)
+    const article = ref<Article|null>(null)
     const store = useStore()
     const language = computed(() => store.state.settings.language)
     const title = computed(() => {
@@ -59,16 +64,17 @@ export default defineComponent({
     })
     const fallbackLanguage = computed(() => store.state.settings.fallbackLanguage)
 
-    const formatedDate = computed(() => date.formatDate(article.value?.created_at, 'DD/MM/YYYY, HH:mm'))
-    const formatedUpdatedDate = computed(() => date.formatDate(article.value?.updated_at, 'DD/MM/YYYY, HH:mm'))
-
-    const { article, loading, error } = articlesService.getById(id)
+    const formatedDate = computed(() => date.formatDate(article.value?.createdAt, 'DD/MM/YYYY, HH:mm'))
+    const formatedUpdatedDate = computed(() => date.formatDate(article.value?.updatedAt, 'DD/MM/YYYY, HH:mm'))
 
     const translate = i18n.global
 
     watchEffect(
       () => {
         // const $q = useQuasar()
+        loading.value = result.fetching.value
+        article.value = result.data.value?.articles_by_pk as Article
+
         if (error.value) {
           console.error(translate.t('errorNetwork'))
           // $q.notify({
