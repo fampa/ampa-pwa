@@ -58,12 +58,12 @@ export default {
             {
               provider: firebase.auth.EmailAuthProvider.PROVIDER_ID,
               fullLabel: translate.t('firebaseui.email')
-            },
-            {
-              provider: firebase.auth.PhoneAuthProvider.PROVIDER_ID,
-              fullLabel: translate.t('firebaseui.phone'),
-              defaultCountry: 'ES'
             }
+            // {
+            //   provider: firebase.auth.PhoneAuthProvider.PROVIDER_ID,
+            //   fullLabel: translate.t('firebaseui.phone'),
+            //   defaultCountry: 'ES'
+            // }
             // firebase.auth.FacebookAuthProvider.PROVIDER_ID,
             // firebase.auth.TwitterAuthProvider.PROVIDER_ID,
             // firebase.auth.GithubAuthProvider.PROVIDER_ID,

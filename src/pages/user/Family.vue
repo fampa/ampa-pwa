@@ -1,7 +1,7 @@
 <template>
   <q-page padding class="bg-grey-2">
     <h1 class="text-h4">{{$t('member.familyData')}}</h1>
-    <div class="q-gutter-md" style="max-width: 300px" v-if="member">
+    <div class="q-gutter-md" style="max-width: 300px">
       <q-form ref="mForm" @submit.prevent="submitForm">
         <q-input outlined v-model="familyName" :label="$t('member.familyName')" bottom-slots disable>
           <template v-slot:hint>
@@ -39,10 +39,12 @@
 </template>
 
 <script lang="ts">
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+
 // import { date } from 'quasar'
 import { useRoute } from 'vue-router'
 import { MembersService } from 'src/services/members'
-import { computed, ref, watchEffect, onMounted } from 'vue'
+import { computed, ref, onMounted } from 'vue'
 import firebase from 'firebase/app'
 import 'firebase/auth'
 import { Child } from '@/models/Child'
@@ -72,11 +74,10 @@ export default {
       }
     })
 
-    const result = membersService.getById(id.value)
-    const member = result.data.value?.members_by_pk
-
-    watchEffect(() => {
-      children.value = member?.family?.children || []
+    onMounted(async () => {
+      const result = await membersService.getById(id.value)
+      const member = result.data?.members_by_pk
+      children.value = member.children ?? children.value
     })
 
     const datePattern = /^-?[\d]+\/[0-1]\d\/[0-3]\d$/
@@ -89,8 +90,6 @@ export default {
       }
       children.value.push(child)
     }
-
-    onMounted(() => console.log('mForm', mForm.value))
 
     // // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     // const formIsValid = async () => {
@@ -117,12 +116,12 @@ export default {
     }
 
     return {
-      member,
       familyName,
       children,
       addChild,
       datePattern,
-      submitForm
+      submitForm,
+      mForm
     }
   }
 }

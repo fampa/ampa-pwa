@@ -87,7 +87,7 @@ export default defineComponent({
     }
 
     watchEffect(() => {
-      console.log(articles)
+      // console.log(articles)
       loading.value = result.fetching.value
       error.value = result.error.value
       articles.value = result.data.value?.articles as Article[]

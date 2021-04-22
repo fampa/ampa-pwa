@@ -1,7 +1,7 @@
 <template>
   <q-page padding class="bg-grey-2">
     <h1 class="text-h4">{{$t('personalData')}}</h1>
-    <div class="q-gutter-md" style="max-width: 300px" v-if="member">
+    <div class="q-gutter-md" style="max-width: 300px">
       <q-form ref="memberForm" @submit.prevent="submitForm">
         <q-input outlined v-model="firstName" :label="$t('member.firstName')" :rules="[val => !!val || $t('forms.required')]" />
         <q-input outlined v-model="lastName" :label="$t('member.lastName')" :rules="[val => !!val || $t('forms.required')]" />
@@ -15,21 +15,29 @@
 </template>
 
 <script lang="ts">
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+
 import { useRoute } from 'vue-router'
 import { MembersService } from 'src/services/members'
-import { computed, ref, watchEffect } from 'vue'
+import { computed, ref, reactive, toRefs, onMounted } from 'vue'
 import firebase from 'firebase/app'
 import 'firebase/auth'
 import { validateSpanishId } from 'spain-id'
+// import { useQuasar } from 'quasar'
 
 export default {
   name: 'PagePersonalData',
   setup () {
-    const firstName = ref<string | undefined>('')
-    const lastName = ref<string | undefined>('')
-    const nif = ref<string | undefined>('')
-    const email = ref<string | undefined>('')
-    const phone = ref<string | undefined>('')
+    // const $q = useQuasar()
+    // $q.notify('success')
+    const data = reactive({
+      id: '',
+      firstName: '',
+      lastName: '',
+      nif: '',
+      email: '',
+      phone: ''
+    })
 
     const emailPattern = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/
 
@@ -40,6 +48,8 @@ export default {
     const currentUserId = computed(() => {
       return firebase.auth().currentUser?.uid
     })
+
+    const memberForm = ref<HTMLFormElement | null>(null)
 
     const membersService = new MembersService()
     const route = useRoute()
@@ -52,40 +62,24 @@ export default {
       }
     })
 
-    const result = membersService.getById(id.value)
-
-    const member = result.data.value?.members_by_pk
-
-    watchEffect(() => {
-      firstName.value = member?.firstName
-      lastName.value = member?.lastName
-      email.value = member?.email
-      phone.value = member?.phone
-      nif.value = member?.nif
+    onMounted(async () => {
+      const result = await membersService.getById(id.value)
+      const dataBase = result.data?.members_by_pk
+      data.id = dataBase?.id || ''
+      data.firstName = dataBase?.firstName || data.firstName
+      data.lastName = dataBase?.lastName || data.lastName
+      data.nif = dataBase?.nif || ''
+      data.email = dataBase?.email || ''
+      data.phone = dataBase?.phone || ''
     })
 
-    const memberForm = ref<HTMLFormElement | null>(null)
-
-    const submitForm = (): void => {
-      // TODO form validation since for some reason mForm is undefined
-      const payload = {
-        id: id.value,
-        firstName: firstName.value || '',
-        lastName: lastName.value || '',
-        nif: nif.value || '',
-        email: email.value || '',
-        phone: phone.value || ''
-      }
-
-      const mutate = membersService.updateMember(payload)
-      console.log(mutate)
-
-      console.log('form submitted', mutate)
-
-      memberForm.value?.validate().then(success => {
+    const { executeMutation } = membersService.updateMember()
+    const submitForm = async () => {
+      await memberForm.value?.validate().then(async (success) => {
         if (success) {
           // yay, models are correct
-          console.log('form submitted')
+          await executeMutation({ ...data })
+          console.log('success')
         } else {
           // oh no, user has filled in
           // at least one invalid value
@@ -94,16 +88,12 @@ export default {
     }
 
     return {
-      member,
-      firstName,
-      lastName,
-      email,
-      phone,
-      nif,
+      ...toRefs(data),
       submitForm,
       emailPattern,
       phonePattern,
-      validateNif
+      validateNif,
+      memberForm
     }
   }
 }

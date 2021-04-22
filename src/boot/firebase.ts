@@ -16,6 +16,8 @@ const config = {
   measurementId: process.env.FIREBASE_MEASUREMENT_ID
 }
 
+export const isFirebaseInit = ref(false)
+
 // bootFileParams is { app, router, ...}
 export default boot((context: BootFileParams<unknown>) => {
   firebase.initializeApp(config)
@@ -24,6 +26,7 @@ export default boot((context: BootFileParams<unknown>) => {
   const firebaseUser = ref<firebase.User | null>(null)
   const isAdmin = ref<boolean>(false)
   firebase.auth().onAuthStateChanged(async function (user) {
+    isFirebaseInit.value = true
     if (user) {
       const tokenResult = await user.getIdTokenResult(true)
       // console.log('tokenResult', tokenResult)
