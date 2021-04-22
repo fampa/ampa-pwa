@@ -70,14 +70,14 @@ export default {
       // TODO form validation since for some reason mForm is undefined
       const payload = {
         id: id.value,
-        firstName: firstName.value,
-        lastName: lastName.value,
-        nif: nif.value,
-        email: email.value,
-        phone: phone.value
+        firstName: firstName.value || '',
+        lastName: lastName.value || '',
+        nif: nif.value || '',
+        email: email.value || '',
+        phone: phone.value || ''
       }
 
-      const { mutate } = membersService.updateMember(payload)
+      const mutate = membersService.updateMember(payload)
       console.log(mutate)
 
       console.log('form submitted', mutate)

@@ -2,12 +2,12 @@ import { Family } from './Family'
 
 /* eslint-disable camelcase */
 export interface Member {
-  id?: number
+  id?: string
   firstName: string
   lastName: string
   email: string
-  familyId: number
-  family: Family
+  familyId?: number
+  family?: Family
   nif?: string
   photoURL?: string
   isAdmin?: boolean

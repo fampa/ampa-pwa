@@ -16,6 +16,10 @@ mutation updateMember(
       nif: $nif
     }
   ) {
-    email
+    email,
+    firstName,
+    lastName,
+    phone,
+    nif
   }
 }
