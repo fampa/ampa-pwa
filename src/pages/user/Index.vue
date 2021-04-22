@@ -8,6 +8,7 @@
         <q-input outlined v-model="nif" label="NIF o NIE" :rules="[val => !!val || $t('forms.required'), val => !!validateNif(val) || $t('forms.validNif')]" />
         <q-input outlined v-model="email" type="email" :label="$t('member.email')" :rules="[val => !!val || $t('forms.required'), val => !!emailPattern.test(val) || $t('forms.validEmail')]" />
         <q-input outlined v-model="phone" type="tel" :label="$t('member.phone')" :rules="[val => !!val || $t('forms.required'), val => !!phonePattern.test(val) || $t('forms.validPhone')]" />
+        <q-btn color="primary" :label="$t('forms.save')" type="submit" />
       </q-form>
     </div>
   </q-page>
@@ -66,6 +67,21 @@ export default {
     const memberForm = ref<HTMLFormElement | null>(null)
 
     const submitForm = (): void => {
+      // TODO form validation since for some reason mForm is undefined
+      const payload = {
+        id: id.value,
+        firstName: firstName.value,
+        lastName: lastName.value,
+        nif: nif.value,
+        email: email.value,
+        phone: phone.value
+      }
+
+      const { mutate } = membersService.updateMember(payload)
+      console.log(mutate)
+
+      console.log('form submitted', mutate)
+
       memberForm.value?.validate().then(success => {
         if (success) {
           // yay, models are correct

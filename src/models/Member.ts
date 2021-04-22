@@ -32,3 +32,17 @@ export interface MemberVars {
 export interface MemberData {
   members_by_pk: Member
 }
+
+export interface UpdateMemberData {
+  update_members_by_pk: Member
+}
+
+export interface UpdateMemberVars {
+  id: string
+  firstName?: string
+  lastName?: string
+  nif?: string
+  email?: string
+  phone?: string
+
+}

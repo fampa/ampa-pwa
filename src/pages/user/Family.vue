@@ -103,6 +103,7 @@ export default {
 
     const submitForm = async (): Promise<void> => {
       console.log('submit clicked')
+      // TODO form validation since for some reason mForm is undefined
       return mForm.value?.validate().then(success => {
         if (success) {
         // yay, models are correct

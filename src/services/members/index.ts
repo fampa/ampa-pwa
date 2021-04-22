@@ -1,21 +1,18 @@
-// import { useQuery, useResult } from '@vue/apollo-composable'
-import getMembers from './queries/getMembers.gql'
-import getMemberById from './queries/getMemberById.gql'
+import getMembers from 'src/services/members/queries/getMembers.gql'
+import getMemberById from 'src/services/members/queries/getMemberById.gql'
+import updateMember from 'src/services/members/queries/updateMember.gql'
 import {
   MemberData,
-  // MembersData,
-  MemberVars
-  // MembersVars
+  MembersData,
+  MemberVars,
+  MembersVars,
+  Member
 } from 'src/models/Member'
-// import { apolloClient } from 'src/boot/apollo'
-import { useQuery } from '@urql/vue'
+import { useQuery, useMutation } from '@urql/vue'
 
 export class MembersService {
   getAll = (offset: number, limit: number) => {
-    /* const { result, loading, error, fetchMore } = useQuery<MembersData, MembersVars>(getMembers, { offset, limit })
-    const members = useResult(result, null, data => data.members)
-    return { members, loading, error, fetchMore } */
-    const result = useQuery({
+    const result = useQuery<MembersData, MembersVars>({
       query: getMembers,
       variables: { offset, limit }
     })
@@ -23,12 +20,6 @@ export class MembersService {
   }
 
   getById = (id: string) => {
-    /* const { result, loading, error } = useQuery<MemberData, MemberVars>(
-      getMemberById,
-      { id }
-    )
-    const member = useResult(result, null, data => data.members_by_pk)
-    return { member, loading, error } */
     const result = useQuery<MemberData, MemberVars>({
       query: getMemberById,
       variables: { id }
@@ -37,7 +28,11 @@ export class MembersService {
     return result
   }
 
-  /* clearCache = async () => {
-    await apolloClient.clearStore()
-  } */
+  updateMember = (member: Member) => {
+    const variables = { ...member }
+    const { executeMutation } = useMutation(updateMember)
+    const result = executeMutation(variables)
+    console.log('result', result)
+    return result
+  }
 }
