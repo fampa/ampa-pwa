@@ -24,7 +24,7 @@ function addAuthExchange () {
       if (!isAuthenticated.value) { return null }
 
       // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-      return await user.value?.getIdToken()
+      return await user.value?.getIdToken(true)
     },
     addAuthToOperation ({ operation, authState }) {
       if (!authState) { return operation }
