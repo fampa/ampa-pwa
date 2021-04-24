@@ -77,7 +77,7 @@ export default {
     onMounted(async () => {
       const result = await membersService.getById(id.value)
       const member = result.data?.members_by_pk
-      children.value = member.children ?? children.value
+      children.value = member?.children ?? children.value
     })
 
     const datePattern = /^-?[\d]+\/[0-1]\d\/[0-3]\d$/
