@@ -40,7 +40,7 @@ const cache = offlineExchange({
 function addAuthExchange () {
   return authExchange({
     async getAuth () {
-      await until(isFirebaseInit).toBeTruthy({ timeout: 500 })
+      await until(isFirebaseInit).toBeTruthy({ timeout: 1000 })
 
       if (!isFirebaseInit.value) { return null }
 
