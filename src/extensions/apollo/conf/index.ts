@@ -13,7 +13,7 @@ import { persistCache, LocalStorageWrapper } from 'apollo3-cache-persist'
 import firebase from 'firebase/app'
 import 'firebase/auth'
 
-export async function getClientOptions(/* {app, router, ...}: Partial<BootFileParams<unknown>> */) {
+export async function getClientOptions(/* {app, router, ...}: Partial<BootFileParams<unknown>> */): Promise<ApolloClientOptions<unknown>> {
   const cache = new InMemoryCache({
     typePolicies: {
       Query: {

@@ -15,7 +15,7 @@
     </div>
     <div class="article" v-else-if="article">
       <h1 class="text-h4 title">{{title}}</h1>
-      <div class="subtitle"><strong>{{formatedDate}}</strong>. <span class="updated" v-if="article.created_at !== article.updated_at">{{$t('updatedAt', {date: formatedUpdatedDate})}}</span></div>
+      <div class="subtitle"><strong>{{formatedDate}}</strong>. <span class="updated" v-if="article.createdAt !== article.updatedAt">{{$t('updatedAt', {date: formatedUpdatedDate})}}</span></div>
       <q-img
         fit="cover"
         v-if="article.image"
@@ -59,8 +59,8 @@ export default defineComponent({
     })
     const fallbackLanguage = computed(() => store.state.settings.fallbackLanguage)
 
-    const formatedDate = computed(() => date.formatDate(article.value?.created_at, 'DD/MM/YYYY, HH:mm'))
-    const formatedUpdatedDate = computed(() => date.formatDate(article.value?.updated_at, 'DD/MM/YYYY, HH:mm'))
+    const formatedDate = computed(() => date.formatDate(article.value?.createdAt, 'DD/MM/YYYY, HH:mm'))
+    const formatedUpdatedDate = computed(() => date.formatDate(article.value?.updatedAt, 'DD/MM/YYYY, HH:mm'))
 
     const { article, loading, error } = articlesService.getById(id)
 

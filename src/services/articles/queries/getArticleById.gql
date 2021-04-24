@@ -2,8 +2,8 @@ query ArticleById($id: Int!) {
   articles_by_pk(id: $id) {
     image
     status
-    created_at
-    updated_at
+    createdAt
+    updatedAt
     translations {
       content
       language

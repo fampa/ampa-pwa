@@ -53,7 +53,7 @@ export default defineComponent({
         return props.article?.translations?.find(t => t.language === fallbackLanguage.value)?.slug
       }
     })
-    const formatedDate = computed(() => date.formatDate(props.article.created_at, 'DD/MM/YYYY'))
+    const formatedDate = computed(() => date.formatDate(props.article.createdAt, 'DD/MM/YYYY'))
     return {
       ...toRefs(props),
       date,

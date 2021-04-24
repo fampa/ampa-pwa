@@ -1,10 +1,10 @@
 query getArticles($offset: Int, $limit: Int) {
-    articles(offset: $offset, limit: $limit, order_by: {created_at: desc}) {
+    articles(offset: $offset, limit: $limit, order_by: {createdAt: desc}) {
     id
     status
     image
-    created_at
-    updated_at
+    createdAt
+    updatedAt
         translations {
             title
             slug
