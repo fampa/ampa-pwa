@@ -1,15 +1,41 @@
 import { boot } from 'quasar/wrappers'
-import urql, { createClient, makeOperation, dedupExchange, cacheExchange, fetchExchange } from '@urql/vue'
+import urql, { createClient, makeOperation, dedupExchange, fetchExchange } from '@urql/vue'
 import type { Client } from '@urql/vue'
 import { authExchange } from '@urql/exchange-auth'
 import { until } from '@vueuse/core'
 import { isFirebaseInit } from './firebase'
 import 'firebase/auth'
 import { useAuth } from '@vueuse/firebase'
+import { offlineExchange } from '@urql/exchange-graphcache'
+import { makeDefaultStorage } from '@urql/exchange-graphcache/default-storage'
 // import type { BootFileParams } from '@quasar/app'
 // bootFileParams is { app, router, ...}
 
 let client: Client
+
+const storage = makeDefaultStorage({
+  idbName: 'graphcache-v3', // The name of the IndexedDB database
+  maxAge: 7 // The maximum age of the persisted data in days
+})
+
+const introspectedSchema = {
+  __schema: {
+    queryType: { name: 'Query' },
+    mutationType: { name: 'Mutation' },
+    subscriptionType: { name: 'Subscription' }
+  }
+}
+
+const cache = offlineExchange({
+  schema: introspectedSchema,
+  storage,
+  updates: {
+    /* ... */
+  },
+  optimistic: {
+    /* ... */
+  }
+})
 
 function addAuthExchange () {
   return authExchange({
@@ -51,10 +77,11 @@ export default boot(({ app }) => {
     url: process.env.GRAPHQL_URI || '',
     exchanges: [
       dedupExchange,
-      cacheExchange,
+      cache,
       addAuthExchange(),
       fetchExchange
-    ]
+    ],
+    requestPolicy: 'cache-and-network'
   })
   app.use(urql, client)
 })
