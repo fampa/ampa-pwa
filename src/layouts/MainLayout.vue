@@ -73,7 +73,25 @@
           <q-item-section>{{item.title}}</q-item-section>
         </q-item>
         <div v-if="user">
+          <q-separator />
+            <q-item>
+              <q-item-section>
+                  <q-item-label overline>{{$t('menu.YourData')}}</q-item-label>
+              </q-item-section>
+            </q-item>
           <q-item v-for="(item, index) in userItems" :key="index" clickable v-ripple :to="item.to" exact>
+            <q-item-section avatar>
+              <q-icon :name="item.icon" />
+            </q-item-section>
+            <q-item-section>{{item.title}}</q-item-section>
+          </q-item>
+          <q-separator />
+            <q-item>
+              <q-item-section>
+                  <q-item-label overline>{{$t('menu.AmpaServices')}}</q-item-label>
+              </q-item-section>
+            </q-item>
+          <q-item v-for="(item, index) in ampaItems" :key="index" clickable v-ripple :to="item.to" exact>
             <q-item-section avatar>
               <q-icon :name="item.icon" />
             </q-item-section>
@@ -145,6 +163,21 @@ export default defineComponent({
       ]
     })
 
+    const ampaItems = computed(() => {
+      return [
+        {
+          title: 'Matinera',
+          icon: 'las la-clock',
+          to: '/services/matinera'
+        },
+        {
+          title: translate.t('extraescolars'),
+          icon: 'las la-skating',
+          to: '/services/extraescolars'
+        }
+      ]
+    })
+
     const adminItems = computed(() => {
       return [
         {
@@ -170,6 +203,7 @@ export default defineComponent({
       items,
       userItems,
       adminItems,
+      ampaItems,
       user,
       leftDrawerOpen,
       logout,

@@ -1,0 +1,25 @@
+mutation updateMember(
+  $id: String!,
+  $email: String!,
+  $firstName: String!,
+  $lastName: String!,
+  $phone: String!,
+  $nif: String!
+  ) {
+  update_members_by_pk(
+    pk_columns: {id: $id},
+    _set: {
+      email: $email,
+      firstName: $firstName,
+      lastName: $lastName,
+      phone: $phone,
+      nif: $nif
+    }
+  ) {
+    email,
+    firstName,
+    lastName,
+    phone,
+    nif
+  }
+}

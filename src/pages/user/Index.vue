@@ -1,13 +1,14 @@
 <template>
   <q-page padding class="bg-grey-2">
     <h1 class="text-h4">{{$t('personalData')}}</h1>
-    <div class="q-gutter-md" style="max-width: 300px" v-if="member">
+    <div class="q-gutter-md" style="max-width: 300px" v-if="id">
       <q-form ref="memberForm" @submit.prevent="submitForm">
         <q-input outlined v-model="firstName" :label="$t('member.firstName')" :rules="[val => !!val || $t('forms.required')]" />
         <q-input outlined v-model="lastName" :label="$t('member.lastName')" :rules="[val => !!val || $t('forms.required')]" />
         <q-input outlined v-model="nif" label="NIF o NIE" :rules="[val => !!val || $t('forms.required'), val => !!validateNif(val) || $t('forms.validNif')]" />
         <q-input outlined v-model="email" type="email" :label="$t('member.email')" :rules="[val => !!val || $t('forms.required'), val => !!emailPattern.test(val) || $t('forms.validEmail')]" />
         <q-input outlined v-model="phone" type="tel" :label="$t('member.phone')" :rules="[val => !!val || $t('forms.required'), val => !!phonePattern.test(val) || $t('forms.validPhone')]" />
+        <q-btn :loading="updateMemberLoading" color="primary" type="submit">{{$t('forms.save')}}</q-btn>
       </q-form>
     </div>
   </q-page>
@@ -16,7 +17,7 @@
 <script lang="ts">
 import { useRoute } from 'vue-router'
 import { MembersService } from 'src/services/members'
-import { computed, ref, watchEffect } from 'vue'
+import { computed, ref, reactive, toRefs } from 'vue'
 import firebase from 'firebase/app'
 import 'firebase/auth'
 import { validateSpanishId } from 'spain-id'
@@ -24,11 +25,14 @@ import { validateSpanishId } from 'spain-id'
 export default {
   name: 'PagePersonalData',
   setup () {
-    const firstName = ref<string | undefined>('')
-    const lastName = ref<string | undefined>('')
-    const nif = ref<string | undefined>('')
-    const email = ref<string | undefined>('')
-    const phone = ref<string | undefined>('')
+    const data = reactive({
+      id: '',
+      firstName: '',
+      lastName: '',
+      nif: '',
+      email: '',
+      phone: ''
+    })
 
     const emailPattern = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/
 
@@ -51,23 +55,27 @@ export default {
       }
     })
 
-    const { member, loading, error } = membersService.getById(id.value)
+    const { member, loading, error, onResult } = membersService.getById(id.value)
 
-    watchEffect(() => {
-      firstName.value = member.value?.firstName
-      lastName.value = member.value?.lastName
-      email.value = member.value?.email
-      phone.value = member.value?.phone
-      nif.value = member.value?.nif
+    onResult(() => {
+      data.id = member.value?.id || ''
+      data.firstName = member.value?.firstName || data.firstName
+      data.lastName = member.value?.lastName || data.lastName
+      data.nif = member.value?.nif || ''
+      data.email = member.value?.email || ''
+      data.phone = member.value?.phone || ''
     })
 
     const memberForm = ref<HTMLFormElement | null>(null)
 
-    const submitForm = (): void => {
-      memberForm.value?.validate().then(success => {
+    const { mutate, loading: updateMemberLoading, error: updateMemberError } = membersService.updateMember()
+
+    const submitForm = () => {
+      memberForm.value?.validate().then(async (success) => {
         if (success) {
           // yay, models are correct
           console.log('form submitted')
+          await mutate({ ...data })
         } else {
           // oh no, user has filled in
           // at least one invalid value
@@ -76,18 +84,16 @@ export default {
     }
 
     return {
-      member,
-      firstName,
-      lastName,
-      email,
-      phone,
-      nif,
+      ...toRefs(data),
       loading,
       error,
       submitForm,
       emailPattern,
       phonePattern,
-      validateNif
+      validateNif,
+      memberForm,
+      updateMemberLoading,
+      updateMemberError
     }
   }
 }

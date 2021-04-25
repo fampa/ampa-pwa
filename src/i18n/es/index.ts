@@ -1,11 +1,9 @@
-// This is just an example,
-// so you can safely delete all default props below
-
 export default {
   admin: {
     users: 'Gestión de usuarios'
   },
   errorNetwork: 'No tienes conexión a internet',
+  extraescolars: 'Extraescolares',
   firebaseui: {
     google: 'Entra o regístrate con Google',
     email: 'Entra o regístrate con Email',
@@ -32,6 +30,10 @@ export default {
     lastName: 'Apellidos',
     email: 'Correo electrónico',
     phone: 'Teléfono'
+  },
+  menu: {
+    YourData: 'TUS DATOS',
+    AmpaServices: 'LOS SERVICIOS DEL AMPA'
   },
   newVersion: 'Nueva versión disponible. Actualice pulsando el botón',
   personalData: 'Datos personales',
