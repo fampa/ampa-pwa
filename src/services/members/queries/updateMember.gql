@@ -1,20 +1,10 @@
 mutation updateMember(
   $id: String!,
-  $email: String!,
-  $firstName: String!,
-  $lastName: String!,
-  $phone: String!,
-  $nif: String!
+  $member: members_set_input,
   ) {
   update_members_by_pk(
     pk_columns: {id: $id},
-    _set: {
-      email: $email,
-      firstName: $firstName,
-      lastName: $lastName,
-      phone: $phone,
-      nif: $nif
-    }
+    _set: $member
   ) {
     email,
     firstName,

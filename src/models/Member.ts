@@ -3,11 +3,11 @@ import { Family } from './Family'
 /* eslint-disable camelcase */
 export interface Member {
   id?: string
-  firstName: string
-  lastName: string
-  email: string
-  familyId: number
-  family: Family
+  firstName?: string
+  lastName?: string
+  email?: string
+  familyId?: number
+  family?: Family
   nif?: string
   photoURL?: string
   isAdmin?: boolean
@@ -26,12 +26,8 @@ export interface MembersVars {
 }
 
 export interface MemberVars {
-  id: string,
-  email?: string,
-  firstName?: string,
-  lastName?: string,
-  nif?: string,
-  phone?: string
+  id?: string
+  member?: Member
 }
 
 export interface MemberData {

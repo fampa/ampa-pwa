@@ -1,0 +1,11 @@
+mutation updateChildren($children: [children_insert_input!]!) {
+  insert_children(
+    objects: $children,
+    on_conflict: {
+      constraint: children_pkey,
+      update_columns: [firstName, lastName, birthDate]
+    }
+  ) {
+    affected_rows
+  }
+}

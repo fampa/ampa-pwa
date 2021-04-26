@@ -21,17 +21,20 @@ import { computed, ref, reactive, toRefs } from 'vue'
 import firebase from 'firebase/app'
 import 'firebase/auth'
 import { validateSpanishId } from 'spain-id'
+import { Member } from '@/models/Member'
 
 export default {
   name: 'PagePersonalData',
   setup () {
-    const data = reactive({
+    const data = reactive<Member>({
       id: '',
       firstName: '',
       lastName: '',
       nif: '',
       email: '',
-      phone: ''
+      phone: '',
+      familyId: undefined,
+      family: undefined
     })
 
     const emailPattern = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/
@@ -64,6 +67,8 @@ export default {
       data.nif = member.value?.nif || ''
       data.email = member.value?.email || ''
       data.phone = member.value?.phone || ''
+      data.familyId = member.value?.familyId
+      data.family = member.value?.family
     })
 
     const memberForm = ref<HTMLFormElement | null>(null)
@@ -75,7 +80,7 @@ export default {
         if (success) {
           // yay, models are correct
           console.log('form submitted')
-          await mutate({ ...data })
+          await mutate({ id: data.id, member: { ...data } })
         } else {
           // oh no, user has filled in
           // at least one invalid value

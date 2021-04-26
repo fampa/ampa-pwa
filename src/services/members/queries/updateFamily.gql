@@ -1,0 +1,5 @@
+mutation updateFamily($family: families_insert_input!) {
+  insert_families_one(object: $family, on_conflict: {constraint: families_pkey, update_columns: name}) {
+    id
+  }
+}
