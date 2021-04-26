@@ -7,19 +7,19 @@ import { apolloClient } from 'src/boot/apollo'
 
 export class ArticlesService {
   getAll = (offset: number, limit: number) => {
-    const { result, loading, error, fetchMore } = useQuery<ArticlesData, ArticlesVars>(getArticles, { offset, limit })
-    const articles = useResult(result, null, data => data.articles)
-    return { articles, loading, error, fetchMore }
+    const response = useQuery<ArticlesData, ArticlesVars>(getArticles, { offset, limit })
+    const articles = useResult(response.result, null, data => data.articles)
+    return { articles, ...response }
   }
 
   getById = (id: number) => {
-    const { result, loading, error } = useQuery<ArticleData, ArticleVars>(
+    const response = useQuery<ArticleData, ArticleVars>(
       getArticleById,
       { id }
     )
-    const article = useResult(result, null, data => data.articles_by_pk)
+    const article = useResult(response.result, null, data => data.articles_by_pk)
 
-    return { article, loading, error }
+    return { article, ...response }
   }
 
   clearCache = async () => {

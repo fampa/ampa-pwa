@@ -4,7 +4,7 @@
             enter-active-class="animated fadeOutLeft"
             leave-active-class="animated fadeInRight">
   <q-page class="bg-grey-2 q-pa-md">
-    <div v-if="loading">
+    <div v-if="!articles && loading">
       <div class="row items-start">
         <div
           class="col-12 col-sm-6 col-md-4 q-pa-sm"
@@ -48,18 +48,20 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, watchEffect, reactive } from 'vue'
+import { defineComponent, watchEffect, reactive, ref } from 'vue'
 // import { useStore } from 'src/services/store'
 import NewsCard from 'components/NewsCard.vue'
 import { ArticlesService } from 'src/services/articles'
 // import { useQuasar } from 'quasar'
 import { i18n } from 'src/boot/i18n'
+import { Article } from 'src/models/Article'
 
 export default defineComponent({
   name: 'PageIndex',
   components: { NewsCard },
   setup () {
     const articlesService = new ArticlesService()
+    const articles = ref<Article[] | null>(null)
     // const store = useStore()
 
     const translate = i18n.global
@@ -69,7 +71,11 @@ export default defineComponent({
       pageSize: 6
     })
 
-    const { articles, loading, error, fetchMore } = articlesService.getAll(data.page, data.pageSize)
+    const { result, loading, error, fetchMore, onResult } = articlesService.getAll(data.page, data.pageSize)
+
+    onResult(() => {
+      articles.value = result.value.articles
+    })
 
     const onLoad = async () => {
       // console.log('onLoad')
