@@ -144,9 +144,8 @@ export default {
     watch(() => familyData.name,
       (newVal, oldVal) => {
         console.log('shouldUpdateFamilyName', shouldUpdateFamilyName.value)
-        if (newVal !== oldVal) {
+        if (oldVal && newVal !== oldVal) {
           shouldUpdateFamilyName.value = true
-          // console.log('update familyName')
         }
       })
 
@@ -158,7 +157,6 @@ export default {
           console.log('success')
           await mutateChildren({ children: childrenData.children })
           if (shouldUpdateFamilyName.value) {
-            console.log('shouldUpdateFamilyName submit', shouldUpdateFamilyName.value)
             await updateFamily()
           }
         } else {
