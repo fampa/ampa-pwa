@@ -120,7 +120,8 @@ module.exports = configure(function (/* ctx */) {
 
       // Quasar plugins
       plugins: [
-        'Notify'
+        'Notify',
+        'Dialog'
       ]
     },
 
@@ -149,7 +150,7 @@ module.exports = configure(function (/* ctx */) {
         short_name: 'AMPA APP',
         description: 'PWA del AMPA',
         display: 'standalone',
-        orientation: 'portrait',
+        orientation: 'portrait-primary',
         background_color: '#ffffff',
         theme_color: '#ff8000',
         icons: [
