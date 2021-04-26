@@ -134,11 +134,9 @@ export default {
 
     watch(() => familyData.name,
       (newVal, oldVal) => {
-        console.log('newVal', newVal)
-        console.log('oldVal', oldVal)
         if (newVal !== oldVal) {
           shouldUpdateFamilyName.value = true
-          console.log('update familyName')
+          // console.log('update familyName')
         }
       })
 
