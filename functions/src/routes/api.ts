@@ -52,7 +52,7 @@ appApi.post('/webhook/change-claims', (req: express.Request, res: express.Respon
     const isAdmin = !!user.isAdmin
     const id = user.id?.toString() || ''
     await updateClaims(id, isAdmin)
-    console.log(`user ${user.email} admin state:`, isAdmin)
+    console.log(`user ${user.email || ''} admin state:`, isAdmin)
     res.json({ data: { isAdmin: isAdmin } })
   }
   return response

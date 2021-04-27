@@ -9127,9 +9127,9 @@ sourcemap-codec@^1.4.4:
   integrity sha512-9NykojV5Uih4lgo5So5dtw+f0JgJX30KCNI8gwhz2J9A15wD0Ml6tjHKwf6fTSa6fAdVBdZeNOs9eJ71qCk8vA==
 
 spain-id@^1.0.11:
-  version "1.0.11"
-  resolved "https://registry.yarnpkg.com/spain-id/-/spain-id-1.0.11.tgz#c15db9e88d9a058ff4276863d9aee0f89a689804"
-  integrity sha512-qnxOOKJCta/RUPCME2LmJUIFlRwFVAhzEwcw7YwvybpOoSOYEWA0DPYNOj5Dt5OKNJm/yc5qX3ltON9QWh139Q==
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/spain-id/-/spain-id-1.1.1.tgz#fc8ece05fd7c55b55687da8ef350bbcb6b171c94"
+  integrity sha512-217frqIZNg+UFDODuUtP9nNQRLaizhECdaZr3ULSIMYnO40Dzq4tXrQHvcaV4sxLanwyzOOT7wu9DGkYwSyM0w==
 
 spdx-correct@^3.0.0:
   version "3.1.1"
