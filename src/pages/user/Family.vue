@@ -54,6 +54,7 @@ import { Child, ChildrenData } from 'src/models/Child'
 import type { QForm } from 'quasar'
 import { Family } from 'src/models/Family'
 import { useQuasar } from 'quasar'
+import { i18n } from 'src/boot/i18n'
 
 export default {
   name: 'PagePersonalData',
@@ -114,6 +115,8 @@ export default {
       childrenData.children = childrenTemp || []
     }
 
+    const translate = i18n.global
+
     const searchFamily = (name: string) => {
       const { families } = membersService.findFamily(name)
       $q.dialog({
@@ -154,6 +157,7 @@ export default {
         await mutateMember({ id: id.value, member: { familyId } })
         familyData.id = familyId
       }
+      $q.notify(translate.t('forms.savedOk'))
     }
 
     watch(() => familyData.name,
@@ -173,6 +177,7 @@ export default {
           if (shouldUpdateFamilyName.value) {
             await updateFamily()
           }
+          $q.notify(translate.t('forms.savedOk'))
         } else {
         // oh no, user has filled in
         // at least one invalid value
