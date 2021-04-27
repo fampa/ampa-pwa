@@ -1,4 +1,4 @@
-import { Member } from '@/models/Member'
+import { Member } from 'src/models/Member'
 import firebase from 'firebase/app'
 import 'firebase/auth'
 

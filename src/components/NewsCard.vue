@@ -23,7 +23,7 @@
 
 <script lang="ts">
 import { defineComponent, PropType, toRefs, computed } from 'vue'
-import { Article } from '@/models/Article'
+import { Article } from 'src/models/Article'
 import { date } from 'quasar'
 import { useStore } from 'src/services/store'
 

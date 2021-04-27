@@ -50,13 +50,15 @@ import { MembersService } from 'src/services/members'
 import { computed, ref, reactive, toRefs, watch } from 'vue'
 import firebase from 'firebase/app'
 import 'firebase/auth'
-import { Child, ChildrenData } from '@/models/Child'
+import { Child, ChildrenData } from 'src/models/Child'
 import type { QForm } from 'quasar'
-import { Family } from '@/models/Family'
+import { Family } from 'src/models/Family'
+import { useQuasar } from 'quasar'
 
 export default {
   name: 'PagePersonalData',
   setup () {
+    const $q = useQuasar()
     const familyData = reactive<Family>({
       id: undefined,
       name: ''
@@ -122,15 +124,28 @@ export default {
       childrenData.children = childrenTemp || []
     }
 
-    // const searchFamily = (name: string) => {
-
-    // }
+    const searchFamily = (name: string) => {
+      const { families } = membersService.findFamily(name)
+      $q.dialog({
+        title: 'Alert',
+        message: 'Some message'
+      }).onOk(() => {
+        console.log(families)
+      }).onCancel(() => {
+        // console.log('Cancel')
+      }).onDismiss(() => {
+        // console.log('I am triggered on both OK and Cancel')
+      })
+    }
 
     const { mutate: mutateFamily, loading: updateFamilyLoading, error: updateFamilyError } = membersService.updateFamily()
     const { mutate: mutateMember, loading: updateMemberLoading, error: updateMemberError } = membersService.updateMember()
     const { mutate: mutateChildren, loading: updateChildrenLoading, error: updateChildrenError } = membersService.updateChildren()
 
     const updateFamily = async () => {
+      if (!familyData.id && familyData.name) {
+        searchFamily(familyData.name)
+      }
       const variables = cleanObject({ ...familyData })
       // console.log(variables)
       const { data } = await mutateFamily({ family: variables })
@@ -182,7 +197,8 @@ export default {
       updateMemberLoading,
       updateMemberError,
       updateChildrenLoading,
-      updateChildrenError
+      updateChildrenError,
+      searchFamily
     }
   }
 }

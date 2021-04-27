@@ -1,4 +1,4 @@
-import { Member } from '@/models/Member'
+import { Member } from 'src/models/Member'
 import { ActionTree } from 'vuex'
 import { StateInterface } from '../index'
 import { UserStateInterface } from './state'

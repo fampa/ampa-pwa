@@ -21,7 +21,7 @@ import { computed, ref, reactive, toRefs } from 'vue'
 import firebase from 'firebase/app'
 import 'firebase/auth'
 import { validateSpanishId } from 'spain-id'
-import { Member } from '@/models/Member'
+import { Member } from 'src/models/Member'
 
 export default {
   name: 'PagePersonalData',
@@ -76,7 +76,7 @@ export default {
     const { mutate, loading: updateMemberLoading, error: updateMemberError } = membersService.updateMember()
 
     const submitForm = () => {
-      memberForm.value?.validate().then(async (success) => {
+      memberForm.value?.validate().then(async (success: boolean) => {
         if (success) {
           // yay, models are correct
           console.log('form submitted')

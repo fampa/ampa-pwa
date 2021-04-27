@@ -16,3 +16,11 @@ export interface FamilyData {
 export interface FamilyVars {
   family: Family
 }
+
+export interface FindFamilyVars {
+  name: string
+}
+
+export interface FamiliesData {
+  families: Family[]
+}

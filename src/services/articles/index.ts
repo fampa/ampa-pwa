@@ -2,7 +2,7 @@ import { useQuery, useResult } from '@vue/apollo-composable'
 // import gql from 'graphql-tag'
 import getArticles from './queries/getArticles.gql'
 import getArticleById from './queries/getArticleById.gql'
-import { ArticleData, ArticlesData, ArticleVars, ArticlesVars } from '@/models/Article'
+import { ArticleData, ArticlesData, ArticleVars, ArticlesVars } from 'src/models/Article'
 import { apolloClient } from 'src/boot/apollo'
 
 export class ArticlesService {
