@@ -87,16 +87,6 @@ export default {
       }
     })
 
-    const cleanObject = (obj: Record<string, unknown>): Record<string, unknown> => {
-      for (const propName in obj) {
-        if (obj[propName] === '__typename' || obj[propName] === null || obj[propName] === undefined) {
-          delete obj[propName]
-        }
-      }
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-      return obj
-    }
-
     const { member, loading, error, onResult } = membersService.getById(id.value)
 
     onResult(() => {
@@ -141,6 +131,16 @@ export default {
     const { mutate: mutateFamily, loading: updateFamilyLoading, error: updateFamilyError } = membersService.updateFamily()
     const { mutate: mutateMember, loading: updateMemberLoading, error: updateMemberError } = membersService.updateMember()
     const { mutate: mutateChildren, loading: updateChildrenLoading, error: updateChildrenError } = membersService.updateChildren()
+
+    const cleanObject = (obj: Record<string, unknown>): Record<string, unknown> => {
+      for (const propName in obj) {
+        if (obj[propName] === '__typename' || obj[propName] === null || obj[propName] === undefined) {
+          delete obj[propName]
+        }
+      }
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+      return obj
+    }
 
     const updateFamily = async () => {
       if (!familyData.id && familyData.name) {

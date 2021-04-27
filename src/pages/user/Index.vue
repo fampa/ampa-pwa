@@ -22,6 +22,8 @@ import firebase from 'firebase/app'
 import 'firebase/auth'
 import { validateSpanishId } from 'spain-id'
 import { Member } from 'src/models/Member'
+import { useQuasar } from 'quasar'
+import { i18n } from 'src/boot/i18n'
 
 export default {
   name: 'PagePersonalData',
@@ -37,11 +39,13 @@ export default {
       family: undefined
     })
 
+    const $q = useQuasar()
+
     const emailPattern = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/
 
     const phonePattern = /(6|7|9)\d{8}$/
 
-    const validateNif = (nif) => validateSpanishId(nif) as boolean
+    const validateNif = (nif: string) => validateSpanishId(nif)
 
     const currentUserId = computed(() => {
       return firebase.auth().currentUser?.uid
@@ -58,6 +62,16 @@ export default {
       }
     })
 
+    const cleanObject = (obj: Record<string, unknown>): Record<string, unknown> => {
+      for (const propName in obj) {
+        if (obj[propName] === '__typename' || obj[propName] === null || obj[propName] === undefined) {
+          delete obj[propName]
+        }
+      }
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+      return obj
+    }
+
     const { member, loading, error, onResult } = membersService.getById(id.value)
 
     onResult(() => {
@@ -71,6 +85,8 @@ export default {
       data.family = member.value?.family
     })
 
+    const translate = i18n.global
+
     const memberForm = ref<HTMLFormElement | null>(null)
 
     const { mutate, loading: updateMemberLoading, error: updateMemberError } = membersService.updateMember()
@@ -80,7 +96,9 @@ export default {
         if (success) {
           // yay, models are correct
           console.log('form submitted')
-          await mutate({ id: data.id, member: { ...data } })
+          const clean = cleanObject({ ...data })
+          await mutate({ id: data.id, member: clean })
+          $q.notify(translate.t('forms.savedOk'))
         } else {
           // oh no, user has filled in
           // at least one invalid value

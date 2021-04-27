@@ -12,7 +12,6 @@ export default defineComponent({
   setup () {
     // provide(DefaultApolloClient, apolloClient)
     provideApolloClient(apolloClient)
-
     onUnmounted(async () => {
       const articlesService = new ArticlesService()
       await articlesService.clearCache()

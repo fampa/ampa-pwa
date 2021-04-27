@@ -14,6 +14,7 @@ export default {
     putChildrenLastName: 'Pon los apellidos de tu hijo/a. P.e. Sanchis Verdú',
     required: 'Este campo es necesario',
     save: 'Guardar',
+    savedOk: 'Se ha guardado correctamente',
     validDate: 'Usa el seleccionador de fechas o escribe en formato YYYY/MM/DD',
     validEmail: 'Por favor, introduce una dirección de correo electrónico válida',
     validNif: 'Por favor, introduce un NIF o NIE válido',

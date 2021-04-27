@@ -1,13 +1,13 @@
 {
   "extends": "@quasar/app/tsconfig-preset",
   "compilerOptions": {
-    "module": "commonjs",
-    "target": "es2017",
-    "noImplicitAny": false,
+    // "module": "commonjs",
+    // "target": "es2017",
+    // "noImplicitAny": false,
     "baseUrl": ".",
   },
   "exclude": [
-    "node_modules",
+    "functions",
   ],
   // "strictFunctionTypes": false
 }

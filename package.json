@@ -25,7 +25,7 @@
     "firebase": "^8.3.1",
     "firebaseui": "^4.8.0",
     "quasar": "^2.0.0-beta.1",
-    "spain-id": "^1.0.11",
+    "spain-id": "^1.1.4",
     "vue-i18n": "^9.0.0-beta.0",
     "vuex-persistedstate": "^4.0.0-beta.3"
   },

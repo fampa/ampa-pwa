@@ -14,6 +14,7 @@ export default {
     putChildrenLastName: 'Poseu els cognoms del vostre fill/a. P.e. Sanchis Verdú',
     required: 'Aquest camp és necessari',
     save: 'Desa',
+    savedOk: 'Desat correctament',
     validDate: 'Usa el seleccionador de dates o introdueix-la en format YYYY/MM/DD',
     validEmail: 'Per favor, poseu una adreça electrònica vàlida',
     validNif: 'Per favor, poseu un NIF o NIE vàlid',

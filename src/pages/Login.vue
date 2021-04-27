@@ -16,13 +16,14 @@ import firebase from 'firebase/app'
 import { onMounted } from 'vue'
 import { useStore } from 'src/services/store'
 import { i18n } from 'src/boot/i18n'
+import * as FirebaseUi from 'firebaseui'
 
 export default {
   name: 'PageLogin',
   setup () {
     // const $q = useQuasar()
     // $q.loading.show()
-    const initUi = () => {
+    const initUi = async () => {
       const route = useRoute()
       // FirebaseUI config.
       const store = useStore()
@@ -37,7 +38,7 @@ export default {
         firebaseUILoader = import('src/lib/firebaseui-npm__ca')
       }
 
-      firebaseUILoader.then((firebaseui) => {
+      await firebaseUILoader.then(() => {
         const uiConfig = {
           signInSuccessUrl: route.query && route.query.next ? route.query.next.toString() : '/',
           callbacks: {
@@ -69,7 +70,7 @@ export default {
             // firebase.auth.GithubAuthProvider.PROVIDER_ID,
           // firebaseui.auth.AnonymousAuthProvider.PROVIDER_ID
           ],
-          credentialHelper: firebaseui.auth.CredentialHelper.GOOGLE_YOLO,
+          credentialHelper: FirebaseUi.auth.CredentialHelper.GOOGLE_YOLO,
           // signInFlow: 'popup',
           // tosUrl and privacyPolicyUrl accept either url string or a callback
           // function.
@@ -83,9 +84,9 @@ export default {
         }
 
         // Initialize the FirebaseUI Widget using firebase.
-        let ui = firebaseui.auth.AuthUI.getInstance()
+        let ui = FirebaseUi.auth.AuthUI.getInstance()
         if (!ui) {
-          ui = new firebaseui.auth.AuthUI(firebase.auth())
+          ui = new FirebaseUi.auth.AuthUI(firebase.auth())
         // The start method will wait until the DOM is loaded.
         }
 
@@ -117,8 +118,8 @@ export default {
       })
     }
 
-    onMounted(() => {
-      initUi()
+    onMounted(async () => {
+      await initUi()
     })
   }
 }

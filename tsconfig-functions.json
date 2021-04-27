@@ -1,4 +1,5 @@
 {
+  "extends": "./tsconfig.json",
   "compilerOptions": {
     "module": "commonjs",
     "noImplicitReturns": true,
@@ -11,6 +12,6 @@
   },
   "compileOnSave": true,
   "include": [
-    "src"
+    "functions/src"
   ]
 }
