@@ -99,7 +99,7 @@ export default {
           const clean = cleanObject({ ...data })
           // remove family property since it is not expected on that mutation
           delete clean.family
-          console.log('form submitted', clean)
+          // console.log('form submitted', clean)
           await mutate({ id: data.id, member: clean })
           $q.notify(translate.t('forms.savedOk'))
         } else {
