@@ -3,8 +3,8 @@ import * as functions from 'firebase-functions'
 import 'firebase-functions'
 import { gql } from 'graphql-request'
 import { graphqlClient } from '../utils/graphql'
-import express = require('express')
-import cors = require('cors')
+import express from 'express'
+import cors from 'cors'
 export const appApi: express.Application = express()
 import { Member } from '../../../src/models/Member'
 

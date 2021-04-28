@@ -1,9 +1,9 @@
-import * as hbs from 'nodemailer-express-handlebars'
+import hbs from 'nodemailer-express-handlebars'
 import * as nodemailer from 'nodemailer'
 import * as express from 'express'
 import * as functions from 'firebase-functions'
 import 'firebase-functions'
-import SMTPTransport = require('nodemailer/lib/smtp-transport')
+import SMTPTransport from 'nodemailer/lib/smtp-transport'
 
 interface MailObject {
   name: string,

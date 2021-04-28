@@ -7,7 +7,7 @@
     "baseUrl": ".",
   },
   "exclude": [
-    "functions",
+    "functions/lib",
   ],
   // "strictFunctionTypes": false
 }
