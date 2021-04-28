@@ -89,14 +89,17 @@ export default {
 
     const memberForm = ref<HTMLFormElement | null>(null)
 
-    const { mutate, loading: updateMemberLoading, error: updateMemberError } = membersService.updateMember()
+    const { mutate, loading: updateMemberLoading, error: updateMemberError, onError } = membersService.updateMember()
 
     const submitForm = () => {
       memberForm.value?.validate().then(async (success: boolean) => {
         if (success) {
           // yay, models are correct
-          console.log('form submitted')
+
           const clean = cleanObject({ ...data })
+          // remove family property since it is not expected on that mutation
+          delete clean.family
+          console.log('form submitted', clean)
           await mutate({ id: data.id, member: clean })
           $q.notify(translate.t('forms.savedOk'))
         } else {
@@ -105,6 +108,14 @@ export default {
         }
       })
     }
+
+    onError(() => {
+      $q.notify({
+        type: 'negative',
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        message: updateMemberError.value.message
+      })
+    })
 
     return {
       ...toRefs(data),
