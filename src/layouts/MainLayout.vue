@@ -83,7 +83,9 @@
             <q-item-section avatar>
               <q-icon :name="item.icon" />
             </q-item-section>
-            <q-item-section>{{item.title}}</q-item-section>
+            <q-item-section>
+              {{item.title}}
+            </q-item-section>
           </q-item>
           <q-separator />
             <q-item>
@@ -95,7 +97,9 @@
             <q-item-section avatar>
               <q-icon :name="item.icon" />
             </q-item-section>
-            <q-item-section>{{item.title}}</q-item-section>
+            <q-item-section>
+              {{item.title}}
+            </q-item-section>
           </q-item>
           <div v-if="isAdmin">
             <q-separator />
@@ -159,6 +163,11 @@ export default defineComponent({
           title: translate.t('member.familyData'),
           icon: 'las la-child',
           to: '/user/family'
+        },
+        {
+          title: translate.t('member.paymentData'),
+          icon: 'las la-money-check-alt',
+          to: '/user/payment'
         }
       ]
     })
@@ -168,12 +177,12 @@ export default defineComponent({
         {
           title: 'Matinera',
           icon: 'las la-clock',
-          to: '/services/matinera'
+          to: '/service/matinera'
         },
         {
           title: translate.t('extraescolars'),
           icon: 'las la-skating',
-          to: '/services/extraescolars'
+          to: '/service/extraescolars'
         }
       ]
     })

@@ -30,11 +30,14 @@ export default {
     birthDate: 'Fecha de nacimiento',
     children: 'Hijos/as',
     familyData: 'Datos familiares',
+    familyDataNotice: 'Facilita primero los datos familiares',
+    familyDataNoticeBtn: 'Ir a Datos Familiares',
     familyName: 'Nombre de la familia',
     firstName: 'Nombre',
     lastName: 'Apellidos',
     email: 'Correo electrónico',
-    phone: 'Teléfono'
+    phone: 'Teléfono',
+    paymentData: 'Datos de domiciliación'
   },
   menu: {
     YourData: 'TUS DATOS',

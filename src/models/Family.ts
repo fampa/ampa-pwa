@@ -5,6 +5,7 @@ export interface Family {
   id?: number
   name?: string
   children?: Child[]
+  iban?: string
   createdAt?: Date
   updatedAt?: Date
 }

@@ -23,7 +23,17 @@ const routes: RouteRecordRaw[] = [
     meta: { requiresAuth: true },
     children: [
       { path: '', component: () => import('pages/user/Index.vue') },
-      { path: 'family', component: () => import('pages/user/Family.vue') }
+      { path: 'family', component: () => import('pages/user/Family.vue') },
+      { path: 'payment', component: () => import('pages/user/Payment.vue') }
+    ]
+  },
+  {
+    path: '/service',
+    component: () => import('layouts/MainLayout.vue'),
+    meta: { requiresAuth: true },
+    children: [
+      { path: 'matinera', component: () => import('pages/service/Matinera.vue') },
+      { path: 'extraescolars', component: () => import('pages/service/Extraescolars.vue') }
     ]
   },
   {

@@ -10,6 +10,7 @@ query memberById($id: String!) {
     family {
       id
       name
+      iban
       children {
         id
         firstName

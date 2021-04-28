@@ -44,7 +44,6 @@
 </template>
 
 <script lang="ts">
-// import { date } from 'quasar'
 import { useRoute } from 'vue-router'
 import { MembersService } from 'src/services/members'
 import { computed, ref, reactive, toRefs, watch } from 'vue'
@@ -55,6 +54,7 @@ import type { QForm } from 'quasar'
 import { Family } from 'src/models/Family'
 import { useQuasar } from 'quasar'
 import { i18n } from 'src/boot/i18n'
+import { cleanObject } from 'src/utilities/cleanObject'
 
 export default {
   name: 'PagePersonalData',
@@ -69,7 +69,8 @@ export default {
     // Reactive data
     const familyData = reactive<Family>({
       id: undefined,
-      name: ''
+      name: '',
+      iban: undefined
     })
 
     const childrenData = reactive<ChildrenData>({
@@ -155,15 +156,6 @@ export default {
       })
     }
 
-    const cleanObject = (obj: Record<string, unknown>): Record<string, unknown> => {
-      for (const propName in obj) {
-        if (obj[propName] === '__typename' || obj[propName] === null || obj[propName] === undefined) {
-          delete obj[propName]
-        }
-      }
-      return obj
-    }
-
     const prepareUpdateFamily = () => {
       if (!familyData.id && familyData.name) {
         return searchFamily(familyData.name)
@@ -186,7 +178,7 @@ export default {
       return mForm.value?.validate().then(async success => {
         if (success) {
         // yay, models are correct
-          console.log('success')
+          // console.log('success')
           await mutateChildren({ children: childrenData.children })
           if (shouldUpdateFamilyName.value) {
             await updateFamily()

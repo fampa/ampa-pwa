@@ -30,11 +30,14 @@ export default {
     birthDate: 'Data de naixement',
     children: 'Fills/es',
     familyData: 'Dades familiars',
+    familyDataNotice: 'Omple primer les dades familiars',
+    familyDataNoticeBtn: 'Aneu a Dades Familiars',
     familyName: 'Nom de la família',
     firstName: 'Nom',
     lastName: 'Cognoms',
     email: 'Correu electrònic',
-    phone: 'Telèfon'
+    phone: 'Telèfon',
+    paymentData: 'Dades de domiciliació'
   },
   menu: {
     YourData: 'LES TEUES DADES',

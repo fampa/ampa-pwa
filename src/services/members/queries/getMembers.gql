@@ -12,6 +12,7 @@ query members {
     family {
       id
       name
+      iban
     }
   }
 }

@@ -24,6 +24,7 @@ import { validateSpanishId } from 'spain-id'
 import { Member } from 'src/models/Member'
 import { useQuasar } from 'quasar'
 import { i18n } from 'src/boot/i18n'
+import { cleanObject } from 'src/utilities/cleanObject'
 
 export default {
   name: 'PagePersonalData',
@@ -61,16 +62,6 @@ export default {
         return currentUserId.value || ''
       }
     })
-
-    const cleanObject = (obj: Record<string, unknown>): Record<string, unknown> => {
-      for (const propName in obj) {
-        if (obj[propName] === '__typename' || obj[propName] === null || obj[propName] === undefined) {
-          delete obj[propName]
-        }
-      }
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-      return obj
-    }
 
     const { member, loading, error, onResult } = membersService.getById(id.value)
 
