@@ -8,7 +8,7 @@
         </template>
         </q-input>
         <br>
-        <q-btn v-if="!id" :loading="updateFamilyLoading || updateMemberLoading" color="primary" :label="$t('forms.save')" @click="updateFamily"/>
+        <q-btn v-if="!id" :loading="isLoading" color="primary" :label="$t('forms.save')" @click="prepareUpdateFamily"/>
         <div v-if="id">
           <h2 class="text-h4">
             {{$t('member.children')}}
@@ -35,7 +35,7 @@
             <q-separator/>
             <br>
           </div>
-          <q-btn :loading="updateChildrenLoading" :disable="children.length === 0" color="primary" :label="$t('forms.save')" type="submit" />
+          <q-btn :loading="isLoading" :disable="children.length === 0" color="primary" :label="$t('forms.save')" type="submit" />
         </q-form>
 
       </div>
@@ -59,7 +59,14 @@ import { i18n } from 'src/boot/i18n'
 export default {
   name: 'PagePersonalData',
   setup () {
+    // utilities and initializations
     const $q = useQuasar()
+    const translate = i18n.global
+    const membersService = new MembersService()
+    const route = useRoute()
+    const datePattern = /^-?[\d]+-[0-1]\d-[0-3]\d$/
+
+    // Reactive data
     const familyData = reactive<Family>({
       id: undefined,
       name: ''
@@ -77,8 +84,6 @@ export default {
       return firebase.auth().currentUser?.uid
     })
 
-    const membersService = new MembersService()
-    const route = useRoute()
     const id = computed(() => {
       const params = route.params?.id?.toString()
       if (params) {
@@ -88,7 +93,10 @@ export default {
       }
     })
 
-    const { member, loading, error, onResult } = membersService.getById(id.value)
+    //
+    // load data
+    //
+    const { member, loading, error, onResult, refetch: refetchMemberData } = membersService.getById(id.value)
 
     onResult(() => {
       familyData.id = member.value?.familyId
@@ -101,8 +109,11 @@ export default {
       // console.log(childrenData)
     })
 
-    const datePattern = /^-?[\d]+-[0-1]\d-[0-3]\d$/
+    const { mutate: mutateFamily, loading: updateFamilyLoading, error: updateFamilyError, onError: updateFamilyOnError } = membersService.updateFamily()
+    const { mutate: mutateMember, loading: updateMemberLoading, error: updateMemberError, onError: updateMemberOnError } = membersService.updateMember()
+    const { mutate: mutateChildren, loading: updateChildrenLoading, error: updateChildrenError, onError: updateChildrenOnError } = membersService.updateChildren()
 
+    // Methods
     const addChild = () => {
       const child: Child = {
         firstName: '',
@@ -115,25 +126,34 @@ export default {
       childrenData.children = childrenTemp || []
     }
 
-    const translate = i18n.global
-
     const searchFamily = (name: string) => {
-      const { families } = membersService.findFamily(name)
-      $q.dialog({
-        title: 'Alert',
-        message: 'Some message'
-      }).onOk(() => {
-        console.log(families)
-      }).onCancel(() => {
-        // console.log('Cancel')
-      }).onDismiss(() => {
+      const { families, onResult: searchHasResult } = membersService.findFamily(name)
+      searchHasResult(() => {
+        const items = families.value?.map((family) => {
+          return { label: `${family.name || ''}. ${translate.t('member.children')}: ${family.children?.map((child) => child.firstName).toString() || ''}`, value: family.id }
+        }) || []
+        items.push({ label: translate.t('forms.selectFamilyNew'), value: undefined })
+        $q.dialog({
+          title: translate.t('forms.selectFamily'),
+          message: translate.t('forms.selectFamilyMore'),
+          options: {
+            type: 'radio',
+            model: 'opt1',
+            // inline: true
+            items: items
+          },
+          cancel: true,
+          persistent: true
+        }).onOk(async (data: number) => {
+          familyData.id = data
+          await updateFamily()
+        }).onCancel(() => {
+        // console.log('>>>> Cancel')
+        }).onDismiss(() => {
         // console.log('I am triggered on both OK and Cancel')
+        })
       })
     }
-
-    const { mutate: mutateFamily, loading: updateFamilyLoading, error: updateFamilyError } = membersService.updateFamily()
-    const { mutate: mutateMember, loading: updateMemberLoading, error: updateMemberError } = membersService.updateMember()
-    const { mutate: mutateChildren, loading: updateChildrenLoading, error: updateChildrenError } = membersService.updateChildren()
 
     const cleanObject = (obj: Record<string, unknown>): Record<string, unknown> => {
       for (const propName in obj) {
@@ -141,31 +161,25 @@ export default {
           delete obj[propName]
         }
       }
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       return obj
     }
 
-    const updateFamily = async () => {
+    const prepareUpdateFamily = () => {
       if (!familyData.id && familyData.name) {
-        searchFamily(familyData.name)
+        return searchFamily(familyData.name)
       }
+    }
+
+    const updateFamily = async () => {
       const variables = cleanObject({ ...familyData })
       // console.log(variables)
       const { data } = await mutateFamily({ family: variables })
-      const familyId = data?.insert_families_one.id
-      if (!familyData.id) {
-        await mutateMember({ id: id.value, member: { familyId } })
-        familyData.id = familyId
-      }
+      const familyId = familyData.id || data?.insert_families_one?.id
+      await mutateMember({ id: id.value, member: { familyId } })
+      familyData.id = familyId
+      await refetchMemberData()
       $q.notify(translate.t('forms.savedOk'))
     }
-
-    watch(() => familyData.name,
-      (newVal, oldVal) => {
-        if (oldVal && newVal !== oldVal) {
-          shouldUpdateFamilyName.value = true
-        }
-      })
 
     const submitForm = async (): Promise<void> => {
       // console.log('submit clicked')
@@ -186,24 +200,56 @@ export default {
       })
     }
 
+    // Error handling
+    updateFamilyOnError(() => {
+      $q.notify({
+        type: 'negative',
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        message: updateFamilyError.value.message
+      })
+    })
+
+    updateMemberOnError(() => {
+      $q.notify({
+        type: 'negative',
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        message: updateMemberError.value.message
+      })
+    })
+
+    updateChildrenOnError(() => {
+      $q.notify({
+        type: 'negative',
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        message: updateChildrenError.value.message
+      })
+    })
+
+    // watchers and computed properties
+
+    const isLoading = computed(() => {
+      return loading.value || updateChildrenLoading.value || updateFamilyLoading.value || updateMemberLoading.value
+    })
+
+    watch(() => familyData.name,
+      (newVal, oldVal) => {
+        if (oldVal && newVal !== oldVal) {
+          shouldUpdateFamilyName.value = true
+        }
+      })
+
     return {
       member,
       ...toRefs(childrenData),
       ...toRefs(familyData),
       addChild,
       datePattern,
-      loading,
       error,
       submitForm,
       mForm,
       updateFamily,
-      updateFamilyLoading,
-      updateFamilyError,
-      updateMemberLoading,
-      updateMemberError,
-      updateChildrenLoading,
-      updateChildrenError,
-      searchFamily
+      isLoading,
+      prepareUpdateFamily
     }
   }
 }
