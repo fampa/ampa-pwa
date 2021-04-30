@@ -6,6 +6,7 @@ export interface Family {
   name?: string
   children?: Child[]
   iban?: string
+  owner?: string
   createdAt?: Date
   updatedAt?: Date
 }

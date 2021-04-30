@@ -13,7 +13,12 @@ export interface MailObject {
   template?: string
 }
 
-export function sendEmail (obj: MailObject): Record<string, unknown> {
+interface Result {
+  success: boolean,
+  error: Error | null
+}
+
+export function sendEmail (obj: MailObject): Result {
   const transportOptions: SMTPTransport.Options = {
     host: functions.config().env.smtp.host as string,
     port: Number(functions.config().env.smtp.port),
@@ -53,7 +58,10 @@ export function sendEmail (obj: MailObject): Record<string, unknown> {
       message: obj.message
     }
   }
-  let result
+  let result: Result = {
+    success: false,
+    error: null
+  }
 
   transport.sendMail(message, function (err, info: string) {
     if (err) {
