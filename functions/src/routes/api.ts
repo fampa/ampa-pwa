@@ -66,7 +66,7 @@ appApi.post('/request/family-access', (req: express.Request, res: express.Respon
     const query = gql`
           query findFamilyOwner($id: Int!) {
             families_by_pk(id: $id) {
-              owner
+              ownerId
               members {
                 firstName
                 lastName
@@ -82,7 +82,7 @@ appApi.post('/request/family-access', (req: express.Request, res: express.Respon
     const data = await graphqlClient(query, variables).catch((error) => console.error(error))
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const member = data.families_by_pk.members[0]
-    const owner = data.families_by_pk.owner as string
+    const ownerId = data.families_by_pk.ownerId as string
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const family = data.families_by_pk.name as string
 
@@ -93,7 +93,7 @@ appApi.post('/request/family-access', (req: express.Request, res: express.Respon
     }
     `
     const joinRequestVariables = {
-      id: owner,
+      id: ownerId,
       email: requester.email
     }
 

@@ -71,7 +71,7 @@ export default {
       id: undefined,
       name: '',
       iban: undefined,
-      owner: undefined
+      ownerId: undefined
     })
 
     const childrenData = reactive<ChildrenData>({
@@ -103,7 +103,7 @@ export default {
     onResult(() => {
       familyData.id = member.value?.familyId
       familyData.name = member.value?.family?.name
-      familyData.owner = member.value?.id
+      familyData.ownerId = member.value?.id
       const childrenTemp = member.value?.family?.children?.map(child => {
         const tempChild: Child = { ...child }
         return tempChild
