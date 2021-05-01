@@ -8,7 +8,7 @@ import findFamily from 'src/services/members/queries/findFamily.gql'
 
 import { MemberData, MembersData, MemberVars, MembersVars, Member } from 'src/models/Member'
 import { apolloClient } from 'src/boot/apollo'
-import { FamilyData, FamilyVars, FindFamilyVars, FamiliesData } from 'src/models/Family'
+import { FamilyData, FamilyVars, FamiliesData } from 'src/models/Family'
 import { ChildrenData, ChildrenVars } from 'src/models/Child'
 import axios from 'axios'
 
@@ -53,9 +53,19 @@ export class MembersService {
 
   findFamily = (name: string) => {
     const searchName = `%${name}%`
-    const response = useQuery<FamiliesData, FindFamilyVars>(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const response = useQuery<FamiliesData, any>(
       findFamily,
-      { name: searchName }
+      {
+        name: searchName
+      },
+      {
+        context: {
+          headers: {
+            'x-hasura-role': 'public'
+          }
+        }
+      }
     )
     const families = useResult(response.result, null, data => data.families)
     return { families, ...response }

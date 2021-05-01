@@ -148,8 +148,11 @@ export default {
           cancel: true,
           persistent: true
         }).onOk(async (data: number) => {
-          familyData.id = data
-          await updateFamily()
+          if (!data) {
+            await updateFamily()
+          } else {
+            await requestFamilyJoin(data)
+          }
         }).onCancel(() => {
         // console.log('>>>> Cancel')
         }).onDismiss(() => {
@@ -173,6 +176,12 @@ export default {
       familyData.id = familyId
       await refetchMemberData()
       $q.notify(translate.t('forms.savedOk'))
+    }
+
+    const requestFamilyJoin = async (familyId: number) => {
+      if (member.value) {
+        await membersService.requestFamilyJoin(familyId, member.value)
+      }
     }
 
     const submitForm = async (): Promise<void> => {

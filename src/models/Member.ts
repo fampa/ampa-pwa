@@ -12,6 +12,8 @@ export interface Member {
   photoURL?: string
   isAdmin?: boolean
   phone?: string
+  joinFamilyRequest?: string
+  hasRequestedJoinFamily?: boolean
   createdAt?: Date
   updatedAt?: Date
 }
