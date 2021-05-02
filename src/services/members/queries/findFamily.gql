@@ -2,6 +2,7 @@ query findFamily($name: String) {
   families(where: {name: {_ilike: $name}}) {
     id
     name
+    ownerId
     children {
       firstName
       birthDate
