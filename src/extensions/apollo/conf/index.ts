@@ -34,11 +34,13 @@ export async function getClientOptions(/* {app, router, ...}: Partial<BootFilePa
     (operation, forward) =>
       new Observable(observer => {
         firebase.auth().onAuthStateChanged(function (user) {
+          const customHeaders = operation.getContext().hasOwnProperty("headers") ? operation.getContext().headers : {};
           if (user) {
             user.getIdToken(true)
               .then(token => {
                 operation.setContext({
                   headers: {
+                    ...customHeaders,
                     authorization: token ? `Bearer ${token}` : ''
                   }
                 })
