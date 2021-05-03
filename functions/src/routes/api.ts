@@ -2,7 +2,7 @@ import * as admin from 'firebase-admin'
 import * as functions from 'firebase-functions'
 import 'firebase-functions'
 import { gql } from 'graphql-request'
-import { graphqlClient } from '../utils/graphql'
+import { client } from '../utils/graphql'
 import express from 'express'
 import cors from 'cors'
 export const appApi: express.Application = express()
@@ -24,7 +24,7 @@ appApi.post('/refresh-token', (req: express.Request, res: express.Response) => {
   updateClaims(user.uid).then(() => {
     return true
   })
-    .then(() => {
+    .then(async () => {
       const mutation = gql`
           mutation insertUser($email: String!, $id: String!) {
             insert_members_one(object: {email: $email, id: $id}, on_conflict: {constraint: members_pkey, update_columns: email}) {
@@ -36,7 +36,16 @@ appApi.post('/refresh-token', (req: express.Request, res: express.Response) => {
         id: user.uid,
         email: user.email
       }
-      return graphqlClient(mutation, variables).catch((error) => console.error(error))
+      try {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        const data = await client.request(mutation, variables)
+        console.log('data from server', data)
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+        return data
+      } catch (error) {
+        console.error(JSON.stringify(error, undefined, 2))
+        process.exit(1)
+      }
     })
     .then((newUser) => {
       functions.logger.log('NewUser', newUser)
@@ -79,46 +88,50 @@ appApi.post('/request/family-access', (req: express.Request, res: express.Respon
     const variables = {
       id: familyId
     }
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    const data = await graphqlClient(query, variables).catch((error) => console.error(error))
-    functions.logger.info('query findFamilyOwner', data)
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    const member = data.families_by_pk.members[0]
-    const ownerId = data.families_by_pk.ownerId as string
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    const family = data.families_by_pk.name as string
-
-    const joinRequestMutation = gql`mutation requestJoin($id: String!, $email: String!) {
-      update_members_by_pk(pk_columns: {id: $id}, _set: {joinFamilyRequest: $email}) {
-        updatedAt
-      }
-    }
-    `
-    const joinRequestVariables = {
-      id: ownerId,
-      email: requester.email
-    }
-
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    const joinRequest = await graphqlClient(joinRequestMutation, joinRequestVariables).catch((error) => console.error(error))
-    functions.logger.info('mutation requestJoin', joinRequest)
-    const messageObj = {
-      name: requester.firstName || '',
+    try {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      to: member.email || '',
-      from: functions.config().env.smtp.username as string || '',
-      subject: 'Sol·licitud d\'accés',
-      message: `
-      <p>Sol·licite accés a gestionar la família ${family} a la app de l'AMPA</p>
-      <p>Per donar-me accés <a href="${functions.config().env.template.siteUrl as string}">entra a l'aplicació</a> i segueix les instruccions.</p>
+      const data = await client.request(query, variables)
+      console.log('data from server', data)
+      functions.logger.info('query findFamilyOwner', data)
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      const member = data.families_by_pk.members[0]
+      const ownerId = data.families_by_pk.ownerId as string
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      const family = data.families_by_pk.name as string
+      const joinRequestMutation = gql`mutation requestJoin($id: String!, $email: String!) {
+        update_members_by_pk(pk_columns: {id: $id}, _set: {joinFamilyRequest: $email}) {
+          updatedAt
+        }
+      }
       `
-    }
-    if (joinRequest) {
-      const response = sendEmail(messageObj)
-      functions.logger.info('response from sendEmail', response)
-      return res.json(response)
-    } else {
-      return res.json('error requesting join')
+      const joinRequestVariables = {
+        id: ownerId,
+        email: requester.email
+      }
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      const joinRequest = await client.request(joinRequestMutation, joinRequestVariables).catch((error) => console.error(error))
+      functions.logger.info('mutation requestJoin', joinRequest)
+      const messageObj = {
+        name: requester.firstName || '',
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        to: member.email || '',
+        from: functions.config().env.smtp.username as string || '',
+        subject: 'Sol·licitud d\'accés',
+        message: `
+        <p>Sol·licite accés a gestionar la família ${family} a la app de l'AMPA</p>
+        <p>Per donar-me accés <a href="${functions.config().env.template.siteUrl as string}">entra a l'aplicació</a> i segueix les instruccions.</p>
+        `
+      }
+      if (joinRequest) {
+        const response = sendEmail(messageObj)
+        functions.logger.info('response from sendEmail', response)
+        return res.json(response)
+      } else {
+        return res.json('error requesting join')
+      }
+    } catch (error) {
+      console.error(JSON.stringify(error, undefined, 2))
+      process.exit(1)
     }
   }
   return mainResponse
