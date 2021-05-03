@@ -13,7 +13,18 @@ admin.initializeApp()
 
 import { updateClaims } from '../utils/customClaims'
 
-appApi.use(cors({ origin: true }))
+const whitelist = [functions.config().env.template.siteUrl, 'http://localhost:3000', 'http://localhost:8080']
+const corsOptions = {
+  origin: function (origin: string, callback) {
+    if (!origin || whitelist.indexOf(origin) !== -1) {
+      callback(null, true)
+    } else {
+      console.log(`${origin} Not allowed by CORS`)
+      callback(new Error(`${origin} Not allowed by CORS`))
+    }
+  }
+}
+appApi.use(cors(corsOptions))
 
 appApi.post('/refresh-token', (req: express.Request, res: express.Response) => {
   const user = req.body as admin.auth.UserRecord
@@ -58,7 +69,7 @@ appApi.post('/refresh-token', (req: express.Request, res: express.Response) => {
 
 appApi.post('/webhook/change-claims', (req: express.Request, res: express.Response) => {
   const response = async () => {
-    const user = req.body.event.data.new as Member
+    const user = req.body.new as Member
     const isAdmin = !!user.isAdmin
     const id = user.id?.toString() || ''
     await updateClaims(id, isAdmin)
@@ -71,8 +82,8 @@ appApi.post('/webhook/change-claims', (req: express.Request, res: express.Respon
 appApi.post('/request/family-access', (req: express.Request, res: express.Response) => {
   functions.logger.info('request family accés initiated', req.body.member)
   const mainResponse = async () => {
-    const requester = req.body.event.data.member as Member
-    const familyId = Number(req.body.event.data.familyId)
+    const requester = req.body.member as Member
+    const familyId = Number(req.body.familyId)
     const query = gql`
           query findFamilyOwner($id: Int!) {
             families_by_pk(id: $id) {
