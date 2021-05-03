@@ -69,7 +69,7 @@ appApi.post('/webhook/change-claims', (req: express.Request, res: express.Respon
 })
 
 appApi.post('/request/family-access', (req: express.Request, res: express.Response) => {
-  functions.logger.info('request family accés initiated', req.body)
+  functions.logger.info('request family accés initiated', req.body.member)
   const mainResponse = async () => {
     const requester = req.body.event.data.member as Member
     const familyId = Number(req.body.event.data.familyId)
