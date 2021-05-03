@@ -17,9 +17,14 @@ export async function graphqlClient (query: string, variables: Record<string, un
     headers: headers
   })
 
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  const data = await graphQLClient.request(query, variables)
-  console.log('data from server', data)
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-  return data
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    const data = await graphQLClient.request(query, variables)
+    console.log('data from server', data)
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    return data
+  } catch (error) {
+    console.error(JSON.stringify(error, undefined, 2))
+    process.exit(1)
+  }
 }
