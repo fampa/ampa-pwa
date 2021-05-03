@@ -15,15 +15,15 @@ import { updateClaims } from '../utils/customClaims'
 
 const whitelist = [functions.config().env.template.siteUrl, 'http://localhost:3000', 'http://localhost:8080']
 const corsOptions = {
-  origin: function (origin: string, callback) {
+  origin: function (origin: string, callback: any) {
     if (!origin || whitelist.indexOf(origin) !== -1) {
       callback(null, true)
     } else {
-      console.log(`${origin} Not allowed by CORS`)
+      functions.logger.error(`${origin} Not allowed by CORS`)
       callback(new Error(`${origin} Not allowed by CORS`))
     }
   }
-}
+} as cors.CorsOptions
 appApi.use(cors(corsOptions))
 
 appApi.post('/refresh-token', (req: express.Request, res: express.Response) => {
