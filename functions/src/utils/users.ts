@@ -2,7 +2,7 @@ import * as admin from 'firebase-admin'
 import * as functions from 'firebase-functions'
 import { gql } from 'graphql-request'
 import { updateClaims } from './customClaims'
-import { graphqlClient } from './graphql'
+import { client } from './graphql'
 
 const addUser = async (user: admin.auth.UserRecord, isAdmin: boolean) => {
   const variables = {
@@ -23,7 +23,7 @@ const addUser = async (user: admin.auth.UserRecord, isAdmin: boolean) => {
       }
     }
   `
-  await graphqlClient(query, variables)
+  await client.request(query, variables)
 }
 
 export const userCreated = async (user: admin.auth.UserRecord) => {
