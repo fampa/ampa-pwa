@@ -61,7 +61,7 @@ appApi.post('/webhook/change-claims', (req: express.Request, res: express.Respon
 
 appApi.post('/request/family-access', (req: express.Request, res: express.Response) => {
   functions.logger.info('request family accés initiated', req.body)
-  const response = async () => {
+  const mainResponse = async () => {
     const requester = req.body.event.data.member as Member
     const familyId = Number(req.body.event.data.familyId)
     const query = gql`
@@ -81,6 +81,7 @@ appApi.post('/request/family-access', (req: express.Request, res: express.Respon
     }
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const data = await graphqlClient(query, variables).catch((error) => console.error(error))
+    functions.logger.info('query findFamilyOwner', data)
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const member = data.families_by_pk.members[0]
     const ownerId = data.families_by_pk.ownerId as string
@@ -100,7 +101,7 @@ appApi.post('/request/family-access', (req: express.Request, res: express.Respon
 
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const joinRequest = await graphqlClient(joinRequestMutation, joinRequestVariables).catch((error) => console.error(error))
-
+    functions.logger.info('mutation requestJoin', joinRequest)
     const messageObj = {
       name: requester.firstName || '',
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
@@ -114,12 +115,13 @@ appApi.post('/request/family-access', (req: express.Request, res: express.Respon
     }
     if (joinRequest) {
       const response = sendEmail(messageObj)
+      functions.logger.info('response from sendEmail', response)
       return res.json(response)
     } else {
       return res.json('error requesting join')
     }
   }
-  return response
+  return mainResponse
 })
 
 appApi.get('/hello', (req: express.Request, res: express.Response) => {
