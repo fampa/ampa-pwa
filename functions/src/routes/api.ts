@@ -109,15 +109,18 @@ appApi.post('/request/family-access', async (req: express.Request, res: express.
     const ownerId = data.families_by_pk.ownerId as string
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const family = data.families_by_pk.name as string
-    const joinRequestMutation = gql`mutation requestJoin($id: String!, $email: String!) {
-        update_members_by_pk(pk_columns: {id: $id}, _set: {joinFamilyRequest: $email}) {
-          updatedAt
-        }
+    const joinRequestMutation = gql`mutation requestJoin($id: String!, $member: jsonb!) {
+      update_members_by_pk(pk_columns: {id: $id}, _set: {joinFamilyRequest: $member}) {
+        updatedAt
       }
-      `
+    }
+    `
     const joinRequestVariables = {
       id: ownerId,
-      email: requester.email
+      member: {
+        id: requester.id,
+        email: requester.email
+      }
     }
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const joinRequest = await client.request(joinRequestMutation, joinRequestVariables).catch(err => functions.logger.error('requestJoin mutation error', err))
@@ -151,4 +154,27 @@ appApi.get('/hello', (req: express.Request, res: express.Response) => {
   const variable: string = functions.config().env.template.schoolName
   res.status(200).json({ results: 'Hola món', variable: variable })
   return res
+})
+
+// eslint-disable-next-line @typescript-eslint/no-misused-promises
+appApi.post('/resolve/family-access', async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+  try {
+    const requester = req.body.member as Member
+    const familyId = Number(req.body.familyId)
+    const joinResolveMutation = gql`mutation requestJoin($id: String!, $familyId: Int!, $permission: Boolean!) {
+      update_members_by_pk(pk_columns: {id: $id}, _set: {familyId: $familyId, hasRequestedJoinFamily: false}) {
+        updatedAt
+      }
+    }
+    `
+    const joinResolveVariables = {
+      id: requester.id,
+      familyId
+    }
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    const response = await client.request(joinResolveMutation, joinResolveVariables).catch(err => functions.logger.error('requestJoin mutation error', err))
+    return res.json(response)
+  } catch (error) {
+    return next(error)
+  }
 })

@@ -2,9 +2,28 @@
   <q-page padding class="bg-grey-2">
     <h1 class="text-h4">{{$t('member.familyData')}}</h1>
     <div class="q-gutter-md" style="max-width: 300px" v-if="member">
+
+      <q-banner class="bg-accent text-white" v-if="hasRequestedJoinFamily">
+        <template v-slot:avatar>
+        <q-icon name="info" color="white" />
+      </template>
+        {{$t('family.hasRequestedJoinNotice')}}
+      </q-banner>
+
+      <q-banner class="bg-accent text-white" v-if="joinFamilyRequest">
+        <template v-slot:avatar>
+        <q-icon name="info" color="white" />
+      </template>
+        {{$t('family.requestJoinNotice', {email: joinFamilyRequest.email})}}
+        <template v-slot:action>
+          <q-btn flat color="white" :label="$t('family.requestJoinNoticeDecline')" />
+          <q-btn flat color="white" :label="$t('family.requestJoinNoticeAccept')" @click="resolveJoin()" />
+        </template>
+      </q-banner>
+
         <q-input outlined v-model="name" :label="$t('member.familyName')" bottom-slots>
           <template v-slot:hint>
-          {{$t('forms.putChildrenLastName')}}
+          {{$t('family.putChildrenLastName')}}
         </template>
         </q-input>
         <br>
@@ -55,6 +74,7 @@ import { Family } from 'src/models/Family'
 import { useQuasar } from 'quasar'
 import { i18n } from 'src/boot/i18n'
 import { cleanObject } from 'src/utilities/cleanObject'
+import { Member } from 'src/models/Member'
 
 export default {
   name: 'PagePersonalData',
@@ -72,6 +92,12 @@ export default {
       name: '',
       iban: undefined,
       ownerId: undefined
+    })
+
+    const memberData = reactive<Member>({
+      familyId: undefined,
+      hasRequestedJoinFamily: false,
+      joinFamilyRequest: undefined
     })
 
     const childrenData = reactive<ChildrenData>({
@@ -104,6 +130,9 @@ export default {
       familyData.id = member.value?.familyId
       familyData.name = member.value?.family?.name
       familyData.ownerId = member.value?.id
+      memberData.familyId = member.value?.familyId
+      memberData.hasRequestedJoinFamily = member.value?.hasRequestedJoinFamily
+      memberData.joinFamilyRequest = member.value?.joinFamilyRequest
       const childrenTemp = member.value?.family?.children?.map(child => {
         const tempChild: Child = { ...child }
         return tempChild
@@ -171,8 +200,11 @@ export default {
       const variables = cleanObject({ ...familyData })
       // console.log(variables)
       const { data } = await mutateFamily({ family: variables })
-      const familyId = familyData.id || data?.insert_families_one?.id
-      await mutateMember({ id: id.value, member: { familyId } })
+      const familyId = memberData.familyId || data?.insert_families_one?.id
+      memberData.hasRequestedJoinFamily = false
+      memberData.familyId = familyId
+      const variablesMember = cleanObject({ ...memberData })
+      await mutateMember({ id: id.value, member: { ...variablesMember } })
       familyData.id = familyId
       await refetchMemberData()
       $q.notify(translate.t('forms.savedOk'))
@@ -181,6 +213,9 @@ export default {
     const requestFamilyJoin = async (familyId: number) => {
       if (member.value) {
         await membersService.requestFamilyJoin(familyId, member.value)
+        memberData.hasRequestedJoinFamily = true
+        const variables = cleanObject({ ...memberData })
+        await mutateMember({ id: id.value, member: { ...variables } })
       }
     }
 
@@ -201,6 +236,13 @@ export default {
           console.log('no valid')
         }
       })
+    }
+
+    const resolveJoin = async () => {
+      await membersService.resolveFamilyJoin(memberData.familyId, memberData.joinFamilyRequest)
+      memberData.hasRequestedJoinFamily = false
+      await mutateMember({ id: id.value, member: { joinFamilyRequest: null } })
+      $q.notify(translate.t('forms.savedOk'))
     }
 
     // Error handling
@@ -245,6 +287,7 @@ export default {
       member,
       ...toRefs(childrenData),
       ...toRefs(familyData),
+      ...toRefs(memberData),
       addChild,
       datePattern,
       error,
@@ -252,7 +295,8 @@ export default {
       mForm,
       updateFamily,
       isLoading,
-      prepareUpdateFamily
+      prepareUpdateFamily,
+      resolveJoin
     }
   }
 }

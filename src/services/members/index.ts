@@ -79,6 +79,14 @@ export class MembersService {
     return response
   }
 
+  resolveFamilyJoin = async (familyId: number, member: Record<string, unknown>) => {
+    const data = { familyId, member }
+    const endpoint = `${this.axiosEndpoint}/resolve/family-access/`
+    const response = await axios
+      .post(endpoint, data)
+    return response
+  }
+
   clearCache = async () => {
     await apolloClient.clearStore()
   }

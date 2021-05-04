@@ -47,7 +47,7 @@ export async function sendEmail (obj: MailObject): Promise<Result> {
   }
 
   transport.use('compile', hbs(options))
-
+  // TODO renderitzar missatge com a html
   const message = {
     from: obj.from, // Sender address
     to: obj.to,

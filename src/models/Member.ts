@@ -12,7 +12,7 @@ export interface Member {
   photoURL?: string
   isAdmin?: boolean
   phone?: string
-  joinFamilyRequest?: string
+  joinFamilyRequest?: Record<string, unknown>
   hasRequestedJoinFamily?: boolean
   createdAt?: Date
   updatedAt?: Date
