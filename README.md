@@ -6,6 +6,13 @@ PWA de gestió del AMPA
 
 Copy or rename `.env.example` file to `.env`, and `functions-config.json.example` to `unctions-config.json`, and fill the variables.
 
+## Prerequisits to be able to deploy to firebase
+
+```bash
+npm install -g firebase-tools
+firebase login
+```
+
 ## Install the dependencies
 
 ```bash
