@@ -16,19 +16,19 @@
                     <td class="content-block" style="font-family: sans-serif; vertical-align: top; padding-bottom: 10px; padding-top: 10px; font-size: 12px; color: #999999; text-align: center;">
                       <span class="apple-link" style="color: #999999; font-size: 12px; text-align: center; font-weight: bold;">Associació de Mares i Pares d'Alumnes del CEIP La Patacona</span>
                         <br>
-                        {{#if functions.config().env.template.nif}}
-                          <span>NIF: {{functions.config().env.template.nif}}</span><br>
+                        {{#if template.nif}}
+                          <span>NIF: {{template.nif}}</span><br>
                         {{/if}}
-                        {{#if functions.config().env.template.numRegAssoc}}
-                          <span>Registre Assoc: {{functions.config().env.template.numRegAssoc}}</span><br>
+                        {{#if template.numRegAssoc}}
+                          <span>Registre Assoc: {{template.numRegAssoc}}</span><br>
                         {{/if}}
-                        {{#if functions.config().env.template.address}}
-                          <span>{{functions.config().env.template.address}}</span><br>
+                        {{#if template.address}}
+                          <span>{{template.address}}</span><br>
                         {{/if}}
-                        {{#if functions.config().env.template.email}}
-                          <span><em>{{functions.config().env.template.email}}</em></span><br>
+                        {{#if template.email}}
+                          <span><em>{{template.email}}</em></span><br>
                         {{/if}}
-                      Pots gestionar les teues dades i els missatges que reps en aquest <a href="{{}}" target="_blank" style="text-decoration: underline; color: #999999; font-size: 12px; text-align: center;">enllaç</a>.
+                      Pots gestionar les teues dades i els missatges que reps en aquest <a href="{{template.siteUrl}}" target="_blank" style="text-decoration: underline; color: #999999; font-size: 12px; text-align: center;">enllaç</a>.
                     </td>
                   </tr>
                   <tr>

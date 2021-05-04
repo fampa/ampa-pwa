@@ -37,3 +37,4 @@ yarn-error.log*
 firebase-debug.log
 
 functions-config.json
+functions/.runtimeconfig.json

@@ -26,6 +26,9 @@ export async function sendEmail (obj: MailObject): Promise<Result> {
     auth: {
       user: functions.config().env.smtp.username as string,
       pass: functions.config().env.smtp.password as string
+    },
+    tls: {
+      rejectUnauthorized: false
     }
   }
 
@@ -57,7 +60,8 @@ export async function sendEmail (obj: MailObject): Promise<Result> {
       name: obj.name,
       email: obj.to,
       subject: obj.subject,
-      message: obj.message
+      message: obj.message,
+      templateVars: functions.config().env.template as Record<string, unknown>
     }
   }
 
