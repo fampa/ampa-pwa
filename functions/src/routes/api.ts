@@ -79,9 +79,10 @@ appApi.post('/webhook/change-claims', (req: express.Request, res: express.Respon
   return response
 })
 
-appApi.post('/request/family-access', (req: express.Request, res: express.Response) => {
-  functions.logger.info('request family accés initiated', req.body.member)
-  const mainResponse = async () => {
+// eslint-disable-next-line @typescript-eslint/no-misused-promises
+appApi.post('/request/family-access', async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+  try {
+    functions.logger.info('request family accés initiated', req.body.member)
     const requester = req.body.member as Member
     const familyId = Number(req.body.familyId)
     const query = gql`
@@ -133,14 +134,15 @@ appApi.post('/request/family-access', (req: express.Request, res: express.Respon
         `
     }
     if (joinRequest) {
-      const response = sendEmail(messageObj)
+      const response = await sendEmail(messageObj)
       functions.logger.info('response from sendEmail', response)
       return res.json(response)
     } else {
       return res.json('error requesting join')
     }
+  } catch (error) {
+    return next(error)
   }
-  return mainResponse
 })
 
 appApi.get('/hello', (req: express.Request, res: express.Response) => {

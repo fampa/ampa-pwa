@@ -13,7 +13,7 @@ import { ChildrenData, ChildrenVars } from 'src/models/Child'
 import axios from 'axios'
 
 export class MembersService {
-  private axiosEndpoint = `https://europe-west1-${process.env.FIREBASE_PROJECT_ID || ''}.cloudfunctions.net/api`
+  private axiosEndpoint = process.env.DEV ? `http://localhost:5001/${process.env.FIREBASE_PROJECT_ID || ''}/europe-west1/api` : `https://europe-west1-${process.env.FIREBASE_PROJECT_ID || ''}.cloudfunctions.net/api`
 
   getAll = (offset: number, limit: number) => {
     const response = useQuery<MembersData, MembersVars>(getMembers, { offset, limit })

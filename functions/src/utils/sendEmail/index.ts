@@ -3,6 +3,7 @@ import * as nodemailer from 'nodemailer'
 import * as functions from 'firebase-functions'
 import 'firebase-functions'
 import SMTPTransport from 'nodemailer/lib/smtp-transport'
+import path from 'path'
 
 export interface MailObject {
   name: string,
@@ -18,7 +19,7 @@ interface Result {
   error: Error | null
 }
 
-export function sendEmail (obj: MailObject): Result {
+export async function sendEmail (obj: MailObject): Promise<Result> {
   const transportOptions: SMTPTransport.Options = {
     host: functions.config().env.smtp.host as string,
     port: Number(functions.config().env.smtp.port),
@@ -33,12 +34,13 @@ export function sendEmail (obj: MailObject): Result {
   const options = {
     viewEngine: {
       extname: '.hbs', // handlebars extension
-      layoutsDir: 'views/email/', // location of handlebars templates
-      defaultLayout: 'contact', // name of main template
-      partialsDir: 'views/email/' // location of your subTemplates aka. header, footer etc
+      layoutsDir: path.resolve(__dirname, 'views/layout/'), // location of handlebars templates
+      defaultLayout: 'default', // name of main template
+      partialsDir: path.resolve(__dirname, 'views/partials/') // location of your subTemplates aka. header, footer etc
     },
-    viewPath: 'views/email',
-    extName: '.hbs'
+    viewPath: path.resolve(__dirname, 'views/layout/'),
+    extName: '.hbs',
+    defaultLayout: false
   }
 
   transport.use('compile', hbs(options))
@@ -58,26 +60,22 @@ export function sendEmail (obj: MailObject): Result {
       message: obj.message
     }
   }
-  let result: Result = {
-    success: false,
-    error: null
-  }
 
-  transport.sendMail(message, function (err, info: string) {
-    if (err) {
-      functions.logger.error('error al enviar correu de contacte', err)
-      result = {
-        success: false,
-        error: err
+  return new Promise((resolve, reject) => {
+    transport.sendMail(message, function (err, info: string) {
+      if (err) {
+        functions.logger.error('error al enviar correu', err)
+        reject({
+          success: false,
+          error: err
+        })
+      } else {
+        functions.logger.info('correu enviat correctament', info)
+        resolve({
+          success: true,
+          error: null
+        })
       }
-    } else {
-      functions.logger.info('correu de contacte enviat correctament', info)
-      result = {
-        success: true,
-        error: null
-      }
-    }
+    })
   })
-
-  return result
 }
