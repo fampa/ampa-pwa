@@ -7,6 +7,7 @@
   "private": true,
   "scripts": {
     "dev": "quasar dev",
+    "dev:functions": "cd functions && yarn serve",
     "generate:icons": "icongenie generate -i src/assets/icon.png",
     "pre:build": "firebase functions:config:set env=\"$(cat functions-config.json)\"",
     "build": "yarn && npm run build:functions && quasar build -m pwa",

@@ -25,6 +25,12 @@ cd functions && yarn && cd .. && yarn
 yarn dev
 ```
 
+Open another terminal and run the functions in dev mode:
+
+```bash
+yarn dev:functions
+```
+
 ### Lint the files
 
 ```bash
