@@ -7,6 +7,7 @@ export default {
   family: {
     hasRequestedJoinNotice: 'Has enviado una solicitud para unirte a una familia. Recuerda a quien dió de alta la familia que entre a la app para autorizarte',
     putChildrenLastName: 'Pon los apellidos de tu hijo/a. P.e. Sanchis Verdú',
+    requestJoinNoticeAbort: 'Cancela la solicitud',
     requestJoinNotice: 'Has recibido una solicitud de {email} para unirse a gestionar tu familia',
     requestJoinNoticeAccept: 'Aceptar',
     requestJoinNoticeDecline: 'Rechazar'

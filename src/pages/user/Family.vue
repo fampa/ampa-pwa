@@ -1,13 +1,16 @@
 <template>
   <q-page padding class="bg-grey-2">
-    <h1 class="text-h4">{{$t('member.familyData')}}</h1>
-    <div class="q-gutter-md" style="max-width: 300px" v-if="member">
+    <div class="q-gutter-md max-600">
+      <h1 class="text-h4">{{$t('member.familyData')}}</h1>
 
       <q-banner class="bg-accent text-white" v-if="hasRequestedJoinFamily">
         <template v-slot:avatar>
         <q-icon name="info" color="white" />
       </template>
         {{$t('family.hasRequestedJoinNotice')}}
+        <template v-slot:action>
+          <q-btn flat color="white" :label="$t('family.requestJoinNoticeAbort')" @click="abortJoin()" />
+        </template>
       </q-banner>
 
       <q-banner class="bg-accent text-white" v-if="joinFamilyRequest">
@@ -16,7 +19,7 @@
       </template>
         {{$t('family.requestJoinNotice', {email: joinFamilyRequest.email})}}
         <template v-slot:action>
-          <q-btn flat color="white" :label="$t('family.requestJoinNoticeDecline')" />
+          <q-btn flat color="white" :label="$t('family.requestJoinNoticeDecline')" @click="rejectJoin()" />
           <q-btn flat color="white" :label="$t('family.requestJoinNoticeAccept')" @click="resolveJoin()" />
         </template>
       </q-banner>
@@ -218,6 +221,7 @@ export default {
         const variables = cleanObject({ ...memberData })
         await mutateMember({ id: id.value, member: { ...variables } })
         loading.value = false
+        await refetchMemberData()
         $q.notify(translate.t('forms.savedOk'))
       }
     }
@@ -242,9 +246,28 @@ export default {
     }
 
     const resolveJoin = async () => {
+      loading.value = true
       await membersService.resolveFamilyJoin(memberData.familyId, memberData.joinFamilyRequest)
       memberData.hasRequestedJoinFamily = false
       await mutateMember({ id: id.value, member: { joinFamilyRequest: null } })
+      loading.value = false
+      await refetchMemberData()
+      $q.notify(translate.t('forms.savedOk'))
+    }
+
+    const rejectJoin = async () => {
+      loading.value = true
+      await mutateMember({ id: id.value, member: { joinFamilyRequest: null } })
+      loading.value = false
+      await refetchMemberData()
+      $q.notify(translate.t('forms.savedOk'))
+    }
+
+    const abortJoin = async () => {
+      loading.value = true
+      await mutateMember({ id: id.value, member: { hasRequestedJoinFamily: false } })
+      loading.value = false
+      await refetchMemberData()
       $q.notify(translate.t('forms.savedOk'))
     }
 
@@ -299,7 +322,9 @@ export default {
       updateFamily,
       isLoading,
       prepareUpdateFamily,
-      resolveJoin
+      resolveJoin,
+      rejectJoin,
+      abortJoin
     }
   }
 }

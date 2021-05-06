@@ -8,6 +8,7 @@ export default {
     hasRequestedJoinNotice: 'Has enviat una sol·licitud per a unir-te a una família. Recorda a qui va crear la família que entre a la app per a acceptar-te',
     putChildrenLastName: 'Poseu els cognoms del vostre fill/a. P.e. Sanchis Verdú',
     requestJoinNotice: 'Has rebut una sol·licitud de {email} per unir-se a gestionar la teua família',
+    requestJoinNoticeAbort: 'Cancel·la la sol·licitud',
     requestJoinNoticeAccept: 'Accepta',
     requestJoinNoticeDecline: 'Rebutja'
   },
