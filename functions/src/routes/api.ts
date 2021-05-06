@@ -109,7 +109,6 @@ appApi.post('/request/family-access', async (req: express.Request, res: express.
     const member = data.families_by_pk.members[0]
     const ownerId = data.families_by_pk.ownerId as string
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    const family = data.families_by_pk.name as string
     const joinRequestMutation = gql`mutation requestJoin($id: String!, $member: jsonb!) {
       update_members_by_pk(pk_columns: {id: $id}, _set: {joinFamilyRequest: $member}) {
         updatedAt
@@ -127,14 +126,14 @@ appApi.post('/request/family-access', async (req: express.Request, res: express.
     const joinRequest = await client.request(joinRequestMutation, joinRequestVariables).catch(err => functions.logger.error('requestJoin mutation error', err))
     functions.logger.info('mutation requestJoin', joinRequest)
     const messageObj = {
-      name: requester.firstName || '',
+      name: 'AMPA',
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       to: member.email || '',
       from: functions.config().env.smtp.username as string || '',
-      subject: 'Sol·licitud d\'accés',
+      subject: `${requester.email} ha sol·licitat accés a la app`,
       message: `
-        <p>Sol·licite accés a gestionar la família ${family} a la app de l'AMPA</p>
-        <p>Per donar-me accés <a href="${functions.config().env.template.siteUrl as string}">entra a l'aplicació</a> i segueix les instruccions.</p>
+        <p>L'usuari ${requester.email} ha sol·licitat accés a gestionar la família a la app de l'AMPA</p>
+        <p>Per donar-li accés <a href="${functions.config().env.template.siteUrl as string}/user/family">entra a l'aplicació</a> i segueix les instruccions.</p>
         `
     }
     if (joinRequest) {

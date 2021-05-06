@@ -211,11 +211,14 @@ export default {
     }
 
     const requestFamilyJoin = async (familyId: number) => {
+      loading.value = true
       if (member.value) {
         await membersService.requestFamilyJoin(familyId, member.value)
         memberData.hasRequestedJoinFamily = true
         const variables = cleanObject({ ...memberData })
         await mutateMember({ id: id.value, member: { ...variables } })
+        loading.value = false
+        $q.notify(translate.t('forms.savedOk'))
       }
     }
 
