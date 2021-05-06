@@ -19,6 +19,11 @@ export interface FamilyVars {
   family: Family
 }
 
+export interface FamilyUpdateVars {
+  id: number
+  family: Family
+}
+
 export interface FindFamilyVars {
   name: string
 }

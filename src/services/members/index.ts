@@ -2,13 +2,14 @@ import { useQuery, useResult, useMutation } from '@vue/apollo-composable'
 import getMembers from './queries/getMembers.gql'
 import getMemberById from './queries/getMemberById.gql'
 import updateMember from 'src/services/members/queries/updateMember.gql'
-import updateFamily from 'src/services/members/queries/updateFamily.gql'
+import upsertFamily from 'src/services/members/queries/upsertFamily.gql'
 import updateChildren from 'src/services/members/queries/updateChildren.gql'
 import findFamily from 'src/services/members/queries/findFamily.gql'
+import updateFamily from 'src/services/members/queries/updateFamily.gql'
 
 import { MemberData, MembersData, MemberVars, MembersVars, Member } from 'src/models/Member'
 import { apolloClient } from 'src/boot/apollo'
-import { FamilyData, FamilyVars, FamiliesData } from 'src/models/Family'
+import { FamilyData, FamilyVars, FamiliesData, FamilyUpdateVars } from 'src/models/Family'
 import { ChildrenData, ChildrenVars } from 'src/models/Child'
 import axios from 'axios'
 
@@ -37,8 +38,15 @@ export class MembersService {
     return response
   }
 
-  updateFamily = () => {
+  upsertFamily = () => {
     const response = useMutation<FamilyData, FamilyVars>(
+      upsertFamily
+    )
+    return response
+  }
+
+  updateFamily = () => {
+    const response = useMutation<FamilyData, FamilyUpdateVars>(
       updateFamily
     )
     return response

@@ -12,10 +12,14 @@
         </template>
       </q-banner>
       <div v-else>
-        <q-input outlined v-model="iban" label="IBAN" placeholder="ES">
+        <q-input mask="ES## #### #### #### #### ####" outlined v-model.trim="iban" label="IBAN" placeholder="ES" :rules="[val => !!val || $t('forms.required'), val => isValidIBAN(val.replace(/\s/g, '')) || $t('forms.validIBAN')]">
         </q-input>
+        <p class="text-caption">
+          {{$t('forms.ibanNotice')}}
+        </p>
+        <q-btn :loading="mutateLoading" color="primary" :label="$t('forms.save')" @click="updateIban"/>
         <br>
-        <q-btn :loading="loading" color="primary" :label="$t('forms.save')" @click="updateIban"/>
+        <br>
       </div>
     </div>
   </q-page>
@@ -28,17 +32,21 @@ import { computed, reactive, toRefs } from 'vue'
 import firebase from 'firebase/app'
 import 'firebase/auth'
 import { Family } from 'src/models/Family'
-import { cleanObject } from 'src/utilities/cleanObject'
+// import { cleanObject } from 'src/utilities/cleanObject'
+import { isValidIBAN } from 'ibantools'
+import { useQuasar } from 'quasar'
+import { i18n } from 'src/boot/i18n'
 
 export default {
   name: 'PagePayment',
   setup () {
     const membersService = new MembersService()
     const route = useRoute()
+    const $q = useQuasar()
+    const translate = i18n.global
 
     const familyData = reactive<Family>({
       id: undefined,
-      name: '',
       iban: undefined
     })
 
@@ -56,7 +64,7 @@ export default {
     })
 
     const { member, loading, onResult } = membersService.getById(id.value)
-    const { mutate } = membersService.updateFamily()
+    const { mutate, loading: mutateLoading, onError, error } = membersService.updateFamily()
 
     onResult(() => {
       if (member) {
@@ -66,16 +74,25 @@ export default {
     })
 
     const updateIban = async () => {
-      console.log(familyData)
-      const variables = cleanObject(familyData)
-      await mutate({ family: { ...variables } })
+      await mutate({ id: familyData.id, family: { iban: familyData.iban.replace(/\s/g, '') } })
+      $q.notify(translate.t('forms.savedOk'))
     }
+
+    onError(() => {
+      $q.notify({
+        type: 'negative',
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        message: error.value.message
+      })
+    })
 
     return {
       loading,
       member,
       ...toRefs(familyData),
-      updateIban
+      updateIban,
+      isValidIBAN,
+      mutateLoading
     }
   }
 }

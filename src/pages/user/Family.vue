@@ -2,64 +2,74 @@
   <q-page padding class="bg-grey-2">
     <div class="q-gutter-md max-600">
       <h1 class="text-h4">{{$t('member.familyData')}}</h1>
-
-      <q-banner class="bg-accent text-white" v-if="hasRequestedJoinFamily">
-        <template v-slot:avatar>
-        <q-icon name="info" color="white" />
-      </template>
-        {{$t('family.hasRequestedJoinNotice')}}
+      <div v-if="!member && isLoading">
+        <q-skeleton height="50px" square />
+      </div>
+      <q-banner v-else-if="!nif" class="bg-red text-white">
+        {{$t('member.userDataNotice')}}
         <template v-slot:action>
-          <q-btn flat color="white" :label="$t('family.requestJoinNoticeAbort')" @click="abortJoin()" />
+          <q-btn flat color="white" :label="$t('member.userDataNoticeBtn')" :to="'/user'" />
         </template>
       </q-banner>
-
-      <q-banner class="bg-accent text-white" v-if="joinFamilyRequest">
-        <template v-slot:avatar>
-        <q-icon name="info" color="white" />
-      </template>
-        {{$t('family.requestJoinNotice', {email: joinFamilyRequest.email})}}
-        <template v-slot:action>
-          <q-btn :loading="isLoading" flat color="white" :label="$t('family.requestJoinNoticeDecline')" @click="rejectJoin()" />
-          <q-btn :loading="isLoading" flat color="white" :label="$t('family.requestJoinNoticeAccept')" @click="resolveJoin()" />
+      <div v-else>
+        <q-banner class="bg-accent text-white" v-if="hasRequestedJoinFamily">
+          <template v-slot:avatar>
+          <q-icon name="info" color="white" />
         </template>
-      </q-banner>
+          {{$t('family.hasRequestedJoinNotice')}}
+          <template v-slot:action>
+            <q-btn flat color="white" :label="$t('family.requestJoinNoticeAbort')" @click="abortJoin()" />
+          </template>
+        </q-banner>
 
-        <q-input outlined v-model="name" :label="$t('member.familyName')" bottom-slots>
-          <template v-slot:hint>
-          {{$t('family.putChildrenLastName')}}
+        <q-banner class="bg-accent text-white" v-if="joinFamilyRequest">
+          <template v-slot:avatar>
+          <q-icon name="info" color="white" />
         </template>
-        </q-input>
-        <br>
-        <q-btn v-if="!id" :loading="isLoading" color="primary" :label="$t('forms.save')" @click="prepareUpdateFamily"/>
-        <div v-if="id">
-          <h2 class="text-h4">
-            {{$t('member.children')}}
-            <q-btn class="float-right" color="primary" flat label="+ Afegeix" @click="addChild" />
-          </h2>
-          <q-form v-if="children" ref="mForm" @submit.prevent="submitForm">
-          <div v-for="child in children" :key="child.id">
-            <q-input outlined v-model="child.firstName" :label="$t('member.firstName')" :rules="[val => !!val || $t('forms.required')]" />
-            <q-input outlined v-model="child.lastName" :label="$t('member.lastName')" :rules="[val => !!val || $t('forms.required')]" />
-            <q-input outlined v-model="child.birthDate" mask="####-##-##" :rules="[val => datePattern.test(val) || $t('forms.validDate'), val => !!val || $t('forms.required')]" :label="$t('member.birthDate')">
-              <template v-slot:append>
-                <q-icon name="event" class="cursor-pointer">
-                  <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
-                    <q-date v-model="child.birthDate">
-                      <div class="row items-center justify-end">
-                        <q-btn v-close-popup label="Close" color="primary" flat />
-                      </div>
-                    </q-date>
-                  </q-popup-proxy>
-                </q-icon>
-              </template>
-            </q-input>
-            <br>
-            <q-separator/>
-            <br>
-          </div>
-          <q-btn :loading="isLoading" :disable="children.length === 0" color="primary" :label="$t('forms.save')" type="submit" />
-        </q-form>
+          {{$t('family.requestJoinNotice', {email: joinFamilyRequest.email})}}
+          <template v-slot:action>
+            <q-btn :loading="isLoading" flat color="white" :label="$t('family.requestJoinNoticeDecline')" @click="rejectJoin()" />
+            <q-btn :loading="isLoading" flat color="white" :label="$t('family.requestJoinNoticeAccept')" @click="resolveJoin()" />
+          </template>
+        </q-banner>
 
+          <q-input outlined v-model="name" :label="$t('member.familyName')" bottom-slots>
+            <template v-slot:hint>
+            {{$t('family.putChildrenLastName')}}
+          </template>
+          </q-input>
+          <br>
+          <q-btn v-if="!id" :loading="isLoading" color="primary" :label="$t('forms.save')" @click="prepareUpdateFamily"/>
+          <div v-if="id">
+            <h2 class="text-h4">
+              {{$t('member.children')}}
+              <q-btn class="float-right" color="primary" flat label="+ Afegeix" @click="addChild" />
+            </h2>
+            <q-form v-if="children" ref="mForm" @submit.prevent="submitForm">
+            <div v-for="child in children" :key="child.id">
+              <q-input outlined v-model="child.firstName" :label="$t('member.firstName')" :rules="[val => !!val || $t('forms.required')]" />
+              <q-input outlined v-model="child.lastName" :label="$t('member.lastName')" :rules="[val => !!val || $t('forms.required')]" />
+              <q-input outlined v-model="child.birthDate" mask="####-##-##" :rules="[val => datePattern.test(val) || $t('forms.validDate'), val => !!val || $t('forms.required')]" :label="$t('member.birthDate')">
+                <template v-slot:append>
+                  <q-icon name="event" class="cursor-pointer">
+                    <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
+                      <q-date v-model="child.birthDate">
+                        <div class="row items-center justify-end">
+                          <q-btn v-close-popup label="Close" color="primary" flat />
+                        </div>
+                      </q-date>
+                    </q-popup-proxy>
+                  </q-icon>
+                </template>
+              </q-input>
+              <br>
+              <q-separator/>
+              <br>
+            </div>
+            <q-btn :loading="isLoading" :disable="children.length === 0" color="primary" :label="$t('forms.save')" type="submit" />
+          </q-form>
+
+        </div>
       </div>
     </div>
   </q-page>
@@ -99,6 +109,7 @@ export default {
 
     const memberData = reactive<Member>({
       familyId: undefined,
+      nif: undefined,
       hasRequestedJoinFamily: false,
       joinFamilyRequest: undefined
     })
@@ -132,8 +143,9 @@ export default {
     onResult(() => {
       familyData.id = member.value?.familyId
       familyData.name = member.value?.family?.name
-      familyData.ownerId = member.value?.id
+      familyData.ownerId = member.value?.family?.ownerId
       memberData.familyId = member.value?.familyId
+      memberData.nif = member.value?.nif
       memberData.hasRequestedJoinFamily = member.value?.hasRequestedJoinFamily
       memberData.joinFamilyRequest = member.value?.joinFamilyRequest
       const childrenTemp = member.value?.family?.children?.map(child => {
@@ -144,7 +156,7 @@ export default {
       // console.log(childrenData)
     })
 
-    const { mutate: mutateFamily, loading: updateFamilyLoading, error: updateFamilyError, onError: updateFamilyOnError } = membersService.updateFamily()
+    const { mutate: mutateFamily, loading: upsertFamilyLoading, error: upsertFamilyError, onError: upsertFamilyOnError } = membersService.upsertFamily()
     const { mutate: mutateMember, loading: updateMemberLoading, error: updateMemberError, onError: updateMemberOnError } = membersService.updateMember()
     const { mutate: mutateChildren, loading: updateChildrenLoading, error: updateChildrenError, onError: updateChildrenOnError } = membersService.updateChildren()
 
@@ -181,7 +193,7 @@ export default {
           persistent: true
         }).onOk(async (data: number) => {
           if (!data) {
-            await updateFamily()
+            await upsertFamily()
           } else {
             await requestFamilyJoin(data)
           }
@@ -199,7 +211,8 @@ export default {
       }
     }
 
-    const updateFamily = async () => {
+    const upsertFamily = async () => {
+      familyData.ownerId = member.value?.id
       const variables = cleanObject({ ...familyData })
       // console.log(variables)
       const { data } = await mutateFamily({ family: variables })
@@ -234,7 +247,7 @@ export default {
           // console.log('success')
           await mutateChildren({ children: childrenData.children })
           if (shouldUpdateFamilyName.value) {
-            await updateFamily()
+            await upsertFamily()
           }
           $q.notify(translate.t('forms.savedOk'))
         } else {
@@ -272,11 +285,11 @@ export default {
     }
 
     // Error handling
-    updateFamilyOnError(() => {
+    upsertFamilyOnError(() => {
       $q.notify({
         type: 'negative',
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-        message: updateFamilyError.value.message
+        message: upsertFamilyError.value.message
       })
     })
 
@@ -299,7 +312,7 @@ export default {
     // watchers and computed properties
 
     const isLoading = computed(() => {
-      return loading.value || updateChildrenLoading.value || updateFamilyLoading.value || updateMemberLoading.value
+      return loading.value || updateChildrenLoading.value || upsertFamilyLoading.value || updateMemberLoading.value
     })
 
     watch(() => familyData.name,
@@ -319,7 +332,7 @@ export default {
       error,
       submitForm,
       mForm,
-      updateFamily,
+      upsertFamily,
       isLoading,
       prepareUpdateFamily,
       resolveJoin,
