@@ -19,8 +19,8 @@
       </template>
         {{$t('family.requestJoinNotice', {email: joinFamilyRequest.email})}}
         <template v-slot:action>
-          <q-btn flat color="white" :label="$t('family.requestJoinNoticeDecline')" @click="rejectJoin()" />
-          <q-btn flat color="white" :label="$t('family.requestJoinNoticeAccept')" @click="resolveJoin()" />
+          <q-btn :loading="isLoading" flat color="white" :label="$t('family.requestJoinNoticeDecline')" @click="rejectJoin()" />
+          <q-btn :loading="isLoading" flat color="white" :label="$t('family.requestJoinNoticeAccept')" @click="resolveJoin()" />
         </template>
       </q-banner>
 

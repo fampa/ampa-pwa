@@ -1,7 +1,7 @@
 <template>
   <q-page padding class="bg-grey-2">
-    <h1 class="text-h4">{{$t('personalData')}}</h1>
-    <div class="q-gutter-md" style="max-width: 300px" v-if="id">
+    <div class="q-gutter-md max-600" v-if="id">
+      <h1 class="text-h4">{{$t('personalData')}}</h1>
       <q-form ref="memberForm" @submit.prevent="submitForm">
         <q-input outlined v-model="firstName" :label="$t('member.firstName')" :rules="[val => !!val || $t('forms.required')]" />
         <q-input outlined v-model="lastName" :label="$t('member.lastName')" :rules="[val => !!val || $t('forms.required')]" />

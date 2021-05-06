@@ -161,7 +161,8 @@ appApi.post('/resolve/family-access', async (req: express.Request, res: express.
   try {
     const requester = req.body.member as Member
     const familyId = Number(req.body.familyId)
-    const joinResolveMutation = gql`mutation requestJoin($id: String!, $familyId: Int!, $permission: Boolean!) {
+    functions.logger.log('Resolved join family', requester.email)
+    const joinResolveMutation = gql`mutation requestJoin($id: String!, $familyId: Int!) {
       update_members_by_pk(pk_columns: {id: $id}, _set: {familyId: $familyId, hasRequestedJoinFamily: false}) {
         updatedAt
       }
@@ -173,6 +174,7 @@ appApi.post('/resolve/family-access', async (req: express.Request, res: express.
     }
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const response = await client.request(joinResolveMutation, joinResolveVariables).catch(err => functions.logger.error('requestJoin mutation error', err))
+    functions.logger.log('response from resolve join family', response)
     return res.json(response)
   } catch (error) {
     return next(error)
