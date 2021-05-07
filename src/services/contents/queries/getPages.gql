@@ -1,0 +1,16 @@
+query getPages {
+  pages(where: {status: {_eq: "PUBLISHED"}}) {
+    createdAt
+    id
+    image
+    status
+    icon
+    updatedAt
+    translations {
+      content
+      language
+      slug
+      title
+    }
+  }
+}

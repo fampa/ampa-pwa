@@ -6,6 +6,7 @@ export interface Page {
   status: string
   translations: PageTranslation[]
   image?: string
+  icon?: string
   createdAt?: Date
   updatedAt?: Date
 }

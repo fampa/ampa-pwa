@@ -72,14 +72,24 @@
           </q-item-section>
           <q-item-section>{{item.title}}</q-item-section>
         </q-item>
-        <div v-if="ampaItems">
+        <div v-if="pagesItems">
+          <q-item v-for="(item, index) in pagesItems" :key="index" clickable v-ripple :to="item.to" exact>
+            <q-item-section avatar>
+              <q-icon :name="item.icon" />
+            </q-item-section>
+            <q-item-section>
+              {{item.title}}
+            </q-item-section>
+          </q-item>
+        </div>
+        <div v-if="serviceItems">
           <q-separator />
             <q-item>
               <q-item-section>
                   <q-item-label overline>{{$t('menu.AmpaServices')}}</q-item-label>
               </q-item-section>
             </q-item>
-          <q-item v-for="(item, index) in ampaItems" :key="index" clickable v-ripple :to="item.to" exact>
+          <q-item v-for="(item, index) in serviceItems" :key="index" clickable v-ripple :to="item.to" exact>
             <q-item-section avatar>
               <q-icon :name="item.icon" />
             </q-item-section>
@@ -129,12 +139,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed } from 'vue'
+import { defineComponent, ref, computed, watch } from 'vue'
 import { i18n } from 'src/boot/i18n'
 import { useStore } from 'src/services/store'
-import { AmpaServicesService } from 'src/services/ampa-services'
+import { ContentsService } from 'src/services/contents'
 import { slugify } from 'src/utilities/slugify'
-
 export default defineComponent({
   name: 'MainLayout',
 
@@ -142,7 +151,8 @@ export default defineComponent({
     const leftDrawerOpen = ref(false)
     const translate = i18n.global
     const store = useStore()
-    const ampaServicesService = new AmpaServicesService()
+    const contentsService = new ContentsService()
+    const currentLanguage = computed(() => store.state.settings.language)
 
     const user = computed(() => {
       return store.state.user.user
@@ -154,12 +164,12 @@ export default defineComponent({
       to: string
     }
 
-    const ampaItems = ref<menuItem[]>([])
+    const serviceItems = ref<menuItem[]>([])
 
-    const { result, onResult } = ampaServicesService.getTipusServeis()
+    const { result: ServicesResult, onResult: onServicesResult } = contentsService.getTipusServeis()
 
-    onResult(() => {
-      ampaItems.value = result.value?.service_types?.map(service => {
+    onServicesResult(() => {
+      serviceItems.value = ServicesResult.value?.service_types?.map(service => {
         return {
           title: service.name,
           icon: service.icon,
@@ -167,6 +177,31 @@ export default defineComponent({
         }
       })
     })
+
+    const pagesItems = ref<menuItem[]>([])
+
+    const { result: PagesResult, onResult: onPagesResult, refetch: refetchPages } = contentsService.getPagesList()
+    const getPageItems = () => {
+      pagesItems.value = PagesResult.value?.pages?.map(page => {
+        const title = page.translations?.find(p => p.language === currentLanguage.value)?.title
+        return {
+          title,
+          icon: page.icon,
+          to: `/p/${page.id}/${slugify(title)}`
+        }
+      })
+    }
+    onPagesResult(() => {
+      getPageItems()
+    })
+
+    watch(() => currentLanguage.value,
+      (newVal, oldVal) => {
+        console.log(newVal)
+        if (newVal !== oldVal) {
+          getPageItems()
+        }
+      })
 
     const items = computed(() => {
       return [
@@ -223,7 +258,8 @@ export default defineComponent({
       items,
       userItems,
       adminItems,
-      ampaItems,
+      serviceItems,
+      pagesItems,
       user,
       leftDrawerOpen,
       logout,
