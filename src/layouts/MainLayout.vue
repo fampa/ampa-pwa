@@ -173,7 +173,7 @@ export default defineComponent({
         return {
           title: service.name,
           icon: service.icon,
-          to: `/service/${service.id}/${slugify(service.name)}`
+          to: `/services/${service.id}/${slugify(service.name)}`
         }
       })
     })
@@ -197,7 +197,6 @@ export default defineComponent({
 
     watch(() => currentLanguage.value,
       (newVal, oldVal) => {
-        console.log(newVal)
         if (newVal !== oldVal) {
           getPageItems()
         }

@@ -12,6 +12,7 @@ export interface Service {
   id: number
   type?: ServiceType
   name?: string
+  icon?: string
   description?: string
   periodicity?: string
   price?: number
@@ -20,6 +21,14 @@ export interface Service {
   updatedAt?: Date
 }
 
-export interface ServiceData {
+export interface ServicesTypeData {
   service_types: ServiceType[]
+}
+
+export interface ServicesData {
+  services: Service[]
+}
+
+export interface ServiceData {
+  services_by_pk: Service
 }

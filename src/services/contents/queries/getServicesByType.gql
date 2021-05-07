@@ -1,0 +1,19 @@
+query getServicesByType($typeId: Int!) {
+  services(where: {typeId: {_eq: $typeId}}) {
+    createdAt
+    description
+    id
+    isAvailable
+    name
+    periodicity
+    price
+    updatedAt
+    icon
+    type {
+      description
+      icon
+      name
+      id
+    }
+  }
+}

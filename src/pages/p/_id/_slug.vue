@@ -27,7 +27,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, watchEffect, ref } from 'vue'
+import { defineComponent, computed, watchEffect, ref, watch } from 'vue'
 import { useQuasar } from 'quasar'
 import { ContentsService } from 'src/services/contents'
 import { useRoute } from 'vue-router'
@@ -60,11 +60,24 @@ export default defineComponent({
     })
     const fallbackLanguage = computed(() => store.state.settings.fallbackLanguage)
 
-    const { result, loading, error, onResult } = contentsService.getPageById(id)
+    const { result, loading, error, onResult, refetch } = contentsService.getPageById(id.value)
 
     onResult(() => {
-      page.value = result.value.pages_by_pk
+      getPage()
     })
+
+    const getPage = () => {
+      page.value = result.value.pages_by_pk
+    }
+
+    watch(() => id.value,
+      async (newVal, oldVal) => {
+        if (newVal !== oldVal) {
+          console.log('newVal', newVal)
+          await refetch({ id: newVal })
+          getPage()
+        }
+      })
 
     const translate = i18n.global
 

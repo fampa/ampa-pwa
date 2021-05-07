@@ -1,0 +1,17 @@
+query getServiceById($id: Int!) {
+  services_by_pk(id: $id) {
+    name
+    description
+    periodicity
+    price
+    isAvailable
+    id
+    icon
+    createdAt
+    updatedAt
+    type {
+      name
+      id
+    }
+  }
+}

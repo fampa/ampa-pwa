@@ -1,5 +1,5 @@
 query getPages {
-  pages(where: {status: {_eq: "PUBLISHED"}}) {
+  pages {
     createdAt
     id
     image

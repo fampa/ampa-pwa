@@ -28,17 +28,22 @@ const routes: RouteRecordRaw[] = [
     ]
   },
   {
-    path: '/service',
+    path: '/services',
     component: () => import('layouts/MainLayout.vue'),
-    meta: { requiresAuth: true },
     children: [
-      { path: ':id/:slug?', component: () => import('pages/service/_id/_slug.vue') }
+      { path: ':id/:slug?', component: () => import('pages/services/_id/_slug.vue') }
+    ]
+  },
+  {
+    path: '/s',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [
+      { path: ':id/:slug?', component: () => import('pages/s/_id/_slug.vue') }
     ]
   },
   {
     path: '/p',
     component: () => import('layouts/MainLayout.vue'),
-    meta: { requiresAuth: true },
     children: [
       { path: ':id/:slug?', component: () => import('pages/p/_id/_slug.vue') }
     ]
