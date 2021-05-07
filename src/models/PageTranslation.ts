@@ -1,4 +1,4 @@
-export interface Translation {
+export interface PageTranslation {
   id: number
   slug: string
   title: string

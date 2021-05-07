@@ -32,8 +32,7 @@ const routes: RouteRecordRaw[] = [
     component: () => import('layouts/MainLayout.vue'),
     meta: { requiresAuth: true },
     children: [
-      { path: 'matinera', component: () => import('pages/service/Matinera.vue') },
-      { path: 'extraescolars', component: () => import('pages/service/Extraescolars.vue') }
+      { path: ':id/:slug?', component: () => import('pages/service/_id/_slug.vue') }
     ]
   },
   {

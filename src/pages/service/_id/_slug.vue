@@ -1,10 +1,10 @@
 <template>
-  WIP
+  WIP: servei
 </template>
 
 <script>
 export default {
-  name: 'PageExtraescolars'
+  name: 'PageServei'
 }
 </script>
 

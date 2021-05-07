@@ -72,6 +72,22 @@
           </q-item-section>
           <q-item-section>{{item.title}}</q-item-section>
         </q-item>
+        <div v-if="ampaItems">
+          <q-separator />
+            <q-item>
+              <q-item-section>
+                  <q-item-label overline>{{$t('menu.AmpaServices')}}</q-item-label>
+              </q-item-section>
+            </q-item>
+          <q-item v-for="(item, index) in ampaItems" :key="index" clickable v-ripple :to="item.to" exact>
+            <q-item-section avatar>
+              <q-icon :name="item.icon" />
+            </q-item-section>
+            <q-item-section>
+              {{item.title}}
+            </q-item-section>
+          </q-item>
+        </div>
         <div v-if="user">
           <q-separator />
             <q-item>
@@ -80,20 +96,6 @@
               </q-item-section>
             </q-item>
           <q-item v-for="(item, index) in userItems" :key="index" clickable v-ripple :to="item.to" exact>
-            <q-item-section avatar>
-              <q-icon :name="item.icon" />
-            </q-item-section>
-            <q-item-section>
-              {{item.title}}
-            </q-item-section>
-          </q-item>
-          <q-separator />
-            <q-item>
-              <q-item-section>
-                  <q-item-label overline>{{$t('menu.AmpaServices')}}</q-item-label>
-              </q-item-section>
-            </q-item>
-          <q-item v-for="(item, index) in ampaItems" :key="index" clickable v-ripple :to="item.to" exact>
             <q-item-section avatar>
               <q-icon :name="item.icon" />
             </q-item-section>
@@ -130,6 +132,8 @@
 import { defineComponent, ref, computed } from 'vue'
 import { i18n } from 'src/boot/i18n'
 import { useStore } from 'src/services/store'
+import { AmpaServicesService } from 'src/services/ampa-services'
+import { slugify } from 'src/utilities/slugify'
 
 export default defineComponent({
   name: 'MainLayout',
@@ -138,8 +142,30 @@ export default defineComponent({
     const leftDrawerOpen = ref(false)
     const translate = i18n.global
     const store = useStore()
+    const ampaServicesService = new AmpaServicesService()
+
     const user = computed(() => {
       return store.state.user.user
+    })
+
+    interface menuItem {
+      title: string
+      icon: string
+      to: string
+    }
+
+    const ampaItems = ref<menuItem[]>([])
+
+    const { result, onResult } = ampaServicesService.getTipusServeis()
+
+    onResult(() => {
+      ampaItems.value = result.value?.service_types?.map(service => {
+        return {
+          title: service.name,
+          icon: service.icon,
+          to: `/service/${service.id}/${slugify(service.name)}`
+        }
+      })
     })
 
     const items = computed(() => {
@@ -168,21 +194,6 @@ export default defineComponent({
           title: translate.t('member.paymentData'),
           icon: 'las la-money-check-alt',
           to: '/user/payment'
-        }
-      ]
-    })
-
-    const ampaItems = computed(() => {
-      return [
-        {
-          title: 'Matinera',
-          icon: 'las la-clock',
-          to: '/service/matinera'
-        },
-        {
-          title: translate.t('extraescolars'),
-          icon: 'las la-skating',
-          to: '/service/extraescolars'
         }
       ]
     })

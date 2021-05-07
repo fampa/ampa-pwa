@@ -1,11 +1,11 @@
 /* eslint-disable camelcase */
 import { Member } from './Member'
-import { Translation } from './Translation'
+import { ArticleTranslation } from './ArticleTranslation'
 
 export interface Article {
   id: number
   status: string
-  translations: Translation[]
+  translations: ArticleTranslation[]
   image?: string
   author?: Member
   createdAt?: Date

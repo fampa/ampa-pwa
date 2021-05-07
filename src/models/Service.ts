@@ -3,6 +3,7 @@ export interface ServiceType {
   id: number
   name?: string
   description?: string
+  icon?: string
   createdAt?: Date
   updatedAt?: Date
 }
@@ -20,5 +21,5 @@ export interface Service {
 }
 
 export interface ServiceData {
-  service_types: Service[]
+  service_types: ServiceType[]
 }
