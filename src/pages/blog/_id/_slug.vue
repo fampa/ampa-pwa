@@ -1,30 +1,30 @@
 <template>
-<transition
-            appear
-            enter-active-class="animated fadeInLeft"
-            leave-active-class="animated fadeOutLeft">
-  <q-page padding class="q-pa-md">
-    <div v-if="loading">
-      <q-skeleton type="text" height="60px" />
-      <q-skeleton height="200px" square />
-      <q-skeleton type="text" />
-      <q-skeleton type="text" />
-    </div>
-    <div class="article" v-else-if="!article">
-      404. Article no trobat
-    </div>
-    <div class="article" v-else-if="article">
-      <h1 class="text-h4 title">{{title}}</h1>
-      <div class="subtitle"><strong>{{formatedDate}}</strong>. <span class="updated" v-if="article.createdAt !== article.updatedAt">{{$t('updatedAt', {date: formatedUpdatedDate})}}</span></div>
-      <q-img
-        fit="cover"
-        v-if="article.image"
-        :src="article.image">
-      </q-img>
-      <div class="content" v-html="content"></div>
-    </div>
-  </q-page>
-</transition>
+  <transition
+              appear
+              enter-active-class="animated fadeInLeft"
+              leave-active-class="animated fadeOutLeft">
+    <q-page padding class="q-pa-md">
+      <div v-if="loading">
+        <q-skeleton type="text" height="60px" />
+        <q-skeleton height="200px" square />
+        <q-skeleton type="text" />
+        <q-skeleton type="text" />
+      </div>
+      <div class="article" v-else-if="!article">
+        404. Article no trobat
+      </div>
+      <div class="article" v-else-if="article">
+        <h1 class="text-h4 title">{{title}}</h1>
+        <div class="subtitle"><strong>{{formatedDate}}</strong>. <span class="updated" v-if="article.createdAt !== article.updatedAt">{{$t('updatedAt', {date: formatedUpdatedDate})}}</span></div>
+        <q-img
+          fit="cover"
+          v-if="article.image"
+          :src="article.image">
+        </q-img>
+        <div class="content" v-html="content"></div>
+      </div>
+    </q-page>
+  </transition>
 </template>
 
 <script lang="ts">
@@ -40,7 +40,7 @@ export default defineComponent({
   setup () {
     const articlesService = new ArticlesService()
     const route = useRoute()
-    const id = Number(route.params.id)
+    const id = computed(() => Number(route.params.id))
     const store = useStore()
     const language = computed(() => store.state.settings.language)
     const title = computed(() => {
@@ -62,7 +62,7 @@ export default defineComponent({
     const formatedDate = computed(() => date.formatDate(article.value?.createdAt, 'DD/MM/YYYY, HH:mm'))
     const formatedUpdatedDate = computed(() => date.formatDate(article.value?.updatedAt, 'DD/MM/YYYY, HH:mm'))
 
-    const { article, loading, error } = articlesService.getById(id)
+    const { article, loading, error } = articlesService.getById(id.value)
 
     const translate = i18n.global
 

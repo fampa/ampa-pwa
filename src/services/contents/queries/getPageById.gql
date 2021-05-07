@@ -1,0 +1,15 @@
+query getPageById($id: Int!) {
+  pages_by_pk(id: $id) {
+    createdAt
+    id
+    image
+    status
+    updatedAt
+    translations {
+      content
+      language
+      slug
+      title
+    }
+  }
+}
