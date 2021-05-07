@@ -180,7 +180,7 @@ export default defineComponent({
 
     const pagesItems = ref<menuItem[]>([])
 
-    const { result: PagesResult, onResult: onPagesResult, refetch: refetchPages } = contentsService.getPagesList()
+    const { result: PagesResult, onResult: onPagesResult } = contentsService.getPagesList()
     const getPageItems = () => {
       pagesItems.value = PagesResult.value?.pages?.map(page => {
         const title = page.translations?.find(p => p.language === currentLanguage.value)?.title
