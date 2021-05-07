@@ -4,7 +4,7 @@ PWA de gestió del AMPA
 
 ## Set environmental variables
 
-Copy or rename `.env.example` file to `.env`, and `functions-config.json.example` to `unctions-config.json`, and fill the variables.
+Copy or rename `.env.example` file to `.env`, and `functions/.runtimeconfig.json.example` to `functions/.runtimeconfig.json`, and fill the variables.
 
 ## Prerequisits to be able to deploy to firebase
 
