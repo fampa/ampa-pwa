@@ -66,5 +66,11 @@ export default {
     notifications: 'Notificacions'
   },
   update: 'ACTUALITZA',
-  updatedAt: 'Actualitzat el {date}'
+  updatedAt: 'Actualitzat el {date}',
+  table: {
+    date: 'Data',
+    title: 'Títol',
+    search: 'Cerca',
+    status: 'Estat'
+  }
 }

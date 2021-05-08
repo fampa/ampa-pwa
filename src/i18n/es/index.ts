@@ -66,5 +66,11 @@ export default {
     notifications: 'Notificaciones'
   },
   update: 'ACTUALIZAR',
-  updatedAt: 'Actualizado el {date}'
+  updatedAt: 'Actualizado el {date}',
+  table: {
+    date: 'Fecha',
+    title: 'Título',
+    search: 'Buscar',
+    status: 'Estado'
+  }
 }
