@@ -16,12 +16,19 @@
         sortBy="createdAt"
       >
       <template v-slot:top-right>
-          <q-input borderless dense debounce="300" v-model="filter" clearable clear-icon="close" :placeholder="$t('table.search')">
-            <template v-slot:append>
-              <q-icon name="search" />
-            </template>
-          </q-input>
-        </template>
+        <q-input borderless dense debounce="300" v-model="filter" clearable clear-icon="close" :placeholder="$t('table.search')">
+          <template v-slot:append>
+            <q-icon name="search" />
+          </template>
+        </q-input>
+      </template>
+      <template v-slot:body-cell-status="props">
+        <q-td :props="props">
+          <q-badge :color="props.value === 'PUBLISHED' ? 'green' : 'red'">
+            {{props.value}}
+          </q-badge>
+        </q-td>
+      </template>
 
       </q-table>
 
@@ -144,7 +151,7 @@ export default {
         filter
       }
       const sanitizeVariables = cleanObject(variables)
-      console.log(sanitizeVariables)
+      // console.log(sanitizeVariables)
       const more = await fetchMore({
         variables: {
           ...sanitizeVariables
@@ -156,7 +163,7 @@ export default {
       pagination.value.sortBy = sortBy
       pagination.value.descending = descending
       pagination.value.rowsNumber = result.value?.articles_aggregate?.aggregate?.count
-      console.log('pagination', pagination)
+      // console.log('pagination', pagination)
     }
 
     return {
