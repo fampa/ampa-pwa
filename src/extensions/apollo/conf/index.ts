@@ -19,7 +19,9 @@ export async function getClientOptions(/* {app, router, ...}: Partial<BootFilePa
     typePolicies: {
       Query: {
         fields: {
-          articles: offsetLimitPagination()
+          articles: {
+            ...offsetLimitPagination()
+          }
         }
       }
     }

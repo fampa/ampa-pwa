@@ -4,7 +4,14 @@ import { GetArticlesData, GetArticlesOptions } from 'src/models/Article'
 
 export class AdminService {
   getArticles = (options: GetArticlesOptions) => {
-    const response = useQuery<GetArticlesData, GetArticlesOptions>(getArticles, { ...options })
+    const response = useQuery<GetArticlesData, GetArticlesOptions>(
+      getArticles,
+      { ...options },
+      {
+        fetchPolicy: 'no-cache',
+        nextFetchPolicy: 'no-cache'
+      }
+    )
     return response
   }
 }

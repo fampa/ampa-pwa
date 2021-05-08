@@ -8,7 +8,10 @@ import { CachePersistor } from 'apollo3-cache-persist'
 
 export class ArticlesService {
   getAll = (offset: number, limit: number) => {
-    const response = useQuery<ArticlesData, ArticlesVars>(getArticles, { offset, limit })
+    const response = useQuery<ArticlesData, ArticlesVars>(
+      getArticles,
+      { offset, limit }
+    )
     const articles = useResult(response.result, null, data => data.articles)
     return { articles, ...response }
   }

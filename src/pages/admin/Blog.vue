@@ -4,7 +4,7 @@
       <q-table
         class="content"
         title="Blog"
-        :data="articles"
+        :rows="articles"
         :columns="columns"
         @row-click="onRowClick"
         row-key="id"
@@ -13,7 +13,7 @@
         :filter="filter"
         @request="onRequest"
         binary-state-sort
-        sortBy="created_at"
+        sortBy="createdAt"
       >
       <template v-slot:top-right>
           <q-input borderless dense debounce="300" v-model="filter" clearable clear-icon="close" :placeholder="$t('table.search')">
@@ -40,6 +40,8 @@ import { i18n } from 'src/boot/i18n'
 import { useRouter } from 'vue-router'
 import { cleanObject } from 'src/utilities/cleanObject'
 import { AdminService } from 'src/services/admin'
+import { formatDate } from 'src/utilities/formatDate'
+
 export default {
   name: 'AdminBlog',
   setup () {
@@ -53,7 +55,7 @@ export default {
     // Data
     const articles = ref<Article[]>([])
     const filter = ref<string | null>(null)
-    const pagination = reactive({
+    const pagination = ref({
       sortBy: 'createdAt',
       descending: true,
       page: 1,
@@ -70,11 +72,11 @@ export default {
         sortable: true
       },
       {
-        name: 'created_at',
+        name: 'createdAt',
         required: true,
         label: translate.t('table.date'),
         align: 'left',
-        field: 'created_at',
+        field: 'createdAt',
         format: val => `${formatDate(val)}`,
         sortable: true
       },
@@ -97,25 +99,16 @@ export default {
     ])
 
     // Methods
-    const formatDate = (date) => {
-      const d = new Date(date)
-      let month = `${d.getMonth() + 1}`
-      let day = `${d.getDate()}`
-      const year = d.getFullYear()
-      if (month.length < 2) month = `0${month}`
-      if (day.length < 2) day = `0${day}`
-      return [day, month, year].join('/')
-    }
     const onRowClick = (evt, row) => {
       // console.log(row)
       const id = row.id
-      return router.push(`/admin/article/edit/${id}`)
+      return router.push(`/admin/blog/edit/${id}`)
     }
 
-    const limit = pagination.rowsPerPage === 0 ? pagination.rowsNumber : pagination.rowsPerPage
-    const offset = (pagination.page - 1) * pagination.rowsPerPage
+    const limit = pagination.value.rowsPerPage === 0 ? pagination.value.rowsNumber : pagination.value.rowsPerPage
+    const offset = (pagination.value.page - 1) * pagination.value.rowsPerPage
     const orderBy = {}
-    orderBy[pagination.sortBy] = pagination.descending ? 'desc' : 'asc'
+    orderBy[pagination.value.sortBy] = pagination.value.descending ? 'desc' : 'asc'
     const variables = {
       limit,
       offset,
@@ -123,12 +116,12 @@ export default {
       filter: filter.value
     }
     const sanitizeVariables = cleanObject(variables)
-    const { result, onResult, loading, refetch } = adminService.getArticles(sanitizeVariables)
+    const { result, onResult, loading, fetchMore } = adminService.getArticles(sanitizeVariables)
 
     onResult(() => {
-      result.value?.articles = articles.value
-      console.log('result.value?.articles', result.value)
-      result.value?.articles_aggregate?.aggregate?.count = pagination.rowsNumber
+      articles.value = result.value?.articles
+      pagination.value.rowsNumber = result.value?.articles_aggregate?.aggregate?.count
+      // console.log('articles', result.value?.articles)
     })
 
     const onRequest = async (props) => {
@@ -151,7 +144,19 @@ export default {
         filter
       }
       const sanitizeVariables = cleanObject(variables)
-      await refetch(sanitizeVariables)
+      console.log(sanitizeVariables)
+      const more = await fetchMore({
+        variables: {
+          ...sanitizeVariables
+        }
+      })
+      articles.value = more.data.articles
+      pagination.value.page = page
+      pagination.value.rowsPerPage = rowsPerPage
+      pagination.value.sortBy = sortBy
+      pagination.value.descending = descending
+      pagination.value.rowsNumber = result.value?.articles_aggregate?.aggregate?.count
+      console.log('pagination', pagination)
     }
 
     return {
