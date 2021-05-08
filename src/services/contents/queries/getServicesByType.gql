@@ -8,7 +8,7 @@ query getServicesByType($typeId: Int!) {
     periodicity
     price
     updatedAt
-    icon
+    image
     type {
       description
       icon

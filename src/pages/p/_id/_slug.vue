@@ -27,7 +27,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, watchEffect, ref, watch } from 'vue'
+import { defineComponent, computed, ref, watch } from 'vue'
 import { useQuasar } from 'quasar'
 import { ContentsService } from 'src/services/contents'
 import { useRoute } from 'vue-router'
@@ -44,6 +44,8 @@ export default defineComponent({
     const store = useStore()
     const language = computed(() => store.state.settings.language)
     const page = ref<Page | null>(null)
+    const $q = useQuasar()
+
     const title = computed(() => {
       if (page.value?.translations.find(t => t.language === language.value)?.title) {
         return page.value?.translations.find(t => t.language === language.value)?.title
@@ -60,7 +62,7 @@ export default defineComponent({
     })
     const fallbackLanguage = computed(() => store.state.settings.fallbackLanguage)
 
-    const { result, loading, error, onResult, refetch } = contentsService.getPageById(id.value)
+    const { result, loading, error, onError, onResult, refetch } = contentsService.getPageById(id.value)
 
     onResult(() => {
       getPage()
@@ -81,18 +83,14 @@ export default defineComponent({
 
     const translate = i18n.global
 
-    watchEffect(
-      () => {
-        const $q = useQuasar()
-        if (error.value) {
-          console.error(translate.t('errorNetwork'))
-          $q.notify({
-            type: 'negative',
-            message: translate.t('errorNetwork')
-          })
-        }
-      }
-    )
+    onError(() => {
+      console.error(translate.t('errorNetwork'))
+      $q.notify({
+        type: 'negative',
+        message: `${translate.t('errorNetwork')}? ${error}`
+      })
+    })
+
     return {
       page,
       loading,

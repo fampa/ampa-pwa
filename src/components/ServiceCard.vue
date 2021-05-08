@@ -6,7 +6,7 @@
           <q-item-section avatar>
               <q-icon
                 style="font-size: 4rem;"
-                :name="service.icon ? service.icon : service.type?.icon"
+                :name="service.image ? service.image : service.type?.icon"
               />
           </q-item-section>
 

@@ -12,7 +12,7 @@ export interface Service {
   id: number
   type?: ServiceType
   name?: string
-  icon?: string
+  image?: string
   description?: string
   periodicity?: string
   price?: number

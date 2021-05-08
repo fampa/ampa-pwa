@@ -28,8 +28,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, watchEffect } from 'vue'
-import { date } from 'quasar'
+import { defineComponent, computed } from 'vue'
+import { date, useQuasar } from 'quasar'
 import { ArticlesService } from 'src/services/articles'
 import { useRoute } from 'vue-router'
 import { useStore } from 'src/services/store'
@@ -42,6 +42,7 @@ export default defineComponent({
     const route = useRoute()
     const id = computed(() => Number(route.params.id))
     const store = useStore()
+    const $q = useQuasar()
     const language = computed(() => store.state.settings.language)
     const title = computed(() => {
       if (article.value?.translations.find(t => t.language === language.value)?.title) {
@@ -62,22 +63,18 @@ export default defineComponent({
     const formatedDate = computed(() => date.formatDate(article.value?.createdAt, 'DD/MM/YYYY, HH:mm'))
     const formatedUpdatedDate = computed(() => date.formatDate(article.value?.updatedAt, 'DD/MM/YYYY, HH:mm'))
 
-    const { article, loading, error } = articlesService.getById(id.value)
+    const { article, loading, error, onError } = articlesService.getById(id.value)
 
     const translate = i18n.global
 
-    watchEffect(
-      () => {
-        // const $q = useQuasar()
-        if (error.value) {
-          console.error(translate.t('errorNetwork'))
-          // $q.notify({
-          //   type: 'negative',
-          //   message: translate.t('errorNetwork')
-          // })
-        }
-      }
-    )
+    onError(() => {
+      console.error(translate.t('errorNetwork'))
+      $q.notify({
+        type: 'negative',
+        message: `${translate.t('errorNetwork')}? ${error}`
+      })
+    })
+
     return {
       article,
       loading,

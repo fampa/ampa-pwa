@@ -6,7 +6,7 @@ query getServiceById($id: Int!) {
     price
     isAvailable
     id
-    icon
+    image
     createdAt
     updatedAt
     type {

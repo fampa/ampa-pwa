@@ -22,11 +22,13 @@
           </div>
         </div>
       </div>
-      <div
-        class="col-12 col-sm-6 col-md-4 q-pa-sm"
-        v-for="service in services" :key="service.id"
-      >
-        <service-card :service="service"></service-card>
+      <div class="row items-start">
+        <div
+          class="col-12 col-sm-6 col-md-4 q-pa-sm"
+          v-for="service in services" :key="service.id"
+        >
+          <service-card :service="service"></service-card>
+        </div>
       </div>
     </div>
   </q-page>
@@ -47,6 +49,7 @@ export default {
     const contentsService = new ContentsService()
     const route = useRoute()
     const id = computed(() => Number(route.params.id))
+    const $q = useQuasar()
 
     const services = ref<Service[]>([])
 
@@ -70,7 +73,6 @@ export default {
       })
 
     onError(() => {
-      const $q = useQuasar()
       $q.notify({
         type: 'negative',
         message: error.value?.message

@@ -1,7 +1,7 @@
 <template>
   <q-page padding class="bg-grey-2">
     <div class="q-gutter-md max-600" v-if="service">
-      <h1>{{service.name}}</h1>
+      <h1 class="text-h4">{{service.name}}</h1>
       <p>{{service.description}}</p>
       <p>{{formatCurrency(service.price)}}/{{service.periodicity}}</p>
       <q-btn label="Matricular" color="primary" disable />
@@ -24,6 +24,7 @@ export default {
     const contentsService = new ContentsService()
     const route = useRoute()
     const id = computed(() => Number(route.params.id))
+    const $q = useQuasar()
 
     const service = ref<Service | null>(null)
 
@@ -34,7 +35,6 @@ export default {
     })
 
     onError(() => {
-      const $q = useQuasar()
       $q.notify({
         type: 'negative',
         message: error.value?.message
