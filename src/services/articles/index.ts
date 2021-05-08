@@ -4,6 +4,7 @@ import getArticles from './queries/getArticles.gql'
 import getArticleById from './queries/getArticleById.gql'
 import { ArticleData, ArticlesData, ArticleVars, ArticlesVars } from 'src/models/Article'
 import { apolloClient } from 'src/boot/apollo'
+import { CachePersistor } from 'apollo3-cache-persist'
 
 export class ArticlesService {
   getAll = (offset: number, limit: number) => {
@@ -23,6 +24,13 @@ export class ArticlesService {
   }
 
   clearCache = async () => {
+    const persistor = new CachePersistor({
+      cache: apolloClient.cache,
+      storage: window.localStorage
+    })
     await apolloClient.clearStore()
+    await apolloClient.resetStore()
+    await apolloClient.cache.reset()
+    await persistor.purge()
   }
 }
