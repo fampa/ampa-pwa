@@ -1,6 +1,9 @@
 export default {
   admin: {
-    users: 'Gestió d\'usuaris'
+    users: 'Gestió d\'usuaris',
+    pages: 'Gestió de pàgines',
+    services: 'Gestió de serveis',
+    blog: 'Gestió del blog'
   },
   errorNetwork: 'No tens connexió a internet',
   extraescolars: 'Extraescolars',

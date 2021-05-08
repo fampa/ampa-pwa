@@ -36,7 +36,7 @@ import { i18n } from 'src/boot/i18n'
 import { Page } from 'src/models/Page'
 
 export default defineComponent({
-  name: 'NewsDetails',
+  name: 'PageDetails',
   setup () {
     const contentsService = new ContentsService()
     const route = useRoute()
@@ -74,8 +74,8 @@ export default defineComponent({
 
     watch(() => id.value,
       async (newVal, oldVal) => {
-        if (newVal !== oldVal) {
-          console.log('newVal', newVal)
+        if (newVal && newVal !== oldVal) {
+          // console.log('newVal', newVal)
           await refetch({ id: newVal })
           getPage()
         }

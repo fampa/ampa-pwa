@@ -28,6 +28,17 @@ const routes: RouteRecordRaw[] = [
     ]
   },
   {
+    path: '/admin',
+    component: () => import('layouts/MainLayout.vue'),
+    meta: { requiresScope: 'admin' },
+    children: [
+      { path: 'users', component: () => import('pages/admin/Users.vue') },
+      { path: 'pages', component: () => import('pages/admin/Pages.vue') },
+      { path: 'services', component: () => import('pages/admin/Services.vue') },
+      { path: 'blog', component: () => import('pages/admin/Blog.vue') }
+    ]
+  },
+  {
     path: '/services',
     component: () => import('layouts/MainLayout.vue'),
     children: [

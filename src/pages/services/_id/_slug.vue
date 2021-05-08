@@ -65,8 +65,8 @@ export default {
 
     watch(() => id.value,
       async (newVal, oldVal) => {
-        if (newVal !== oldVal) {
-          console.log('newVal', newVal)
+        if (newVal && newVal !== oldVal) {
+          // console.log('newVal', newVal)
           await refetch({ typeId: newVal })
           getServices()
         }

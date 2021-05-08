@@ -153,6 +153,7 @@ export default defineComponent({
     const store = useStore()
     const contentsService = new ContentsService()
     const currentLanguage = computed(() => store.state.settings.language)
+    const fallbackLanguage = computed(() => store.state.settings.fallbackLanguage)
 
     const user = computed(() => {
       return store.state.user.user
@@ -183,7 +184,7 @@ export default defineComponent({
     const { result: PagesResult, onResult: onPagesResult } = contentsService.getPagesList()
     const getPageItems = () => {
       pagesItems.value = PagesResult.value?.pages?.map(page => {
-        const title = page.translations?.find(p => p.language === currentLanguage.value)?.title
+        const title = page.translations?.find(p => p.language === currentLanguage.value)?.title || page.translations?.find(p => p.language === fallbackLanguage.value)?.title
         return {
           title,
           icon: page.icon,
@@ -238,6 +239,21 @@ export default defineComponent({
           title: translate.t('admin.users'),
           icon: 'las la-users',
           to: '/admin/users'
+        },
+        {
+          title: translate.t('admin.pages'),
+          icon: 'las la-file-alt',
+          to: '/admin/pages'
+        },
+        {
+          title: translate.t('admin.services'),
+          icon: 'las la-list',
+          to: '/admin/services'
+        },
+        {
+          title: translate.t('admin.blog'),
+          icon: 'las la-rss',
+          to: '/admin/blog'
         }
       ]
     })
