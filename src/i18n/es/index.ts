@@ -67,6 +67,10 @@ export default {
   },
   update: 'ACTUALIZAR',
   updatedAt: 'Actualizado el {date}',
+  status: {
+    PUBLISHED: 'PUBLICADO',
+    DRAFT: 'BORRADOR'
+  },
   table: {
     date: 'Fecha',
     title: 'Título',

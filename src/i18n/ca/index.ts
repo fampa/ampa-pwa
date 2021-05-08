@@ -65,6 +65,10 @@ export default {
     language: 'Idioma',
     notifications: 'Notificacions'
   },
+  status: {
+    PUBLISHED: 'PUBLICAT',
+    DRAFT: 'ESBORRANY'
+  },
   update: 'ACTUALITZA',
   updatedAt: 'Actualitzat el {date}',
   table: {

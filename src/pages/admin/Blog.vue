@@ -24,7 +24,7 @@
       </template>
       <template v-slot:body-cell-status="props">
         <q-td :props="props">
-          <q-badge :color="props.value === 'PUBLISHED' ? 'green' : 'red'">
+          <q-badge :color="props.value === 'PUBLICAT' || 'PUBLICADO' ? 'green' : 'red'">
             {{props.value}}
           </q-badge>
         </q-td>
@@ -101,6 +101,7 @@ export default {
         label: translate.t('table.status'),
         align: 'left',
         field: 'status',
+        format: val => translate.t(`status.${val}`),
         sortable: true
       }
     ])
