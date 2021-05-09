@@ -33,7 +33,7 @@
       </q-table>
 
       <q-page-sticky position="bottom-right" :offset="[18, 18]">
-        <q-btn fab icon="add" color="primary" to="/admin/article/edit" />
+        <q-btn fab icon="add" color="primary" to="/admin/users/edit" />
       </q-page-sticky>
     </div>
   </q-page>
@@ -50,6 +50,7 @@ import { Member } from 'src/models/Member'
 
 export default {
   name: 'AdminMembers',
+  emits: ['row-click'],
   setup () {
     const translate = i18n.global
     const router = useRouter()
@@ -113,7 +114,7 @@ export default {
     const onRowClick = (evt, row) => {
       // console.log(row)
       const id = row.id
-      return router.push(`/admin/member/edit/${id}`)
+      return router.push(`/admin/users/edit/${id}`)
     }
 
     const limit = pagination.value.rowsPerPage === 0 ? pagination.value.rowsNumber : pagination.value.rowsPerPage

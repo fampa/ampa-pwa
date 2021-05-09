@@ -10,6 +10,10 @@
         <q-input outlined v-model="phone" type="tel" :label="$t('member.phone')" :rules="[val => !!val || $t('forms.required'), val => !!phonePattern.test(val) || $t('forms.validPhone')]" />
         <q-btn :loading="updateMemberLoading" color="primary" type="submit">{{$t('forms.save')}}</q-btn>
       </q-form>
+      <div v-if="isAdmin" class="q-gutter-md">
+        <q-btn color="accent" :label="$t('member.familyData')" :to="`/admin/family/edit/${id}`" />
+        <q-btn color="accent" :label="$t('member.paymentData')" :to="`/admin/payment/edit/${id}`" />
+      </div>
     </div>
   </q-page>
 </template>
@@ -25,6 +29,7 @@ import { Member } from 'src/models/Member'
 import { useQuasar } from 'quasar'
 import { i18n } from 'src/boot/i18n'
 import { cleanObject } from 'src/utilities/cleanObject'
+import { useStore } from 'src/services/store'
 
 export default {
   name: 'PagePersonalData',
@@ -39,6 +44,9 @@ export default {
       familyId: undefined,
       family: undefined
     })
+
+    const store = useStore()
+    const isAdmin = computed(() => store.state.user.isAdmin)
 
     const $q = useQuasar()
 
@@ -118,7 +126,8 @@ export default {
       validateNif,
       memberForm,
       updateMemberLoading,
-      updateMemberError
+      updateMemberError,
+      isAdmin
     }
   }
 }
