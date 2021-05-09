@@ -1,6 +1,7 @@
 /* eslint-disable camelcase */
 import { Member } from './Member'
 import { ArticleTranslation } from './ArticleTranslation'
+import { Aggregate } from './QueryTable'
 
 export interface Article {
   id: number
@@ -27,19 +28,6 @@ export interface ArticleVars {
 
 export interface ArticleData {
   articles_by_pk: Article
-}
-
-export interface GetArticlesOptions {
-  offset?: number,
-  limit?: number,
-  orderBy?: Record<string, unknown>
-  filter?: string
-}
-
-interface Aggregate {
-  aggregate: {
-    count: number
-  }
 }
 
 export interface GetArticlesData {

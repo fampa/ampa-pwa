@@ -1,5 +1,6 @@
 /* eslint-disable camelcase */
 import { PageTranslation } from './PageTranslation'
+import { Aggregate } from './QueryTable'
 
 export interface Page {
   id: number
@@ -12,7 +13,7 @@ export interface Page {
 }
 
 export interface PagesData {
-  pages: Page[];
+  pages: Page[]
 }
 
 export interface PagesVars {
@@ -26,4 +27,9 @@ export interface PageVars {
 
 export interface PageData {
   pages_by_pk: Page
+}
+
+export interface GetPagesData {
+  pages_aggregate: Aggregate
+  pages: Page[]
 }

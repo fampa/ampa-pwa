@@ -1,0 +1,32 @@
+query getMembers($filter: String = "%%", $limit: Int, $offset: Int, $orderBy: [members_order_by!] = {lastName: asc}) {
+  members_aggregate(where: {
+    _or: [
+      {email: {_ilike: $filter}},
+      {lastName: {_ilike: $filter}}
+    ]
+  }) {
+    aggregate {
+      count
+    }
+  }
+  members(where: {
+    _or: [
+      {email: {_ilike: $filter}},
+      {lastName: {_ilike: $filter}}
+    ]
+  },
+    limit: $limit,
+    offset: $offset,
+    order_by: $orderBy) {
+    createdAt
+    email
+    familyId
+    firstName
+    id
+    isAdmin
+    lastName
+    nif
+    phone
+    updatedAt
+  }
+}

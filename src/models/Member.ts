@@ -1,3 +1,4 @@
+import { Aggregate } from './QueryTable'
 import { Family } from './Family'
 
 /* eslint-disable camelcase */
@@ -34,4 +35,9 @@ export interface MemberVars {
 
 export interface MemberData {
   members_by_pk: Member
+}
+
+export interface GetMembersData {
+  members_aggregate: Aggregate
+  members: Member[]
 }

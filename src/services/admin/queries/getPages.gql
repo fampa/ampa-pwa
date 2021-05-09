@@ -1,0 +1,40 @@
+query getPages($filter: String = "%%", $limit: Int, $offset: Int, $orderBy: [pages_order_by!] = {createdAt: desc}) {
+  pages_aggregate(
+    where: {
+      translations: 
+        {
+          _or: [
+            {content: {_ilike: $filter}},
+            {title: {_ilike: $filter}}
+          ]
+      	}
+  	}
+  ) {
+    aggregate {
+      count
+    }
+  }
+  pages(order_by: $orderBy, limit: $limit, offset: $offset, 
+    where: {
+      translations: 
+        {
+          _or: [
+            {content: {_ilike: $filter}},
+            {title: {_ilike: $filter}}
+          ]
+      	}
+  	}
+  ) {
+    createdAt
+    id
+    image
+    status
+    updatedAt
+    translations {
+      slug
+      language
+      title
+      content
+    }
+  }
+}
