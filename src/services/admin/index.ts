@@ -1,13 +1,17 @@
-import { useQuery } from '@vue/apollo-composable'
+import { useMutation, useQuery } from '@vue/apollo-composable'
 import getArticles from './queries/getArticles.gql'
 import getPages from './queries/getPages.gql'
 import getMembers from './queries/getMembers.gql'
 import getServiceTypes from './queries/getServiceTypes.gql'
+import getServiceTypeById from './queries/getServiceTypeById.gql'
+import upsertServiceType from './queries/upsertServiceType.gql'
+import removeServiceType from './queries/removeServiceType.gql'
+import getServicesByType from './queries/getServicesByType.gql'
 import { GetArticlesData } from 'src/models/Article'
 import { QueryTableOptions } from 'src/models/QueryTable'
 import { GetMembersData } from 'src/models/Member'
 import { GetPagesData } from 'src/models/Page'
-import { GetServiceTypesData } from 'src/models/Service'
+import { GetServiceTypeByID, GetServiceTypesData, ServiceType, upsertServiceTypeResult, upsertServiceTypeInput, GetServicesByTypeResult, GetServicesByTypeInput } from 'src/models/Service'
 
 export class AdminService {
   getArticles = (options: QueryTableOptions) => {
@@ -54,6 +58,44 @@ export class AdminService {
         fetchPolicy: 'no-cache',
         nextFetchPolicy: 'no-cache'
       }
+    )
+    return response
+  }
+
+  getServiceTypeById = (id: number) => {
+    const response = useQuery<GetServiceTypeByID, ServiceType>(
+      getServiceTypeById,
+      { id },
+      {
+        fetchPolicy: 'no-cache',
+        nextFetchPolicy: 'no-cache'
+      }
+    )
+    return response
+  }
+
+  getServicesByType = (options: GetServicesByTypeInput) => {
+    const response = useQuery<GetServicesByTypeResult, GetServicesByTypeInput>(
+      getServicesByType,
+      { ...options },
+      {
+        fetchPolicy: 'no-cache',
+        nextFetchPolicy: 'no-cache'
+      }
+    )
+    return response
+  }
+
+  upsertServiceType = () => {
+    const response = useMutation<upsertServiceTypeResult, upsertServiceTypeInput>(
+      upsertServiceType
+    )
+    return response
+  }
+
+  removeServiceType = () => {
+    const response = useMutation<upsertServiceTypeResult, ServiceType>(
+      removeServiceType
     )
     return response
   }

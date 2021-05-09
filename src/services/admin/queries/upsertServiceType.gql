@@ -1,0 +1,7 @@
+mutation upsertServiceType($insertInput: service_types_insert_input!) {
+  insert_service_types_one(object: $insertInput, on_conflict: {constraint: service_types_pkey, update_columns: [name, description, icon]}) {
+    createdAt
+    updatedAt
+    id
+  }
+}

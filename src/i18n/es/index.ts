@@ -60,6 +60,21 @@ export default {
   },
   newVersion: 'Nueva versión disponible. Actualice pulsando el botón',
   personalData: 'Datos personales',
+  remove: {
+    title: 'Eliminar',
+    question: '¿Seguro que queréis eliminar eso?',
+    confirm: 'Eliminado correctamente'
+  },
+  service: {
+    type: {
+      description: 'Descripción',
+      edit: 'Edita un tipo de servicio',
+      icon: 'Icono',
+      iconPre: 'Pon el nombre del icono. Los iconos disponibles los podéis encontrar en:',
+      iconHint: 'Per exemple "las la-school"',
+      name: 'Nombre'
+    }
+  },
   settings: 'Preferencias',
   settingsPage: {
     general: 'Preferencias generales',

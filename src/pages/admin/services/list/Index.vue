@@ -4,7 +4,7 @@
       <q-table
         class="content"
         :title="$t('table.serviceTypes')"
-        :rows="serviceTypes"
+        :rows="services"
         :columns="columns"
         @row-click="onRowClick"
         row-key="id"
@@ -32,20 +32,20 @@
       </q-table>
 
       <q-page-sticky position="bottom-right" :offset="[18, 18]">
-        <q-btn fab icon="add" color="primary" to="/admin/article/edit" />
+        <q-btn fab icon="add" color="primary" to="/admin/services/s/edit" />
       </q-page-sticky>
     </div>
   </q-page>
 </template>
 
 <script lang="ts">
-import { ref, reactive } from 'vue'
+import { ref, reactive, computed } from 'vue'
 import { i18n } from 'src/boot/i18n'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { cleanObject } from 'src/utilities/cleanObject'
 import { AdminService } from 'src/services/admin'
 import { formatDate } from 'src/utilities/formatDate'
-import { ServiceType } from 'src/models/Service'
+import { GetServicesByTypeInput, Service } from 'src/models/Service'
 
 export default {
   name: 'AdminBlog',
@@ -53,9 +53,11 @@ export default {
     const translate = i18n.global
     const router = useRouter()
     const adminService = new AdminService()
+    const route = useRoute()
 
     // Data
-    const serviceTypes = ref<ServiceType[]>([])
+    const services = ref<Service[]>([])
+    const id = computed(() => Number(route.params?.id))
     const filter = ref<string | null>(null)
     const pagination = ref({
       sortBy: 'createdAt',
@@ -89,14 +91,6 @@ export default {
         align: 'left',
         field: 'name',
         sortable: true
-      },
-      {
-        name: 'icon',
-        required: false,
-        label: '',
-        align: 'left',
-        field: 'icon',
-        sortable: false
       }
     ])
 
@@ -104,7 +98,7 @@ export default {
     const onRowClick = (evt, row) => {
       // console.log(row)
       const id = row.id
-      return router.push(`/admin/services/edit/${id}`)
+      return router.push(`/admin/service/edit/${id}`)
     }
 
     const limit = pagination.value.rowsPerPage === 0 ? pagination.value.rowsNumber : pagination.value.rowsPerPage
@@ -115,14 +109,15 @@ export default {
       limit,
       offset,
       orderBy,
-      filter: filter.value
+      filter: filter.value,
+      typeId: id.value
     }
-    const sanitizeVariables = cleanObject(variables)
-    const { result, onResult, loading, fetchMore } = adminService.getServiceTypes(sanitizeVariables)
+    const sanitizeVariables = cleanObject(variables) as unknown as GetServicesByTypeInput
+    const { result, onResult, loading, fetchMore } = adminService.getServicesByType(sanitizeVariables)
 
     onResult(() => {
-      serviceTypes.value = result.value?.service_types
-      pagination.value.rowsNumber = result.value?.service_types_aggregate?.aggregate?.count
+      services.value = result.value?.services
+      pagination.value.rowsNumber = result.value?.services_aggregate?.aggregate?.count
       // console.log('service_types', result.value?.service_types)
     })
 
@@ -143,32 +138,34 @@ export default {
         limit,
         offset,
         orderBy,
-        filter
+        filter,
+        typeId: id.value
       }
-      const sanitizeVariables = cleanObject(variables)
+      const sanitizeVariables = cleanObject(variables) as unknown as GetServicesByTypeInput
       // console.log(sanitizeVariables)
       const more = await fetchMore({
         variables: {
           ...sanitizeVariables
         }
       })
-      serviceTypes.value = more.data.service_types
+      services.value = more.data.services
       pagination.value.page = page
       pagination.value.rowsPerPage = rowsPerPage
       pagination.value.sortBy = sortBy
       pagination.value.descending = descending
-      pagination.value.rowsNumber = result.value?.service_types_aggregate?.aggregate?.count
+      pagination.value.rowsNumber = result.value?.services_aggregate?.aggregate?.count
       // console.log('pagination', pagination)
     }
 
     return {
-      serviceTypes,
+      services,
       pagination,
       columns,
       loading,
       filter,
       onRowClick,
-      onRequest
+      onRequest,
+      id
     }
   }
 

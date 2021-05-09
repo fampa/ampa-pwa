@@ -1,8 +1,8 @@
-import { Aggregate } from './QueryTable'
+import { Aggregate, QueryTableOptions } from './QueryTable'
 
 /* eslint-disable camelcase */
 export interface ServiceType {
-  id: number
+  id?: number
   name?: string
   description?: string
   icon?: string
@@ -38,4 +38,25 @@ export interface ServiceData {
 export interface GetServiceTypesData {
   service_types_aggregate: Aggregate
   service_types: ServiceType[]
+}
+
+export interface upsertServiceTypeResult {
+  insert_service_types_one: ServiceType
+}
+
+export interface upsertServiceTypeInput {
+  insertInput: ServiceType
+}
+
+export interface GetServiceTypeByID {
+  service_types_by_pk: ServiceType
+}
+
+export interface GetServicesByTypeResult {
+  services: Service[]
+  services_aggregate: Aggregate
+}
+
+export type GetServicesByTypeInput = QueryTableOptions & {
+  typeId: number
 }

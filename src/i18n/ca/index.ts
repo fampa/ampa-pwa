@@ -72,6 +72,21 @@ export default {
   },
   update: 'ACTUALITZA',
   updatedAt: 'Actualitzat el {date}',
+  remove: {
+    title: 'Eliminar',
+    question: 'Esteu segur que voleu eliminar això?',
+    confirm: 'Eliminat correctament'
+  },
+  service: {
+    type: {
+      description: 'Descripció',
+      edit: 'Edita un tipus de servei',
+      icon: 'Icona',
+      iconPre: 'Poseu el nom de la classe de la icona. Les icones disponibles les podeu trobar a:',
+      iconHint: 'Per exemple "las la-school"',
+      name: 'Nom'
+    }
+  },
   table: {
     date: 'Data',
     firstName: 'Nom',

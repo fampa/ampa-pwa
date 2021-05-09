@@ -52,7 +52,14 @@ const routes: RouteRecordRaw[] = [
       { path: 'family/edit/:id', component: () => import('pages/user/Family.vue') },
       { path: 'payment/edit/:id', component: () => import('pages/user/Payment.vue') },
       { path: 'pages', component: () => import('pages/admin/Pages.vue') },
-      { path: 'services', component: () => import('pages/admin/Services.vue') },
+      { path: 'services', component: () => import('pages/admin/services/Index.vue') },
+      {
+        path: 'services/edit/:id?',
+        component: () => import('pages/admin/services/Edit.vue'),
+        children: [
+          { path: '', component: () => import('pages/admin/services/list/Index.vue') }
+        ]
+      },
       { path: 'blog', component: () => import('pages/admin/Blog.vue') }
     ]
   },
