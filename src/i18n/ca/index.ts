@@ -54,8 +54,9 @@ export default {
     userDataNoticeBtn: 'Aneu a Dades Personals'
   },
   menu: {
-    YourData: 'LES TEUES DADES',
-    AmpaServices: 'ELS SERVEIS DE L\'AMPA'
+    AmpaServices: 'ELS SERVEIS DE L\'AMPA',
+    contact: 'Contacte',
+    YourData: 'LES TEUES DADES'
   },
   newVersion: 'Nova versió disponible. Actualitza polsant el botó',
   personalData: 'Dades personals',

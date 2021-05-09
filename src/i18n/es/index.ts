@@ -54,8 +54,9 @@ export default {
     userDataNoticeBtn: 'Ir a Datos Personales'
   },
   menu: {
-    YourData: 'TUS DATOS',
-    AmpaServices: 'LOS SERVICIOS DEL AMPA'
+    AmpaServices: 'LOS SERVICIOS DEL AMPA',
+    contact: 'Contacte',
+    YourData: 'TUS DATOS'
   },
   newVersion: 'Nueva versión disponible. Actualice pulsando el botón',
   personalData: 'Datos personales',

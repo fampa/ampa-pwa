@@ -1,22 +1,26 @@
 <template>
   <router-link class="card" :to="`/s/${service.id}/${slug}`">
     <q-card v-ripple>
+      <div class="img-container">
+          <q-img
+            :src="service.image"
+            class="image-placeholder"
+            fit="cover"
+          ></q-img>
+        </div>
       <q-card-section class="card-section">
-        <q-item>
-          <q-item-section avatar>
-              <q-icon
-                style="font-size: 4rem;"
-                :name="service.image ? service.image : service.type?.icon"
-              />
-          </q-item-section>
-
-          <q-item-section>
-            <q-item-label class="text-h6 titular">{{service.name}}</q-item-label>
-            <q-item-label caption>
-              {{service.description}}
-            </q-item-label>
-          </q-item-section>
-        </q-item>
+        <div class="text-h6 titular">
+          {{service.name}}
+          <q-tooltip>
+            {{service.name}}
+          </q-tooltip>
+        </div>
+        <div class="text-subtitle2 titular">
+          {{service.description}}
+          <q-tooltip>
+            {{service.description}}
+          </q-tooltip>
+        </div>
       </q-card-section>
     </q-card>
   </router-link>

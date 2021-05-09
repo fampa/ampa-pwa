@@ -82,6 +82,14 @@
             </q-item-section>
           </q-item>
         </div>
+        <q-item clickable v-ripple to="/contact" exact>
+            <q-item-section avatar>
+              <q-icon name="las la-envelope" />
+            </q-item-section>
+            <q-item-section>
+              {{$t('menu.contact')}}
+            </q-item-section>
+          </q-item>
         <div v-if="serviceItems">
           <q-separator />
             <q-item>
@@ -217,7 +225,7 @@ export default defineComponent({
       return [
         {
           title: translate.t('personalData'),
-          icon: 'las la-user',
+          icon: 'las la-id-card',
           to: '/user'
         },
         {
