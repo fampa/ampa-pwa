@@ -13,6 +13,16 @@ const routes: RouteRecordRaw[] = [
     children: [{ path: '', component: () => import('pages/Settings.vue') }]
   },
   {
+    path: '/privacy',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [{ path: '', component: () => import('src/pages/Privacy/Index.vue') }]
+  },
+  {
+    path: '/terms',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [{ path: '', component: () => import('src/pages/Terms/Index.vue') }]
+  },
+  {
     path: '/login',
     component: () => import('layouts/MainLayout.vue'),
     children: [{ path: '', component: () => import('pages/Login.vue') }]
