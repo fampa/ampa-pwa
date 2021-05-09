@@ -75,8 +75,11 @@ export default {
     date: 'Fecha',
     firstName: 'Nombre',
     lastName: 'Apellidos',
+    members: 'Miembros',
+    pages: 'Páginas',
     title: 'Título',
     search: 'Buscar',
+    serviceTypes: 'Tipos de servicios',
     status: 'Estado'
   }
 }

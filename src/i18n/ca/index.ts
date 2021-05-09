@@ -75,8 +75,11 @@ export default {
     date: 'Data',
     firstName: 'Nom',
     lastName: 'Cognoms',
+    members: 'Membres',
+    pages: 'Pàgines',
     title: 'Títol',
     search: 'Cerca',
+    serviceTypes: 'Tipus de serveis',
     status: 'Estat'
   }
 }

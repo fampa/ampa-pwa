@@ -3,7 +3,7 @@
     <div class="max-900">
       <q-table
         class="content"
-        title="Membres"
+        :title="$t('table.members')"
         :rows="members"
         :columns="columns"
         @row-click="onRowClick"

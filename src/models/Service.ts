@@ -1,3 +1,5 @@
+import { Aggregate } from './QueryTable'
+
 /* eslint-disable camelcase */
 export interface ServiceType {
   id: number
@@ -31,4 +33,9 @@ export interface ServicesData {
 
 export interface ServiceData {
   services_by_pk: Service
+}
+
+export interface GetServiceTypesData {
+  service_types_aggregate: Aggregate
+  service_types: ServiceType[]
 }
