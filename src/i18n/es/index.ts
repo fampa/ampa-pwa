@@ -5,6 +5,14 @@ export default {
     services: 'Gestión de servicios',
     blog: 'Gestión del blog'
   },
+  contact: {
+    email: 'Correo electrónico',
+    firstName: 'Nombre',
+    lastName: 'Apellidos',
+    message: 'Mensaje',
+    subject: 'Asunto',
+    title: 'Contacto'
+  },
   errorNetwork: 'No tienes conexión a internet',
   extraescolars: 'Extraescolares',
   family: {

@@ -1,13 +1,82 @@
 <template>
   <q-page padding class="bg-grey-2">
-    <h1 class="text-h4">{{$t('menu.contact')}}</h1>
-    WIP
+    <div class="max-600">
+      <h1 class="text-h4">{{$t('contact.title')}}</h1>
+      <q-form ref="memberForm" @submit.prevent="submitForm">
+        <q-input outlined v-model="contact.firstName" :label="$t('contact.firstName')" :rules="[val => !!val || $t('forms.required')]" />
+        <q-input outlined v-model="contact.lastName" :label="$t('contact.lastName')" />
+        <br>
+        <q-input type="email" outlined v-model="contact.email" :label="$t('contact.email')" :rules="[val => !!val || $t('forms.required')]" />
+        <q-input outlined v-model="contact.subject" :label="$t('contact.subject')" :rules="[val => !!val || $t('forms.required')]" />
+        <q-input type="textarea" outlined v-model="contact.message" :label="$t('contact.message')" :rules="[val => !!val || $t('forms.required')]" />
+        <br>
+        <q-btn :loading="loading" color="primary" type="submit">{{$t('forms.save')}}</q-btn>
+      </q-form>
+    </div>
   </q-page>
 </template>
 
 <script lang="ts">
+import { ref, computed } from 'vue'
+import { MembersService } from 'src/services/members'
+import { useStore } from 'src/services/store'
+import { useQuasar } from 'quasar'
+
 export default {
-  name: 'Contact'
+  name: 'ContactPage',
+  setup () {
+    const membersService = new MembersService()
+    const store = useStore()
+    const $q = useQuasar()
+    const userId = computed(() => store.state.user.user.uid)
+    // Data
+    const contact = ref({
+      firstName: '',
+      lastName: '',
+      email: '',
+      subject: '',
+      message: ''
+    })
+
+    const loading = ref(false)
+
+    // Methods
+    const { result, onResult } = membersService.getById(userId.value)
+    onResult(() => {
+      const user = result.value.members_by_pk
+      contact.value.firstName = user.firstName
+      contact.value.lastName = user.lastName
+      contact.value.email = user.email
+    })
+    const submitForm = async () => {
+      loading.value = true
+      const mailObj = {
+        name: `${contact.value.firstName} ${contact.value.lastName}`,
+        from: contact.value.email,
+        subject: contact.value.subject,
+        message: contact.value.message
+
+      }
+      await membersService.contact(mailObj)
+        .then(() => {
+          loading.value = false
+        })
+        .catch(err => {
+          console.error(err)
+          loading.value = false
+          $q.notify({
+            type: 'negative',
+            message: err.message
+          })
+        })
+    }
+
+    return {
+      contact,
+      submitForm,
+      loading
+    }
+  }
 
 }
 </script>

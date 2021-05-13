@@ -95,6 +95,13 @@ export class MembersService {
     return response
   }
 
+  contact = async (messageObj: Record<string, unknown>) => {
+    const endpoint = `${this.axiosEndpoint}/contact/`
+    const response = await axios
+      .post(endpoint, messageObj)
+    return response
+  }
+
   clearCache = async () => {
     await apolloClient.clearStore()
   }
