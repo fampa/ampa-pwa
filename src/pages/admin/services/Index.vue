@@ -40,17 +40,17 @@
 
 <script lang="ts">
 import { ref, reactive } from 'vue'
-import { i18n } from 'src/boot/i18n'
 import { useRouter } from 'vue-router'
 import { cleanObject } from 'src/utilities/cleanObject'
 import { AdminService } from 'src/services/admin'
 import { formatDate } from 'src/utilities/formatDate'
 import { ServiceType } from 'src/models/Service'
+import { useI18n } from 'vue-i18n'
 
 export default {
   name: 'AdminBlog',
   setup () {
-    const translate = i18n.global
+    const i18n = useI18n()
     const router = useRouter()
     const adminService = new AdminService()
 
@@ -76,7 +76,7 @@ export default {
       {
         name: 'createdAt',
         required: true,
-        label: translate.t('table.date'),
+        label: i18n.t('table.date'),
         align: 'left',
         field: 'createdAt',
         format: val => `${formatDate(val)}`,
@@ -85,7 +85,7 @@ export default {
       {
         name: 'name',
         required: true,
-        label: translate.t('table.firstName'),
+        label: i18n.t('table.firstName'),
         align: 'left',
         field: 'name',
         sortable: true

@@ -28,7 +28,7 @@ import { ServiceType } from 'src/models/Service'
 import { useRoute, useRouter } from 'vue-router'
 import { AdminService } from 'src/services/admin'
 import { useQuasar } from 'quasar'
-import { i18n } from 'src/boot/i18n'
+import { useI18n } from 'vue-i18n'
 
 export default {
   name: 'EditServiceType',
@@ -38,7 +38,7 @@ export default {
     const id = computed(() => Number(route.params?.id))
     const adminService = new AdminService()
     const $q = useQuasar()
-    const translate = i18n.global
+    const i18n = useI18n()
     // Data
     const loading = ref<boolean>(false)
     const serviceType = ref<ServiceType>({
@@ -65,22 +65,22 @@ export default {
     const submitForm = async () => {
       loading.value = loadingMutate.value
       await mutate({ insertInput: serviceType.value })
-      $q.notify(translate.t('forms.savedOk'))
+      $q.notify(i18n.t('forms.savedOk'))
       loading.value = false
       await router.replace('/admin/services')
     }
 
     const remove = () => {
       $q.dialog({
-        title: translate.t('remove.title'),
-        message: translate.t('remove.question'),
+        title: i18n.t('remove.title'),
+        message: i18n.t('remove.question'),
         cancel: true,
         persistent: true
       }).onOk(async () => {
         await removeServiceType({ id: id.value })
       }).onOk(async () => {
         // console.log('>>>> second OK catcher')
-        $q.notify(translate.t('remove.confirm'))
+        $q.notify(i18n.t('remove.confirm'))
         await router.replace('/admin/services')
       }).onCancel(() => {
         // console.log('>>>> Cancel')

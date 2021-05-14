@@ -35,7 +35,7 @@ import { Family } from 'src/models/Family'
 // import { cleanObject } from 'src/utilities/cleanObject'
 import { isValidIBAN } from 'ibantools'
 import { useQuasar } from 'quasar'
-import { i18n } from 'src/boot/i18n'
+import { useI18n } from 'vue-i18n'
 
 export default {
   name: 'PagePayment',
@@ -43,7 +43,7 @@ export default {
     const membersService = new MembersService()
     const route = useRoute()
     const $q = useQuasar()
-    const translate = i18n.global
+    const i18n = useI18n()
 
     const familyData = reactive<Family>({
       id: undefined,
@@ -75,7 +75,7 @@ export default {
 
     const updateIban = async () => {
       await mutate({ id: familyData.id, family: { iban: familyData.iban.replace(/\s/g, '') } })
-      $q.notify(translate.t('forms.savedOk'))
+      $q.notify(i18n.t('forms.savedOk'))
     }
 
     onError(() => {

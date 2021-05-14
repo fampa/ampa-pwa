@@ -27,9 +27,9 @@ import 'firebase/auth'
 import { validateSpanishId } from 'spain-id'
 import { Member } from 'src/models/Member'
 import { useQuasar } from 'quasar'
-import { i18n } from 'src/boot/i18n'
 import { cleanObject } from 'src/utilities/cleanObject'
 import { useStore } from 'src/services/store'
+import { useI18n } from 'vue-i18n'
 
 export default {
   name: 'PagePersonalData',
@@ -84,7 +84,7 @@ export default {
       data.family = member.value?.family
     })
 
-    const translate = i18n.global
+    const i18n = useI18n()
 
     const memberForm = ref<HTMLFormElement | null>(null)
 
@@ -100,7 +100,7 @@ export default {
           delete clean.family
           // console.log('form submitted', clean)
           await mutate({ id: data.id, member: clean })
-          $q.notify(translate.t('forms.savedOk'))
+          $q.notify(i18n.t('forms.savedOk'))
         } else {
           // oh no, user has filled in
           // at least one invalid value

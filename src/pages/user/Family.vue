@@ -85,16 +85,16 @@ import { Child, ChildrenData } from 'src/models/Child'
 import type { QForm } from 'quasar'
 import { Family } from 'src/models/Family'
 import { useQuasar } from 'quasar'
-import { i18n } from 'src/boot/i18n'
 import { cleanObject } from 'src/utilities/cleanObject'
 import { Member } from 'src/models/Member'
+import { useI18n } from 'vue-i18n'
 
 export default {
   name: 'PagePersonalData',
   setup () {
     // utilities and initializations
     const $q = useQuasar()
-    const translate = i18n.global
+    const i18n = useI18n()
     const membersService = new MembersService()
     const route = useRoute()
     const datePattern = /^-?[\d]+-[0-1]\d-[0-3]\d$/
@@ -177,12 +177,12 @@ export default {
       const { families, onResult: searchHasResult } = membersService.findFamily(name)
       searchHasResult(() => {
         const items = families.value?.map((family) => {
-          return { label: `${family.name || ''}. ${translate.t('member.children')}: ${family.children?.map((child) => child.firstName).toString() || ''}`, value: family.id }
+          return { label: `${family.name || ''}. ${i18n.t('member.children')}: ${family.children?.map((child) => child.firstName).toString() || ''}`, value: family.id }
         }) || []
-        items.push({ label: translate.t('forms.selectFamilyNew'), value: undefined })
+        items.push({ label: i18n.t('forms.selectFamilyNew'), value: undefined })
         $q.dialog({
-          title: translate.t('forms.selectFamily'),
-          message: translate.t('forms.selectFamilyMore'),
+          title: i18n.t('forms.selectFamily'),
+          message: i18n.t('forms.selectFamilyMore'),
           options: {
             type: 'radio',
             model: 'opt1',
@@ -223,7 +223,7 @@ export default {
       await mutateMember({ id: id.value, member: { ...variablesMember } })
       familyData.id = familyId
       await refetchMemberData()
-      $q.notify(translate.t('forms.savedOk'))
+      $q.notify(i18n.t('forms.savedOk'))
     }
 
     const requestFamilyJoin = async (familyId: number) => {
@@ -235,7 +235,7 @@ export default {
         await mutateMember({ id: id.value, member: { ...variables } })
         loading.value = false
         await refetchMemberData()
-        $q.notify(translate.t('forms.savedOk'))
+        $q.notify(i18n.t('forms.savedOk'))
       }
     }
 
@@ -249,7 +249,7 @@ export default {
           if (shouldUpdateFamilyName.value) {
             await upsertFamily()
           }
-          $q.notify(translate.t('forms.savedOk'))
+          $q.notify(i18n.t('forms.savedOk'))
         } else {
         // oh no, user has filled in
         // at least one invalid value
@@ -265,7 +265,7 @@ export default {
       await mutateMember({ id: id.value, member: { joinFamilyRequest: null } })
       loading.value = false
       await refetchMemberData()
-      $q.notify(translate.t('forms.savedOk'))
+      $q.notify(i18n.t('forms.savedOk'))
     }
 
     const rejectJoin = async () => {
@@ -273,7 +273,7 @@ export default {
       await mutateMember({ id: id.value, member: { joinFamilyRequest: null } })
       loading.value = false
       await refetchMemberData()
-      $q.notify(translate.t('forms.savedOk'))
+      $q.notify(i18n.t('forms.savedOk'))
     }
 
     const abortJoin = async () => {
@@ -281,7 +281,7 @@ export default {
       await mutateMember({ id: id.value, member: { hasRequestedJoinFamily: false } })
       loading.value = false
       await refetchMemberData()
-      $q.notify(translate.t('forms.savedOk'))
+      $q.notify(i18n.t('forms.savedOk'))
     }
 
     // Error handling

@@ -32,8 +32,8 @@ import { useQuasar } from 'quasar'
 import { ContentsService } from 'src/services/contents'
 import { useRoute } from 'vue-router'
 import { useStore } from 'src/services/store'
-import { i18n } from 'src/boot/i18n'
 import { Page } from 'src/models/Page'
+import { useI18n } from 'vue-i18n'
 
 export default defineComponent({
   name: 'PageDetails',
@@ -81,13 +81,13 @@ export default defineComponent({
         }
       })
 
-    const translate = i18n.global
+    const i18n = useI18n()
 
     onError(() => {
-      console.error(translate.t('errorNetwork'))
+      console.error(i18n.t('errorNetwork'))
       $q.notify({
         type: 'negative',
-        message: `${translate.t('errorNetwork')}? ${error}`
+        message: `${i18n.t('errorNetwork')}? ${error}`
       })
     })
 

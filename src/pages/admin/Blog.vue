@@ -43,11 +43,11 @@
 import { ref, reactive } from 'vue'
 import { Article } from 'src/models/Article'
 import { useStore } from 'src/services/store'
-import { i18n } from 'src/boot/i18n'
 import { useRouter } from 'vue-router'
 import { cleanObject } from 'src/utilities/cleanObject'
 import { AdminService } from 'src/services/admin'
 import { formatDate } from 'src/utilities/formatDate'
+import { useI18n } from 'vue-i18n'
 
 export default {
   name: 'AdminBlog',
@@ -55,7 +55,7 @@ export default {
     const store = useStore()
     const currentLanguage = store.state.settings.language
     const fallbackLanguage = store.state.settings.fallbackLanguage
-    const translate = i18n.global
+    const i18n = useI18n()
     const router = useRouter()
     const adminService = new AdminService()
 
@@ -81,7 +81,7 @@ export default {
       {
         name: 'createdAt',
         required: true,
-        label: translate.t('table.date'),
+        label: i18n.t('table.date'),
         align: 'left',
         field: 'createdAt',
         format: val => `${formatDate(val)}`,
@@ -90,7 +90,7 @@ export default {
       {
         name: 'title',
         required: true,
-        label: translate.t('table.title'),
+        label: i18n.t('table.title'),
         align: 'left',
         field: row => row.translations.find(t => t.language === currentLanguage).title || row.translations.find(t => t.language === fallbackLanguage).title,
         sortable: true
@@ -98,10 +98,10 @@ export default {
       {
         name: 'status',
         required: true,
-        label: translate.t('table.status'),
+        label: i18n.t('table.status'),
         align: 'left',
         field: 'status',
-        format: val => translate.t(`status.${val}`),
+        format: val => i18n.t(`status.${val}`),
         sortable: true
       }
     ])

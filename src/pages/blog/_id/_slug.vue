@@ -33,7 +33,7 @@ import { date, useQuasar } from 'quasar'
 import { ArticlesService } from 'src/services/articles'
 import { useRoute } from 'vue-router'
 import { useStore } from 'src/services/store'
-import { i18n } from 'src/boot/i18n'
+import { useI18n } from 'vue-i18n'
 
 export default defineComponent({
   name: 'NewsDetails',
@@ -65,13 +65,13 @@ export default defineComponent({
 
     const { article, loading, error, onError } = articlesService.getById(id.value)
 
-    const translate = i18n.global
+    const i18n = useI18n()
 
     onError(() => {
-      console.error(translate.t('errorNetwork'))
+      console.error(i18n.t('errorNetwork'))
       $q.notify({
         type: 'negative',
-        message: `${translate.t('errorNetwork')}? ${error}`
+        message: `${i18n.t('errorNetwork')}? ${error}`
       })
     })
 

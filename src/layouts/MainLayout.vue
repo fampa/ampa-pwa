@@ -148,16 +148,16 @@
 
 <script lang="ts">
 import { defineComponent, ref, computed, watch } from 'vue'
-import { i18n } from 'src/boot/i18n'
 import { useStore } from 'src/services/store'
 import { ContentsService } from 'src/services/contents'
 import { slugify } from 'src/utilities/slugify'
+import { useI18n } from 'vue-i18n'
 export default defineComponent({
   name: 'MainLayout',
 
   setup () {
     const leftDrawerOpen = ref(false)
-    const translate = i18n.global
+    const i18n = useI18n()
     const store = useStore()
     const contentsService = new ContentsService()
     const currentLanguage = computed(() => store.state.settings.language)
@@ -214,7 +214,7 @@ export default defineComponent({
     const items = computed(() => {
       return [
         {
-          title: translate.t('home'),
+          title: i18n.t('home'),
           icon: 'las la-home',
           to: '/'
         }
@@ -224,17 +224,17 @@ export default defineComponent({
     const userItems = computed(() => {
       return [
         {
-          title: translate.t('personalData'),
+          title: i18n.t('personalData'),
           icon: 'las la-id-card',
           to: '/user'
         },
         {
-          title: translate.t('member.familyData'),
+          title: i18n.t('member.familyData'),
           icon: 'las la-child',
           to: '/user/family'
         },
         {
-          title: translate.t('member.paymentData'),
+          title: i18n.t('member.paymentData'),
           icon: 'las la-money-check-alt',
           to: '/user/payment'
         }
@@ -244,22 +244,22 @@ export default defineComponent({
     const adminItems = computed(() => {
       return [
         {
-          title: translate.t('admin.users'),
+          title: i18n.t('admin.users'),
           icon: 'las la-users',
           to: '/admin/users'
         },
         {
-          title: translate.t('admin.pages'),
+          title: i18n.t('admin.pages'),
           icon: 'las la-file-alt',
           to: '/admin/pages'
         },
         {
-          title: translate.t('admin.services'),
+          title: i18n.t('admin.services'),
           icon: 'las la-list',
           to: '/admin/services'
         },
         {
-          title: translate.t('admin.blog'),
+          title: i18n.t('admin.blog'),
           icon: 'las la-rss',
           to: '/admin/blog'
         }

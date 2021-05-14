@@ -15,8 +15,8 @@ import { useRoute } from 'vue-router'
 import firebase from 'firebase/app'
 import { onMounted } from 'vue'
 import { useStore } from 'src/services/store'
-import { i18n } from 'src/boot/i18n'
 import * as FirebaseUi from 'firebaseui'
+import { useI18n } from 'vue-i18n'
 
 export default {
   name: 'PageLogin',
@@ -28,7 +28,7 @@ export default {
       // FirebaseUI config.
       const store = useStore()
       const locale = store.state.settings.language
-      const translate = i18n.global
+      const i18n = useI18n()
 
       let firebaseUILoader
 
@@ -54,15 +54,15 @@ export default {
           signInOptions: [
             {
               provider: firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-              fullLabel: translate.t('firebaseui.google')
+              fullLabel: i18n.t('firebaseui.google')
             },
             {
               provider: firebase.auth.EmailAuthProvider.PROVIDER_ID,
-              fullLabel: translate.t('firebaseui.email')
+              fullLabel: i18n.t('firebaseui.email')
             }
             // {
             //   provider: firebase.auth.PhoneAuthProvider.PROVIDER_ID,
-            //   fullLabel: translate.t('firebaseui.phone'),
+            //   fullLabel: i18n.t('firebaseui.phone'),
             //   defaultCountry: 'ES'
             // }
             // firebase.auth.FacebookAuthProvider.PROVIDER_ID,

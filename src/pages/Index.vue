@@ -52,9 +52,9 @@ import { defineComponent, watchEffect, reactive, ref } from 'vue'
 // import { useStore } from 'src/services/store'
 import NewsCard from 'components/NewsCard.vue'
 import { ArticlesService } from 'src/services/articles'
-// import { useQuasar } from 'quasar'
-import { i18n } from 'src/boot/i18n'
+import { useQuasar } from 'quasar'
 import { Article } from 'src/models/Article'
+import { useI18n } from 'vue-i18n'
 
 export default defineComponent({
   name: 'PageIndex',
@@ -63,8 +63,8 @@ export default defineComponent({
     const articlesService = new ArticlesService()
     const articles = ref<Article[] | null>(null)
     // const store = useStore()
-
-    const translate = i18n.global
+    const $q = useQuasar()
+    const i18n = useI18n()
 
     const data = reactive({
       page: 0,
@@ -89,12 +89,11 @@ export default defineComponent({
 
     watchEffect(() => {
       if (error.value) {
-        console.error(error, translate.t('errorNetwork'))
-        // const $q = useQuasar()
-        // $q.notify({
-        //   type: 'negative',
-        //   message: translate.t('errorNetwork')
-        // })
+        console.error(error, i18n.t('errorNetwork'))
+        $q.notify({
+          type: 'negative',
+          message: i18n.t('errorNetwork')
+        })
       }
     })
 
