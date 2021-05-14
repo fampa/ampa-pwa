@@ -71,7 +71,7 @@ export default {
       }
     })
 
-    const { member, loading, error, onResult } = membersService.getById(id.value)
+    const { member, loading, error, onResult, onError: onGetMemberError } = membersService.getById(id.value)
 
     onResult(() => {
       data.id = member.value?.id || ''
@@ -115,6 +115,8 @@ export default {
         message: updateMemberError.value.message
       })
     })
+
+    onGetMemberError(() => window.location.reload())
 
     return {
       ...toRefs(data),

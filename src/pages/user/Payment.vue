@@ -5,13 +5,13 @@
       <div v-if="loading">
         <q-skeleton height="50px" square />
       </div>
-      <q-banner v-else-if="!id" class="bg-red text-white">
+      <q-banner v-else-if="member && !id" class="bg-red text-white">
         {{$t('member.familyDataNotice')}}
         <template v-slot:action>
           <q-btn flat color="white" :label="$t('member.familyDataNoticeBtn')" :to="'/user/family'" />
         </template>
       </q-banner>
-      <div v-else>
+      <div v-else-if="member && id">
         <q-input mask="ES## #### #### #### #### ####" outlined v-model.trim="iban" label="IBAN" placeholder="ES" :rules="[val => !!val || $t('forms.required'), val => isValidIBAN(val.replace(/\s/g, '')) || $t('forms.validIBAN')]">
         </q-input>
         <p class="text-caption">
@@ -50,8 +50,8 @@ export default {
       iban: undefined
     })
 
-    const currentUserId = computed(() => {
-      return firebase.auth().currentUser?.uid
+    const user = computed(() => {
+      return firebase.auth().currentUser
     })
 
     const id = computed(() => {
@@ -59,11 +59,11 @@ export default {
       if (params) {
         return params
       } else {
-        return currentUserId.value || ''
+        return user.value?.uid
       }
     })
 
-    const { member, loading, onResult } = membersService.getById(id.value)
+    const { member, loading, onResult, onError: onGetMemberError } = membersService.getById(id.value)
     const { mutate, loading: mutateLoading, onError, error } = membersService.updateFamily()
 
     onResult(() => {
@@ -86,9 +86,12 @@ export default {
       })
     })
 
+    onGetMemberError(() => window.location.reload())
+
     return {
       loading,
       member,
+      user,
       ...toRefs(familyData),
       updateIban,
       isValidIBAN,
