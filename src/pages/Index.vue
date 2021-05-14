@@ -48,7 +48,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, watchEffect, reactive, ref } from 'vue'
+import { defineComponent, reactive, ref } from 'vue'
 // import { useStore } from 'src/services/store'
 import NewsCard from 'components/NewsCard.vue'
 import { ArticlesService } from 'src/services/articles'
@@ -71,7 +71,7 @@ export default defineComponent({
       pageSize: 6
     })
 
-    const { result, loading, error, fetchMore, onResult } = articlesService.getAll(data.page, data.pageSize)
+    const { result, loading, error, fetchMore, onResult, onError } = articlesService.getAll(data.page, data.pageSize)
 
     onResult(() => {
       articles.value = result.value.articles
@@ -87,20 +87,16 @@ export default defineComponent({
       })
     }
 
-    watchEffect(() => {
-      if (error.value) {
-        console.error(error)
-        $q.notify({
-          type: 'negative',
-          message: error.value.message
-        })
-      }
+    onError(() => {
+      $q.notify({
+        type: 'negative',
+        message: error.value.message
+      })
     })
 
     return {
       articles,
       loading,
-      error,
       onLoad
     }
   }
