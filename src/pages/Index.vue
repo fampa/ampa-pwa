@@ -54,7 +54,7 @@ import NewsCard from 'components/NewsCard.vue'
 import { ArticlesService } from 'src/services/articles'
 import { useQuasar } from 'quasar'
 import { Article } from 'src/models/Article'
-import { useI18n } from 'vue-i18n'
+// import { useI18n } from 'vue-i18n'
 
 export default defineComponent({
   name: 'PageIndex',
@@ -64,7 +64,7 @@ export default defineComponent({
     const articles = ref<Article[] | null>(null)
     // const store = useStore()
     const $q = useQuasar()
-    const i18n = useI18n()
+    // const i18n = useI18n()
 
     const data = reactive({
       page: 0,
@@ -89,10 +89,10 @@ export default defineComponent({
 
     watchEffect(() => {
       if (error.value) {
-        console.error(error, i18n.t('errorNetwork'))
+        console.error(error)
         $q.notify({
           type: 'negative',
-          message: i18n.t('errorNetwork')
+          message: error.value.message
         })
       }
     })
