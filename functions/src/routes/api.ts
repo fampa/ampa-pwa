@@ -132,7 +132,7 @@ appApi.post('/request/family-access', async (req: express.Request, res: express.
     const messageObj = {
       name: 'AMPA',
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      to: member.email || '',
+      to: [member.email],
       from: functions.config().env.smtp.username as string || '',
       subject: `${requester.email} ha sol·licitat accés a la app`,
       message: `
@@ -188,13 +188,18 @@ appApi.post('/resolve/family-access', async (req: express.Request, res: express.
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
 appApi.post('/contact', async (req: express.Request, res:express.Response /*, next:express.NextFunction */) => {
   const obj = req.body as MailObject
-  obj.to = functions.config().env.template.email
-
+  obj.to = [functions.config().env.template.email, obj.from]
+  obj.replyTo = obj.from
+  obj.from = `AMPA <${functions.config().env.template.email}>`
   obj.template = 'contact'
 
-  const result = await sendEmail(obj)
+  try {
+    const result = await sendEmail(obj)
 
-  functions.logger.info('Contact form sendEmail result:', result)
-
-  return res.json(result)
+    functions.logger.info('Contact form sendEmail result:', result)
+    return res.json(result)
+  } catch (error) {
+    functions.logger.error(error)
+    return res.status(500).json({ error })
+  }
 })

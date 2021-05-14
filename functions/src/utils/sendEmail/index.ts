@@ -7,10 +7,11 @@ import path from 'path'
 
 export interface MailObject {
   name: string,
-  to: string,
+  to: string | Array<string>,
   from: string,
   subject: string,
   message: string,
+  replyTo?: string,
   template?: string
 }
 
@@ -38,7 +39,7 @@ export async function sendEmail (obj: MailObject): Promise<Result> {
     viewEngine: {
       extname: '.hbs', // handlebars extension
       layoutsDir: path.resolve(__dirname, 'views/layout/'), // location of handlebars templates
-      defaultLayout: 'default', // name of main template
+      defaultLayout: false, // name of main template
       partialsDir: path.resolve(__dirname, 'views/partials/') // location of your subTemplates aka. header, footer etc
     },
     viewPath: path.resolve(__dirname, 'views/layout/'),
@@ -51,7 +52,7 @@ export async function sendEmail (obj: MailObject): Promise<Result> {
   const message = {
     from: obj.from, // Sender address
     to: obj.to,
-    replyTo: obj.to, // List of recipients
+    replyTo: obj.replyTo || obj.from, // List of recipients
     subject: obj.subject,
     // text: obj.message,
     // html: html
@@ -65,7 +66,10 @@ export async function sendEmail (obj: MailObject): Promise<Result> {
     }
   }
 
+  functions.logger.info('Contingut del missatge', message)
+
   return new Promise((resolve, reject) => {
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     transport.sendMail(message, function (err, info: string) {
       if (err) {
         functions.logger.error('error al enviar correu', err)

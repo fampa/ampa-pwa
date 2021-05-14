@@ -6,7 +6,7 @@
     "serve": "npm run build && firebase functions:config:get > .runtimeconfig.json && firebase emulators:start --only functions",
     "shell": "npm run build && firebase functions:shell",
     "start": "npm run shell",
-    "copy-files": "copyfiles -u 1 src/utils/sendEmail/views/**/*.* lib/functions/src",
+    "copy-files": "copyfiles -u 1 src/utils/sendEmail/views/**.* src/utils/sendEmail/views/**/**.* lib/functions/src",
     "deploy": "firebase deploy --only functions",
     "logs": "firebase functions:log"
   },
