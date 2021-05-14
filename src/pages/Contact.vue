@@ -21,6 +21,7 @@ import { ref, computed } from 'vue'
 import { MembersService } from 'src/services/members'
 import { useStore } from 'src/services/store'
 import { useQuasar } from 'quasar'
+import { useI18n } from 'vue-i18n'
 
 export default {
   name: 'ContactPage',
@@ -29,6 +30,8 @@ export default {
     const store = useStore()
     const $q = useQuasar()
     const userId = computed(() => store.state.user.user?.uid)
+    const i18n = useI18n()
+
     // Data
     const contact = ref({
       firstName: '',
@@ -63,6 +66,9 @@ export default {
       await membersService.contact(mailObj)
         .then(() => {
           loading.value = false
+          $q.notify({
+            message: i18n.t('contact.messageSent')
+          })
         })
         .catch(err => {
           console.error(err)

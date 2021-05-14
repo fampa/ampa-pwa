@@ -14,6 +14,10 @@ admin.initializeApp()
 import { updateClaims } from '../utils/customClaims'
 
 const whitelist = [functions.config().env.template.siteUrl]
+const dev = !!process.env.FUNCTIONS_EMULATOR
+if (dev) {
+  whitelist.push('http://localhost:8080')
+}
 const corsOptions = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   origin: function (origin: string, callback: any) {

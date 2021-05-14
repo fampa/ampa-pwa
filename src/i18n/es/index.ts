@@ -10,6 +10,7 @@ export default {
     firstName: 'Nombre',
     lastName: 'Apellidos',
     message: 'Mensaje',
+    messageSent: 'Mensaje enviado correctamente',
     subject: 'Asunto',
     title: 'Contacto'
   },
