@@ -188,7 +188,8 @@ appApi.post('/resolve/family-access', async (req: express.Request, res: express.
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
 appApi.post('/contact', async (req: express.Request, res:express.Response /*, next:express.NextFunction */) => {
   const obj = req.body as MailObject
-  obj.to = [functions.config().env.template.email, obj.from]
+  obj.to = functions.config().env.template.email
+  obj.bcc = obj.from
   obj.replyTo = obj.from
   obj.from = `AMPA <${functions.config().env.template.email}>`
   obj.template = 'contact'

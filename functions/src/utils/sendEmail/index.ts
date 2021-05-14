@@ -11,6 +11,7 @@ export interface MailObject {
   from: string,
   subject: string,
   message: string,
+  bcc?: string | Array<string>,
   replyTo?: string,
   template?: string
 }
@@ -53,13 +54,14 @@ export async function sendEmail (obj: MailObject): Promise<Result> {
     from: obj.from, // Sender address
     to: obj.to,
     replyTo: obj.replyTo || obj.from, // List of recipients
+    bcc: obj.bcc,
     subject: obj.subject,
     // text: obj.message,
     // html: html
     template: obj.template || 'default',
     context: {
       name: obj.name,
-      email: obj.to,
+      email: obj.from,
       subject: obj.subject,
       message: obj.message,
       templateVars: functions.config().env.template as Record<string, unknown>
