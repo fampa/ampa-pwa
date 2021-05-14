@@ -28,7 +28,7 @@ export default {
     const membersService = new MembersService()
     const store = useStore()
     const $q = useQuasar()
-    const userId = computed(() => store.state.user.user.uid)
+    const userId = computed(() => store.state.user.user?.uid)
     // Data
     const contact = ref({
       firstName: '',
@@ -41,20 +41,23 @@ export default {
     const loading = ref(false)
 
     // Methods
-    const { result, onResult } = membersService.getById(userId.value)
-    onResult(() => {
-      const user = result.value.members_by_pk
-      contact.value.firstName = user.firstName
-      contact.value.lastName = user.lastName
-      contact.value.email = user.email
-    })
+    if (userId.value) {
+      const { result, onResult } = membersService.getById(userId.value)
+      onResult(() => {
+        const user = result.value?.members_by_pk
+        contact.value.firstName = user.firstName
+        contact.value.lastName = user.lastName
+        contact.value.email = user.email
+      })
+    }
+
     const submitForm = async () => {
       loading.value = true
       const mailObj = {
-        name: `${contact.value.firstName} ${contact.value.lastName}`,
-        from: contact.value.email,
-        subject: contact.value.subject,
-        message: contact.value.message
+        name: `${contact.value?.firstName} ${contact.value?.lastName}`,
+        from: contact.value?.email,
+        subject: contact.value?.subject,
+        message: contact.value?.message
 
       }
       await membersService.contact(mailObj)
