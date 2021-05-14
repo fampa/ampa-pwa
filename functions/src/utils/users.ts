@@ -41,18 +41,13 @@ export const userCreated = async (user: admin.auth.UserRecord) => {
   const listUsers = await admin.auth().listUsers(2)
   const isNotTheFirst = listUsers.users.length > 1
 
-  let isAdmin = false
-
   if (isNotTheFirst) {
     functions.logger.log('isNotTheFirst', isNotTheFirst)
-    await updateClaims(user.uid)
+    await updateClaims(user.uid).then(async () => await addUser(user))
   } else {
     functions.logger.log('the first is admin!')
-    await updateClaims(user.uid, true)
-    isAdmin = true
+    await updateClaims(user.uid, true).then(async () => await addUser(user, true))
   }
-
-  await addUser(user, isAdmin)
 }
 
 export const userRemoved = async (user: admin.auth.UserRecord) => {
