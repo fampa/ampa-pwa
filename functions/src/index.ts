@@ -1,7 +1,7 @@
 import * as functions from 'firebase-functions'
 
 import { appApi } from './routes/api'
-import { userCreated } from './utils/users'
+import { userCreated, userRemoved } from './utils/users'
 
 // // Start writing Firebase Functions
 // // https://firebase.google.com/docs/functions/typescript
@@ -14,3 +14,5 @@ import { userCreated } from './utils/users'
 export const api: functions.HttpsFunction = functions.region('europe-west1').https.onRequest(appApi)
 
 export const onUserCreated: functions.HttpsFunction = functions.region('europe-west1').auth.user().onCreate(userCreated)
+
+export const onUserRemoved: functions.HttpsFunction = functions.region('europe-west1').auth.user().onDelete(userRemoved)
