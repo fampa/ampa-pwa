@@ -7,13 +7,13 @@ import express from 'express'
 import cors from 'cors'
 export const appApi: express.Application = express()
 import { Member } from '../../../src/models/Member'
-import { sendEmail } from '../utils/sendEmail'
+import { sendEmail, MailObject } from '../utils/sendEmail'
 
 admin.initializeApp()
 
 import { updateClaims } from '../utils/customClaims'
 
-const whitelist = [functions.config().env.template.siteUrl, 'http://localhost:3000', 'http://localhost:8080']
+const whitelist = [functions.config().env.template.siteUrl]
 const corsOptions = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   origin: function (origin: string, callback: any) {
@@ -179,4 +179,15 @@ appApi.post('/resolve/family-access', async (req: express.Request, res: express.
   } catch (error) {
     return next(error)
   }
+})
+
+appApi.post('/contact', (req: express.Request, res:express.Response /*, next:express.NextFunction */) => {
+  const obj = req.body as MailObject
+  obj.to = functions.config().env.template.email
+
+  obj.template = 'contact'
+
+  const result = sendEmail(obj)
+
+  return res.json(result)
 })
