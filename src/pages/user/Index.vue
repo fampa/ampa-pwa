@@ -10,7 +10,8 @@
         <q-input outlined v-model="phone" type="tel" :label="$t('member.phone')" :rules="[val => !!val || $t('forms.required'), val => !!phonePattern.test(val) || $t('forms.validPhone')]" />
         <q-btn :loading="updateMemberLoading" color="primary" type="submit">{{$t('forms.save')}}</q-btn>
       </q-form>
-      <div v-if="isAdmin" class="q-gutter-md">
+
+      <div v-if="isAdmin && $route.params?.id" class="q-gutter-md">
         <q-btn color="accent" :label="$t('member.familyData')" :to="`/admin/family/edit/${id}`" />
         <q-btn color="accent" :label="$t('member.paymentData')" :to="`/admin/payment/edit/${id}`" />
       </div>
