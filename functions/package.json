@@ -1,8 +1,9 @@
 {
   "name": "functions",
   "scripts": {
+    "prebuild": "firebase functions:config:set env=\"$(cat env.json)\"",
     "build": "rm -rf lib && tsc && yarn copy-files",
-    "serve": "firebase functions:config:get > .runtimeconfig.json && npm run build && firebase emulators:start --only functions",
+    "serve": "npm run build && firebase functions:config:get > .runtimeconfig.json && firebase emulators:start --only functions",
     "shell": "npm run build && firebase functions:shell",
     "start": "npm run shell",
     "copy-files": "copyfiles -u 1 src/utils/sendEmail/views/**/*.* lib/functions/src",

@@ -185,13 +185,16 @@ appApi.post('/resolve/family-access', async (req: express.Request, res: express.
   }
 })
 
-appApi.post('/contact', (req: express.Request, res:express.Response /*, next:express.NextFunction */) => {
+// eslint-disable-next-line @typescript-eslint/no-misused-promises
+appApi.post('/contact', async (req: express.Request, res:express.Response /*, next:express.NextFunction */) => {
   const obj = req.body as MailObject
   obj.to = functions.config().env.template.email
 
   obj.template = 'contact'
 
-  const result = sendEmail(obj)
+  const result = await sendEmail(obj)
+
+  functions.logger.info('Contact form sendEmail result:', result)
 
   return res.json(result)
 })
