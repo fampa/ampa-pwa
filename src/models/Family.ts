@@ -28,6 +28,6 @@ export interface FindFamilyVars {
   name: string
 }
 
-export interface FamiliesData {
-  families: Family[]
+export interface FamilySearchData {
+  search_families: Family[]
 }

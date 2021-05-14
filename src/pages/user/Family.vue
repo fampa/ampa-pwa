@@ -5,7 +5,7 @@
       <div v-if="!member && isLoading">
         <q-skeleton height="50px" square />
       </div>
-      <q-banner v-else-if="!nif" class="bg-red text-white">
+      <q-banner v-else-if="user && !nif" class="bg-red text-white">
         {{$t('member.userDataNotice')}}
         <template v-slot:action>
           <q-btn flat color="white" :label="$t('member.userDataNoticeBtn')" :to="'/user'" />
@@ -88,6 +88,7 @@ import { useQuasar } from 'quasar'
 import { cleanObject } from 'src/utilities/cleanObject'
 import { Member } from 'src/models/Member'
 import { useI18n } from 'vue-i18n'
+import { useStore } from 'src/services/store'
 
 export default {
   name: 'PagePersonalData',
@@ -97,6 +98,8 @@ export default {
     const i18n = useI18n()
     const membersService = new MembersService()
     const route = useRoute()
+    const store = useStore()
+    const user = computed(() => store.state.user.user)
     const datePattern = /^-?[\d]+-[0-1]\d-[0-3]\d$/
 
     // Reactive data
@@ -138,7 +141,7 @@ export default {
     //
     // load data
     //
-    const { member, loading, error, onResult, refetch: refetchMemberData } = membersService.getById(id.value)
+    const { member, loading, error, onError, onResult, refetch: refetchMemberData } = membersService.getById(id.value)
 
     onResult(() => {
       familyData.id = member.value?.familyId
@@ -174,8 +177,9 @@ export default {
     }
 
     const searchFamily = (name: string) => {
-      const { families, onResult: searchHasResult } = membersService.findFamily(name)
+      const { families, onResult: searchHasResult } = membersService.searchFamily(name)
       searchHasResult(() => {
+        if (!user.value) return
         const items = families.value?.map((family) => {
           return { label: `${family.name || ''}. ${i18n.t('member.children')}: ${family.children?.map((child) => child.firstName).toString() || ''}`, value: family.id }
         }) || []
@@ -322,12 +326,15 @@ export default {
         }
       })
 
+    onError(() => window.location.reload())
+
     return {
       member,
       ...toRefs(childrenData),
       ...toRefs(familyData),
       ...toRefs(memberData),
       addChild,
+      user,
       datePattern,
       error,
       submitForm,

@@ -1,0 +1,11 @@
+query searchFamilies($name: String!) {
+  search_families(args: {search: $name}) {
+    id
+    name
+    ownerId
+    children {
+      firstName
+    }
+  }
+}
+
