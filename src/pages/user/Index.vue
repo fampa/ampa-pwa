@@ -34,7 +34,7 @@
 <script lang="ts">
 import { useRoute } from 'vue-router'
 import { MembersService } from 'src/services/members'
-import { computed, ref, reactive, toRefs } from 'vue'
+import { computed, ref, reactive, toRefs, onMounted } from 'vue'
 import firebase from 'firebase/app'
 import 'firebase/auth'
 import { validateSpanishId } from 'spain-id'
@@ -60,6 +60,7 @@ export default {
     })
 
     const store = useStore()
+
     const admin = computed(() => store.state.user.isAdmin)
 
     const $q = useQuasar()
@@ -85,18 +86,22 @@ export default {
       }
     })
 
-    const { member, loading, error, onResult, onError: onGetMemberError } = membersService.getById(id.value)
+    onMounted(() => {
+      const { member, onResult, onError } = membersService.getById(id.value)
 
-    onResult(() => {
-      data.id = member.value?.id || ''
-      data.firstName = member.value?.firstName || data.firstName
-      data.lastName = member.value?.lastName || data.lastName
-      data.nif = member.value?.nif || ''
-      data.email = member.value?.email || ''
-      data.phone = member.value?.phone || ''
-      data.familyId = member.value?.familyId
-      data.family = member.value?.family
-      data.isAdmin = member.value?.isAdmin
+      onResult(() => {
+        data.id = member.value?.id || ''
+        data.firstName = member.value?.firstName || data.firstName
+        data.lastName = member.value?.lastName || data.lastName
+        data.nif = member.value?.nif || ''
+        data.email = member.value?.email || ''
+        data.phone = member.value?.phone || ''
+        data.familyId = member.value?.familyId
+        data.family = member.value?.family
+        data.isAdmin = member.value?.isAdmin
+      })
+
+      onError(() => window.location.reload())
     })
 
     const i18n = useI18n()
@@ -131,8 +136,6 @@ export default {
       })
     })
 
-    onGetMemberError(() => window.location.reload())
-
     const makeAdminLoading = ref<boolean>(false)
 
     const makeAdmin = () => {
@@ -157,8 +160,6 @@ export default {
 
     return {
       ...toRefs(data),
-      loading,
-      error,
       submitForm,
       emailPattern,
       phonePattern,

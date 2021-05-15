@@ -114,6 +114,15 @@ export class MembersService {
     return response
   }
 
+  getCurrentUser = () => {
+    return new Promise((resolve, reject) => {
+      const unsubscribe = firebase.auth().onAuthStateChanged(user => {
+        unsubscribe()
+        resolve(user)
+      }, reject)
+    })
+  }
+
   clearCache = async () => {
     await apolloClient.clearStore()
   }

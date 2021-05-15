@@ -152,6 +152,7 @@ import { useStore } from 'src/services/store'
 import { ContentsService } from 'src/services/contents'
 import { slugify } from 'src/utilities/slugify'
 import { useI18n } from 'vue-i18n'
+
 export default defineComponent({
   name: 'MainLayout',
 
@@ -162,7 +163,6 @@ export default defineComponent({
     const contentsService = new ContentsService()
     const currentLanguage = computed(() => store.state.settings.language)
     const fallbackLanguage = computed(() => store.state.settings.fallbackLanguage)
-
     const user = computed(() => {
       return store.state.user.user
     })

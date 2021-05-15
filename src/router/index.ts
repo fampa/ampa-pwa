@@ -53,8 +53,8 @@ export default route<StateInterface>(function (/* { store } */) {
       if (requireAuth || requireScope) {
         if (!user) { // there is no user
           return next({ path: '/login', query: { next: to.fullPath } })
-        } else if (!user.emailVerified && to.path !== '/verifyEmail' && to.path !== '/completeAccount') {
-          return next('/verifyEmail')
+        // } else if (!user.emailVerified && to.path !== '/verifyEmail' && to.path !== '/completeAccount') {
+        //   return next('/verifyEmail')
         } else { // there is user. Let's check permissions
           if (requireScope) {
             const permissionRequired = to.matched.find(record => record.meta.requiresScope)?.meta.requiresScope as string
