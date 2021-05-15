@@ -8,6 +8,8 @@ import cors from 'cors'
 export const appApi: express.Application = express()
 import { Member } from '../../../src/models/Member'
 import { sendEmail, MailObject } from '../utils/sendEmail'
+import { validateFirebaseIdToken } from '../utils/validateFirebaseToken'
+import cookieParser from 'cookie-parser'
 
 admin.initializeApp()
 
@@ -30,6 +32,8 @@ const corsOptions = {
   }
 } as cors.CorsOptions
 appApi.use(cors(corsOptions))
+appApi.use(cookieParser())
+appApi.use('/admin', validateFirebaseIdToken)
 
 appApi.post('/refresh-token', (req: express.Request, res: express.Response) => {
   const user = req.body as admin.auth.UserRecord
@@ -72,16 +76,15 @@ appApi.post('/refresh-token', (req: express.Request, res: express.Response) => {
     })
 })
 
-appApi.post('/webhook/change-claims', (req: express.Request, res: express.Response) => {
-  const response = async () => {
-    const user = req.body.new as Member
-    const isAdmin = !!user.isAdmin
-    const id = user.id?.toString() || ''
-    await updateClaims(id, isAdmin)
-    console.log(`user ${user.email || ''} admin state:`, isAdmin)
-    res.json({ data: { isAdmin: isAdmin } })
-  }
-  return response
+// eslint-disable-next-line @typescript-eslint/no-misused-promises
+appApi.post('/admin/change-claims', async (req: express.Request, res: express.Response) => {
+  const member = req.body.member as Member
+  functions.logger.info('changing admin privileges of', member)
+  const isAdmin = !member.isAdmin
+  const id = member.id
+  await updateClaims(id, isAdmin)
+  functions.logger.info(`member ${member.email} admin state:`, isAdmin)
+  return res.json({ isAdmin: isAdmin })
 })
 
 // eslint-disable-next-line @typescript-eslint/no-misused-promises

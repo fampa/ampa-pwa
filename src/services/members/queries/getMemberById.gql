@@ -9,6 +9,7 @@ query memberById($id: String!) {
     familyId
     hasRequestedJoinFamily
     joinFamilyRequest
+    isAdmin
     family {
       id
       name

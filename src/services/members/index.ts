@@ -6,6 +6,8 @@ import upsertFamily from 'src/services/members/queries/upsertFamily.gql'
 import updateChildren from 'src/services/members/queries/updateChildren.gql'
 import searchFamilies from 'src/services/members/queries/searchFamilies.gql'
 import updateFamily from 'src/services/members/queries/updateFamily.gql'
+import firebase from 'firebase/app'
+import 'firebase/auth'
 
 import { MemberData, MembersData, MemberVars, MembersVars, Member } from 'src/models/Member'
 import { apolloClient } from 'src/boot/apollo'
@@ -101,6 +103,15 @@ export class MembersService {
     )
     const families = useResult(response.result, null, data => data.search_families)
     return { families, ...response }
+  }
+
+  makeAdmin = async (member: Member) => {
+    const token = await firebase.auth().currentUser.getIdToken()
+    const data = { member }
+    const endpoint = `${this.axiosEndpoint}/admin/change-claims/`
+    const response = await axios
+      .post(endpoint, data, { headers: { authorization: `Bearer ${token}` } })
+    return response
   }
 
   clearCache = async () => {

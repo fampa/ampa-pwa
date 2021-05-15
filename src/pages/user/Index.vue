@@ -1,7 +1,12 @@
 <template>
   <q-page padding class="bg-grey-2">
     <div class="q-gutter-md max-600" v-if="id">
-      <h1 class="text-h4">{{$t('personalData')}}</h1>
+      <h1 class="text-h4">
+        {{$t('personalData')}}
+        <q-badge v-if="isAdmin" color="red">
+            ADMIN
+        </q-badge>
+      </h1>
       <q-form ref="memberForm" @submit.prevent="submitForm">
         <q-input outlined v-model="firstName" :label="$t('member.firstName')" :rules="[val => !!val || $t('forms.required')]" />
         <q-input outlined v-model="lastName" :label="$t('member.lastName')" :rules="[val => !!val || $t('forms.required')]" />
@@ -11,9 +16,16 @@
         <q-btn :loading="updateMemberLoading" color="primary" type="submit">{{$t('forms.save')}}</q-btn>
       </q-form>
 
-      <div v-if="isAdmin && $route.params?.id" class="q-gutter-md">
-        <q-btn color="accent" :label="$t('member.familyData')" :to="`/admin/family/edit/${id}`" />
-        <q-btn color="accent" :label="$t('member.paymentData')" :to="`/admin/payment/edit/${id}`" />
+      <div v-if="admin && $route.params?.id">
+        <h2 class="text-h5">ADMIN</h2>
+        <div class="q-gutter-md">
+          <q-btn color="accent" :label="$t('member.familyData')" :to="`/admin/family/edit/${id}`" />
+          <q-btn color="accent" :label="$t('member.paymentData')" :to="`/admin/payment/edit/${id}`" />
+        </div>
+        <br>
+        <div class="q-gutter-md">
+          <q-btn color="red" :label="isAdmin ? $t('member.removeAdmin') : $t('member.addAdmin')" @click="makeAdmin" :loading="makeAdminLoading" />
+        </div>
       </div>
     </div>
   </q-page>
@@ -43,11 +55,12 @@ export default {
       email: '',
       phone: '',
       familyId: undefined,
-      family: undefined
+      family: undefined,
+      isAdmin: false
     })
 
     const store = useStore()
-    const isAdmin = computed(() => store.state.user.isAdmin)
+    const admin = computed(() => store.state.user.isAdmin)
 
     const $q = useQuasar()
 
@@ -83,6 +96,7 @@ export default {
       data.phone = member.value?.phone || ''
       data.familyId = member.value?.familyId
       data.family = member.value?.family
+      data.isAdmin = member.value?.isAdmin
     })
 
     const i18n = useI18n()
@@ -119,6 +133,28 @@ export default {
 
     onGetMemberError(() => window.location.reload())
 
+    const makeAdminLoading = ref<boolean>(false)
+
+    const makeAdmin = () => {
+      makeAdminLoading.value = true
+      const result = membersService.makeAdmin(data)
+      result
+        .then((res) => {
+          makeAdminLoading.value = false
+          // console.log(res)
+          data.isAdmin = res.data?.isAdmin
+          $q.notify(i18n.t('forms.savedOk'))
+        })
+        .catch((err) => {
+          makeAdminLoading.value = false
+          $q.notify({
+            type: 'negative',
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+            message: err.message
+          })
+        })
+    }
+
     return {
       ...toRefs(data),
       loading,
@@ -130,7 +166,9 @@ export default {
       memberForm,
       updateMemberLoading,
       updateMemberError,
-      isAdmin
+      admin,
+      makeAdmin,
+      makeAdminLoading
     }
   }
 }

@@ -48,6 +48,7 @@ export default {
   login: 'Entrar',
   logout: 'Salir',
   member: {
+    addAdmin: 'Añador admin',
     birthDate: 'Fecha de nacimiento',
     children: 'Hijos/as',
     familyData: 'Datos familiares',
@@ -59,6 +60,7 @@ export default {
     email: 'Correo electrónico',
     phone: 'Teléfono',
     paymentData: 'Datos de domiciliación',
+    removeAdmin: 'Quitar admin',
     userDataNotice: 'Cumplimenta primero los datos personales',
     userDataNoticeBtn: 'Ir a Datos Personales'
   },

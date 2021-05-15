@@ -48,6 +48,7 @@ export default {
   login: 'Entrar',
   logout: 'Eixir',
   member: {
+    addAdmin: 'Afegir admin',
     birthDate: 'Data de naixement',
     children: 'Fills/es',
     familyData: 'Dades familiars',
@@ -58,6 +59,7 @@ export default {
     lastName: 'Cognoms',
     email: 'Correu electrònic',
     phone: 'Telèfon',
+    removeAdmin: 'Llevar admin',
     paymentData: 'Dades de domiciliació',
     userDataNotice: 'Omple primer les dades personals',
     userDataNoticeBtn: 'Aneu a Dades Personals'
