@@ -6,7 +6,8 @@
         <q-input outlined v-model="contact.firstName" :label="$t('contact.firstName')" :rules="[val => !!val || $t('forms.required')]" />
         <q-input outlined v-model="contact.lastName" :label="$t('contact.lastName')" />
         <br>
-        <q-input type="email" outlined v-model="contact.email" :label="$t('contact.email')" :rules="[val => !!val || $t('forms.required')]" />
+        <q-input type="email" outlined v-model="contact.email" :label="$t('contact.email')" :rules="[val => !!val || $t('forms.required'),  val => validateEmail(val) || $t('forms.validEmail')]" />
+        <q-input type="phone" outlined v-model="contact.phone" :label="$t('contact.phone')" :rules="[val => (val === '' || validatePhone(val)) || $t('forms.validPhone')]" />
         <q-input outlined v-model="contact.subject" :label="$t('contact.subject')" :rules="[val => !!val || $t('forms.required')]" />
         <q-input type="textarea" outlined v-model="contact.message" :label="$t('contact.message')" :rules="[val => !!val || $t('forms.required')]" />
         <br>
@@ -22,6 +23,7 @@ import { MembersService } from 'src/services/members'
 import { useStore } from 'src/services/store'
 import { useQuasar } from 'quasar'
 import { useI18n } from 'vue-i18n'
+import { validatePhone, validateEmail } from 'src/utilities/validations'
 
 export default {
   name: 'ContactPage',
@@ -37,6 +39,7 @@ export default {
       firstName: '',
       lastName: '',
       email: '',
+      phone: '',
       subject: '',
       message: ''
     })
@@ -51,6 +54,7 @@ export default {
         contact.value.firstName = user.firstName
         contact.value.lastName = user.lastName
         contact.value.email = user.email
+        contact.value.phone = user.phone
       })
     }
 
@@ -59,6 +63,7 @@ export default {
       const mailObj = {
         name: `${contact.value?.firstName} ${contact.value?.lastName}`,
         from: contact.value?.email,
+        phone: contact.value?.phone,
         subject: contact.value?.subject,
         message: contact.value?.message
 
@@ -82,6 +87,8 @@ export default {
 
     return {
       contact,
+      validatePhone,
+      validateEmail,
       submitForm,
       loading
     }

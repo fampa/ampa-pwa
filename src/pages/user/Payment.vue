@@ -12,7 +12,7 @@
         </template>
       </q-banner>
       <div v-else-if="member && id">
-        <q-input mask="ES## #### #### #### #### ####" outlined v-model.trim="iban" label="IBAN" placeholder="ES" :rules="[val => !!val || $t('forms.required'), val => isValidIBAN(val.replace(/\s/g, '')) || $t('forms.validIBAN')]">
+        <q-input mask="ES## #### #### #### #### ####" outlined v-model.trim="iban" label="IBAN" placeholder="ES" :rules="[val => !!val || $t('forms.required'), val => validateIban(val.replace(/\s/g, '')) || $t('forms.validIBAN')]">
         </q-input>
         <p class="text-caption">
           {{$t('forms.ibanNotice')}}
@@ -33,9 +33,9 @@ import firebase from 'firebase/app'
 import 'firebase/auth'
 import { Family } from 'src/models/Family'
 // import { cleanObject } from 'src/utilities/cleanObject'
-import { isValidIBAN } from 'ibantools'
 import { useQuasar } from 'quasar'
 import { useI18n } from 'vue-i18n'
+import { validateIban } from 'src/utilities/validations'
 
 export default {
   name: 'PagePayment',
@@ -94,7 +94,7 @@ export default {
       user,
       ...toRefs(familyData),
       updateIban,
-      isValidIBAN,
+      validateIban,
       mutateLoading
     }
   }

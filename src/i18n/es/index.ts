@@ -11,6 +11,7 @@ export default {
     lastName: 'Apellidos',
     message: 'Mensaje',
     messageSent: 'Mensaje enviado correctamente',
+    phone: 'Teléfono',
     subject: 'Asunto',
     title: 'Contacto'
   },

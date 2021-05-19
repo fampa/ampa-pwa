@@ -11,6 +11,7 @@ export default {
     lastName: 'Cognoms',
     message: 'Missatge',
     messageSent: 'Missatge enviat correctament',
+    phone: 'Telèfon',
     subject: 'Assumpte',
     title: 'Contacte'
   },
