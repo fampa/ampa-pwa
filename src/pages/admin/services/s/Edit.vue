@@ -16,13 +16,21 @@
         <br>
         <q-btn :loading="loading" color="primary" type="submit">{{$t('forms.save')}}</q-btn> <q-btn v-if="id" color="red" class="float-right" :label="$t('remove.title')" @click="remove" />
       </q-form>
-      <router-view v-if="id"></router-view>
+
+      <div id="participants">
+        <h2 class="text-h5">{{$t('service.edit.participants')}}</h2>
+        <ul>
+          <li v-for="(participant, index) in service.participants" :key="index">
+            {{participant.child.firstName}} {{participant.child.lastName}} ({{participant.child.birthDate}}) <q-btn flat round color="red" icon="las la-trash" @click="unJoin(participant.child.id)" />
+          </li>
+        </ul>
+      </div>
     </div>
   </q-page>
 </template>
 
 <script lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { Service } from 'src/models/Service'
 import { useRoute, useRouter } from 'vue-router'
 import { AdminService } from 'src/services/admin'
@@ -37,9 +45,9 @@ export default {
     const router = useRouter()
     const id = computed(() => Number(route.params?.id))
     const adminService = new AdminService()
-    const contentsService = new ContentsService()
     const $q = useQuasar()
     const i18n = useI18n()
+    const contentsService = new ContentsService()
     // Data
     const loading = ref<boolean>(false)
     const service = ref<Service>({
@@ -49,6 +57,7 @@ export default {
       typeId: null,
       image: null,
       spots: 0,
+      participants: null,
       price: null,
       periodicity: null,
       isAvailable: false
@@ -58,9 +67,8 @@ export default {
 
     const { mutate, loading: loadingMutate } = adminService.upsertService()
     const { mutate: removeService } = adminService.removeService()
-
-    if (id.value) {
-      const { result, loading: loadingGet, onResult } = contentsService.getServiceById(id.value)
+    const { result, loading: loadingGet, onResult, refetch: refetchService } = adminService.getServiceById(id.value)
+    const getService = () => {
       loading.value = loadingGet.value
       onResult(() => {
         service.value.id = result.value?.services_by_pk?.id
@@ -72,10 +80,15 @@ export default {
         service.value.periodicity = result.value?.services_by_pk?.periodicity
         service.value.spots = Number(result.value?.services_by_pk?.spots)
         service.value.isAvailable = result.value?.services_by_pk?.isAvailable
+        service.value.participants = result.value?.services_by_pk?.participants
 
         loading.value = false
       })
     }
+
+    onMounted(() => {
+      getService()
+    })
 
     // Methods
     const submitForm = async () => {
@@ -105,13 +118,48 @@ export default {
       })
     }
 
+    const { mutate: unJoinMutation } = contentsService.unJoinService()
+
+    const unJoin = (childId: number) => {
+      console.log('removed', childId)
+      loading.value = true
+      $q.dialog({
+        title: i18n.t('remove.title'),
+        message: i18n.t('remove.question'),
+        cancel: true,
+        persistent: true
+      }).onOk(async () => {
+        await unJoinMutation({
+          childId,
+          serviceId: id.value
+        })
+          .then(async () => {
+            await refetchService()
+            loading.value = false
+          })
+          .catch(err => {
+            console.error(err)
+            loading.value = false
+          })
+      }).onOk(() => {
+        // console.log('>>>> second OK catcher')
+        $q.notify(i18n.t('remove.confirm'))
+        // await router.replace(`/admin/services/edit/${service.value?.typeId}`)
+      }).onCancel(() => {
+        // console.log('>>>> Cancel')
+      }).onDismiss(() => {
+        // console.log('I am triggered on both OK and Cancel')
+      })
+    }
+
     return {
       service,
       submitForm,
       loading,
       id,
       remove,
-      periodicityOptions
+      periodicityOptions,
+      unJoin
     }
   }
 

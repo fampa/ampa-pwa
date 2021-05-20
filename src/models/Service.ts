@@ -1,3 +1,4 @@
+import { Child } from './Child'
 import { Aggregate, QueryTableOptions } from './QueryTable'
 
 /* eslint-disable camelcase */
@@ -10,6 +11,12 @@ export interface ServiceType {
   updatedAt?: Date
 }
 
+export interface Participant {
+  childId?: number
+  serviceId?: number,
+  child?: Child
+}
+
 export interface Service {
   id: number
   type?: ServiceType
@@ -20,7 +27,7 @@ export interface Service {
   periodicity?: string
   price?: number
   spots?: number
-  participants?: Record<string, unknown>[]
+  participants?: Participant[]
   isAvailable?: boolean
   createdAt?: Date
   updatedAt?: Date

@@ -9,11 +9,12 @@ import upsertServiceType from './queries/upsertServiceType.gql'
 import removeServiceType from './queries/removeServiceType.gql'
 import removeService from './queries/removeService.gql'
 import getServicesByType from './queries/getServicesByType.gql'
+import getServiceById from './queries/getServiceById.gql'
 import { GetArticlesData } from 'src/models/Article'
 import { QueryTableOptions } from 'src/models/QueryTable'
 import { GetMembersData } from 'src/models/Member'
 import { GetPagesData } from 'src/models/Page'
-import { Service, GetServiceTypeByID, GetServiceTypesData, ServiceType, upsertServiceTypeResult, upsertServiceTypeInput, GetServicesByTypeResult, GetServicesByTypeInput, upsertServiceResult, upsertServiceInput } from 'src/models/Service'
+import { Service, ServiceData, GetServiceTypeByID, GetServiceTypesData, ServiceType, upsertServiceTypeResult, upsertServiceTypeInput, GetServicesByTypeResult, GetServicesByTypeInput, upsertServiceResult, upsertServiceInput } from 'src/models/Service'
 
 export class AdminService {
   getArticles = (options: QueryTableOptions) => {
@@ -113,6 +114,15 @@ export class AdminService {
     const response = useMutation<upsertServiceResult, Service>(
       removeService
     )
+    return response
+  }
+
+  getServiceById = (id: number) => {
+    const response = useQuery<ServiceData>(
+      getServiceById,
+      { id }
+    )
+
     return response
   }
 }
