@@ -87,7 +87,9 @@ export default {
     }
 
     onMounted(() => {
-      getService()
+      if (id.value) {
+        getService()
+      }
     })
 
     // Methods
