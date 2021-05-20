@@ -90,9 +90,9 @@ export default {
         childId,
         serviceId: id.value
       })
-        .then(() => {
+        .then(async () => {
           getUserData()
-          refetchService()
+          await refetchService()
           loading.value = false
           $q.notify(i18n.t('forms.savedOk'))
         })
@@ -111,9 +111,9 @@ export default {
         childId,
         serviceId: id.value
       })
-        .then(() => {
+        .then(async () => {
           getUserData()
-          refetchService()
+          await refetchService()
           loading.value = false
           $q.notify(i18n.t('forms.savedOk'))
         })
