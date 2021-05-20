@@ -93,7 +93,9 @@ export default {
     // Methods
     const submitForm = async () => {
       loading.value = loadingMutate.value
-      await mutate({ insertInput: service.value })
+      const serviceData = service.value
+      delete serviceData.participants
+      await mutate({ insertInput: serviceData })
       $q.notify(i18n.t('forms.savedOk'))
       loading.value = false
       await router.replace(`/admin/services/edit/${service.value?.typeId}`)

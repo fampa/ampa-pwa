@@ -17,7 +17,6 @@
           <div v-if="member?.family">
             <ul>
               <li class="q-pa-md" v-for="(child, index) in member.family.children" :key="index">
-                {{}}
                 <q-btn
                   v-if="child.hiredServices.find((h) => h.service.id === service.id)"
                   color="accent"
@@ -30,7 +29,7 @@
                 <q-btn
                   v-else
                   color="primary"
-                  :disable="!user || member?.family?.iban === (null || undefined || '') || (Number(participants)/Number(service.spots) === 1)"
+                  :disable="!user || member?.family?.iban === (null || undefined || '') || (Number(service.spots) === 0) || (Number(participants)/Number(service.spots) === 1)"
                   @click="join(child)"
                   :loading="loading"
                 >
