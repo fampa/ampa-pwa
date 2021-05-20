@@ -208,3 +208,23 @@ appApi.post('/contact', async (req: express.Request, res:express.Response /*, ne
     return res.status(500).json({ error })
   }
 })
+
+// eslint-disable-next-line @typescript-eslint/no-misused-promises
+appApi.post('/service', async (req: express.Request, res:express.Response /*, next:express.NextFunction */) => {
+  const obj = req.body as MailObject
+  obj.to = functions.config().env.template.email
+  obj.bcc = obj.from
+  obj.sender = obj.from
+  obj.replyTo = obj.from
+  obj.from = `AMPA <${functions.config().env.template.email}>`
+
+  try {
+    const result = await sendEmail(obj)
+
+    functions.logger.info('Contact form sendEmail result:', result)
+    return res.json(result)
+  } catch (error) {
+    functions.logger.error(error)
+    return res.status(500).json({ error })
+  }
+})

@@ -63,6 +63,14 @@
                 </template>
               </q-input>
               <br>
+              <div v-if="child.hiredServices.length > 0">
+                <h3 class="text-h5">{{$t('family.hiredServices', { name: child.firstName })}}</h3>
+                <ul>
+                  <li v-for="(hiredService, index) in child.hiredServices" :key="index">
+                    <router-link :to="`/s/${hiredService.service.id}/${slugify(hiredService.service.name)}`">{{ hiredService.service.name }}</router-link>
+                  </li>
+                </ul>
+              </div>
               <q-separator/>
               <br>
             </div>
@@ -89,6 +97,7 @@ import { cleanObject } from 'src/utilities/cleanObject'
 import { Member } from 'src/models/Member'
 import { useI18n } from 'vue-i18n'
 import { useStore } from 'src/services/store'
+import { slugify } from 'src/utilities/slugify'
 
 export default {
   name: 'PagePersonalData',
@@ -344,7 +353,8 @@ export default {
       prepareUpdateFamily,
       resolveJoin,
       rejectJoin,
-      abortJoin
+      abortJoin,
+      slugify
     }
   }
 }

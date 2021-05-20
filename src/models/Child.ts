@@ -1,10 +1,17 @@
+import { Service } from './Service'
+
 /* eslint-disable camelcase */
+export interface HiredService {
+  service: Service
+}
+
 export interface Child {
   id?: number
   firstName: string
   lastName: string
   birthDate: string
   familyId?: number
+  hiredServices?: HiredService[]
   createdAt?: Date
   updatedAt?: Date
 }

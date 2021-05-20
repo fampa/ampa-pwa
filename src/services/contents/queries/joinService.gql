@@ -1,0 +1,7 @@
+mutation joinService($serviceId: Int!, $childId: Int!) {
+  insert_childService_one(object: {childId: $childId, serviceId: $serviceId}) {
+    updatedAt
+    childId
+    serviceId
+  }
+}

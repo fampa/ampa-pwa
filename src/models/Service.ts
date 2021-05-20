@@ -13,11 +13,14 @@ export interface ServiceType {
 export interface Service {
   id: number
   type?: ServiceType
+  typeId?: number
   name?: string
   image?: string
   description?: string
   periodicity?: string
   price?: number
+  spots?: number
+  participants?: Record<string, unknown>[]
   isAvailable?: boolean
   createdAt?: Date
   updatedAt?: Date
@@ -35,6 +38,14 @@ export interface ServiceData {
   services_by_pk: Service
 }
 
+export interface JoinServiceResponse {
+  insert_childService_one: unknown
+}
+
+export interface UnJoinServiceResponse {
+  delete_childService_by_pk: Record<string, unknown>
+}
+
 export interface GetServiceTypesData {
   service_types_aggregate: Aggregate
   service_types: ServiceType[]
@@ -44,8 +55,16 @@ export interface upsertServiceTypeResult {
   insert_service_types_one: ServiceType
 }
 
+export interface upsertServiceResult {
+  insert_services_one: Service
+}
+
 export interface upsertServiceTypeInput {
   insertInput: ServiceType
+}
+
+export interface upsertServiceInput {
+  insertInput: Service
 }
 
 export interface GetServiceTypeByID {

@@ -1,10 +1,12 @@
-import { useQuery } from '@vue/apollo-composable'
+import { useQuery, useMutation } from '@vue/apollo-composable'
 import getTipusServeis from './queries/getTipusServeis.gql'
 import getPages from './queries/getPages.gql'
 import getPageById from './queries/getPageById.gql'
 import getServicesByType from './queries/getServicesByType.gql'
 import getServiceById from './queries/getServiceById.gql'
-import { ServicesTypeData, ServicesData, ServiceData } from 'src/models/Service'
+import unJoinService from './queries/unJoinService.gql'
+import joinService from './queries/joinService.gql'
+import { ServicesTypeData, UnJoinServiceResponse, ServicesData, ServiceData, JoinServiceResponse } from 'src/models/Service'
 import { PageData, PagesData } from 'src/models/Page'
 
 export class ContentsService {
@@ -46,6 +48,22 @@ export class ContentsService {
     const response = useQuery<ServiceData>(
       getServiceById,
       { id }
+    )
+
+    return response
+  }
+
+  joinService = () => {
+    const response = useMutation<JoinServiceResponse>(
+      joinService
+    )
+
+    return response
+  }
+
+  unJoinService = () => {
+    const response = useMutation<UnJoinServiceResponse>(
+      unJoinService
     )
 
     return response

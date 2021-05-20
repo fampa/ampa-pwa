@@ -1,0 +1,5 @@
+mutation unJoinService($childId: Int!, $serviceId: Int!) {
+  delete_childService_by_pk(childId: $childId, serviceId: $serviceId) {
+    updatedAt
+  }
+}

@@ -19,6 +19,7 @@ export default {
   extraescolars: 'Extraescolares',
   family: {
     hasRequestedJoinNotice: 'Has enviado una solicitud para unirte a una familia. Recuerda a quien dió de alta la familia que entre a la app para autorizarte',
+    hiredServices: 'Servicios contratados para {name}',
     putChildrenLastName: 'Pon los apellidos de tu hijo/a. P.e. Sanchis Verdú',
     requestJoinNoticeAbort: 'Cancela la solicitud',
     requestJoinNotice: 'Has recibido una solicitud de {email} para unirse a gestionar tu familia',
@@ -59,6 +60,8 @@ export default {
     firstName: 'Nombre',
     lastName: 'Apellidos',
     email: 'Correo electrónico',
+    needLogin: 'Necesitas estar identificado para poder proseguir',
+    needPayment: 'Necesitas facilitar los datos de domiciliación para poder proseguir',
     phone: 'Teléfono',
     paymentData: 'Datos de domiciliación',
     removeAdmin: 'Quitar admin',
@@ -78,7 +81,19 @@ export default {
     confirm: 'Eliminado correctamente'
   },
   service: {
-    edit: 'Edita un servicio',
+    edit: {
+      availability: 'Disponibilidad',
+      description: 'Descripción',
+      image: 'Imagen',
+      join: 'Apuntar a {name}',
+      name: 'Nombre del servicio',
+      participants: 'Actualmente inscritos',
+      periodicity: 'Periodicidad',
+      price: 'Precio',
+      remove: 'Borrar a {name}',
+      spots: 'Capacidad',
+      title: 'Edita un servicio'
+    },
     type: {
       description: 'Descripción',
       edit: 'Edita un tipo de servicio',

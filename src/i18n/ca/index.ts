@@ -19,6 +19,7 @@ export default {
   extraescolars: 'Extraescolars',
   family: {
     hasRequestedJoinNotice: 'Has enviat una sol·licitud per a unir-te a una família. Recorda a qui va crear la família que entre a la app per a acceptar-te',
+    hiredServices: 'Serveis contractats per a {name}',
     putChildrenLastName: 'Poseu els cognoms del vostre fill/a. P.e. Sanchis Verdú',
     requestJoinNotice: 'Has rebut una sol·licitud de {email} per unir-se a gestionar la teua família',
     requestJoinNoticeAbort: 'Cancel·la la sol·licitud',
@@ -61,6 +62,8 @@ export default {
     email: 'Correu electrònic',
     phone: 'Telèfon',
     removeAdmin: 'Llevar admin',
+    needLogin: 'Necessites estar identificat per poder prosseguir',
+    needPayment: 'Necessites omplir les dades de domiciliació per poder prosseguir',
     paymentData: 'Dades de domiciliació',
     userDataNotice: 'Omple primer les dades personals',
     userDataNoticeBtn: 'Aneu a Dades Personals'
@@ -90,7 +93,19 @@ export default {
     confirm: 'Eliminat correctament'
   },
   service: {
-    edit: 'Edita un servei',
+    edit: {
+      availability: 'Disponibilitat',
+      description: 'Descripció',
+      image: 'Imatge',
+      join: 'Apuntar a {name}',
+      name: 'Nom del servei',
+      participants: 'Actualment inscrits',
+      periodicity: 'Periodicitat',
+      price: 'Preu',
+      remove: 'Esborrar a {name}',
+      spots: 'Capacitat',
+      title: 'Edita un servei'
+    },
     type: {
       description: 'Descripció',
       edit: 'Edita un tipus de servei',

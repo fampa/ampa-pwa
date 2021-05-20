@@ -20,6 +20,12 @@ query memberById($id: String!) {
         lastName
         birthDate
         familyId
+        hiredServices {
+          service {
+            name
+            id
+          }
+        }
       }
     }
   }

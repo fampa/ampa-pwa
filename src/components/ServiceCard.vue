@@ -40,7 +40,7 @@ export default defineComponent({
     }
   },
   setup (props) {
-    const slug = computed(() => slugify(props.service.name))
+    const slug = computed(() => slugify(props.service?.name))
     return {
       ...toRefs(props),
       slug

@@ -4,14 +4,16 @@ import getPages from './queries/getPages.gql'
 import getMembers from './queries/getMembers.gql'
 import getServiceTypes from './queries/getServiceTypes.gql'
 import getServiceTypeById from './queries/getServiceTypeById.gql'
+import upsertService from './queries/upsertService.gql'
 import upsertServiceType from './queries/upsertServiceType.gql'
 import removeServiceType from './queries/removeServiceType.gql'
+import removeService from './queries/removeService.gql'
 import getServicesByType from './queries/getServicesByType.gql'
 import { GetArticlesData } from 'src/models/Article'
 import { QueryTableOptions } from 'src/models/QueryTable'
 import { GetMembersData } from 'src/models/Member'
 import { GetPagesData } from 'src/models/Page'
-import { GetServiceTypeByID, GetServiceTypesData, ServiceType, upsertServiceTypeResult, upsertServiceTypeInput, GetServicesByTypeResult, GetServicesByTypeInput } from 'src/models/Service'
+import { Service, GetServiceTypeByID, GetServiceTypesData, ServiceType, upsertServiceTypeResult, upsertServiceTypeInput, GetServicesByTypeResult, GetServicesByTypeInput, upsertServiceResult, upsertServiceInput } from 'src/models/Service'
 
 export class AdminService {
   getArticles = (options: QueryTableOptions) => {
@@ -93,9 +95,23 @@ export class AdminService {
     return response
   }
 
+  upsertService = () => {
+    const response = useMutation<upsertServiceResult, upsertServiceInput>(
+      upsertService
+    )
+    return response
+  }
+
   removeServiceType = () => {
     const response = useMutation<upsertServiceTypeResult, ServiceType>(
       removeServiceType
+    )
+    return response
+  }
+
+  removeService = () => {
+    const response = useMutation<upsertServiceResult, Service>(
+      removeService
     )
     return response
   }
