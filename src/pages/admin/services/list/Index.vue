@@ -1,9 +1,9 @@
 <template>
-  <q-page padding class="bg-blue-grey-1">
+  <q-page padding class="bg-grey-2 q-pa-md">
     <div class="max-900">
       <q-table
         class="content"
-        :title="$t('table.serviceTypes')"
+        :title="$t('table.services')"
         :rows="services"
         :columns="columns"
         @row-click="onRowClick"
@@ -98,7 +98,7 @@ export default {
     const onRowClick = (evt, row) => {
       // console.log(row)
       const id = row.id
-      return router.push(`/admin/service/edit/${id}`)
+      return router.push(`/admin/services/s/edit/${id}`)
     }
 
     const limit = pagination.value.rowsPerPage === 0 ? pagination.value.rowsNumber : pagination.value.rowsPerPage

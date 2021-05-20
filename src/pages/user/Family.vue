@@ -1,6 +1,6 @@
 <template>
-  <q-page padding class="bg-grey-2">
-    <div class="q-gutter-md max-600">
+  <q-page padding class="bg-grey-2  q-pa-md">
+    <div class="max-600">
       <h1 class="text-h4">{{$t('member.familyData')}}</h1>
       <div v-if="!member && isLoading">
         <q-skeleton height="50px" square />

@@ -1,5 +1,5 @@
 <template>
-  <q-page padding class="bg-grey-2">
+  <q-page padding class="bg-grey-2  q-pa-md">
     <div class="max-600">
       <h1 class="text-h4">{{$t('member.paymentData')}}</h1>
       <div v-if="loading">

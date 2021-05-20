@@ -1,5 +1,5 @@
 <template>
-  <q-page padding class="bg-blue-grey-1">
+  <q-page padding class="bg-blue-grey-1 q-pa-md">
     <div class="max-900">
       <q-table
         class="content"

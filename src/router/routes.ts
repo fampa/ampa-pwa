@@ -53,6 +53,7 @@ const routes: RouteRecordRaw[] = [
       { path: 'payment/edit/:id', component: () => import('pages/user/Payment.vue') },
       { path: 'pages', component: () => import('pages/admin/Pages.vue') },
       { path: 'services', component: () => import('pages/admin/services/Index.vue') },
+      { path: 'services/s/edit/:id?', component: () => import('pages/admin/services/s/Edit.vue') },
       {
         path: 'services/edit/:id?',
         component: () => import('pages/admin/services/Edit.vue'),

@@ -1,6 +1,6 @@
 <template>
-  <q-page padding class="bg-grey-2">
-    <div class="q-gutter-md max-600" v-if="service">
+  <q-page padding class="bg-grey-2 q-pa-md">
+    <div class="max-600" v-if="service">
       <h1 class="text-h4">{{service.name}}</h1>
       <q-img :src="service.image"></q-img>
       <p>{{service.description}}</p>

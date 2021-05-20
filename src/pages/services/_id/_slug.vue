@@ -1,6 +1,6 @@
 <template>
-  <q-page padding class="bg-grey-2">
-    <div class="q-gutter-md max-600">
+  <q-page padding class="bg-grey-2 q-pa-md">
+    <div class="max-600">
       <div v-if="!services && loading">
         <div class="row items-start">
           <div

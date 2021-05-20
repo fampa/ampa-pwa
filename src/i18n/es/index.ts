@@ -49,7 +49,7 @@ export default {
   login: 'Entrar',
   logout: 'Salir',
   member: {
-    addAdmin: 'Añador admin',
+    addAdmin: 'Hacer admin',
     birthDate: 'Fecha de nacimiento',
     children: 'Hijos/as',
     familyData: 'Datos familiares',
@@ -78,6 +78,7 @@ export default {
     confirm: 'Eliminado correctamente'
   },
   service: {
+    edit: 'Edita un servicio',
     type: {
       description: 'Descripción',
       edit: 'Edita un tipo de servicio',
@@ -107,6 +108,7 @@ export default {
     pages: 'Páginas',
     title: 'Título',
     search: 'Buscar',
+    services: 'Servicios',
     serviceTypes: 'Tipos de servicios',
     status: 'Estado'
   }

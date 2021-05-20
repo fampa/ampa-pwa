@@ -1,5 +1,5 @@
 <template>
-  <q-page padding class="bg-grey-2">
+  <q-page padding class="bg-grey-2  q-pa-md">
     <h1 class="text-h4">{{$t('settings')}}</h1>
       <q-list bordered padding class="bg-white">
         <q-item-label header>{{$t('settingsPage.general')}}</q-item-label>

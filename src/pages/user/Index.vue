@@ -1,6 +1,6 @@
 <template>
-  <q-page padding class="bg-grey-2">
-    <div class="q-gutter-md max-600" v-if="id">
+  <q-page padding class="bg-grey-2  q-pa-md">
+    <div class="max-600" v-if="id">
       <h1 class="text-h4">
         {{$t('personalData')}}
         <q-badge v-if="isAdmin" color="red">

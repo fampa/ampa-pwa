@@ -49,7 +49,7 @@ export default {
   login: 'Entrar',
   logout: 'Eixir',
   member: {
-    addAdmin: 'Afegir admin',
+    addAdmin: 'Fer admin',
     birthDate: 'Data de naixement',
     children: 'Fills/es',
     familyData: 'Dades familiars',
@@ -90,6 +90,7 @@ export default {
     confirm: 'Eliminat correctament'
   },
   service: {
+    edit: 'Edita un servei',
     type: {
       description: 'Descripció',
       edit: 'Edita un tipus de servei',
@@ -107,6 +108,7 @@ export default {
     pages: 'Pàgines',
     title: 'Títol',
     search: 'Cerca',
+    services: 'Serveis',
     serviceTypes: 'Tipus de serveis',
     status: 'Estat'
   }

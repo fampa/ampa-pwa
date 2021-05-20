@@ -1,7 +1,7 @@
 <template>
   <q-page padding class="bg-grey-2  q-pa-md">
     <div class="max-600">
-      <h1 class="text-h4">{{$t('service.type.edit')}}</h1>
+      <h1 class="text-h4">{{$t('service.edit')}}</h1>
       <q-form ref="memberForm" @submit.prevent="submitForm">
         <q-input outlined v-model="serviceType.name" :label="$t('service.type.name')" :rules="[val => !!val || $t('forms.required')]" />
         <q-input outlined v-model="serviceType.description" :label="$t('service.type.description')" />
@@ -31,7 +31,7 @@ import { useQuasar } from 'quasar'
 import { useI18n } from 'vue-i18n'
 
 export default {
-  name: 'EditServiceType',
+  name: 'EditService',
   setup () {
     const route = useRoute()
     const router = useRouter()
