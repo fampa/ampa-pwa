@@ -31,7 +31,7 @@
                   v-else
                   color="primary"
                   :disable="!user || member?.family?.iban === (null || undefined || '') || (Number(participants)/Number(service.spots) === 1)"
-                  @click="join(child.id)"
+                  @click="join(child)"
                   :loading="loading"
                 >
                   {{$t('service.edit.join', { name: child.firstName})}}
@@ -57,6 +57,7 @@ import { Member } from 'src/models/Member'
 import firebase from 'firebase/app'
 import 'firebase/auth'
 import { useI18n } from 'vue-i18n'
+import { Child } from 'src/models/Child'
 
 export default {
   name: 'PageServei',
@@ -83,22 +84,23 @@ export default {
 
     const { mutate: joinMutation } = contentsService.joinService()
 
-    const join = async (childId: number) => {
-      console.log('joined', childId)
+    const join = async (child: Child) => {
       loading.value = true
       await joinMutation({
-        childId,
+        childId: child.id,
         serviceId: id.value
       })
         .then(async () => {
           getUserData()
           await refetchService()
-          loading.value = false
           await contentsService.serviceMessage({
             from: member.value.email,
-            message: `El xiquet/a amb id ${childId} ha contractat el servei amb id ${id.value}`
+            message: `<p>El xiquet/a ${child.firstName} ${child.lastName} (${child.birthDate})  ha contractat el servei <a href="https://${process.env.FIREBASE_PROJECT_ID}.web.app${route.path}" target="_blank">${service.value.name}</a></p>`
           })
+        })
+        .then(() => {
           $q.notify(i18n.t('forms.savedOk'))
+          loading.value = false
         })
         .catch(err => {
           console.error(err)
@@ -109,7 +111,6 @@ export default {
     const { mutate: unJoinMutation } = contentsService.unJoinService()
 
     const remove = async (childId: number) => {
-      console.log('removed', childId)
       loading.value = true
       await unJoinMutation({
         childId,
