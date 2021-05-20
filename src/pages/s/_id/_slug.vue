@@ -94,6 +94,10 @@ export default {
           getUserData()
           await refetchService()
           loading.value = false
+          await contentsService.serviceMessage({
+            from: member.value.email,
+            message: `El xiquet/a amb id ${childId} ha contractat el servei amb id ${id.value}`
+          })
           $q.notify(i18n.t('forms.savedOk'))
         })
         .catch(err => {

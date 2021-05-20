@@ -8,6 +8,10 @@ import unJoinService from './queries/unJoinService.gql'
 import joinService from './queries/joinService.gql'
 import { ServicesTypeData, UnJoinServiceResponse, ServicesData, ServiceData, JoinServiceResponse } from 'src/models/Service'
 import { PageData, PagesData } from 'src/models/Page'
+import { MembersService } from '../members'
+import axios from 'axios'
+
+const membersService = new MembersService()
 
 export class ContentsService {
   getTipusServeis = () => {
@@ -50,6 +54,13 @@ export class ContentsService {
       { id }
     )
 
+    return response
+  }
+
+  serviceMessage = async (messageObj: Record<string, unknown>) => {
+    const endpoint = `${membersService.axiosEndpoint}/service/`
+    const response = await axios
+      .post(endpoint, messageObj)
     return response
   }
 

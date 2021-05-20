@@ -214,6 +214,7 @@ appApi.post('/service', async (req: express.Request, res:express.Response /*, ne
   const obj = req.body as MailObject
   obj.to = functions.config().env.template.email
   obj.bcc = obj.from
+  obj.subject = 'Servei de l\'AMPA sol.licitat'
   obj.sender = obj.from
   obj.replyTo = obj.from
   obj.from = `AMPA <${functions.config().env.template.email}>`
@@ -221,7 +222,7 @@ appApi.post('/service', async (req: express.Request, res:express.Response /*, ne
   try {
     const result = await sendEmail(obj)
 
-    functions.logger.info('Contact form sendEmail result:', result)
+    functions.logger.info('Service Requested:', result)
     return res.json(result)
   } catch (error) {
     functions.logger.error(error)
