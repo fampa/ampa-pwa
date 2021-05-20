@@ -9,6 +9,7 @@ export interface MailObject {
   name: string,
   to: string | Array<string>,
   from: string,
+  sender?: string,
   subject: string,
   message: string,
   bcc?: string | Array<string>,
@@ -62,7 +63,7 @@ export async function sendEmail (obj: MailObject): Promise<Result> {
     template: obj.template || 'default',
     context: {
       name: obj.name,
-      email: obj.from,
+      email: obj.sender,
       phone: obj.phone,
       subject: obj.subject,
       message: obj.message,

@@ -193,6 +193,7 @@ appApi.post('/contact', async (req: express.Request, res:express.Response /*, ne
   const obj = req.body as MailObject
   obj.to = functions.config().env.template.email
   obj.bcc = obj.from
+  obj.sender = obj.from
   obj.replyTo = obj.from
   obj.from = `AMPA <${functions.config().env.template.email}>`
   obj.template = 'contact'
