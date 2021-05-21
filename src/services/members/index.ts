@@ -25,6 +25,7 @@ export class MembersService {
   }
 
   getById = (id: string) => {
+    if (!id) return
     const response = useQuery<MemberData, MemberVars>(
       getMemberById,
       { id }

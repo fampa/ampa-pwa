@@ -9,8 +9,9 @@ export interface Article {
   translations: ArticleTranslation[]
   image?: string
   author?: Member
-  createdAt?: Date
-  updatedAt?: Date
+  authorId?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export interface ArticlesData {

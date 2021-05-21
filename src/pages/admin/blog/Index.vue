@@ -33,7 +33,7 @@
       </q-table>
 
       <q-page-sticky position="bottom-right" :offset="[18, 18]">
-        <q-btn fab icon="add" color="primary" to="/admin/article/edit" />
+        <q-btn fab icon="add" color="primary" to="/admin/blog/edit" />
       </q-page-sticky>
     </div>
   </q-page>

@@ -5,6 +5,12 @@ export default {
     services: 'Gestió de serveis',
     blog: 'Gestió del blog'
   },
+  article: {
+    content: 'Contingut',
+    draft: 'Esborrany',
+    published: 'Publicat',
+    title: 'Títol'
+  },
   contact: {
     email: 'Correu electrònic',
     firstName: 'Nom',

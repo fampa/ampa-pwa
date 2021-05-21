@@ -17,6 +17,7 @@ export class ArticlesService {
   }
 
   getById = (id: number) => {
+    if (!id) return
     const response = useQuery<ArticleData, ArticleVars>(
       getArticleById,
       { id }

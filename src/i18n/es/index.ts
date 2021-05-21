@@ -5,6 +5,12 @@ export default {
     services: 'Gestión de servicios',
     blog: 'Gestión del blog'
   },
+  article: {
+    content: 'Contenido',
+    draft: 'Borrador',
+    published: 'Publicado',
+    title: 'Título'
+  },
   contact: {
     email: 'Correo electrónico',
     firstName: 'Nombre',
