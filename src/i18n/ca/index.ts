@@ -11,6 +11,7 @@ export default {
     published: 'Publicat',
     title: 'Títol'
   },
+  ca: 'Valencià',
   contact: {
     email: 'Correu electrònic',
     firstName: 'Nom',
@@ -22,6 +23,7 @@ export default {
     title: 'Contacte'
   },
   errorNetwork: 'No tens connexió a internet',
+  es: 'Castellano',
   extraescolars: 'Extraescolars',
   family: {
     hasRequestedJoinNotice: 'Has enviat una sol·licitud per a unir-te a una família. Recorda a qui va crear la família que entre a la app per a acceptar-te',

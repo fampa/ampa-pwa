@@ -4,7 +4,7 @@ import { ArticleTranslation } from './ArticleTranslation'
 import { Aggregate } from './QueryTable'
 
 export interface Article {
-  id: number
+  id?: number
   status: string
   translations: ArticleTranslation[]
   image?: string

@@ -5,13 +5,15 @@
         <div class="row">
           <div class="col-12">
             <div v-for="(translation, index) in translations" :key="index">
-              <q-input @change="updateTitle(index)" v-if="translation.language === lang" borderless ref="title" class="title-input" :model-value="translation.title" :placeholder="$t('article.title')" :rules="[val => !!val || $t('forms.required')]" />
+              <q-input v-if="translation.language === lang" borderless ref="title" class="title-input" v-model="translation.title"  :placeholder="$t('article.title')" :rules="[val => !!val || $t('forms.required')]" />
             </div>
           </div>
         </div>
         <div class="row">
           <div class="col-12">
-            <!-- <content-editor v-model="article.translations.find(t => t.language === lang).content" @input="content" /> -->
+            <!-- <div v-for="(translation, index) in translations" :key="index">
+              <content-editor v-if="translation.language === lang" v-model="translation.content" @input="content" />
+            </div> -->
           </div>
         </div>
 
@@ -25,17 +27,17 @@
         </div>
         <div class="row">
           <div class="col-12">
-            <q-select outlined v-model="status" :options="statusOptions" label="Status" emit-value map-options />
+            <q-select outlined v-model="article.status" :options="statusOptions" label="Status" emit-value map-options />
           </div>
         </div>
 
         <div class="row">
           <div class="col-12">
-            <q-input filled v-model="createdAt">
+            <q-input filled v-model="article.createdAt">
               <template v-slot:prepend>
                 <q-icon name="event" class="cursor-pointer">
                   <q-popup-proxy transition-show="scale" transition-hide="scale">
-                    <q-date v-model="createdAt" mask="YYYY-MM-DD HH:mm">
+                    <q-date v-model="article.createdAt" mask="YYYY-MM-DD HH:mm">
                       <div class="row items-center justify-end">
                         <q-btn v-close-popup label="Close" color="primary" flat />
                       </div>
@@ -47,7 +49,7 @@
               <template v-slot:append>
                 <q-icon name="access_time" class="cursor-pointer">
                   <q-popup-proxy transition-show="scale" transition-hide="scale">
-                    <q-time v-model="createdAt" mask="YYYY-MM-DD HH:mm" format24h>
+                    <q-time v-model="article.createdAt" mask="YYYY-MM-DD HH:mm" format24h>
                       <div class="row items-center justify-end">
                         <q-btn v-close-popup label="Close" color="primary" flat />
                       </div>
@@ -59,11 +61,11 @@
           </div>
         </div><!--  datetime row -->
 
-        <div class="row" v-if="image">
+        <div class="row" v-if="article.image">
           <div class="image-wrapper-2">
             <q-img
               class="article-image cursor-pointer"
-              :src="image"
+              :src="article.image"
               @click="getImagesPrompt = true"
             >
             </q-img>
@@ -75,7 +77,7 @@
           <!-- <get-images @cancel="getImagesPrompt = false" @selected="imageSelected" :prompt="getImagesPrompt" /> -->
         </div>
 
-        <div class="row" v-if="!image">
+        <div class="row" v-if="!article.image">
           <div class="col">
             <q-btn @click="getImagesPrompt = true" color="accent" label="Añadir imagen de portada" />
           </div>
@@ -105,91 +107,77 @@
 </template>
 
 <script lang="ts">
-// import ContentEditor from './ContentEditor'
-// import GetImages from './GetImages'
-import { ref, reactive, toRefs, computed, defineComponent, onMounted } from 'vue'
+// import ContentEditor from './ContentEditor.vue'
+// import GetImages from './GetImages.vue'
+import { ref, PropType, computed, defineComponent } from 'vue'
 import firebase from 'firebase/app'
 import 'firebase/storage'
 import { Article } from 'src/models/Article'
 import { useQuasar, date } from 'quasar'
 import { useI18n } from 'vue-i18n'
-import { ArticlesService } from 'src/services/articles'
+// import { ArticlesService } from 'src/services/articles'
 import { useRoute } from 'vue-router'
+import { ArticleTranslation } from 'src/models/ArticleTranslation'
+
+const formatDate = (inputDate: Date) => {
+  return date.formatDate(inputDate, 'YYYY-MM-DD HH:mm')
+}
 
 export default defineComponent({
   name: 'ArticleEditor',
-  //   components: {
-  //     ContentEditor,
-  //     GetImages
-  //   },
+  components: {
+    // ContentEditor,
+    // GetImages
+  },
+  props: {
+    inputArticle: {
+      type: Object as PropType<Article>,
+      required: false
+    }
+  },
   emits: ['guardar'],
   setup (props, { emit }) {
     const $q = useQuasar()
     const i18n = useI18n()
     const router = useRoute()
-    const articlesService = new ArticlesService()
-    const formatDate = (inputDate: Date) => {
-      return date.formatDate(inputDate, 'YYYY-MM-DD HH:mm')
-    }
-
     // Data
-    const article = reactive<Article>({
-      id: null,
-      status: 'DRAFT',
-      image: null,
-      createdAt: formatDate(new Date()),
-      translations: [
-        {
-          title: '',
-          language: 'es',
-          content: ''
-        },
-        {
-          title: '',
-          language: 'ca',
-          content: ''
-        }
-      ]
-    })
+    const article = ref<Article>(Object.assign(props.inputArticle))
+    const translations = ref<ArticleTranslation[]>(i18n.availableLocales.map(l => {
+      return {
+        title: props.inputArticle.translations.find(t => t.language === l).title,
+        language: l,
+        content: props.inputArticle.translations.find(t => t.language === l).content
+      }
+    }))
     const id = computed(() => Number(router.params?.id))
     const dialog = ref(false)
-    const image = ref<string>(null)
+    // const image = ref<string>(null)
     const getImagesPrompt = ref(false)
     const triggerUpload = ref(false)
     const pendingImages = ref(false)
-    const lang = ref('es')
-    const langOptions = ref([
-      { label: 'Valencià', value: 'ca' },
-      { label: 'Castellano', value: 'es' }
-    ])
+    const lang = ref(i18n.availableLocales[0])
+    const availableLocales = i18n.availableLocales.map(l => {
+      return {
+        label: i18n.t(l),
+        value: l
+      }
+    })
+    const langOptions = ref(availableLocales)
     const statusOptions = ref([
       { label: i18n.t('article.draft'), value: 'DRAFT' },
       { label: i18n.t('article.published'), value: 'PUBLISHED' }
     ])
 
-    onMounted(() => {
-      const { article: databaseArticle, onResult } = articlesService.getById(id.value)
-
-      if (id.value) {
-        onResult(() => {
-          article.status = databaseArticle.value?.status
-          article.translations = databaseArticle.value?.translations
-          article.image = databaseArticle.value?.image
-          article.createdAt = formatDate(databaseArticle.value.createdAt)
-        })
-      }
-    })
-
     // methods
     const imageSelected = (image) => {
       // console.log(image)
-      article.image = image
+      article.value.image = image
       getImagesPrompt.value = false
     }
 
     const preSave = () => {
       // if (!this.validation) return
-      if (article.status === 'PUBLISHED') {
+      if (article.value.status === 'PUBLISHED') {
         return guardar()
       } else {
         dialog.value = true
@@ -199,12 +187,13 @@ export default defineComponent({
     const guardar = (publicar = false) => {
       // if (!this.validation) return
       if (publicar) {
-        article.status = 'PUBLISHED'
+        article.value.status = 'PUBLISHED'
       }
       if (id.value) {
-        article.id = id.value
+        article.value.id = id.value
       }
-      if (article.image || !pendingImages.value) return emit('guardar', article)
+      article.value.translations = translations.value
+      if (article.value.image || !pendingImages.value) return emit('guardar', article)
       // this.$refs.uploader.upload()
     }
 
@@ -217,13 +206,13 @@ export default defineComponent({
     }
 
     const removeImage = () => {
-      article.image = null
+      article.value.image = null
     }
 
     const deleteImage = () => {
-      const refFromUrl = firebase.storage().refFromURL(article.image)
+      const refFromUrl = firebase.storage().refFromURL(article.value.image)
       refFromUrl.delete().then(() => {
-        article.image = null
+        article.value.image = null
         return guardar()
       })
         .catch(err => $q.notify(err))
@@ -231,20 +220,15 @@ export default defineComponent({
 
     const uploadImage = (obj) => {
       // console.log(obj)
-      article.image = obj.url
+      article.value.image = obj.url
       emit('guardar', article)
     }
 
-    const updateTitle = (value) => {
-      console.log(article.translations[value].title)
-    }
-
     return {
-      ...toRefs(article),
-      updateTitle,
+      article,
+      translations,
       dialog,
       guardar,
-      image,
       triggerUpload,
       langOptions,
       statusOptions,

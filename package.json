@@ -29,6 +29,9 @@
     "path": "^0.12.7",
     "quasar": "^2.0.0-beta.1",
     "spain-id": "^1.1.4",
+    "tiptap": "^1.32.2",
+    "tiptap-extensions": "^1.35.2",
+    "uuid": "^8.3.2",
     "vue-i18n": "^9.0.0-beta.0",
     "vuex-persistedstate": "^4.0.0-beta.3"
   },
