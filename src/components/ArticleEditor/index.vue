@@ -11,9 +11,11 @@
         </div>
         <div class="row">
           <div class="col-12">
-            <!-- <div v-for="(translation, index) in translations" :key="index">
-              <content-editor v-if="translation.language === lang" v-model="translation.content" @input="content" />
-            </div> -->
+            <div v-for="(translation, index) in translations" :key="index">
+              <div v-if="translation.language === lang">
+                <content-editor v-model="translation.content" />
+              </div>
+            </div>
           </div>
         </div>
 
@@ -107,7 +109,7 @@
 </template>
 
 <script lang="ts">
-// import ContentEditor from './ContentEditor.vue'
+import ContentEditor from './ContentEditor.vue'
 // import GetImages from './GetImages.vue'
 import { ref, PropType, computed, defineComponent } from 'vue'
 import firebase from 'firebase/app'
@@ -126,7 +128,7 @@ const formatDate = (inputDate: Date) => {
 export default defineComponent({
   name: 'ArticleEditor',
   components: {
-    // ContentEditor,
+    ContentEditor
     // GetImages
   },
   props: {

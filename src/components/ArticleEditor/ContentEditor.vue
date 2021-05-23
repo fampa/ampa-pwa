@@ -5,15 +5,16 @@
         <q-btn
           icon="las la-bold"
           @click="editor.commands.toggleBold()"
+          :flat="!editor?.isActive('bold')"
           color="primary"
           size="sm"
           round
         />
 
-        <!-- <q-btn
+        <q-btn
           icon="las la-italic"
-          @click="editor.commands.italic"
-          :flat="!isActive.italic()"
+          @click="editor.commands.toggleItalic()"
+          :flat="!editor?.isActive('italic')"
           color="primary"
           size="sm"
           round
@@ -21,8 +22,8 @@
 
         <q-btn
           icon="las la-strikethrough"
-          @click="editor.commands.strike"
-          :flat="!isActive.strike()"
+          @click="editor.commands.toggleStrike()"
+          :flat="!editor?.isActive('strike')"
           color="primary"
           size="sm"
           round
@@ -30,8 +31,8 @@
 
         <q-btn
           icon="las la-underline"
-          @click="editor.commands.underline"
-          :flat="!isActive.underline()"
+          @click="editor.commands.toggleUnderline()"
+          :flat="!editor?.isActive('underline')"
           color="primary"
           size="sm"
           round
@@ -39,34 +40,35 @@
 
         <q-btn
           icon="las la-link"
-          @click="openLinkModal(editor.commands.link, getMarkAttrs('link'))"
-          :flat="!isActive.link()"
+          @click="setLink"
+          :flat="!editor?.isActive('link')"
           color="primary"
           size="sm"
           round
         />
 
         <q-btn
-          icon="las la-code"
-          @click="editor.commands.code"
-          :flat="!isActive.code()"
+          icon="las la-unlink"
+          v-if="editor?.isActive('link')"
+          @click="editor?.chain().focus().unsetLink().run()"
+          :flat="!editor?.isActive('link')"
           color="primary"
           size="sm"
           round
         />
 
-        <q-btn
+        <!-- <q-btn
           icon="las la-paragraph"
-          @click="editor.commands.paragraph"
-          :flat="!isActive.paragraph()"
+          @click="editor.commands.setParagraph()"
+          :flat="!editor?.isActive('paragraph')"
           color="primary"
           size="sm"
           round
-        />
+        /> -->
 
         <q-btn
-          @click="editor.commands.heading({ level: 1 })"
-          :flat="!isActive.heading({ level: 1 })"
+          @click="editor.commands.toggleHeading({ level: 1 })"
+          :flat="!editor?.isActive('heading', { level: 1 })"
           color="primary"
           size="sm"
           round
@@ -74,8 +76,8 @@
         />
 
         <q-btn
-          @click="editor.commands.heading({ level: 2 })"
-          :flat="!isActive.heading({ level: 2 })"
+          @click="editor.commands.toggleHeading({ level: 2 })"
+          :flat="!editor?.isActive('heading', { level: 2 })"
           color="primary"
           size="sm"
           round
@@ -83,8 +85,8 @@
         />
 
         <q-btn
-          @click="editor.commands.heading({ level: 3 })"
-          :flat="!isActive.heading({ level: 3 })"
+          @click="editor.commands.toggleHeading({ level: 3 })"
+          :flat="!editor?.isActive('heading', { level: 3 })"
           color="primary"
           size="sm"
           round
@@ -93,8 +95,8 @@
 
         <q-btn
           icon="las la-list-ul"
-          @click="editor.commands.bullet_list"
-          :flat="!isActive.bullet_list()"
+          @click="editor.commands.toggleBulletList()"
+          :flat="!editor?.isActive('bulletList')"
           color="primary"
           size="sm"
           round
@@ -102,8 +104,8 @@
 
         <q-btn
           icon="las la-list-ol"
-          @click="editor.commands.ordered_list"
-          :flat="!isActive.ordered_list()"
+          @click="editor.commands.toggleOrderedList()"
+          :flat="!editor?.isActive('orderedList')"
           color="primary"
           size="sm"
           round
@@ -111,17 +113,8 @@
 
         <q-btn
           icon="las la-quote-left"
-          @click="editor.commands.blockquote"
-          :flat="!isActive.blockquote()"
-          color="primary"
-          size="sm"
-          round
-        />
-
-        <q-btn
-          icon="las la-laptop-code"
-          @click="editor.commands.code_block"
-          :flat="!isActive.code_block()"
+          @click="editor.commands.toggleBlockquote()"
+          :flat="!editor?.isActive('blockquote')"
           color="primary"
           size="sm"
           round
@@ -129,8 +122,8 @@
 
         <q-btn
           icon="las la-image"
-          @click="openModal(editor.commands.image)"
-          :flat="!isActive.image()"
+          @click="addImage"
+          :flat="!editor?.isActive('image')"
           color="primary"
           size="sm"
           round
@@ -138,7 +131,7 @@
 
         <q-btn
           icon="las la-ruler-horizontal"
-          @click="editor.commands.horizontal_rule"
+          @click="editor.commands.setHorizontalRule()"
           color="primary"
           size="sm"
           flat
@@ -147,7 +140,7 @@
 
         <q-btn
           icon="las la-undo"
-          @click="editor.commands.undo"
+          @click="editor.commands.undo()"
           color="primary"
           size="sm"
           flat
@@ -156,10 +149,28 @@
 
         <q-btn
           icon="las la-redo"
-          @click="editor.commands.redo"
+          @click="editor.commands.redo()"
           color="primary"
           size="sm"
           flat
+          round
+        />
+
+        <!-- <q-btn
+          icon="las la-code"
+          @click="editor.commands.toggleCode()"
+          :flat="!editor?.isActive('code')"
+          color="primary"
+          size="sm"
+          round
+        />
+
+        <q-btn
+          icon="las la-laptop-code"
+          @click="editor.commands.toggleCodeBlock()"
+          :flat="!editor?.isActive('codeBlock')"
+          color="primary"
+          size="sm"
           round
         /> -->
 
@@ -174,6 +185,9 @@ import { useEditor, EditorContent } from '@tiptap/vue-3'
 import StarterKit from '@tiptap/starter-kit'
 import TextAlign from '@tiptap/extension-text-align'
 import Highlight from '@tiptap/extension-highlight'
+import Underline from '@tiptap/extension-underline'
+import Link from '@tiptap/extension-link'
+import Image from '@tiptap/extension-image'
 
 export default {
   components: {
@@ -192,27 +206,91 @@ export default {
       extensions: [
         StarterKit,
         TextAlign,
-        Highlight
+        Highlight,
+        Underline,
+        Link,
+        Image
       ],
       onUpdate: () => {
-        emit('input', editor.getHTML())
+        emit('update:modelValue', editor.value.getHTML())
       }
     })
 
     onBeforeUnmount(() => {
-      editor.destroy()
+      editor.value.destroy()
     })
 
     watch(() => props.modelValue,
-      (newVal, oldVal) => {
-        const isSame = editor.getHTML() === newVal
+      (newVal, _) => {
+        const isSame = editor.value.getHTML() === newVal
         if (isSame) {
           return
         }
-        editor.commands.setContent(props.modelValue, false)
+        editor.value.commands.setContent(props.modelValue, false)
       })
 
-    return { editor }
+    // methods
+    const openModal = (command) => {
+      this.$refs.ytmodal.setCommand(command)
+      this.getImagesPrompt = true
+    }
+
+    const openLinkModal = (command, url) => {
+      this.$refs.linkModal.setCommand(command, url)
+      this.linkPrompt = true
+    }
+
+    const linkSelected = (obj) => {
+      const data = {
+        command: obj.command,
+        data: {
+          href: obj.href
+        }
+      }
+      if (data.command !== null) {
+        data.command(data.data)
+      }
+      this.linkPrompt = false
+    }
+
+    const imageSelected = (obj) => {
+      const data = {
+        command: obj.command,
+        data: {
+          src: obj.image
+          // alt: "YOU CAN ADD ALT",
+          // title: "YOU CAN ADD TITLE"
+        }
+      }
+      if (data.command !== null) {
+        data.command(data.data)
+      }
+      this.getImagesPrompt = false
+    }
+
+    const setLink = () => {
+      const url = window.prompt('URL')
+
+      editor.value.chain().focus().setLink({ href: url }).run()
+    }
+
+    const addImage = () => {
+      const url = window.prompt('URL')
+
+      if (url) {
+        editor.value.chain().focus().setImage({ src: url }).run()
+      }
+    }
+
+    return {
+      editor,
+      openModal,
+      openLinkModal,
+      linkSelected,
+      imageSelected,
+      setLink,
+      addImage
+    }
   }
 }
 </script>

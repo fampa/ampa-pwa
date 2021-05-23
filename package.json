@@ -18,6 +18,13 @@
   },
   "dependencies": {
     "@quasar/extras": "^1.0.0",
+    "@tiptap/extension-highlight": "^2.0.0-beta.13",
+    "@tiptap/extension-image": "^2.0.0-beta.13",
+    "@tiptap/extension-link": "^2.0.0-beta.17",
+    "@tiptap/extension-text-align": "^2.0.0-beta.17",
+    "@tiptap/extension-underline": "^2.0.0-beta.14",
+    "@tiptap/starter-kit": "^2.0.0-beta.63",
+    "@tiptap/vue-3": "^2.0.0-beta.37",
     "@vue/apollo-composable": "^4.0.0-alpha.12",
     "@vue/composition-api": "^1.0.0-rc.4",
     "apollo3-cache-persist": "^0.9.1",
