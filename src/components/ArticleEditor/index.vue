@@ -63,7 +63,7 @@
           </div>
         </div><!--  datetime row -->
 
-        <div class="row" v-if="article.image">
+        <div class="row" v-if="!isPage && article.image">
           <div class="image-wrapper-2">
             <q-img
               class="article-image cursor-pointer"
@@ -79,7 +79,7 @@
           <!-- <get-images @cancel="getImagesPrompt = false" @selected="imageSelected" :prompt="getImagesPrompt" /> -->
         </div>
 
-        <div class="row" v-if="!article.image">
+        <div class="row" v-if="!isPage && !article.image">
           <div class="col">
             <q-btn @click="getImagesPrompt = true" color="accent" label="Añadir imagen de portada" />
           </div>
@@ -139,6 +139,7 @@ export default defineComponent({
       type: Object as PropType<Article>,
       required: false
     },
+    isPage: Boolean,
     loading: Boolean
   },
   emits: ['guardar', 'remove'],
@@ -150,7 +151,7 @@ export default defineComponent({
     const article = ref<Article>(Object.assign(props.inputArticle))
     const translations = ref<ArticleTranslation[]>(i18n.availableLocales.map(l => {
       return {
-        articleId: props.inputArticle.id,
+        parentId: props.inputArticle.id,
         title: props.inputArticle.translations.find(t => t.language === l).title,
         language: l,
         content: props.inputArticle.translations.find(t => t.language === l).content

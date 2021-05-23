@@ -2,7 +2,7 @@ export interface ArticleTranslation {
   id?: number
   slug?: string
   title: string
-  articleId?: number
+  parentId?: number
   content?: string
   language?: string
 }

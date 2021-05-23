@@ -3,13 +3,13 @@ import { PageTranslation } from './PageTranslation'
 import { Aggregate } from './QueryTable'
 
 export interface Page {
-  id: number
+  id?: number
   status: string
-  translations: PageTranslation[]
+  translations?: PageTranslation[]
   image?: string
   icon?: string
-  createdAt?: Date
-  updatedAt?: Date
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export interface PagesData {
@@ -32,4 +32,19 @@ export interface PageData {
 export interface GetPagesData {
   pages_aggregate: Aggregate
   pages: Page[]
+}
+
+export interface UpsertPageResponse {
+  insert_pages_one: Page,
+  insert_pages_translations: {
+    retuning: PageTranslation[]
+  }
+}
+
+export interface DeletePageResponse {
+  delete_pages_by_pk: Page
+}
+
+export interface InsertPageResponse {
+  insert_pages_one: Page
 }

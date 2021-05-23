@@ -24,7 +24,7 @@
       </template>
       <template v-slot:body-cell-status="props">
         <q-td :props="props">
-          <q-badge :color="props.value === 'PUBLICAT' || 'PUBLICADO' ? 'green' : 'red'">
+          <q-badge :color="props.value === ('PUBLICAT' || 'PUBLICADO') ? 'positive' : 'warning'">
             {{props.value}}
           </q-badge>
         </q-td>
@@ -33,7 +33,7 @@
       </q-table>
 
       <q-page-sticky position="bottom-right" :offset="[18, 18]">
-        <q-btn fab icon="add" color="primary" to="/admin/article/edit" />
+        <q-btn fab icon="add" color="primary" to="/admin/pages/edit" />
       </q-page-sticky>
     </div>
   </q-page>

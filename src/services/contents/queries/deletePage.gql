@@ -1,0 +1,6 @@
+mutation deletePage($id: Int!) {
+  delete_pages_by_pk(id: $id) {
+    id
+    updatedAt
+  }
+}

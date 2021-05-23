@@ -6,8 +6,11 @@ import getServicesByType from './queries/getServicesByType.gql'
 import getServiceById from './queries/getServiceById.gql'
 import unJoinService from './queries/unJoinService.gql'
 import joinService from './queries/joinService.gql'
+import upsertPage from './queries/upsertPage.gql'
+import insertPage from './queries/insertPage.gql'
+import deletePage from './queries/deletePage.gql'
 import { ServicesTypeData, UnJoinServiceResponse, ServicesData, ServiceData, JoinServiceResponse } from 'src/models/Service'
-import { PageData, PagesData } from 'src/models/Page'
+import { PageData, PagesData, UpsertPageResponse, InsertPageResponse, DeletePageResponse } from 'src/models/Page'
 import { MembersService } from '../members'
 import axios from 'axios'
 
@@ -75,6 +78,30 @@ export class ContentsService {
   unJoinService = () => {
     const response = useMutation<UnJoinServiceResponse>(
       unJoinService
+    )
+
+    return response
+  }
+
+  upsertPage = () => {
+    const response = useMutation<UpsertPageResponse>(
+      upsertPage
+    )
+
+    return response
+  }
+
+  insertPage = () => {
+    const response = useMutation<InsertPageResponse>(
+      insertPage
+    )
+
+    return response
+  }
+
+  deletePage = () => {
+    const response = useMutation<DeletePageResponse>(
+      deletePage
     )
 
     return response
