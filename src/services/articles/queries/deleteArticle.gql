@@ -1,0 +1,6 @@
+mutation deleteArticle($id: Int!) {
+  delete_articles_by_pk(id: $id) {
+    id
+    updatedAt
+  }
+}

@@ -1,14 +1,14 @@
 query getArticles($offset: Int, $limit: Int) {
-    articles(offset: $offset, limit: $limit, order_by: {createdAt: desc}) {
+  articles(offset: $offset, limit: $limit, order_by: {createdAt: desc}, where: {status: {_eq: "PUBLISHED"}}) {
     id
     status
     image
     createdAt
     updatedAt
-        translations {
-            title
-            slug
-            language
-        }
+    translations {
+      title
+      slug
+      language
     }
+  }
 }

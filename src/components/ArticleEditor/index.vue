@@ -103,7 +103,11 @@
       </q-card>
     </q-dialog>
     <q-page-sticky position="bottom-right" :offset="[18, 18]">
-      <q-btn fab icon="save" color="primary" @click="preSave" />
+      <q-btn :loading="loading" fab icon="save" color="primary" @click="preSave" />
+    </q-page-sticky>
+
+    <q-page-sticky position="bottom-left" :offset="[18, 18]">
+      <q-btn fab icon="las la-trash" color="negative" @click="remove" />
     </q-page-sticky>
   </form>
 </template>
@@ -111,14 +115,13 @@
 <script lang="ts">
 import ContentEditor from './ContentEditor.vue'
 // import GetImages from './GetImages.vue'
-import { ref, PropType, computed, defineComponent } from 'vue'
+import { ref, PropType, defineComponent } from 'vue'
 import firebase from 'firebase/app'
 import 'firebase/storage'
 import { Article } from 'src/models/Article'
 import { useQuasar, date } from 'quasar'
 import { useI18n } from 'vue-i18n'
 // import { ArticlesService } from 'src/services/articles'
-import { useRoute } from 'vue-router'
 import { ArticleTranslation } from 'src/models/ArticleTranslation'
 
 const formatDate = (inputDate: Date) => {
@@ -135,23 +138,25 @@ export default defineComponent({
     inputArticle: {
       type: Object as PropType<Article>,
       required: false
-    }
+    },
+    loading: Boolean
   },
-  emits: ['guardar'],
+  emits: ['guardar', 'remove'],
   setup (props, { emit }) {
     const $q = useQuasar()
     const i18n = useI18n()
-    const router = useRoute()
+
     // Data
     const article = ref<Article>(Object.assign(props.inputArticle))
     const translations = ref<ArticleTranslation[]>(i18n.availableLocales.map(l => {
       return {
+        articleId: props.inputArticle.id,
         title: props.inputArticle.translations.find(t => t.language === l).title,
         language: l,
         content: props.inputArticle.translations.find(t => t.language === l).content
       }
     }))
-    const id = computed(() => Number(router.params?.id))
+
     const dialog = ref(false)
     // const image = ref<string>(null)
     const getImagesPrompt = ref(false)
@@ -191,11 +196,8 @@ export default defineComponent({
       if (publicar) {
         article.value.status = 'PUBLISHED'
       }
-      if (id.value) {
-        article.value.id = id.value
-      }
       article.value.translations = translations.value
-      if (article.value.image || !pendingImages.value) return emit('guardar', article)
+      if (article.value.image || !pendingImages.value) return emit('guardar', article.value)
       // this.$refs.uploader.upload()
     }
 
@@ -226,6 +228,10 @@ export default defineComponent({
       emit('guardar', article)
     }
 
+    const remove = () => {
+      emit('remove', article)
+    }
+
     return {
       article,
       translations,
@@ -242,7 +248,8 @@ export default defineComponent({
       deleteImage,
       uploadImage,
       lang,
-      formatDate
+      formatDate,
+      remove
     }
   }
 })

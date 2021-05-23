@@ -1,8 +1,11 @@
-import { useQuery, useResult } from '@vue/apollo-composable'
+import { useQuery, useResult, useMutation } from '@vue/apollo-composable'
 // import gql from 'graphql-tag'
 import getArticles from './queries/getArticles.gql'
 import getArticleById from './queries/getArticleById.gql'
-import { ArticleData, ArticlesData, ArticleVars, ArticlesVars } from 'src/models/Article'
+import upsertArticle from './queries/upsertArticle.gql'
+import deleteArticle from './queries/deleteArticle.gql'
+import insertArticle from './queries/insertArticle.gql'
+import { ArticleData, InsertArticleResponse, DeleteArticleResponse, ArticlesData, ArticleVars, ArticlesVars, UpsertArticleResponse } from 'src/models/Article'
 import { apolloClient } from 'src/boot/apollo'
 import { CachePersistor } from 'apollo3-cache-persist'
 
@@ -17,7 +20,7 @@ export class ArticlesService {
   }
 
   getById = (id: number) => {
-    if (!id) return
+    if (!id) return { article: null, onResult: null, loading: false, error: null, onError: null }
     const response = useQuery<ArticleData, ArticleVars>(
       getArticleById,
       { id }
@@ -36,5 +39,29 @@ export class ArticlesService {
     await apolloClient.resetStore()
     await apolloClient.cache.reset()
     await persistor.purge()
+  }
+
+  upsertArticle = () => {
+    const response = useMutation<UpsertArticleResponse>(
+      upsertArticle
+    )
+
+    return response
+  }
+
+  insertArticle = () => {
+    const response = useMutation<InsertArticleResponse>(
+      insertArticle
+    )
+
+    return response
+  }
+
+  deleteArticle = () => {
+    const response = useMutation<DeleteArticleResponse>(
+      deleteArticle
+    )
+
+    return response
   }
 }

@@ -1,0 +1,19 @@
+mutation insertArticle($article: articles_insert_input = {}) {
+  insert_articles_one(object: $article) {
+    id
+    createdAt
+    updatedAt
+    status
+    image
+    author {
+      firstName
+    }
+    translations {
+      articleId
+      content
+      title
+      slug
+      language
+    }
+  }
+}

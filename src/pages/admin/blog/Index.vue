@@ -24,7 +24,7 @@
       </template>
       <template v-slot:body-cell-status="props">
         <q-td :props="props">
-          <q-badge :color="props.value === 'PUBLICAT' || 'PUBLICADO' ? 'green' : 'red'">
+          <q-badge :color="props.value === ('PUBLICAT' || 'PUBLICADO') ? 'positive' : 'warning'">
             {{props.value}}
           </q-badge>
         </q-td>
@@ -63,7 +63,7 @@ export default {
     const articles = ref<Article[]>([])
     const filter = ref<string | null>(null)
     const pagination = ref({
-      sortBy: 'createdAt',
+      sortBy: 'id',
       descending: true,
       page: 1,
       rowsPerPage: 5,

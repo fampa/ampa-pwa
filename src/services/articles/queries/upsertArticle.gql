@@ -1,0 +1,20 @@
+mutation upsertArticle($article: articles_insert_input!, $translations: [articles_translations_insert_input!] = {}) {
+  insert_articles_one(object: $article, on_conflict: {constraint: articles_pkey, update_columns: [authorId, status, image, createdAt]}) {
+    id
+    createdAt
+    updatedAt
+    status
+    image
+    author {
+      firstName
+    }
+  }
+  insert_articles_translations(objects: $translations, on_conflict: {constraint: articles_translations_pkey, update_columns: [title, content]}) {
+    returning {
+      title
+      content
+      slug
+      language
+    }
+  }
+}

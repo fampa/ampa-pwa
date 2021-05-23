@@ -35,3 +35,17 @@ export interface GetArticlesData {
   articles_aggregate: Aggregate,
   articles: Article[]
 }
+
+export interface UpsertArticleResponse {
+  insert_articles_one: Article,
+  insert_articles_translations: {
+    retuning: ArticleTranslation[]
+  }
+}
+export interface DeleteArticleResponse {
+  delete_articles_by_pk: Article
+}
+
+export interface InsertArticleResponse {
+  insert_articles_one: Article
+}
