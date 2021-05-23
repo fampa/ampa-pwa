@@ -230,43 +230,6 @@ export default {
       })
 
     // methods
-    const openModal = (command) => {
-      this.$refs.ytmodal.setCommand(command)
-      this.getImagesPrompt = true
-    }
-
-    const openLinkModal = (command, url) => {
-      this.$refs.linkModal.setCommand(command, url)
-      this.linkPrompt = true
-    }
-
-    const linkSelected = (obj) => {
-      const data = {
-        command: obj.command,
-        data: {
-          href: obj.href
-        }
-      }
-      if (data.command !== null) {
-        data.command(data.data)
-      }
-      this.linkPrompt = false
-    }
-
-    const imageSelected = (obj) => {
-      const data = {
-        command: obj.command,
-        data: {
-          src: obj.image
-          // alt: "YOU CAN ADD ALT",
-          // title: "YOU CAN ADD TITLE"
-        }
-      }
-      if (data.command !== null) {
-        data.command(data.data)
-      }
-      this.getImagesPrompt = false
-    }
 
     const setLink = () => {
       const url = window.prompt('URL')
@@ -284,10 +247,6 @@ export default {
 
     return {
       editor,
-      openModal,
-      openLinkModal,
-      linkSelected,
-      imageSelected,
       setLink,
       addImage
     }

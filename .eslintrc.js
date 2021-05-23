@@ -105,6 +105,7 @@ module.exports = {
 
     // https://github.com/eslint/eslint/issues/13956
     "indent": "off",
-    "@typescript-eslint/indent": ["error", 2]
+    "@typescript-eslint/indent": ["error", 2],
+    '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }]
   }
 }
