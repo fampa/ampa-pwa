@@ -65,12 +65,9 @@ export default {
     const getImages = async () => {
       const storageRef = firebase.storage().ref()
       const listRef = storageRef.child('media')
-      console.log('getImages called')
       await listRef.listAll()
         .then((res) => {
-          console.log('res', res)
           if (res.items.length === 0) {
-            console.log('reset images')
             images.value = []
           }
           res.prefixes.forEach((folderRef) => {
@@ -79,7 +76,6 @@ export default {
             // eslint-disable-next-line @typescript-eslint/no-floating-promises
             folderRef.listAll()
               .then(function (res) {
-                console.log(res)
                 const imagesTemp = []
                 // eslint-disable-next-line @typescript-eslint/no-misused-promises
                 res.items.forEach(async (itemRef) => {
@@ -88,7 +84,6 @@ export default {
                     images.value.push(url)
                   })
                 })
-                console.log('images', imagesTemp)
                 images.value = imagesTemp
               })
           })
@@ -121,12 +116,10 @@ export default {
     }
 
     const uploadImage = async (file) => {
-      console.log('uploadImage', file)
       await getImages()
     }
 
     const deleteImage = (image) => {
-      console.log('delete', image)
       const refFromUrl = firebase.storage().refFromURL(image)
       refFromUrl.delete().then(async () => {
         await getImages()
