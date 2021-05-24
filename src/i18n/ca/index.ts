@@ -134,6 +134,7 @@ export default {
     search: 'Cerca',
     services: 'Serveis',
     serviceTypes: 'Tipus de serveis',
-    status: 'Estat'
+    status: 'Estat',
+    tags: 'Etiquetes'
   }
 }

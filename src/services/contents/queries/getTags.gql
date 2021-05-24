@@ -1,0 +1,12 @@
+query getTags {
+  tags {
+    id
+    isMenu
+    icon
+    translations {
+      language
+      name
+      tagId
+    }
+  }
+}

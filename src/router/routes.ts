@@ -63,7 +63,10 @@ const routes: RouteRecordRaw[] = [
         ]
       },
       { path: 'blog', component: () => import('src/pages/admin/blog/Index.vue') },
-      { path: 'blog/edit/:id?', component: () => import('src/pages/admin/blog/Edit.vue') }
+      { path: 'blog/edit/:id?', component: () => import('src/pages/admin/blog/Edit.vue') },
+      { path: 'tags', component: () => import('src/pages/admin/tags/Index.vue') },
+      { path: 'tags/edit/:id?', component: () => import('src/pages/admin/tags/Edit.vue') }
+
     ]
   },
   {

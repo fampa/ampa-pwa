@@ -78,6 +78,19 @@
         </div>
 
         <div v-if="type === 'ARTICLE'">
+          <div class="row">
+             <div style="min-width: 250px; max-width: 300px">
+              <q-select
+                filled
+                v-model="selectedTags"
+                multiple
+                :options="tags"
+                use-chips
+                stack-label
+                label="Multiple selection"
+              />
+            </div>
+          </div>
           <div class="row" v-if="content.image">
             <div class="image-wrapper-2">
               <q-img
@@ -140,6 +153,8 @@ import { Content } from 'src/models/Content'
 import { ContentTranslation } from 'src/models/ContentTranslation'
 import { useStore } from 'src/services/store'
 import { cleanObject } from 'src/utilities/cleanObject'
+import { Tag } from 'src/models/Tag'
+import { ContentsService } from 'src/services/contents'
 
 const formatDate = (inputDate: Date) => {
   return date.formatDate(inputDate, 'YYYY-MM-DD HH:mm')
@@ -166,20 +181,21 @@ export default defineComponent({
     const store = useStore()
     const user = computed(() => store.state.user.user)
     const getImagesPrompt = ref(false)
+    const tags = ref<{label: string, value: number}[]>([])
+    const selectedTags = ref<Tag[]>([])
+    const contentsService = new ContentsService()
+    const { result: tagsResult, onResult: onTagsResult } = contentsService.getTags()
 
     // Data
     const content = ref<Content>(Object.assign(props.inputContent))
     const translations = ref<ContentTranslation[]>(i18n.availableLocales.map(l => {
       return {
-        parentId: props.inputContent.id,
-        title: props.inputContent.translations.find(t => t.language === l).title,
+        parentId: props.inputContent?.id,
+        title: props.inputContent?.translations?.find(t => t.language === l).title,
         language: l,
-        content: props.inputContent.translations.find(t => t.language === l).content
+        content: props.inputContent?.translations?.find(t => t.language === l).content
       }
     }))
-
-    const pathPrefix = computed(() => `media/${user.value.uid}/`)
-
     const dialog = ref(false)
     // const image = ref<string>(null)
     const triggerUpload = ref(false)
@@ -196,6 +212,17 @@ export default defineComponent({
       { label: i18n.t('content.draft'), value: false },
       { label: i18n.t('content.published'), value: true }
     ])
+
+    onTagsResult(() => {
+      tags.value = tagsResult.value.tags.map(tag => {
+        return {
+          value: tag.id,
+          label: tag.translations.find(t => t.language === lang.value).name
+        }
+      })
+    })
+
+    const pathPrefix = computed(() => `media/${user.value.uid}/`)
 
     // methods
     const imageSelected = (image) => {
@@ -222,6 +249,10 @@ export default defineComponent({
       content.value.authorId = user.value.uid
       content.value.type = props.type
       const obj = content.value
+      // si no hi ha tags, llevar la clau per evitar error de graphql type
+      if (obj.tags.length === 0) {
+        delete obj.tags
+      }
       cleanObject(obj)
       if (content.value.image || !pendingImages.value) return emit('guardar', obj)
       // this.$refs.uploader.upload()
@@ -277,7 +308,9 @@ export default defineComponent({
       formatDate,
       remove,
       getImagesPrompt,
-      pathPrefix
+      pathPrefix,
+      tags,
+      selectedTags
     }
   }
 })

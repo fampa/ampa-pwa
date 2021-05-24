@@ -6,6 +6,15 @@ query getContentById($id: Int!) {
     icon
     isPublished
     isMenu
+    tags {
+    	tag {
+        id
+        translations {
+          name
+          language
+        }
+      }
+    }
     updatedAt
     translations {
       content

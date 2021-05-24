@@ -1,0 +1,12 @@
+query getTagById($id: Int!) {
+  tags_by_pk(id: $id) {
+    id
+    isMenu
+    icon
+    translations {
+      language
+      name
+      tagId
+    }
+  }
+}

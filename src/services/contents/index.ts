@@ -9,10 +9,13 @@ import joinService from './queries/joinService.gql'
 import upsertContent from './queries/upsertContent.gql'
 import insertContent from './queries/insertContent.gql'
 import deleteContent from './queries/deleteContent.gql'
+import getTags from './queries/getTags.gql'
+import getTagById from './queries/getTagById.gql'
 import { ServicesTypeData, UnJoinServiceResponse, ServicesData, ServiceData, JoinServiceResponse } from 'src/models/Service'
 import { MembersService } from '../members'
 import axios from 'axios'
 import { ContentData, ContentsData, DeleteContentResponse, InsertContentResponse, UpsertContentResponse } from 'src/models/Content'
+import { TagData, TagsData } from 'src/models/Tag'
 
 const membersService = new MembersService()
 
@@ -102,6 +105,25 @@ export class ContentsService {
   deleteContent = () => {
     const response = useMutation<DeleteContentResponse>(
       deleteContent
+    )
+
+    return response
+  }
+
+  getTags = () => {
+    const response = useQuery<TagsData>(
+      getTags
+    )
+
+    return response
+  }
+
+  getTagById = (id: number) => {
+    const response = useQuery<TagData>(
+      getTagById,
+      {
+        id
+      }
     )
 
     return response

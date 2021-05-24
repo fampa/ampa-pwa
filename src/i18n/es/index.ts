@@ -134,6 +134,7 @@ export default {
     search: 'Buscar',
     services: 'Servicios',
     serviceTypes: 'Tipos de servicios',
-    status: 'Estado'
+    status: 'Estado',
+    tags: 'Etiquetas'
   }
 }

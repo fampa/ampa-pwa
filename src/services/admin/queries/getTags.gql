@@ -1,0 +1,16 @@
+query getTags($limit: Int, $offset: Int, $orderBy: [tags_order_by!] = {id: desc}, $filter: String = "%%") {
+  tags_aggregate(where: {translations: {name: {_ilike: $filter}}}, limit: $limit, offset: $offset) {
+    aggregate {
+      count
+    }
+  }
+  tags(where: {translations: {name: {_ilike: $filter}}}, limit: $limit, offset: $offset, order_by: $orderBy) {
+    id
+    icon
+    translations {
+      name
+      language
+      tagId
+    }
+  }
+}
