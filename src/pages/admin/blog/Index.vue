@@ -1,10 +1,10 @@
 <template>
-  <q-page padding class="bg-blue-grey-1 q-pa-md">
+  <q-page padding class="bg-blue-grey-1">
     <div class="max-900">
       <q-table
         class="content"
         title="Blog"
-        :rows="articles"
+        :rows="contents"
         :columns="columns"
         @row-click="onRowClick"
         row-key="id"
@@ -22,9 +22,9 @@
           </template>
         </q-input>
       </template>
-      <template v-slot:body-cell-status="props">
+      <template v-slot:body-cell-isPublished="props">
         <q-td :props="props">
-          <q-badge :color="props.value === ('PUBLICAT' || 'PUBLICADO') ? 'positive' : 'warning'">
+          <q-badge :color="props.value === ('Publicat' || 'Publicado') ? 'positive' : 'warning'">
             {{props.value}}
           </q-badge>
         </q-td>
@@ -33,7 +33,7 @@
       </q-table>
 
       <q-page-sticky position="bottom-right" :offset="[18, 18]">
-        <q-btn fab icon="add" color="primary" to="/admin/blog/edit" />
+        <q-btn fab icon="add" color="primary" to="/admin/pages/edit" />
       </q-page-sticky>
     </div>
   </q-page>
@@ -41,16 +41,16 @@
 
 <script lang="ts">
 import { ref, reactive } from 'vue'
-import { Article } from 'src/models/Article'
 import { useStore } from 'src/services/store'
 import { useRouter } from 'vue-router'
 import { cleanObject } from 'src/utilities/cleanObject'
 import { AdminService } from 'src/services/admin'
 import { formatDate } from 'src/utilities/formatDate'
 import { useI18n } from 'vue-i18n'
+import { Content } from 'src/models/Content'
 
 export default {
-  name: 'AdminBlog',
+  name: 'AdminPages',
   setup () {
     const store = useStore()
     const currentLanguage = store.state.settings.language
@@ -60,10 +60,10 @@ export default {
     const adminService = new AdminService()
 
     // Data
-    const articles = ref<Article[]>([])
+    const contents = ref<Content[]>([])
     const filter = ref<string | null>(null)
     const pagination = ref({
-      sortBy: 'id',
+      sortBy: 'createdAt',
       descending: true,
       page: 1,
       rowsPerPage: 5,
@@ -96,12 +96,12 @@ export default {
         sortable: true
       },
       {
-        name: 'status',
+        name: 'isPublished',
         required: true,
         label: i18n.t('table.status'),
+        format: val => val ? i18n.t('content.published') : i18n.t('content.draft'),
         align: 'left',
-        field: 'status',
-        format: val => i18n.t(`status.${val}`),
+        field: 'isPublished',
         sortable: true
       }
     ])
@@ -121,15 +121,16 @@ export default {
       limit,
       offset,
       orderBy,
-      filter: filter.value
+      filter: filter.value,
+      type: 'ARTICLE'
     }
     const sanitizeVariables = cleanObject(variables)
-    const { result, onResult, loading, fetchMore } = adminService.getArticles(sanitizeVariables)
+    const { result, onResult, loading, fetchMore } = adminService.getContentsByType(sanitizeVariables)
 
     onResult(() => {
-      articles.value = result.value?.articles
-      pagination.value.rowsNumber = result.value?.articles_aggregate?.aggregate?.count
-      // console.log('articles', result.value?.articles)
+      contents.value = result.value?.content
+      pagination.value.rowsNumber = result.value?.content_aggregate?.aggregate?.count
+      // console.log('contents', result.value?.contents)
     })
 
     const onRequest = async (props) => {
@@ -158,17 +159,17 @@ export default {
           ...sanitizeVariables
         }
       })
-      articles.value = more.data.articles
+      contents.value = more.data.content
       pagination.value.page = page
       pagination.value.rowsPerPage = rowsPerPage
       pagination.value.sortBy = sortBy
       pagination.value.descending = descending
-      pagination.value.rowsNumber = result.value?.articles_aggregate?.aggregate?.count
+      pagination.value.rowsNumber = result.value?.content_aggregate?.aggregate?.count
       // console.log('pagination', pagination)
     }
 
     return {
-      articles,
+      contents,
       pagination,
       columns,
       loading,

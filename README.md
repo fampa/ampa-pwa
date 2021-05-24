@@ -8,6 +8,12 @@ Copy or rename `.env.example` file to `.env`, and `functions/env.json.example` t
 
 ## Prerequisits to be able to deploy to firebase
 
+You'll need to create a Firebase project and enable email and goggle login. You'll also need to enable Firebase Storage to upload files.
+
+You may need to change the Firebase Plan to Blaze to be able to make calls from Firebase Functions to the Hasura database.
+
+Once you have done this, you'll need to:
+
 ```bash
 npm install -g firebase-tools
 firebase login

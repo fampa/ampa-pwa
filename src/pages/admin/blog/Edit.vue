@@ -1,51 +1,52 @@
 <template>
-    <article-editor v-if="article" @guardar="guardar" @remove="remove" :loading="upsertLoading || insertLoading" :input-article="article"></article-editor>
+    <translation-editor v-if="content" @guardar="guardar" type="ARTICLE" @remove="remove" :loading="upsertLoading || insertLoading" :input-content="content"></translation-editor>
 </template>
 
 <script lang="ts">
-import ArticleEditor from 'src/components/TranslationEditor/index.vue'
+import TranslationEditor from 'src/components/TranslationEditor/index.vue'
 import { ref, onMounted, computed } from 'vue'
-import { Article } from 'src/models/Article'
-import { ArticlesService } from 'src/services/articles'
 import { useRoute, useRouter } from 'vue-router'
 import { date, useQuasar } from 'quasar'
 import { useI18n } from 'vue-i18n'
 import { cleanObject } from 'src/utilities/cleanObject'
+import { ContentsService } from 'src/services/contents'
+import { Content } from 'src/models/Content'
 
-const formatDate = (inputDate: Date) => {
+const formatDate = (inputDate: Date | string) => {
   return date.formatDate(inputDate, 'YYYY-MM-DD HH:mm')
 }
 
 export default {
-  components: { ArticleEditor },
+  components: { TranslationEditor },
+  name: 'EditContent',
   setup () {
-    const articlesService = new ArticlesService()
+    const contentsService = new ContentsService()
     const route = useRoute()
     const router = useRouter()
     const i18n = useI18n()
     const $q = useQuasar()
 
-    const { mutate: upsertArticle, loading: upsertLoading } = articlesService.upsertArticle()
-    const { mutate: removeArticle } = articlesService.deleteArticle()
-    const { mutate: insertArticle, loading: insertLoading } = articlesService.insertArticle()
+    const { mutate: upsertContent, loading: upsertLoading } = contentsService.upsertContent()
+    const { mutate: removeContent } = contentsService.deleteContent()
+    const { mutate: insertContent, loading: insertLoading } = contentsService.insertContent()
 
     // Data
     const id = computed(() => Number(route.params?.id))
-    const article = ref<Article>(null)
+    const content = ref<Content>(null)
     // Methods
-    const guardar = async (article) => {
-      // console.log('guardat', article)
-      const translations = article.translations
+    const guardar = async (content) => {
+      // console.log('guardat', content)
+      const translations = content.translations
       cleanObject(translations)
-      delete article.translations
-      cleanObject(article)
+      delete content.translations
+      cleanObject(content)
       const variables = {
-        article,
+        content,
         translations
       }
       // console.log(variables)
       if (id.value) {
-        await upsertArticle(variables)
+        await upsertContent(variables)
           .then(() => {
             $q.notify(i18n.t('forms.savedOk'))
           })
@@ -53,10 +54,10 @@ export default {
             console.error(err)
           })
       } else {
-        variables.article.translations = {}
-        variables.article.translations.data = variables.translations
+        variables.content.translations = {}
+        variables.content.translations.data = variables.translations
         delete variables.translations
-        await insertArticle(variables)
+        await insertContent(variables)
           .then(async () => {
             await router.replace('/admin/blog')
           })
@@ -69,14 +70,14 @@ export default {
       }
     }
 
-    const remove = (article) => {
+    const remove = (content) => {
       $q.dialog({
         title: i18n.t('remove.title'),
         message: i18n.t('remove.question'),
         cancel: true,
         persistent: true
       }).onOk(async () => {
-        await removeArticle({ id: article.value.id })
+        await removeContent({ id: content.value.id })
       }).onOk(async () => {
         // console.log('>>>> second OK catcher')
         $q.notify(i18n.t('remove.confirm'))
@@ -89,20 +90,22 @@ export default {
     }
 
     onMounted(() => {
-      const { article: databaseArticle, onResult } = articlesService.getById(id.value)
+      const { result, onResult } = contentsService.getContentById(id.value)
 
       if (id.value) {
         onResult(() => {
-          const articleTemp = Object.assign({ ...databaseArticle.value }) as Article
-          articleTemp.createdAt = formatDate(databaseArticle.value.createdAt)
-          // console.log(articleTemp)
-          article.value = articleTemp
+          const contentTemp = Object.assign({ ...result.value.content_by_pk }) as Content
+          contentTemp.createdAt = formatDate(result.value.content_by_pk.createdAt)
+          // console.log(contentTemp)
+          content.value = contentTemp
         })
       } else {
-        article.value = {
-          status: 'DRAFT',
+        content.value = {
+          isPublished: false,
           createdAt: formatDate(new Date()),
           image: null,
+          icon: null,
+          type: 'ARTICLE',
           translations: i18n.availableLocales.map(l => {
             return {
               title: '',
@@ -116,7 +119,7 @@ export default {
 
     return {
       guardar,
-      article,
+      content,
       upsertLoading,
       insertLoading,
       remove

@@ -91,7 +91,7 @@
         </div>
 
           <div>
-            <!-- <get-images @cancel="getImagesPrompt = false" @selected="imageSelected" :prompt="getImagesPrompt" /> -->
+            <get-images :path-prefix="pathPrefix" @cancel="getImagesPrompt = false" @selected="imageSelected" :prompt="getImagesPrompt" />
           </div>
 
           <div class="row" v-if="!content.image">
@@ -130,7 +130,7 @@
 
 <script lang="ts">
 import ContentEditor from './ContentEditor.vue'
-// import GetImages from './GetImages.vue'
+import GetImages from './GetImages.vue'
 import { ref, PropType, defineComponent, computed } from 'vue'
 import firebase from 'firebase/app'
 import 'firebase/storage'
@@ -148,8 +148,8 @@ const formatDate = (inputDate: Date) => {
 export default defineComponent({
   name: 'TranslationEditor',
   components: {
-    ContentEditor
-    // GetImages
+    ContentEditor,
+    GetImages
   },
   props: {
     inputContent: {
@@ -165,6 +165,7 @@ export default defineComponent({
     const i18n = useI18n()
     const store = useStore()
     const user = computed(() => store.state.user.user)
+    const getImagesPrompt = ref(false)
 
     // Data
     const content = ref<Content>(Object.assign(props.inputContent))
@@ -177,9 +178,10 @@ export default defineComponent({
       }
     }))
 
+    const pathPrefix = computed(() => `media/${user.value.uid}/`)
+
     const dialog = ref(false)
     // const image = ref<string>(null)
-    const getImagesPrompt = ref(false)
     const triggerUpload = ref(false)
     const pendingImages = ref(false)
     const lang = ref(i18n.availableLocales[0])
@@ -273,7 +275,9 @@ export default defineComponent({
       uploadImage,
       lang,
       formatDate,
-      remove
+      remove,
+      getImagesPrompt,
+      pathPrefix
     }
   }
 })
