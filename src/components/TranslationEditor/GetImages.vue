@@ -28,6 +28,7 @@ import { onMounted, ref, watch, onBeforeUnmount } from 'vue'
 import firebase from 'firebase/app'
 import 'firebase/storage'
 import FirebaseUploader from './FirebaseUploader'
+import { useQuasar } from 'quasar'
 
 export default {
   components: {
@@ -44,6 +45,7 @@ export default {
     const images = ref<string[]>([])
     const open = ref(false)
     const pendingImages = ref(false)
+    const $q = useQuasar()
 
     // methods
     const setCommand = (command) => {
@@ -124,7 +126,7 @@ export default {
       refFromUrl.delete().then(async () => {
         await getImages()
       })
-        .catch(err => this.$notify(err))
+        .catch(err => $q.notify(err))
     }
 
     return {
