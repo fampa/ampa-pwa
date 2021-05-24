@@ -89,7 +89,7 @@ export default {
                 images.value = imagesTemp
               })
           })
-          res.items.forEach((itemRef) => {
+          res.items.forEach((/* itemRef */) => {
             // All the items under listRef.
           })
         }).catch((error) => {
@@ -117,7 +117,7 @@ export default {
       pendingImages.value = false
     }
 
-    const uploadImage = async (file) => {
+    const uploadImage = async () => {
       await getImages()
     }
 
