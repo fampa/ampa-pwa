@@ -1,0 +1,22 @@
+query getContentsByType($filter: String = "%%", $limit: Int, $offset: Int, $orderBy: [content_order_by!] = {createdAt: desc}, $type: String!) {
+  content_aggregate(where: {translations: {_or: [{content: {_ilike: $filter}}, {title: {_ilike: $filter}}]}, type: {_eq: $type}}) {
+    aggregate {
+      count
+    }
+  }
+  content(order_by: $orderBy, limit: $limit, offset: $offset, where: {translations: {_or: [{content: {_ilike: $filter}}, {title: {_ilike: $filter}}]}, type: {_eq: $type}}) {
+    createdAt
+    id
+    image
+    icon
+    isPublished
+    isMenu
+    updatedAt
+    translations {
+      slug
+      language
+      title
+      content
+    }
+  }
+}

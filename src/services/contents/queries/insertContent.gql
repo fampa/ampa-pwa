@@ -1,0 +1,18 @@
+mutation insertContent($content: content_insert_input = {}) {
+  insert_content_one(object: $content) {
+    id
+    createdAt
+    updatedAt
+    isPublished
+    isMenu
+    icon
+    image
+    translations {
+      parentId
+      content
+      title
+      slug
+      language
+    }
+  }
+}

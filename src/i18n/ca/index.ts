@@ -5,9 +5,10 @@ export default {
     services: 'Gestió de serveis',
     blog: 'Gestió del blog'
   },
-  article: {
+  content: {
     content: 'Contingut',
     draft: 'Esborrany',
+    isMenu: 'Incloure al menú',
     published: 'Publicat',
     title: 'Títol'
   },
@@ -118,7 +119,7 @@ export default {
       description: 'Descripció',
       edit: 'Edita un tipus de servei',
       icon: 'Icona',
-      iconPre: 'Poseu el nom de la classe de la icona. Les icones disponibles les podeu trobar a:',
+      iconPre: 'Poseu el nom de la classe de la icona, per exemple "las la-school". Les icones disponibles les podeu trobar a:',
       iconHint: 'Per exemple "las la-school"',
       name: 'Nom'
     }

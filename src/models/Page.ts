@@ -8,6 +8,7 @@ export interface Page {
   translations?: PageTranslation[]
   image?: string
   icon?: string
+  isMenu?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
 }

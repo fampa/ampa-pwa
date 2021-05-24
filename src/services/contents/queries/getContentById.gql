@@ -1,9 +1,11 @@
-query getPageById($id: Int!) {
-  pages_by_pk(id: $id) {
+query getContentById($id: Int!) {
+  content_by_pk(id: $id) {
     createdAt
     id
     image
-    status
+    icon
+    isPublished
+    isMenu
     updatedAt
     translations {
       content

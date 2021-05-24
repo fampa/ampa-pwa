@@ -1,11 +1,11 @@
 <template>
-  <form class="article-editor q-pa-md">
+  <form class="content-editor q-pa-md">
     <main class="row q-col-gutter-sm">
       <div class="col-md-8">
         <div class="row">
           <div class="col-12">
             <div v-for="(translation, index) in translations" :key="index">
-              <q-input v-if="translation.language === lang" borderless ref="title" class="title-input" v-model="translation.title"  :placeholder="$t('article.title')" :rules="[val => !!val || $t('forms.required')]" />
+              <q-input v-if="translation.language === lang" borderless ref="title" class="title-input" v-model="translation.title"  :placeholder="$t('content.title')" :rules="[val => !!val || $t('forms.required')]" />
             </div>
           </div>
         </div>
@@ -29,17 +29,17 @@
         </div>
         <div class="row">
           <div class="col-12">
-            <q-select outlined v-model="article.status" :options="statusOptions" label="Status" emit-value map-options />
+            <q-select outlined v-model="content.isPublished" :options="statusOptions" label="Status" emit-value map-options />
           </div>
         </div>
 
         <div class="row">
           <div class="col-12">
-            <q-input filled v-model="article.createdAt">
+            <q-input filled v-model="content.createdAt">
               <template v-slot:prepend>
                 <q-icon name="event" class="cursor-pointer">
                   <q-popup-proxy transition-show="scale" transition-hide="scale">
-                    <q-date v-model="article.createdAt" mask="YYYY-MM-DD HH:mm">
+                    <q-date v-model="content.createdAt" mask="YYYY-MM-DD HH:mm">
                       <div class="row items-center justify-end">
                         <q-btn v-close-popup label="Close" color="primary" flat />
                       </div>
@@ -51,7 +51,7 @@
               <template v-slot:append>
                 <q-icon name="access_time" class="cursor-pointer">
                   <q-popup-proxy transition-show="scale" transition-hide="scale">
-                    <q-time v-model="article.createdAt" mask="YYYY-MM-DD HH:mm" format24h>
+                    <q-time v-model="content.createdAt" mask="YYYY-MM-DD HH:mm" format24h>
                       <div class="row items-center justify-end">
                         <q-btn v-close-popup label="Close" color="primary" flat />
                       </div>
@@ -63,25 +63,41 @@
           </div>
         </div><!--  datetime row -->
 
-        <div class="row" v-if="!isPage && article.image">
-          <div class="image-wrapper-2">
-            <q-img
-              class="article-image cursor-pointer"
-              :src="article.image"
-              @click="getImagesPrompt = true"
-            >
-            </q-img>
-            <q-btn class="remove-button" round flat size="xm" color="primary" @click="removeImage"  label="X" />
+        <div v-if="type === 'PAGE'">
+          <div class="q-gutter-sm">
+            <q-checkbox v-model="content.isMenu" :label="$t('content.isMenu')" />
+          </div>
+          <q-input bottom-slots outlined v-model="content.icon" :label="$t('service.type.icon')">
+            <template v-slot:before>
+              <q-icon :name="content.icon" />
+            </template>
+            <template v-slot:hint>
+              {{$t('service.type.iconPre')}} <a href="https://icons8.com/line-awesome" target="_blank" rel="noopener noreferrer">Line Awesome</a>
+            </template>
+          </q-input>
+        </div>
+
+        <div v-if="type === 'ARTICLE'">
+          <div class="row" v-if="content.image">
+            <div class="image-wrapper-2">
+              <q-img
+                class="content-image cursor-pointer"
+                :src="content.image"
+                @click="getImagesPrompt = true"
+              >
+              </q-img>
+              <q-btn class="remove-button" round flat size="xm" color="primary" @click="removeImage"  label="X" />
           </div>
         </div>
 
-        <div>
-          <!-- <get-images @cancel="getImagesPrompt = false" @selected="imageSelected" :prompt="getImagesPrompt" /> -->
-        </div>
+          <div>
+            <!-- <get-images @cancel="getImagesPrompt = false" @selected="imageSelected" :prompt="getImagesPrompt" /> -->
+          </div>
 
-        <div class="row" v-if="!isPage && !article.image">
-          <div class="col">
-            <q-btn @click="getImagesPrompt = true" color="accent" label="Añadir imagen de portada" />
+          <div class="row" v-if="!content.image">
+            <div class="col">
+              <q-btn @click="getImagesPrompt = true" color="accent" label="Añadir imagen de portada" />
+            </div>
           </div>
         </div>
 
@@ -115,46 +131,49 @@
 <script lang="ts">
 import ContentEditor from './ContentEditor.vue'
 // import GetImages from './GetImages.vue'
-import { ref, PropType, defineComponent } from 'vue'
+import { ref, PropType, defineComponent, computed } from 'vue'
 import firebase from 'firebase/app'
 import 'firebase/storage'
-import { Article } from 'src/models/Article'
 import { useQuasar, date } from 'quasar'
 import { useI18n } from 'vue-i18n'
-// import { ArticlesService } from 'src/services/articles'
-import { ArticleTranslation } from 'src/models/ArticleTranslation'
+import { Content } from 'src/models/Content'
+import { ContentTranslation } from 'src/models/ContentTranslation'
+import { useStore } from 'src/services/store'
+import { cleanObject } from 'src/utilities/cleanObject'
 
 const formatDate = (inputDate: Date) => {
   return date.formatDate(inputDate, 'YYYY-MM-DD HH:mm')
 }
 
 export default defineComponent({
-  name: 'ArticleEditor',
+  name: 'TranslationEditor',
   components: {
     ContentEditor
     // GetImages
   },
   props: {
-    inputArticle: {
-      type: Object as PropType<Article>,
+    inputContent: {
+      type: Object as PropType<Content>,
       required: false
     },
-    isPage: Boolean,
+    type: String,
     loading: Boolean
   },
   emits: ['guardar', 'remove'],
   setup (props, { emit }) {
     const $q = useQuasar()
     const i18n = useI18n()
+    const store = useStore()
+    const user = computed(() => store.state.user.user)
 
     // Data
-    const article = ref<Article>(Object.assign(props.inputArticle))
-    const translations = ref<ArticleTranslation[]>(i18n.availableLocales.map(l => {
+    const content = ref<Content>(Object.assign(props.inputContent))
+    const translations = ref<ContentTranslation[]>(i18n.availableLocales.map(l => {
       return {
-        parentId: props.inputArticle.id,
-        title: props.inputArticle.translations.find(t => t.language === l).title,
+        parentId: props.inputContent.id,
+        title: props.inputContent.translations.find(t => t.language === l).title,
         language: l,
-        content: props.inputArticle.translations.find(t => t.language === l).content
+        content: props.inputContent.translations.find(t => t.language === l).content
       }
     }))
 
@@ -172,20 +191,20 @@ export default defineComponent({
     })
     const langOptions = ref(availableLocales)
     const statusOptions = ref([
-      { label: i18n.t('article.draft'), value: 'DRAFT' },
-      { label: i18n.t('article.published'), value: 'PUBLISHED' }
+      { label: i18n.t('content.draft'), value: false },
+      { label: i18n.t('content.published'), value: true }
     ])
 
     // methods
     const imageSelected = (image) => {
       // console.log(image)
-      article.value.image = image
+      content.value.image = image
       getImagesPrompt.value = false
     }
 
     const preSave = () => {
       // if (!this.validation) return
-      if (article.value.status === 'PUBLISHED') {
+      if (content.value.isPublished) {
         return guardar()
       } else {
         dialog.value = true
@@ -195,10 +214,14 @@ export default defineComponent({
     const guardar = (publicar = false) => {
       // if (!this.validation) return
       if (publicar) {
-        article.value.status = 'PUBLISHED'
+        content.value.isPublished = true
       }
-      article.value.translations = translations.value
-      if (article.value.image || !pendingImages.value) return emit('guardar', article.value)
+      content.value.translations = translations.value
+      content.value.authorId = user.value.uid
+      content.value.type = props.type
+      const obj = content.value
+      cleanObject(obj)
+      if (content.value.image || !pendingImages.value) return emit('guardar', obj)
       // this.$refs.uploader.upload()
     }
 
@@ -211,13 +234,13 @@ export default defineComponent({
     }
 
     const removeImage = () => {
-      article.value.image = null
+      content.value.image = null
     }
 
     const deleteImage = () => {
-      const refFromUrl = firebase.storage().refFromURL(article.value.image)
+      const refFromUrl = firebase.storage().refFromURL(content.value.image)
       refFromUrl.delete().then(() => {
-        article.value.image = null
+        content.value.image = null
         return guardar()
       })
         .catch(err => $q.notify(err))
@@ -225,16 +248,16 @@ export default defineComponent({
 
     const uploadImage = (obj) => {
       // console.log(obj)
-      article.value.image = obj.url
-      emit('guardar', article)
+      content.value.image = obj.url
+      emit('guardar', content)
     }
 
     const remove = () => {
-      emit('remove', article)
+      emit('remove', content)
     }
 
     return {
-      article,
+      content,
       translations,
       dialog,
       guardar,
@@ -271,7 +294,7 @@ export default defineComponent({
     line-height: 2.5rem;
     color: lightgray;
   }
-.article-editor {
+.content-editor {
 
   label {
     margin-bottom: 2rem;

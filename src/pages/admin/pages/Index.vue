@@ -4,7 +4,7 @@
       <q-table
         class="content"
         :title="$t('table.pages')"
-        :rows="pages"
+        :rows="contents"
         :columns="columns"
         @row-click="onRowClick"
         row-key="id"
@@ -22,9 +22,9 @@
           </template>
         </q-input>
       </template>
-      <template v-slot:body-cell-status="props">
+      <template v-slot:body-cell-isPublished="props">
         <q-td :props="props">
-          <q-badge :color="props.value === ('PUBLICAT' || 'PUBLICADO') ? 'positive' : 'warning'">
+          <q-badge :color="props.value === ('Publicat' || 'Publicado') ? 'positive' : 'warning'">
             {{props.value}}
           </q-badge>
         </q-td>
@@ -46,11 +46,11 @@ import { useRouter } from 'vue-router'
 import { cleanObject } from 'src/utilities/cleanObject'
 import { AdminService } from 'src/services/admin'
 import { formatDate } from 'src/utilities/formatDate'
-import { Page } from 'src/models/Page'
 import { useI18n } from 'vue-i18n'
+import { Content } from 'src/models/Content'
 
 export default {
-  name: 'AdminBlog',
+  name: 'AdminPages',
   setup () {
     const store = useStore()
     const currentLanguage = store.state.settings.language
@@ -60,7 +60,7 @@ export default {
     const adminService = new AdminService()
 
     // Data
-    const pages = ref<Page[]>([])
+    const contents = ref<Content[]>([])
     const filter = ref<string | null>(null)
     const pagination = ref({
       sortBy: 'createdAt',
@@ -96,12 +96,12 @@ export default {
         sortable: true
       },
       {
-        name: 'status',
+        name: 'isPublished',
         required: true,
         label: i18n.t('table.status'),
+        format: val => val ? i18n.t('content.published') : i18n.t('content.draft'),
         align: 'left',
-        field: 'status',
-        format: val => i18n.t(`status.${val}`),
+        field: 'isPublished',
         sortable: true
       }
     ])
@@ -121,15 +121,16 @@ export default {
       limit,
       offset,
       orderBy,
-      filter: filter.value
+      filter: filter.value,
+      type: 'PAGE'
     }
     const sanitizeVariables = cleanObject(variables)
-    const { result, onResult, loading, fetchMore } = adminService.getPages(sanitizeVariables)
+    const { result, onResult, loading, fetchMore } = adminService.getContentsByType(sanitizeVariables)
 
     onResult(() => {
-      pages.value = result.value?.pages
-      pagination.value.rowsNumber = result.value?.pages_aggregate?.aggregate?.count
-      // console.log('pages', result.value?.pages)
+      contents.value = result.value?.content
+      pagination.value.rowsNumber = result.value?.content_aggregate?.aggregate?.count
+      // console.log('contents', result.value?.contents)
     })
 
     const onRequest = async (props) => {
@@ -158,17 +159,17 @@ export default {
           ...sanitizeVariables
         }
       })
-      pages.value = more.data.pages
+      contents.value = more.data.content
       pagination.value.page = page
       pagination.value.rowsPerPage = rowsPerPage
       pagination.value.sortBy = sortBy
       pagination.value.descending = descending
-      pagination.value.rowsNumber = result.value?.pages_aggregate?.aggregate?.count
+      pagination.value.rowsNumber = result.value?.content_aggregate?.aggregate?.count
       // console.log('pagination', pagination)
     }
 
     return {
-      pages,
+      contents,
       pagination,
       columns,
       loading,

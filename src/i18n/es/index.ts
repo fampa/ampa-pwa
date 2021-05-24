@@ -5,9 +5,10 @@ export default {
     services: 'Gestión de servicios',
     blog: 'Gestión del blog'
   },
-  article: {
+  content: {
     content: 'Contenido',
     draft: 'Borrador',
+    isMenu: 'Incluir al menú',
     published: 'Publicado',
     title: 'Título'
   },
@@ -106,7 +107,7 @@ export default {
       description: 'Descripción',
       edit: 'Edita un tipo de servicio',
       icon: 'Icono',
-      iconPre: 'Pon el nombre del icono. Los iconos disponibles los podéis encontrar en:',
+      iconPre: 'Pon el nombre del icono, por ejemplo "las la-school". Los iconos disponibles los podéis encontrar en:',
       iconHint: 'Per exemple "las la-school"',
       name: 'Nombre'
     }

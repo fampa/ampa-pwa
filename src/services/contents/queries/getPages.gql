@@ -1,16 +1,19 @@
 query getPages {
-  pages {
-    createdAt
+  content(where: {type: {_eq: "PAGE"}, isMenu: {_eq: true}, isPublished: {_eq: true}}) {
     id
+    isMenu
+    isPublished
     image
-    status
     icon
+    type
+    createdAt
     updatedAt
     translations {
-      content
-      language
+      parentId
       slug
       title
+      content
+      language
     }
   }
 }

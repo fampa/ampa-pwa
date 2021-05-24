@@ -1,0 +1,6 @@
+mutation deleteContent($id: Int!) {
+  delete_content_by_pk(id: $id) {
+    id
+    updatedAt
+  }
+}

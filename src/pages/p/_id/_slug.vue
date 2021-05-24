@@ -32,8 +32,8 @@ import { useQuasar } from 'quasar'
 import { ContentsService } from 'src/services/contents'
 import { useRoute } from 'vue-router'
 import { useStore } from 'src/services/store'
-import { Page } from 'src/models/Page'
 import { useI18n } from 'vue-i18n'
+import { Content } from 'src/models/Content'
 
 export default defineComponent({
   name: 'PageDetails',
@@ -43,7 +43,7 @@ export default defineComponent({
     const id = computed(() => Number(route.params.id))
     const store = useStore()
     const language = computed(() => store.state.settings.language)
-    const page = ref<Page | null>(null)
+    const page = ref<Content | null>(null)
     const $q = useQuasar()
 
     const title = computed(() => {
@@ -62,14 +62,14 @@ export default defineComponent({
     })
     const fallbackLanguage = computed(() => store.state.settings.fallbackLanguage)
 
-    const { result, loading, error, onError, onResult, refetch } = contentsService.getPageById(id.value)
+    const { result, loading, error, onError, onResult, refetch } = contentsService.getContentById(id.value)
 
     onResult(() => {
       getPage()
     })
 
     const getPage = () => {
-      page.value = result.value.pages_by_pk
+      page.value = result.value.content_by_pk
     }
 
     watch(() => id.value,

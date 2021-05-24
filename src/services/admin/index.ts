@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from '@vue/apollo-composable'
 import getArticles from './queries/getArticles.gql'
-import getPages from './queries/getPages.gql'
+import getContentsByType from './queries/getContentsByType.gql'
 import getMembers from './queries/getMembers.gql'
 import getServiceTypes from './queries/getServiceTypes.gql'
 import getServiceTypeById from './queries/getServiceTypeById.gql'
@@ -13,8 +13,8 @@ import getServiceById from './queries/getServiceById.gql'
 import { GetArticlesData } from 'src/models/Article'
 import { QueryTableOptions } from 'src/models/QueryTable'
 import { GetMembersData } from 'src/models/Member'
-import { GetPagesData } from 'src/models/Page'
 import { Service, ServiceData, GetServiceTypeByID, GetServiceTypesData, ServiceType, upsertServiceTypeResult, upsertServiceTypeInput, GetServicesByTypeResult, GetServicesByTypeInput, upsertServiceResult, upsertServiceInput } from 'src/models/Service'
+import { GetContentsData } from 'src/models/Content'
 
 export class AdminService {
   getArticles = (options: QueryTableOptions) => {
@@ -29,9 +29,9 @@ export class AdminService {
     return response
   }
 
-  getMembers = (options: QueryTableOptions) => {
-    const response = useQuery<GetMembersData, QueryTableOptions>(
-      getMembers,
+  getContentsByType = (options: QueryTableOptions) => {
+    const response = useQuery<GetContentsData, QueryTableOptions>(
+      getContentsByType,
       { ...options },
       {
         fetchPolicy: 'no-cache',
@@ -41,9 +41,9 @@ export class AdminService {
     return response
   }
 
-  getPages = (options: QueryTableOptions) => {
-    const response = useQuery<GetPagesData, QueryTableOptions>(
-      getPages,
+  getMembers = (options: QueryTableOptions) => {
+    const response = useQuery<GetMembersData, QueryTableOptions>(
+      getMembers,
       { ...options },
       {
         fetchPolicy: 'no-cache',

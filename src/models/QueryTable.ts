@@ -8,5 +8,6 @@ export interface QueryTableOptions {
   offset?: number,
   limit?: number,
   orderBy?: Record<string, unknown>
-  filter?: string
+  filter?: string,
+  type?: string
 }

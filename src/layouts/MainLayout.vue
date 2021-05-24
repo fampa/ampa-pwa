@@ -191,7 +191,7 @@ export default defineComponent({
 
     const { result: PagesResult, onResult: onPagesResult } = contentsService.getPagesList()
     const getPageItems = () => {
-      pagesItems.value = PagesResult.value?.pages?.map(page => {
+      pagesItems.value = PagesResult.value?.content?.map(page => {
         const title = page.translations?.find(p => p.language === currentLanguage.value)?.title || page.translations?.find(p => p.language === fallbackLanguage.value)?.title
         return {
           title,

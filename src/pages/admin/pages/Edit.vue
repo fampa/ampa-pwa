@@ -1,24 +1,24 @@
 <template>
-    <article-editor v-if="page" @guardar="guardar" isPage @remove="remove" :loading="upsertLoading || insertLoading" :input-article="page"></article-editor>
+    <translation-editor v-if="content" @guardar="guardar" type="PAGE" @remove="remove" :loading="upsertLoading || insertLoading" :input-content="content"></translation-editor>
 </template>
 
 <script lang="ts">
-import ArticleEditor from 'src/components/ArticleEditor/index.vue'
+import TranslationEditor from 'src/components/TranslationEditor/index.vue'
 import { ref, onMounted, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { date, useQuasar } from 'quasar'
 import { useI18n } from 'vue-i18n'
 import { cleanObject } from 'src/utilities/cleanObject'
 import { ContentsService } from 'src/services/contents'
-import { Page } from 'src/models/Page'
+import { Content } from 'src/models/Content'
 
 const formatDate = (inputDate: Date | string) => {
   return date.formatDate(inputDate, 'YYYY-MM-DD HH:mm')
 }
 
 export default {
-  components: { ArticleEditor },
-  name: 'EditPage',
+  components: { TranslationEditor },
+  name: 'EditContent',
   setup () {
     const contentsService = new ContentsService()
     const route = useRoute()
@@ -26,27 +26,27 @@ export default {
     const i18n = useI18n()
     const $q = useQuasar()
 
-    const { mutate: upsertPage, loading: upsertLoading } = contentsService.upsertPage()
-    const { mutate: removePage } = contentsService.deletePage()
-    const { mutate: insertPage, loading: insertLoading } = contentsService.insertPage()
+    const { mutate: upsertContent, loading: upsertLoading } = contentsService.upsertContent()
+    const { mutate: removeContent } = contentsService.deleteContent()
+    const { mutate: insertContent, loading: insertLoading } = contentsService.insertContent()
 
     // Data
     const id = computed(() => Number(route.params?.id))
-    const page = ref<Page>(null)
+    const content = ref<Content>(null)
     // Methods
-    const guardar = async (page) => {
-      // console.log('guardat', page)
-      const translations = page.translations
+    const guardar = async (content) => {
+      console.log('guardat', content)
+      const translations = content.translations
       cleanObject(translations)
-      delete page.translations
-      cleanObject(page)
+      delete content.translations
+      cleanObject(content)
       const variables = {
-        page,
+        content,
         translations
       }
       // console.log(variables)
       if (id.value) {
-        await upsertPage(variables)
+        await upsertContent(variables)
           .then(() => {
             $q.notify(i18n.t('forms.savedOk'))
           })
@@ -54,10 +54,10 @@ export default {
             console.error(err)
           })
       } else {
-        variables.page.translations = {}
-        variables.page.translations.data = variables.translations
+        variables.content.translations = {}
+        variables.content.translations.data = variables.translations
         delete variables.translations
-        await insertPage(variables)
+        await insertContent(variables)
           .then(async () => {
             await router.replace('/admin/pages')
           })
@@ -70,14 +70,14 @@ export default {
       }
     }
 
-    const remove = (page) => {
+    const remove = (content) => {
       $q.dialog({
         title: i18n.t('remove.title'),
         message: i18n.t('remove.question'),
         cancel: true,
         persistent: true
       }).onOk(async () => {
-        await removePage({ id: page.value.id })
+        await removeContent({ id: content.value.id })
       }).onOk(async () => {
         // console.log('>>>> second OK catcher')
         $q.notify(i18n.t('remove.confirm'))
@@ -90,20 +90,22 @@ export default {
     }
 
     onMounted(() => {
-      const { result, onResult } = contentsService.getPageById(id.value)
+      const { result, onResult } = contentsService.getContentById(id.value)
 
       if (id.value) {
         onResult(() => {
-          const pageTemp = Object.assign({ ...result.value.pages_by_pk }) as Page
-          pageTemp.createdAt = formatDate(result.value.pages_by_pk.createdAt)
-          // console.log(pageTemp)
-          page.value = pageTemp
+          const contentTemp = Object.assign({ ...result.value.content_by_pk }) as Content
+          contentTemp.createdAt = formatDate(result.value.content_by_pk.createdAt)
+          // console.log(contentTemp)
+          content.value = contentTemp
         })
       } else {
-        page.value = {
-          status: 'DRAFT',
+        content.value = {
+          isPublished: false,
           createdAt: formatDate(new Date()),
           image: null,
+          icon: null,
+          type: 'PAGE',
           translations: i18n.availableLocales.map(l => {
             return {
               title: '',
@@ -117,7 +119,7 @@ export default {
 
     return {
       guardar,
-      page,
+      content,
       upsertLoading,
       insertLoading,
       remove

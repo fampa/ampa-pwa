@@ -1,18 +1,18 @@
 import { useQuery, useMutation } from '@vue/apollo-composable'
 import getTipusServeis from './queries/getTipusServeis.gql'
 import getPages from './queries/getPages.gql'
-import getPageById from './queries/getPageById.gql'
+import getContentById from './queries/getContentById.gql'
 import getServicesByType from './queries/getServicesByType.gql'
 import getServiceById from './queries/getServiceById.gql'
 import unJoinService from './queries/unJoinService.gql'
 import joinService from './queries/joinService.gql'
-import upsertPage from './queries/upsertPage.gql'
-import insertPage from './queries/insertPage.gql'
-import deletePage from './queries/deletePage.gql'
+import upsertContent from './queries/upsertContent.gql'
+import insertContent from './queries/insertContent.gql'
+import deleteContent from './queries/deleteContent.gql'
 import { ServicesTypeData, UnJoinServiceResponse, ServicesData, ServiceData, JoinServiceResponse } from 'src/models/Service'
-import { PageData, PagesData, UpsertPageResponse, InsertPageResponse, DeletePageResponse } from 'src/models/Page'
 import { MembersService } from '../members'
 import axios from 'axios'
+import { ContentData, ContentsData, DeleteContentResponse, InsertContentResponse, UpsertContentResponse } from 'src/models/Content'
 
 const membersService = new MembersService()
 
@@ -26,16 +26,16 @@ export class ContentsService {
   }
 
   getPagesList = () => {
-    const response = useQuery<PagesData>(
+    const response = useQuery<ContentsData>(
       getPages
     )
 
     return response
   }
 
-  getPageById = (id: number) => {
-    const response = useQuery<PageData>(
-      getPageById,
+  getContentById = (id: number) => {
+    const response = useQuery<ContentData>(
+      getContentById,
       () => ({ id })
     )
 
@@ -83,25 +83,25 @@ export class ContentsService {
     return response
   }
 
-  upsertPage = () => {
-    const response = useMutation<UpsertPageResponse>(
-      upsertPage
+  upsertContent = () => {
+    const response = useMutation<UpsertContentResponse>(
+      upsertContent
     )
 
     return response
   }
 
-  insertPage = () => {
-    const response = useMutation<InsertPageResponse>(
-      insertPage
+  insertContent = () => {
+    const response = useMutation<InsertContentResponse>(
+      insertContent
     )
 
     return response
   }
 
-  deletePage = () => {
-    const response = useMutation<DeletePageResponse>(
-      deletePage
+  deleteContent = () => {
+    const response = useMutation<DeleteContentResponse>(
+      deleteContent
     )
 
     return response

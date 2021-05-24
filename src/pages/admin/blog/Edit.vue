@@ -3,7 +3,7 @@
 </template>
 
 <script lang="ts">
-import ArticleEditor from 'src/components/ArticleEditor/index.vue'
+import ArticleEditor from 'src/components/TranslationEditor/index.vue'
 import { ref, onMounted, computed } from 'vue'
 import { Article } from 'src/models/Article'
 import { ArticlesService } from 'src/services/articles'

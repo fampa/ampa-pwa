@@ -1,0 +1,23 @@
+mutation upsertContent($content: content_insert_input!, $translations: [content_translations_insert_input!] = {}) {
+  insert_content_one(object: $content, on_conflict: {constraint: content_pkey, update_columns: [authorId, isPublished, isMenu, image, icon, createdAt]}) {
+    id
+    createdAt
+    updatedAt
+    type
+    icon
+    isPublished
+    isMenu
+    image
+    author {
+      firstName
+    }
+  }
+  insert_content_translations(objects: $translations, on_conflict: {constraint: contentTranslations_pkey, update_columns: [title, content]}) {
+    returning {
+      title
+      content
+      slug
+      language
+    }
+  }
+}
