@@ -67,7 +67,7 @@
                 <h3 class="text-h5">{{$t('family.hiredServices', { name: child.firstName })}}</h3>
                 <ul>
                   <li v-for="(hiredService, index) in child.hiredServices" :key="index">
-                    <router-link :to="`/s/${hiredService.service.id}/${slugify(hiredService.service.name)}`">{{ hiredService.service.name }}</router-link>
+                    <router-link :to="`/${hiredService.service.type}/${hiredService.service.id}/${hiredService.service.translations.find(t => t.language === $store.state.settings.language).slug}`">{{ hiredService.service.translations.find(t => t.language === $store.state.settings.language).title }}</router-link>
                   </li>
                 </ul>
               </div>

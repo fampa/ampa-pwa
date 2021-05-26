@@ -1,8 +1,7 @@
-import { Service } from './Service'
-
+import { Content } from './Content'
 /* eslint-disable camelcase */
 export interface HiredService {
-  service: Service
+  service: Content
 }
 
 export interface Child {
