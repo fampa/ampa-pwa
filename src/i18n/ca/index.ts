@@ -96,6 +96,14 @@ export default {
   },
   newVersion: 'Nova versió disponible. Actualitza polsant el botó',
   personalData: 'Dades personals',
+  privacy: {
+    title: 'Política de privadesa',
+    content: `
+    <p>Totes les dades que faciliteu en aquesta web són necessaries per a la comunicació i prestació de serveis i són custodiades per l'AMPA, els detalls socials de la qual podeu consultar a l'apartat <strong>Sobre Nosaltres</strong>.</p>
+    <p>Aquest lloc fa ús de <em>cookies</em> pròpies i de tercers per millorar l'experiència d'usuari, així com per recollir dades sobre ús, per tal de millorar-la.</p>
+    <p>Podeu exercir els vostres drets d'accés, rectificació i cancel·lació mitjançant el formulari de contacte.</p> 
+    `
+  },
   settings: 'Preferències',
   settingsPage: {
     general: 'Preferències generals',
@@ -154,5 +162,12 @@ export default {
   tag: {
     add: 'Afegeix etiquetes',
     edit: 'Edita una etiqueta'
+  },
+  terms: {
+    title: 'Condicions del servei',
+    content: `
+    <p>Mitjançant l'ús d'aquesta aplicació entenem que estàs d'acord en rebre informació sobre l'AMPA així com a formar part d'ella de manera activa, facilitant les teues dades reals i actualitzades.</p>
+    <p>L'AMPA és una organització sense afany de lucre que es financia mitjançant les quotes dels seus afiliats i els serveis que ofereix poden ser subcontractats, i poden ser retirats o substituïts sense previ avís.</p>
+    `
   }
 }
