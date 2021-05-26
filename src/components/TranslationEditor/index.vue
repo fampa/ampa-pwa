@@ -9,7 +9,7 @@
             </div>
           </div>
         </div>
-        <div class="row">
+        <div class="row" v-if="['page', 'article', 'service'].includes(type)">
           <div class="col-12">
             <div v-for="(translation, index) in translations" :key="index">
               <div v-if="translation.language === lang">
@@ -63,7 +63,7 @@
           </div>
         </div><!--  datetime row -->
 
-        <div v-if="type === 'PAGE'">
+        <div v-if="['page', 'tag', 'service'].includes(type)">
           <div class="q-gutter-sm">
             <q-checkbox v-model="content.isMenu" :label="$t('content.isMenu')" />
           </div>
@@ -77,18 +77,22 @@
           </q-input>
         </div>
 
-        <div v-if="type === 'ARTICLE'">
+        <div v-if="['article', 'service'].includes(type)">
           <div class="row">
              <div style="min-width: 250px; max-width: 300px">
               <q-select
                 filled
                 v-model="selectedTags"
                 multiple
-                :options="tags"
+                :options="tagsOptions"
                 use-chips
                 stack-label
-                label="Multiple selection"
+                @remove="removeContentTag"
+                :label="$t('table.tag')"
               />
+            </div>
+            <div>
+              <q-btn flat dense icon="add" :label="$t('admin.tags')" to="/admin/tags" />
             </div>
           </div>
           <div class="row" v-if="content.image">
@@ -153,7 +157,7 @@ import { Content } from 'src/models/Content'
 import { ContentTranslation } from 'src/models/ContentTranslation'
 import { useStore } from 'src/services/store'
 import { cleanObject } from 'src/utilities/cleanObject'
-import { Tag } from 'src/models/Tag'
+// import { Tag } from 'src/models/Tag'
 import { ContentsService } from 'src/services/contents'
 
 const formatDate = (inputDate: Date) => {
@@ -174,28 +178,15 @@ export default defineComponent({
     type: String,
     loading: Boolean
   },
-  emits: ['guardar', 'remove'],
+  emits: ['guardar', 'remove', 'removeTag'],
   setup (props, { emit }) {
     const $q = useQuasar()
     const i18n = useI18n()
     const store = useStore()
-    const user = computed(() => store.state.user.user)
-    const getImagesPrompt = ref(false)
-    const tags = ref<{label: string, value: number}[]>([])
-    const selectedTags = ref<Tag[]>([])
+
     const contentsService = new ContentsService()
     const { result: tagsResult, onResult: onTagsResult } = contentsService.getTags()
-
     // Data
-    const content = ref<Content>(Object.assign(props.inputContent))
-    const translations = ref<ContentTranslation[]>(i18n.availableLocales.map(l => {
-      return {
-        parentId: props.inputContent?.id,
-        title: props.inputContent?.translations?.find(t => t.language === l).title,
-        language: l,
-        content: props.inputContent?.translations?.find(t => t.language === l).content
-      }
-    }))
     const dialog = ref(false)
     // const image = ref<string>(null)
     const triggerUpload = ref(false)
@@ -207,17 +198,41 @@ export default defineComponent({
         value: l
       }
     })
+    const user = computed(() => store.state.user.user)
+    const getImagesPrompt = ref(false)
+    const tagsOptions = ref<{label: string, value: number}[]>([])
+    const selectedTags = ref<{label: string, value: number}[]>(props.inputContent.tags?.map(t => {
+      return {
+        value: t.tag.id,
+        label: t.tag.translations.find(tr => tr.language === lang.value).title
+      }
+    }))
     const langOptions = ref(availableLocales)
     const statusOptions = ref([
       { label: i18n.t('content.draft'), value: false },
       { label: i18n.t('content.published'), value: true }
     ])
+    const content = ref<Content>(Object.assign(props.inputContent))
+    const translations = ref<ContentTranslation[]>(i18n.availableLocales.map(l => {
+      return {
+        parentId: props.inputContent?.id,
+        title: props.inputContent?.translations?.find(t => t.language === l).title,
+        language: l,
+        content: props.inputContent?.translations?.find(t => t.language === l).content
+      }
+    }))
+    // const tags = ref<Tag[]>(props.inputContent.tags?.map(t => {
+    //   return {
+    //     id: t.tag.id,
+    //     translations: t.tag.translations
+    //   }
+    // }))
 
     onTagsResult(() => {
-      tags.value = tagsResult.value.tags.map(tag => {
+      tagsOptions.value = tagsResult.value.content?.map(tag => {
         return {
           value: tag.id,
-          label: tag.translations.find(t => t.language === lang.value).name
+          label: tag.translations.find(t => t.language === lang.value).title
         }
       })
     })
@@ -229,6 +244,10 @@ export default defineComponent({
       // console.log(image)
       content.value.image = image
       getImagesPrompt.value = false
+    }
+
+    const removeContentTag = (tag) => {
+      emit('removeTag', tag.value)
     }
 
     const preSave = () => {
@@ -246,15 +265,12 @@ export default defineComponent({
         content.value.isPublished = true
       }
       content.value.translations = translations.value
+      const tags = selectedTags.value?.map(t => t.value)
       content.value.authorId = user.value.uid
       content.value.type = props.type
-      const obj = content.value
-      // si no hi ha tags, llevar la clau per evitar error de graphql type
-      if (obj.tags.length === 0) {
-        delete obj.tags
-      }
+      const obj = { ...content.value }
       cleanObject(obj)
-      if (content.value.image || !pendingImages.value) return emit('guardar', obj)
+      if (content.value.image || !pendingImages.value) return emit('guardar', { content: obj, tags })
       // this.$refs.uploader.upload()
     }
 
@@ -309,8 +325,9 @@ export default defineComponent({
       remove,
       getImagesPrompt,
       pathPrefix,
-      tags,
-      selectedTags
+      tagsOptions,
+      selectedTags,
+      removeContentTag
     }
   }
 })

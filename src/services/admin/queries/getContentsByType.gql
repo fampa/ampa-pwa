@@ -15,7 +15,7 @@ query getContentsByType($filter: String = "%%", $limit: Int, $offset: Int, $orde
     	tag {
         id
         translations {
-          name
+          title
           language
         }
       }

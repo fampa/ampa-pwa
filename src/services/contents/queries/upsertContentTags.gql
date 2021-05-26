@@ -1,0 +1,5 @@
+mutation upsertContentTags($tags: [content_tags_insert_input!] = {}) {
+  insert_content_tags(objects: $tags, on_conflict: {constraint: article_tags_pkey1, update_columns: [content_id, tag_id]}) {
+    affected_rows
+  }
+}

@@ -51,8 +51,8 @@ const routes: RouteRecordRaw[] = [
       { path: 'users/edit/:id', component: () => import('pages/user/Index.vue') },
       { path: 'family/edit/:id', component: () => import('pages/user/Family.vue') },
       { path: 'payment/edit/:id', component: () => import('pages/user/Payment.vue') },
-      { path: 'pages', component: () => import('pages/admin/pages/Index.vue') },
-      { path: 'pages/edit/:id?', component: () => import('pages/admin/pages/Edit.vue') },
+      // { path: 'pages', component: () => import('pages/admin/pages/Index.vue') },
+      // { path: 'pages/edit/:id?', component: () => import('pages/admin/pages/Edit.vue') },
       { path: 'services', component: () => import('pages/admin/services/Index.vue') },
       { path: 'services/s/edit/:id?', component: () => import('pages/admin/services/s/Edit.vue') },
       {
@@ -62,8 +62,9 @@ const routes: RouteRecordRaw[] = [
           { path: '', component: () => import('pages/admin/services/list/Index.vue') }
         ]
       },
-      { path: 'blog', component: () => import('src/pages/admin/blog/Index.vue') },
-      { path: 'blog/edit/:id?', component: () => import('src/pages/admin/blog/Edit.vue') },
+      { path: ':type/edit/:id?', component: () => import('src/pages/admin/_type/Edit.vue') },
+      { path: ':type', component: () => import('src/pages/admin/_type/Index.vue') },
+      // { path: 'blog/edit/:id?', component: () => import('src/pages/admin/blog/Edit.vue') },
       { path: 'tags', component: () => import('src/pages/admin/tags/Index.vue') },
       { path: 'tags/edit/:id?', component: () => import('src/pages/admin/tags/Edit.vue') }
 

@@ -32,7 +32,7 @@
       </q-table>
 
       <q-page-sticky position="bottom-right" :offset="[18, 18]">
-        <q-btn fab icon="add" color="primary" to="/admin/tags/s/edit" />
+        <q-btn fab icon="add" color="primary" to="/admin/tags/edit" />
       </q-page-sticky>
     </div>
   </q-page>
@@ -85,6 +85,15 @@ export default {
         label: i18n.t('table.firstName'),
         align: 'left',
         field: row => row.translations.find(t => t.language === currentLanguage.value).name || row.translations.find(t => t.language === fallbackLanguage.value).name,
+        sortable: true
+      },
+      {
+        name: 'type',
+        required: true,
+        label: i18n.t('content.type.title'),
+        align: 'left',
+        field: 'type',
+        format: val => i18n.t(`content.type.${val}`),
         sortable: true
       }
     ])

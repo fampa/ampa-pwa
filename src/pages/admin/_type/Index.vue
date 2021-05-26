@@ -3,7 +3,7 @@
     <div class="max-900">
       <q-table
         class="content"
-        :title="$t('table.pages')"
+        :title="$t(`table.${type}`)"
         :rows="contents"
         :columns="columns"
         @row-click="onRowClick"
@@ -33,16 +33,16 @@
       </q-table>
 
       <q-page-sticky position="bottom-right" :offset="[18, 18]">
-        <q-btn fab icon="add" color="primary" to="/admin/pages/edit" />
+        <q-btn fab icon="add" color="primary" :to="`/admin/${type}/edit`" />
       </q-page-sticky>
     </div>
   </q-page>
 </template>
 
 <script lang="ts">
-import { ref, reactive } from 'vue'
+import { ref, reactive, computed } from 'vue'
 import { useStore } from 'src/services/store'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute, onBeforeRouteUpdate } from 'vue-router'
 import { cleanObject } from 'src/utilities/cleanObject'
 import { AdminService } from 'src/services/admin'
 import { formatDate } from 'src/utilities/formatDate'
@@ -51,12 +51,25 @@ import { Content } from 'src/models/Content'
 
 export default {
   name: 'AdminPages',
+  beforeRouteEnter (to, from, next) {
+    // called before the route that renders this component is confirmed.
+    // does NOT have access to `this` component instance,
+    // because it has not been created yet when this guard is called!
+    const allowedTypes = ['page', 'article', 'service', 'tag']
+    if (allowedTypes.includes(to.params?.type as string)) {
+      next()
+    } else {
+      next('/')
+    }
+  },
   setup () {
     const store = useStore()
     const currentLanguage = store.state.settings.language
     const fallbackLanguage = store.state.settings.fallbackLanguage
     const i18n = useI18n()
     const router = useRouter()
+    const route = useRoute()
+    const type = computed(() => route.params?.type as string)
     const adminService = new AdminService()
 
     // Data
@@ -110,7 +123,7 @@ export default {
     const onRowClick = (evt, row) => {
       // console.log(row)
       const id = row.id
-      return router.push(`/admin/pages/edit/${id}`)
+      return router.push(`/admin/${type.value}/edit/${id}`)
     }
 
     const limit = pagination.value.rowsPerPage === 0 ? pagination.value.rowsNumber : pagination.value.rowsPerPage
@@ -122,10 +135,10 @@ export default {
       offset,
       orderBy,
       filter: filter.value,
-      type: 'PAGE'
+      type: type.value
     }
     const sanitizeVariables = cleanObject(variables)
-    const { result, onResult, loading, fetchMore } = adminService.getContentsByType(sanitizeVariables)
+    const { result, onResult, loading, fetchMore, refetch } = adminService.getContentsByType(sanitizeVariables)
 
     onResult(() => {
       contents.value = result.value?.content
@@ -168,6 +181,12 @@ export default {
       // console.log('pagination', pagination)
     }
 
+    onBeforeRouteUpdate(async (to, _) => {
+      const type = to.params?.type.toString()
+      const newVariables = { ...variables, type }
+      await refetch(newVariables)
+    })
+
     return {
       contents,
       pagination,
@@ -175,7 +194,9 @@ export default {
       loading,
       filter,
       onRowClick,
-      onRequest
+      onRequest,
+      type,
+      refetch
     }
   }
 

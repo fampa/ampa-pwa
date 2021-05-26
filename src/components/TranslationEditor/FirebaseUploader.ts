@@ -3,7 +3,6 @@ import { createUploaderComponent } from 'quasar'
 import { computed, ref } from 'vue'
 import firebase from 'firebase/app'
 import 'firebase/storage'
-import { v4 as uuidv4 } from 'uuid'
 
 // export a Vue component
 export default createUploaderComponent({

@@ -1,12 +1,12 @@
-query getTags {
-  tags {
+query getTag{
+  content(where: {type: {_eq: "tag"}}) {
     id
     isMenu
     icon
+    type
     translations {
       language
-      name
-      tagId
+      title
     }
   }
 }

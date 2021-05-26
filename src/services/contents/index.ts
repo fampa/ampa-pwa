@@ -7,15 +7,18 @@ import getServiceById from './queries/getServiceById.gql'
 import unJoinService from './queries/unJoinService.gql'
 import joinService from './queries/joinService.gql'
 import upsertContent from './queries/upsertContent.gql'
+import upsertContentTags from './queries/upsertContentTags.gql'
 import insertContent from './queries/insertContent.gql'
 import deleteContent from './queries/deleteContent.gql'
 import getTags from './queries/getTags.gql'
 import getTagById from './queries/getTagById.gql'
+import upsertTag from './queries/upsertTag.gql'
+import removeContentTags from './queries/removeContentTags.gql'
 import { ServicesTypeData, UnJoinServiceResponse, ServicesData, ServiceData, JoinServiceResponse } from 'src/models/Service'
 import { MembersService } from '../members'
 import axios from 'axios'
-import { ContentData, ContentsData, DeleteContentResponse, InsertContentResponse, UpsertContentResponse } from 'src/models/Content'
-import { TagData, TagsData } from 'src/models/Tag'
+import { ContentData, ContentsData, DeleteContentResponse, DeleteContentTagResponse, InsertContentResponse, UpsertContentResponse } from 'src/models/Content'
+import { TagData, UpsertContentTagsResponse, UpsertTagResponse } from 'src/models/Tag'
 
 const membersService = new MembersService()
 
@@ -110,8 +113,24 @@ export class ContentsService {
     return response
   }
 
+  upsertContentTags = () => {
+    const response = useMutation<UpsertContentTagsResponse>(
+      upsertContentTags
+    )
+
+    return response
+  }
+
+  deleteContentTags = () => {
+    const response = useMutation<DeleteContentTagResponse>(
+      removeContentTags
+    )
+
+    return response
+  }
+
   getTags = () => {
-    const response = useQuery<TagsData>(
+    const response = useQuery<ContentsData>(
       getTags
     )
 
@@ -124,6 +143,14 @@ export class ContentsService {
       {
         id
       }
+    )
+
+    return response
+  }
+
+  upsertTag = () => {
+    const response = useMutation<UpsertTagResponse>(
+      upsertTag
     )
 
     return response

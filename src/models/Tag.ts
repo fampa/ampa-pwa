@@ -10,7 +10,8 @@ export interface TagTranslation {
 export interface Tag {
   id?: number,
   isMenu?: boolean,
-  icon: string,
+  icon?: string,
+  type?: string,
   translations?: TagTranslation[]
 }
 
@@ -25,4 +26,16 @@ export interface GetTagsData {
 
 export interface TagData {
   tags_by_pk: Tag
+}
+
+export interface UpsertContentTagsResponse {
+  insert_content_tags: {
+    affected_rows: number
+  }
+}
+
+export interface UpsertTagResponse {
+  insert_tags_one: {
+    id: number
+  }
 }

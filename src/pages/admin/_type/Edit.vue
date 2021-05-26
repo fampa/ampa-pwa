@@ -1,5 +1,5 @@
 <template>
-    <translation-editor v-if="content" @guardar="guardar" type="PAGE" @remove="remove" :loading="upsertLoading || insertLoading" :input-content="content"></translation-editor>
+    <translation-editor v-if="content" @guardar="guardar" :type="type" @remove="remove" @removeTag="removeTag" :loading="upsertLoading || insertLoading" :input-content="content"></translation-editor>
 </template>
 
 <script lang="ts">
@@ -19,6 +19,17 @@ const formatDate = (inputDate: Date | string) => {
 export default {
   components: { TranslationEditor },
   name: 'EditContent',
+  beforeRouteEnter (to, from, next) {
+    // called before the route that renders this component is confirmed.
+    // does NOT have access to `this` component instance,
+    // because it has not been created yet when this guard is called!
+    const allowedTypes = ['page', 'article', 'service', 'tag']
+    if (allowedTypes.includes(to.params?.type as string)) {
+      next()
+    } else {
+      next('/')
+    }
+  },
   setup () {
     const contentsService = new ContentsService()
     const route = useRoute()
@@ -26,27 +37,45 @@ export default {
     const i18n = useI18n()
     const $q = useQuasar()
 
-    const { mutate: upsertContent, loading: upsertLoading } = contentsService.upsertContent()
-    const { mutate: removeContent } = contentsService.deleteContent()
-    const { mutate: insertContent, loading: insertLoading } = contentsService.insertContent()
-
     // Data
     const id = computed(() => Number(route.params?.id))
     const content = ref<Content>(null)
+    const type = ref(route.params?.type as string)
+    const { result, onResult } = contentsService.getContentById(id.value)
+    const { mutate: upsertContent, loading: upsertLoading } = contentsService.upsertContent()
+    const { mutate: removeContent } = contentsService.deleteContent()
+    const { mutate: insertContent, loading: insertLoading } = contentsService.insertContent()
+    const { mutate: upsertContentTags } = contentsService.upsertContentTags()
+    const { mutate: removeContentTagMutation } = contentsService.deleteContentTags()
     // Methods
-    const guardar = async (content) => {
-      console.log('guardat', content)
+    const guardar = async (obj) => {
+      const content = obj.content
       const translations = content.translations
+      const tags = obj.tags
       cleanObject(translations)
       delete content.translations
+      delete content.tags
       cleanObject(content)
       const variables = {
         content,
         translations
       }
-      // console.log(variables)
       if (id.value) {
         await upsertContent(variables)
+          .then(async () => {
+            // update tags
+            if (tags.length > 0) {
+              const variables = {
+                tags: tags.map(t => {
+                  return {
+                    content_id: id.value,
+                    tag_id: t
+                  }
+                })
+              }
+              await upsertContentTags(variables)
+            }
+          })
           .then(() => {
             $q.notify(i18n.t('forms.savedOk'))
           })
@@ -58,8 +87,25 @@ export default {
         variables.content.translations.data = variables.translations
         delete variables.translations
         await insertContent(variables)
+          .then(res => {
+            return res.data.insert_content_one.id
+          })
+          .then(async (id) => {
+            // update tags
+            if (tags.length > 0) {
+              const variables = {
+                tags: tags.map(t => {
+                  return {
+                    content_id: id,
+                    tag_id: t
+                  }
+                })
+              }
+              await upsertContentTags(variables)
+            }
+          })
           .then(async () => {
-            await router.replace('/admin/pages')
+            await router.replace(`/admin/${type.value}`)
           })
           .then(() => {
             $q.notify(i18n.t('forms.savedOk'))
@@ -81,7 +127,7 @@ export default {
       }).onOk(async () => {
         // console.log('>>>> second OK catcher')
         $q.notify(i18n.t('remove.confirm'))
-        await router.replace('/admin/pages')
+        await router.replace(`/admin/${type.value}`)
       }).onCancel(() => {
         // console.log('>>>> Cancel')
       }).onDismiss(() => {
@@ -89,13 +135,23 @@ export default {
       })
     }
 
-    onMounted(() => {
-      const { result, onResult } = contentsService.getContentById(id.value)
+    const removeTag = async (tag) => {
+      const variables = {
+        contentId: id.value,
+        tagId: tag.value
+      }
+      await removeContentTagMutation(variables)
+    }
 
+    onMounted(() => {
       if (id.value) {
         onResult(() => {
           const contentTemp = Object.assign({ ...result.value.content_by_pk }) as Content
           contentTemp.createdAt = formatDate(result.value.content_by_pk.createdAt)
+          // oer si algú introdueix manualment una url amb un tipus que no es correspon amb el ID
+          if (contentTemp.type) {
+            type.value = contentTemp.type
+          }
           // console.log(contentTemp)
           content.value = contentTemp
         })
@@ -105,7 +161,8 @@ export default {
           createdAt: formatDate(new Date()),
           image: null,
           icon: null,
-          type: 'PAGE',
+          type: type.value,
+          tags: [],
           translations: i18n.availableLocales.map(l => {
             return {
               title: '',
@@ -122,7 +179,9 @@ export default {
       content,
       upsertLoading,
       insertLoading,
-      remove
+      remove,
+      removeTag,
+      type
     }
   }
 

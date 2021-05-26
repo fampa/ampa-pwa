@@ -2,7 +2,6 @@
 import { Member } from './Member'
 import { ContentTranslation } from './ContentTranslation'
 import { Aggregate } from './QueryTable'
-import { Tag } from './Tag'
 
 export interface Content {
   id?: number
@@ -14,7 +13,9 @@ export interface Content {
   authorId?: string
   icon?: string
   type?: string
-  tags?: Tag[]
+  tags?: {
+    tag: Content
+  }[]
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -53,4 +54,10 @@ export interface DeleteContentResponse {
 
 export interface InsertContentResponse {
   insert_content_one: Content
+}
+
+export interface DeleteContentTagResponse {
+  delete_content_tags_by_pk: {
+    tag_id: number
+  }
 }

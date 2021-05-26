@@ -3,6 +3,7 @@ query getTagById($id: Int!) {
     id
     isMenu
     icon
+    type
     translations {
       language
       name

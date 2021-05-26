@@ -251,17 +251,22 @@ export default defineComponent({
         {
           title: i18n.t('admin.pages'),
           icon: 'las la-file-alt',
-          to: '/admin/pages'
+          to: '/admin/page'
         },
         {
           title: i18n.t('admin.services'),
           icon: 'las la-list',
-          to: '/admin/services'
+          to: '/admin/service'
         },
         {
           title: i18n.t('admin.blog'),
           icon: 'las la-rss',
-          to: '/admin/blog'
+          to: '/admin/article'
+        },
+        {
+          title: i18n.t('admin.tags'),
+          icon: 'las la-tags',
+          to: '/admin/tag'
         }
       ]
     })

@@ -4,13 +4,14 @@ query getContentById($id: Int!) {
     id
     image
     icon
+    type
     isPublished
     isMenu
     tags {
     	tag {
         id
         translations {
-          name
+          title
           language
         }
       }

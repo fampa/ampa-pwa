@@ -1,5 +1,5 @@
 <template>
-    <translation-editor v-if="content" @guardar="guardar" type="ARTICLE" @remove="remove" :loading="upsertLoading || insertLoading" :input-content="content"></translation-editor>
+    <translation-editor v-if="content" @guardar="guardar" type="article" @remove="remove" @removeTag="removeTag" :loading="upsertLoading || insertLoading" :input-content="content"></translation-editor>
 </template>
 
 <script lang="ts">
@@ -29,24 +29,41 @@ export default {
     const { mutate: upsertContent, loading: upsertLoading } = contentsService.upsertContent()
     const { mutate: removeContent } = contentsService.deleteContent()
     const { mutate: insertContent, loading: insertLoading } = contentsService.insertContent()
+    const { mutate: upsertContentTags } = contentsService.upsertContentTags()
+    const { mutate: removeContentTagMutation } = contentsService.deleteContentTags()
 
     // Data
     const id = computed(() => Number(route.params?.id))
     const content = ref<Content>(null)
     // Methods
-    const guardar = async (content) => {
-      // console.log('guardat', content)
+    const guardar = async (obj) => {
+      const content = obj.content
       const translations = content.translations
+      const tags = obj.tags
       cleanObject(translations)
       delete content.translations
+      delete content.tags
       cleanObject(content)
       const variables = {
         content,
         translations
       }
-      // console.log(variables)
       if (id.value) {
         await upsertContent(variables)
+          .then(async () => {
+            // update tags
+            if (tags.length > 0) {
+              const variables = {
+                tags: tags.map(t => {
+                  return {
+                    content_id: id.value,
+                    tag_id: t
+                  }
+                })
+              }
+              await upsertContentTags(variables)
+            }
+          })
           .then(() => {
             $q.notify(i18n.t('forms.savedOk'))
           })
@@ -58,6 +75,23 @@ export default {
         variables.content.translations.data = variables.translations
         delete variables.translations
         await insertContent(variables)
+          .then(res => {
+            return res.data.insert_content_one.id
+          })
+          .then(async (id) => {
+            // update tags
+            if (tags.length > 0) {
+              const variables = {
+                tags: tags.map(t => {
+                  return {
+                    content_id: id,
+                    tag_id: t
+                  }
+                })
+              }
+              await upsertContentTags(variables)
+            }
+          })
           .then(async () => {
             await router.replace('/admin/blog')
           })
@@ -89,6 +123,14 @@ export default {
       })
     }
 
+    const removeTag = async (tag) => {
+      const variables = {
+        contentId: id.value,
+        tagId: tag.value
+      }
+      await removeContentTagMutation(variables)
+    }
+
     onMounted(() => {
       const { result, onResult } = contentsService.getContentById(id.value)
 
@@ -105,7 +147,8 @@ export default {
           createdAt: formatDate(new Date()),
           image: null,
           icon: null,
-          type: 'ARTICLE',
+          type: 'article',
+          tags: [],
           translations: i18n.availableLocales.map(l => {
             return {
               title: '',
@@ -122,7 +165,8 @@ export default {
       content,
       upsertLoading,
       insertLoading,
-      remove
+      remove,
+      removeTag
     }
   }
 

@@ -33,7 +33,7 @@
       </q-table>
 
       <q-page-sticky position="bottom-right" :offset="[18, 18]">
-        <q-btn fab icon="add" color="primary" to="/admin/pages/edit" />
+        <q-btn fab icon="add" color="primary" to="/admin/blog/edit" />
       </q-page-sticky>
     </div>
   </q-page>
@@ -122,7 +122,7 @@ export default {
       offset,
       orderBy,
       filter: filter.value,
-      type: 'ARTICLE'
+      type: 'article'
     }
     const sanitizeVariables = cleanObject(variables)
     const { result, onResult, loading, fetchMore } = adminService.getContentsByType(sanitizeVariables)

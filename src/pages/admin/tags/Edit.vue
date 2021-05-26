@@ -1,10 +1,11 @@
 <template>
   <q-page padding class="bg-grey-2  q-pa-md">
     <div class="max-600">
-      <h1 class="text-h4">{{$t('tag.type.edit')}}</h1>
+      <h1 class="text-h4">{{$t('tag.edit')}}</h1>
       <q-form ref="memberForm" @submit.prevent="submitForm">
-        <div v-for="(lang, index) in langOptions" :key="index">
-          <q-input outlined v-model="translations[index].name" :label="lang.label" :rules="[val => !!val || $t('forms.required')]" />
+        <q-select outlined v-model="tag.type" :options="typeOptions" :label="$t('content.type.title')" emit-value map-options :rules="[val => !!val || $t('forms.required')]" />
+        <div v-for="(translation, index) in translations" :key="index">
+          <q-input outlined v-model="translation.name" :label="$t(translation.language)" :rules="[val => !!val || $t('forms.required')]" />
         </div>
          <div class="q-gutter-sm">
           <q-checkbox v-model="tag.isMenu" :label="$t('content.isMenu')" />
@@ -19,7 +20,7 @@
           </template>
         </q-input>
         <br>
-        <q-btn :loading="loading" color="primary" type="submit">{{$t('forms.save')}}</q-btn> <q-btn v-if="id" color="red" class="float-right" :label="$t('remove.title')" @click="remove" />
+        <q-btn v-if="id" color="red" :label="$t('remove.title')" @click="remove" /> <q-btn  class="float-right" :loading="loading" color="primary" type="submit">{{$t('forms.save')}}</q-btn>
       </q-form>
       <router-view v-if="id"></router-view>
     </div>
@@ -27,13 +28,13 @@
 </template>
 
 <script lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { AdminService } from 'src/services/admin'
 import { useQuasar } from 'quasar'
 import { useI18n } from 'vue-i18n'
 import { ContentsService } from 'src/services/contents'
 import { Tag, TagTranslation } from 'src/models/Tag'
+import { cleanObject } from 'src/utilities/cleanObject'
 
 export default {
   name: 'EditServiceType',
@@ -42,9 +43,9 @@ export default {
     const router = useRouter()
     const contentsService = new ContentsService()
     const id = computed(() => Number(route.params?.id))
-    const adminService = new AdminService()
     const $q = useQuasar()
     const i18n = useI18n()
+    // Data
     const availableLocales = i18n.availableLocales.map(l => {
       return {
         label: i18n.t(l),
@@ -52,42 +53,63 @@ export default {
       }
     })
     const langOptions = ref(availableLocales)
-    // Data
+    const typeOptions = ref([
+      {
+        value: 'article',
+        label: i18n.t('content.type.article')
+      },
+      {
+        value: 'page',
+        label: i18n.t('content.type.page')
+      },
+      {
+        value: 'service',
+        label: i18n.t('content.type.service')
+      }
+    ])
     const loading = ref<boolean>(false)
     const tag = ref<Tag>({
       icon: 'las la-school',
-      isMenu: false
+      isMenu: false,
+      type: 'article'
     })
 
     const translations = ref<TagTranslation[]>(i18n.availableLocales.map(l => {
       return {
         tagId: id.value,
-        name: tag.value?.translations?.find(t => t.language === l).name,
+        name: null,
         language: l
       }
     }))
 
-    // const { mutate, loading: loadingMutate } = adminService.upsertServiceType()
-    const { mutate: removeServiceType } = adminService.removeServiceType()
-    if (id.value) {
-      const { result, loading: loadingGet, onResult } = contentsService.getTagById(id.value)
-      loading.value = loadingGet.value
-      onResult(() => {
-        tag.value.id = result.value?.tags_by_pk?.id
-        tag.value.isMenu = result.value?.tags_by_pk?.isMenu
-        translations.value = result.value?.tags_by_pk?.translations
-        tag.value.icon = result.value?.tags_by_pk?.icon
-        loading.value = false
-      })
-    }
+    const { mutate: upsertTag, loading: loadingMutate } = contentsService.upsertTag()
+    // const { mutate: removeTag } = contentsService.
+    const { result, loading: loadingGet, onResult } = contentsService.getTagById(id.value)
+    onMounted(() => {
+      if (id.value) {
+        loading.value = loadingGet.value
+        onResult(() => {
+          const tagTemp = { ...result.value?.tags_by_pk } as Tag
+          console.log('tagTemp', tagTemp)
+          tag.value = tagTemp
+          translations.value = tagTemp.translations
+          loading.value = false
+          console.log('translations', translations)
+        })
+      }
+    })
 
     // Methods
     const submitForm = async () => {
-      // loading.value = loadingMutate.value
-      // await mutate({ insertInput: serviceType.value })
+      loading.value = loadingMutate.value
+      const tagTemp = Object.assign({ ...tag.value })
+      tagTemp.translations = {}
+      tagTemp.translations.data = { ...translations.value }
+      cleanObject(tagTemp)
+      await upsertTag({ tag: tagTemp })
       $q.notify(i18n.t('forms.savedOk'))
       loading.value = false
-      await router.replace('/admin/services')
+      await router.replace('/admin/tags')
     }
 
     const remove = () => {
@@ -97,11 +119,11 @@ export default {
         cancel: true,
         persistent: true
       }).onOk(async () => {
-        await removeServiceType({ id: id.value })
+        // await removeTag({ id: id.value })
       }).onOk(async () => {
         // console.log('>>>> second OK catcher')
         $q.notify(i18n.t('remove.confirm'))
-        await router.replace('/admin/services')
+        await router.replace('/admin/tags')
       }).onCancel(() => {
         // console.log('>>>> Cancel')
       }).onDismiss(() => {
@@ -116,7 +138,8 @@ export default {
       loading,
       id,
       remove,
-      langOptions
+      langOptions,
+      typeOptions
     }
   }
 

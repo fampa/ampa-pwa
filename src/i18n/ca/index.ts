@@ -3,14 +3,21 @@ export default {
     users: 'Gestió d\'usuaris',
     pages: 'Gestió de pàgines',
     services: 'Gestió de serveis',
-    blog: 'Gestió del blog'
+    blog: 'Gestió del blog',
+    tags: 'Gestió d\'etiquetes'
   },
   content: {
     content: 'Contingut',
     draft: 'Esborrany',
     isMenu: 'Incloure al menú',
     published: 'Publicat',
-    title: 'Títol'
+    title: 'Títol',
+    type: {
+      article: 'Article',
+      page: 'Pàgina',
+      service: 'Servei',
+      title: 'Tipus'
+    }
   },
   ca: 'Valencià',
   contact: {
@@ -125,16 +132,22 @@ export default {
     }
   },
   table: {
+    article: 'Articles',
     date: 'Data',
     firstName: 'Nom',
     lastName: 'Cognoms',
     members: 'Membres',
-    pages: 'Pàgines',
+    page: 'Pàgines',
     title: 'Títol',
     search: 'Cerca',
-    services: 'Serveis',
+    service: 'Serveis',
     serviceTypes: 'Tipus de serveis',
     status: 'Estat',
-    tags: 'Etiquetes'
+    tag: 'Etiquetes',
+    type: 'Tipus'
+  },
+  tag: {
+    add: 'Afegeix etiquetes',
+    edit: 'Edita una etiqueta'
   }
 }

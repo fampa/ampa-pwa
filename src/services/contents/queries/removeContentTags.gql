@@ -1,0 +1,5 @@
+mutation RemoveContentTags($contentId: Int!, $tagId: Int!) {
+  delete_content_tags_by_pk(content_id: $contentId, tag_id: $tagId) {
+    tag_id
+  }
+}

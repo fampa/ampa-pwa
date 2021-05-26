@@ -3,14 +3,21 @@ export default {
     users: 'Gestión de usuarios',
     pages: 'Gestión de págines',
     services: 'Gestión de servicios',
-    blog: 'Gestión del blog'
+    blog: 'Gestión del blog',
+    tags: 'Gestión de etiquetas'
   },
   content: {
     content: 'Contenido',
     draft: 'Borrador',
     isMenu: 'Incluir al menú',
     published: 'Publicado',
-    title: 'Título'
+    title: 'Título',
+    type: {
+      article: 'Artículo',
+      page: 'Página',
+      service: 'Servicio',
+      title: 'Tipo'
+    }
   },
   ca: 'Valencià',
   contact: {
@@ -125,16 +132,22 @@ export default {
     DRAFT: 'BORRADOR'
   },
   table: {
+    article: 'Artículos',
     date: 'Fecha',
     firstName: 'Nombre',
     lastName: 'Apellidos',
     members: 'Miembros',
-    pages: 'Páginas',
+    page: 'Páginas',
     title: 'Título',
     search: 'Buscar',
-    services: 'Servicios',
+    service: 'Servicios',
     serviceTypes: 'Tipos de servicios',
     status: 'Estado',
-    tags: 'Etiquetas'
+    tag: 'Etiquetas',
+    type: 'Tipo'
+  },
+  tag: {
+    add: 'Afegeix etiquetes',
+    edit: 'Edita una etiqueta'
   }
 }
