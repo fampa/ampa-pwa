@@ -22,6 +22,7 @@ query GetContentsByType($type: String = "article") {
         id
         translations {
           title
+          language
         }
       }
     }

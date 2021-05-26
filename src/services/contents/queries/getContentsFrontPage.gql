@@ -22,6 +22,7 @@ query GetContentsFrontPage($type: String = "article", $offset: Int = 0, $limit: 
         id
         translations {
           title
+          language
         }
       }
     }

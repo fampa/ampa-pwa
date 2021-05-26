@@ -15,7 +15,18 @@
             {{title}}
           </q-tooltip>
         </div>
-        <div v-if="article.type === 'article'" class="text-subtitle2">{{formatedDate}}</div>
+        <div class="row justify-between">
+          <div v-if="article.type === 'article'" class="text-subtitle2">{{formatedDate}}</div>
+          <div class="row">
+            <div v-for="(t, index) in article.tags" :key="index">
+              <div v-for="(tr, index) in t.tag.translations" :key="index">
+                <q-chip v-if="tr.language === $store.state.settings.language" color="accent" text-color="white" icon="las la-tag">
+                  {{tr.title}}
+                </q-chip>
+              </div>
+            </div>
+          </div>
+        </div>
       </q-card-section>
     </q-card>
   </router-link>

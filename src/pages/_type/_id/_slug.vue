@@ -16,12 +16,20 @@
       <div class="article" v-else-if="content">
         <h1 class="title">{{title}}</h1>
         <div class="subtitle" v-if="content.type === 'article'"><strong>{{formatedDate}}</strong>. <span class="updated" v-if="content.createdAt !== content.updatedAt">{{$t('updatedAt', {date: formatedUpdatedDate})}}</span></div>
+          <div class="row">
+            <div v-for="(t, index) in content.tags" :key="index">
+              <q-chip clickable @click="$router.push(`/tag/${t.tag.id}/${t.tag.translations.find(tr => tr.language === $store.state.settings.language).slug}`)" color="accent" text-color="white" icon="las la-tag">
+                {{t.tag.translations.find(tr => tr.language === $store.state.settings.language).title}}
+              </q-chip>
+            </div>
+          </div>
         <q-img
           fit="cover"
           v-if="content.image"
           :src="content.image">
         </q-img>
         <div class="content" v-html="contentText"></div>
+        <!-- is tag -->
         <div v-if="content.type === 'tag'">
           <div class="row items-start">
             <div
@@ -34,6 +42,7 @@
           </div>
         </div>
       </div>
+      <!-- is admin -->
       <q-page-sticky v-if="isAdmin" position="bottom-right" :offset="[18, 18]">
         <q-btn fab icon="las la-pencil-alt" color="primary" :to="`/admin/${content?.type}/edit/${content?.id}`" />
       </q-page-sticky>
