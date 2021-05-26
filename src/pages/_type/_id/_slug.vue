@@ -41,6 +41,10 @@
             </div>
           </div>
         </div>
+        <!-- is service -->
+        <div v-if="content.type === 'service'">
+          <service-component @refetch="refetchContent" :service="content"></service-component>
+        </div>
       </div>
       <!-- is admin -->
       <q-page-sticky v-if="isAdmin" position="bottom-right" :offset="[18, 18]">
@@ -59,10 +63,11 @@ import { useI18n } from 'vue-i18n'
 import { ContentsService } from 'src/services/contents'
 import { Content } from 'src/models/Content'
 import NewsCard from 'src/components/NewsCard.vue'
+import ServiceComponent from 'src/components/ServiceComponent.vue'
 
 export default defineComponent({
   name: 'NewsDetails',
-  components: { NewsCard },
+  components: { NewsCard, ServiceComponent },
   beforeRouteEnter (to, from, next) {
     // called before the route that renders this component is confirmed.
     // does NOT have access to `this` component instance,
@@ -111,14 +116,18 @@ export default defineComponent({
 
     // methods
     onResult(() => {
-      content.value = result.value.content_by_pk
-      if (result.value.content_by_pk.type === 'tag') {
-        const { result: contentsByTagResult, onResult: onContentsByTagIdResult } = contentsService.getContentsByTagId(result.value.content_by_pk.id)
+      content.value = result.value?.content_by_pk
+      if (result.value?.content_by_pk.type === 'tag') {
+        const { result: contentsByTagResult, onResult: onContentsByTagIdResult } = contentsService.getContentsByTagId(result.value?.content_by_pk?.id)
         onContentsByTagIdResult(() => {
           contentsList.value = contentsByTagResult.value?.content
         })
       }
     })
+
+    const refetchContent = async () => {
+      await refetch()
+    }
 
     onBeforeRouteUpdate(async (to, _) => {
       const id = to.params?.id.toString()
@@ -142,7 +151,8 @@ export default defineComponent({
       formatedUpdatedDate,
       contentText,
       isAdmin,
-      contentsList
+      contentsList,
+      refetchContent
     }
   }
 })

@@ -22,7 +22,10 @@ query memberById($id: String!) {
         familyId
         hiredServices {
           service {
-            name
+            translations {
+              language
+              title
+            }
             id
           }
         }

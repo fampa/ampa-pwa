@@ -11,6 +11,12 @@ query GetContentsByType($type: String = "article") {
     isPublished
     type
     updatedAt
+    participants {
+      child {
+        firstName
+      }
+      childId
+    }
     translations {
       title
       content

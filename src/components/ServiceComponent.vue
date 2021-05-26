@@ -1,5 +1,4 @@
 <template>
-  <q-page padding class="bg-grey-2 q-pa-md">
     <div class="max-600" v-if="service">
       <div class="row justify-between">
         <div class="col-md-6 q-pa-md">
@@ -37,7 +36,6 @@
         </div>
       </div>
     </div>
-  </q-page>
 </template>
 
 <script lang="ts">
@@ -45,7 +43,6 @@ import { ContentsService } from 'src/services/contents'
 import { useRoute } from 'vue-router'
 import { computed, ref, defineComponent, PropType } from 'vue'
 import { useQuasar } from 'quasar'
-import { Service } from 'src/models/Service'
 import { formatCurrency } from 'src/utilities/formatCurrency'
 import { MembersService } from 'src/services/members'
 import { Member } from 'src/models/Member'
@@ -63,7 +60,8 @@ export default defineComponent({
       required: true
     }
   },
-  setup () {
+  emits: ['refetch'],
+  setup (props, { emit }) {
     const contentsService = new ContentsService()
     const membersService = new MembersService()
     const route = useRoute()
@@ -74,15 +72,14 @@ export default defineComponent({
     const user = ref<firebase.User | null>(null)
     const member = ref<Member | null>(null)
     const loading = ref(false)
-    const service = ref<Service | null>(null)
 
-    const participants = computed(() => service.value?.participants?.length)
+    const participants = computed(() => props.service.participants?.length)
 
-    const { result, loading: serviceLoading, error, onResult, onError, refetch: refetchService } = contentsService.getServiceById(id.value)
+    // const { result, loading: serviceLoading, error, onResult, onError, refetch: refetchService } = contentsService.getContentById(id.value)
 
-    onResult(() => {
-      service.value = result.value?.services_by_pk
-    })
+    // onResult(() => {
+    //   service.value = result.value?.content_by_pk
+    // })
 
     const { mutate: joinMutation } = contentsService.joinService()
 
@@ -94,10 +91,11 @@ export default defineComponent({
       })
         .then(async () => {
           getUserData()
-          await refetchService()
+          // await refetchService()
+          emit('refetch')
           await contentsService.serviceMessage({
             from: member.value.email,
-            message: `<p>El xiquet/a ${child.firstName} ${child.lastName} (${child.birthDate})  ha contractat el servei <a href="https://${process.env.FIREBASE_PROJECT_ID}.web.app${route.path}" target="_blank">${service.value.name}</a></p>`
+            message: `<p>El xiquet/a ${child.firstName} ${child.lastName} (${child.birthDate})  ha contractat el servei <a href="https://${process.env.FIREBASE_PROJECT_ID}.web.app${route.path}" target="_blank">${props.service.translations.find(t => t.language === i18n.locale.value).title}</a></p>`
           })
         })
         .then(() => {
@@ -118,9 +116,10 @@ export default defineComponent({
         childId,
         serviceId: id.value
       })
-        .then(async () => {
+        .then(() => {
           getUserData()
-          await refetchService()
+          // await refetchService()
+          emit('refetch')
           loading.value = false
           $q.notify(i18n.t('forms.savedOk'))
         })
@@ -146,19 +145,8 @@ export default defineComponent({
       }
     })
 
-    onError(() => {
-      if (error.value.message === "claims key: 'https://hasura.io/jwt/claims' not found") {
-        return window.location.reload()
-      }
-      $q.notify({
-        type: 'negative',
-        message: error.value?.message
-      })
-    })
-
     return {
       loading,
-      serviceLoading,
       formatCurrency,
       user,
       member,

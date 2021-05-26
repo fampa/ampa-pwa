@@ -2,6 +2,7 @@
 import { Member } from './Member'
 import { ContentTranslation } from './ContentTranslation'
 import { Aggregate } from './QueryTable'
+import { Child } from './Child'
 
 export interface Content {
   id?: number
@@ -15,6 +16,11 @@ export interface Content {
   type?: string
   tags?: {
     tag: Content
+  }[]
+  participants?: {
+    child: Child,
+    childId?: number
+    createdAt?: Date | string
   }[]
   spots?: number
   price?: number

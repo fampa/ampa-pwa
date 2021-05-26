@@ -11,6 +11,12 @@ query GetContentsByTagId($id: Int!) {
     isPublished
     type
     updatedAt
+    participants {
+      child {
+        firstName
+      }
+      childId
+    }
     translations {
       title
       content

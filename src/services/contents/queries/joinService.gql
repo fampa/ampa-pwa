@@ -1,5 +1,5 @@
 mutation joinService($serviceId: Int!, $childId: Int!) {
-  insert_childService_one(object: {childId: $childId, serviceId: $serviceId}) {
+  insert_childService_one(object: {childId: $childId, serviceId: $serviceId}, on_conflict: {constraint: childService_pkey, update_columns: [childId, serviceId]}) {
     updatedAt
     childId
     serviceId
