@@ -63,7 +63,7 @@
           </div>
         </div><!--  datetime row -->
 
-        <div v-if="['page', 'tag', 'service'].includes(type)">
+        <div v-if="['page', 'tag'].includes(type)">
           <div class="q-gutter-sm">
             <q-checkbox v-model="content.isMenu" :label="$t('content.isMenu')" />
           </div>
@@ -75,6 +75,9 @@
               {{$t('service.type.iconPre')}} <a href="https://icons8.com/line-awesome" target="_blank" rel="noopener noreferrer">Line Awesome</a>
             </template>
           </q-input>
+        </div>
+        <div v-if="['service'].includes(type)">
+          Especific de servei
         </div>
 
         <div v-if="['article', 'service'].includes(type)">
@@ -92,7 +95,7 @@
               />
             </div>
             <div>
-              <q-btn flat dense icon="add" :label="$t('admin.tags')" to="/admin/tags" />
+              <q-btn flat dense icon="add" :label="$t('admin.tags')" to="/admin/tag" />
             </div>
           </div>
           <div class="row" v-if="content.image">

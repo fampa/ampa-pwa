@@ -1,0 +1,29 @@
+query GetContentsByType($type: String = "article") {
+  content(where: {type: {_eq: $type}}, order_by: {createdAt: desc}) {
+    id
+    createdAt
+    icon
+    author {
+      firstName
+    }
+    image
+    isMenu
+    isPublished
+    type
+    updatedAt
+    translations {
+      title
+      content
+      language
+      slug
+    }
+    tags {
+      tag {
+        id
+        translations {
+          title
+        }
+      }
+    }
+  }
+}

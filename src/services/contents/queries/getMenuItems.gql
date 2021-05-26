@@ -1,5 +1,5 @@
-query getPages {
-  content(where: {type: {_eq: "page"}, isMenu: {_eq: true}, isPublished: {_eq: true}}) {
+query getMenuItems {
+  content(where: {isMenu: {_eq: true}, isPublished: {_eq: true}}) {
     id
     isMenu
     isPublished

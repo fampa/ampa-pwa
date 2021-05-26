@@ -26,7 +26,7 @@
       </div>
     </div>
     <div v-else-if="articles">
-      <q-infinite-scroll :offset="100" @load="onLoad">
+      <q-infinite-scroll :offset="200" @load="onLoad">
         <div class="row items-start">
           <div
             class="col-12 col-sm-6 col-md-4 q-pa-sm"
@@ -51,17 +51,17 @@
 import { defineComponent, reactive, ref } from 'vue'
 // import { useStore } from 'src/services/store'
 import NewsCard from 'components/NewsCard.vue'
-import { ArticlesService } from 'src/services/articles'
 import { useQuasar } from 'quasar'
-import { Article } from 'src/models/Article'
+import { ContentsService } from 'src/services/contents'
+import { Content } from 'src/models/Content'
 // import { useI18n } from 'vue-i18n'
 
 export default defineComponent({
   name: 'PageIndex',
   components: { NewsCard },
   setup () {
-    const articlesService = new ArticlesService()
-    const articles = ref<Article[] | null>(null)
+    const contentsService = new ContentsService()
+    const articles = ref<Content[] | null>(null)
     // const store = useStore()
     const $q = useQuasar()
     // const i18n = useI18n()
@@ -71,20 +71,23 @@ export default defineComponent({
       pageSize: 6
     })
 
-    const { result, loading, error, fetchMore, onResult, onError } = articlesService.getAll(data.page, data.pageSize)
+    const { result, loading, error, fetchMore, onResult, onError } = contentsService.getContentsFrontPage({ offset: data.page, limit: data.pageSize })
 
     onResult(() => {
-      articles.value = result.value.articles
+      articles.value = result.value.content
     })
 
     const onLoad = async () => {
       // console.log('onLoad')
       data.page++
-      await fetchMore({
+      const moreData = await fetchMore({
         variables: {
           offset: (data.page * data.pageSize)
         }
       })
+      const articlesTemp = Object.assign([], articles.value)
+      moreData.data.content.forEach(art => articlesTemp.push(art))
+      articles.value = articlesTemp
     }
 
     onError(() => {

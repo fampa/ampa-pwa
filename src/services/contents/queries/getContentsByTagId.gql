@@ -1,0 +1,29 @@
+query GetContentsByTagId($id: Int!) {
+  content(where: {tags: {tag_id: {_eq: $id}}}, order_by: {createdAt: desc}) {
+    id
+    createdAt
+    icon
+    author {
+      firstName
+    }
+    image
+    isMenu
+    isPublished
+    type
+    updatedAt
+    translations {
+      title
+      content
+      language
+      slug
+    }
+    tags {
+      tag {
+        id
+        translations {
+          title
+        }
+      }
+    }
+  }
+}

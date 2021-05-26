@@ -87,6 +87,7 @@ export default {
   menu: {
     AmpaServices: 'LOS SERVICIOS DEL AMPA',
     contact: 'Contacte',
+    featured: 'DESTACADO',
     YourData: 'TUS DATOS'
   },
   newVersion: 'Nueva versión disponible. Actualice pulsando el botón',

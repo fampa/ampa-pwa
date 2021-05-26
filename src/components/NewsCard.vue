@@ -1,5 +1,5 @@
 <template>
-  <router-link class="card" :to="`/blog/${article.id}/${slug}`">
+  <router-link class="card" :to="`/${article.type}/${article.id}/${slug}`">
     <q-card class="news-card" v-ripple>
       <div class="img-container">
         <q-img
@@ -15,7 +15,7 @@
             {{title}}
           </q-tooltip>
         </div>
-        <div class="text-subtitle2">{{formatedDate}}</div>
+        <div v-if="article.type === 'article'" class="text-subtitle2">{{formatedDate}}</div>
       </q-card-section>
     </q-card>
   </router-link>
@@ -23,15 +23,15 @@
 
 <script lang="ts">
 import { defineComponent, PropType, toRefs, computed } from 'vue'
-import { Article } from 'src/models/Article'
 import { date } from 'quasar'
 import { useStore } from 'src/services/store'
+import { Content } from 'src/models/Content'
 
 export default defineComponent({
   name: 'NewsCard',
   props: {
     article: {
-      type: Object as PropType<Article>,
+      type: Object as PropType<Content>,
       required: true
     }
   },

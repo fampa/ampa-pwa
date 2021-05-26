@@ -16,15 +16,15 @@ import 'firebase/auth'
 export async function getClientOptions(/* {app, router, ...}: Partial<BootFileParams<unknown>> */): Promise<ApolloClientOptions<unknown>> {
   const cache = new InMemoryCache({
     addTypename: false,
-    typePolicies: {
-      Query: {
-        fields: {
-          articles: {
-            ...offsetLimitPagination()
-          }
-        }
-      }
-    }
+    // typePolicies: {
+    //   Query: {
+    //     fields: {
+    //       content: {
+    //         ...offsetLimitPagination()
+    //       }
+    //     }
+    //   }
+    // }
   })
 
   await persistCache({

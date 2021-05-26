@@ -1,6 +1,6 @@
 import { useQuery, useMutation } from '@vue/apollo-composable'
 import getTipusServeis from './queries/getTipusServeis.gql'
-import getPages from './queries/getPages.gql'
+import getMenuItems from './queries/getMenuItems.gql'
 import getContentById from './queries/getContentById.gql'
 import getServicesByType from './queries/getServicesByType.gql'
 import getServiceById from './queries/getServiceById.gql'
@@ -13,6 +13,9 @@ import deleteContent from './queries/deleteContent.gql'
 import getTags from './queries/getTags.gql'
 import getTagById from './queries/getTagById.gql'
 import upsertTag from './queries/upsertTag.gql'
+import getContentsByType from './queries/getContentsByType.gql'
+import getContentsByTagId from './queries/getContentsByTagId.gql'
+import getContentsFrontPage from './queries/getContentsFrontPage.gql'
 import removeContentTags from './queries/removeContentTags.gql'
 import { ServicesTypeData, UnJoinServiceResponse, ServicesData, ServiceData, JoinServiceResponse } from 'src/models/Service'
 import { MembersService } from '../members'
@@ -31,9 +34,9 @@ export class ContentsService {
     return response
   }
 
-  getPagesList = () => {
+  getMenuItems = () => {
     const response = useQuery<ContentsData>(
-      getPages
+      getMenuItems
     )
 
     return response
@@ -43,6 +46,33 @@ export class ContentsService {
     const response = useQuery<ContentData>(
       getContentById,
       () => ({ id })
+    )
+
+    return response
+  }
+
+  getContentsByTagId = (id: number) => {
+    const response = useQuery<ContentsData>(
+      getContentsByTagId,
+      () => ({ id })
+    )
+
+    return response
+  }
+
+  getContentsByType = (type = 'article') => {
+    const response = useQuery<ContentsData>(
+      getContentsByType,
+      () => ({ type })
+    )
+
+    return response
+  }
+
+  getContentsFrontPage = ({ type = 'article', offset = 0, limit = 10 }) => {
+    const response = useQuery<ContentsData>(
+      getContentsFrontPage,
+      () => ({ type, offset, limit })
     )
 
     return response

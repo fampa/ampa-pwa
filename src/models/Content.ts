@@ -16,6 +16,8 @@ export interface Content {
   tags?: {
     tag: Content
   }[]
+  spots?: number
+  price?: number
   createdAt?: Date | string
   updatedAt?: Date | string
 }

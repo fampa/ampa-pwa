@@ -148,7 +148,7 @@ export default {
         onResult(() => {
           const contentTemp = Object.assign({ ...result.value.content_by_pk }) as Content
           contentTemp.createdAt = formatDate(result.value.content_by_pk.createdAt)
-          // oer si algú introdueix manualment una url amb un tipus que no es correspon amb el ID
+          // per si algú introdueix manualment una url amb un tipus que no es correspon amb el ID
           if (contentTemp.type) {
             type.value = contentTemp.type
           }
@@ -160,7 +160,8 @@ export default {
           isPublished: false,
           createdAt: formatDate(new Date()),
           image: null,
-          icon: null,
+          icon: 'las la-school',
+          isMenu: false,
           type: type.value,
           tags: [],
           translations: i18n.availableLocales.map(l => {

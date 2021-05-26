@@ -90,14 +90,14 @@
               {{$t('menu.contact')}}
             </q-item-section>
           </q-item>
-        <div v-if="serviceItems">
+        <div v-if="tagItems">
           <q-separator />
             <q-item>
               <q-item-section>
-                  <q-item-label overline>{{$t('menu.AmpaServices')}}</q-item-label>
+                  <q-item-label overline>{{$t('menu.featured')}}</q-item-label>
               </q-item-section>
             </q-item>
-          <q-item v-for="(item, index) in serviceItems" :key="index" clickable v-ripple :to="item.to" exact>
+          <q-item v-for="(item, index) in tagItems" :key="index" clickable v-ripple :to="item.to" exact>
             <q-item-section avatar>
               <q-icon :name="item.icon" />
             </q-item-section>
@@ -173,41 +173,38 @@ export default defineComponent({
       to: string
     }
 
-    const serviceItems = ref<menuItem[]>([])
-
-    const { result: ServicesResult, onResult: onServicesResult } = contentsService.getTipusServeis()
-
-    onServicesResult(() => {
-      serviceItems.value = ServicesResult.value?.service_types?.map(service => {
-        return {
-          title: service.name,
-          icon: service.icon,
-          to: `/services/${service.id}/${slugify(service.name)}`
-        }
-      })
-    })
+    const tagItems = ref<menuItem[]>([])
 
     const pagesItems = ref<menuItem[]>([])
 
-    const { result: PagesResult, onResult: onPagesResult } = contentsService.getPagesList()
-    const getPageItems = () => {
-      pagesItems.value = PagesResult.value?.content?.map(page => {
+    const { result: menuItems, onResult: onMenuItemsResult } = contentsService.getMenuItems()
+    const getMenuItems = () => {
+      pagesItems.value = menuItems.value?.content?.filter(m => m.type === 'page').map(page => {
         const title = page.translations?.find(p => p.language === currentLanguage.value)?.title || page.translations?.find(p => p.language === fallbackLanguage.value)?.title
         return {
           title,
           icon: page.icon,
-          to: `/p/${page.id}/${slugify(title)}`
+          to: `/page/${page.id}/${slugify(title)}`
+        }
+      })
+
+      tagItems.value = menuItems.value?.content?.filter(m => m.type === 'tag').map(page => {
+        const title = page.translations?.find(p => p.language === currentLanguage.value)?.title || page.translations?.find(p => p.language === fallbackLanguage.value)?.title
+        return {
+          title,
+          icon: page.icon,
+          to: `/tag/${page.id}/${slugify(title)}`
         }
       })
     }
-    onPagesResult(() => {
-      getPageItems()
+    onMenuItemsResult(() => {
+      getMenuItems()
     })
 
     watch(() => currentLanguage.value,
       (newVal, oldVal) => {
         if (newVal !== oldVal) {
-          getPageItems()
+          getMenuItems()
         }
       })
 
@@ -286,7 +283,7 @@ export default defineComponent({
       items,
       userItems,
       adminItems,
-      serviceItems,
+      tagItems,
       pagesItems,
       user,
       leftDrawerOpen,
