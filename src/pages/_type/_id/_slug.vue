@@ -18,7 +18,7 @@
         <div class="subtitle" v-if="content.type === 'article'"><strong>{{formatedDate}}</strong>. <span class="updated" v-if="content.createdAt !== content.updatedAt">{{$t('updatedAt', {date: formatedUpdatedDate})}}</span></div>
           <div class="row">
             <div v-for="(t, index) in content.tags" :key="index">
-              <q-chip clickable @click="$router.push(`/tag/${t.tag.id}/${t.tag.translations.find(tr => tr.language === $store.state.settings.language).slug}`)" color="accent" text-color="white" icon="las la-tag">
+              <q-chip dense clickable @click="$router.push(`/tag/${t.tag.id}/${t.tag.translations.find(tr => tr.language === $store.state.settings.language).slug}`)" color="accent" text-color="white" icon="las la-tag">
                 {{t.tag.translations.find(tr => tr.language === $store.state.settings.language).title}}
               </q-chip>
             </div>
