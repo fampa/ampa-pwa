@@ -7,8 +7,8 @@ const translate = i18n.global
 // The ready(), registered(), cached(), updatefound() and updated()
 // events passes a ServiceWorkerRegistration instance in their arguments.
 // ServiceWorkerRegistration: https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorkerRegistration
-
-register(process.env.service_WORKER_FILE, {
+// posava process.env.service_WORKER_FILE pero no es substituía pel valor durant el build així que està hardcoded
+register('service-worker.js', {
   // The registrationOptions object will be passed as the second argument
   // to ServiceWorkerContainer.register()
   // https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorkerContainer/register#Parameter
