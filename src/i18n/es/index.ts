@@ -59,6 +59,7 @@ export default {
     selectFamily: 'Selecciona tu familia',
     selectFamilyMore: 'Elije una opción y pulsa OK',
     selectFamilyNew: 'Crea una familia nueva',
+    send: 'Enviar',
     validDate: 'Usa el seleccionador de fechas o escribe en formato YYYY/MM/DD',
     validEmail: 'Por favor, introduce una dirección de correo electrónico válida',
     validIBAN: 'Per favor, introduce un IBAN válido',

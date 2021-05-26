@@ -59,6 +59,7 @@ export default {
     selectFamily: 'Selecciona la teua família',
     selectFamilyMore: 'Trieu una opció i polseu d\'acord',
     selectFamilyNew: 'Crea una família nova',
+    send: 'Envia',
     validDate: 'Usa el seleccionador de dates o introdueix-la en format YYYY/MM/DD',
     validEmail: 'Per favor, poseu una adreça electrònica vàlida',
     validIBAN: 'Per favor, poseu un IBAN vàlid',

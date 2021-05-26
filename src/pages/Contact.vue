@@ -11,7 +11,7 @@
         <q-input outlined v-model="contact.subject" :label="$t('contact.subject')" :rules="[val => !!val || $t('forms.required')]" />
         <q-input type="textarea" outlined v-model="contact.message" :label="$t('contact.message')" :rules="[val => !!val || $t('forms.required')]" />
         <br>
-        <q-btn :loading="loading" color="primary" type="submit">{{$t('forms.save')}}</q-btn>
+        <q-btn :loading="loading" color="primary" type="submit">{{$t('forms.send')}}</q-btn>
       </q-form>
     </div>
   </q-page>
