@@ -8,9 +8,12 @@ export default {
   },
   content: {
     content: 'Contenido',
+    delete: 'Borrar',
     draft: 'Borrador',
     isMenu: 'Incluir al menú',
     published: 'Publicado',
+    save: 'Desa',
+    see: 'Visualizar',
     title: 'Título',
     type: {
       article: 'Artículo',

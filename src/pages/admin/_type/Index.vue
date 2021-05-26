@@ -92,12 +92,12 @@ export default {
         sortable: true
       },
       {
-        name: 'createdAt',
+        name: 'isPublished',
         required: true,
-        label: i18n.t('table.date'),
+        label: i18n.t('table.status'),
+        format: val => val ? i18n.t('content.published') : i18n.t('content.draft'),
         align: 'left',
-        field: 'createdAt',
-        format: val => `${formatDate(val)}`,
+        field: 'isPublished',
         sortable: true
       },
       {
@@ -109,12 +109,12 @@ export default {
         sortable: true
       },
       {
-        name: 'isPublished',
+        name: 'createdAt',
         required: true,
-        label: i18n.t('table.status'),
-        format: val => val ? i18n.t('content.published') : i18n.t('content.draft'),
+        label: i18n.t('table.date'),
         align: 'left',
-        field: 'isPublished',
+        field: 'createdAt',
+        format: val => `${formatDate(val)}`,
         sortable: true
       }
     ])

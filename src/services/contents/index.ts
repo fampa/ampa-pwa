@@ -72,7 +72,8 @@ export class ContentsService {
   getContentsFrontPage = ({ type = 'article', offset = 0, limit = 10 }) => {
     const response = useQuery<ContentsData>(
       getContentsFrontPage,
-      () => ({ type, offset, limit })
+      () => ({ type, offset, limit }),
+      { notifyOnNetworkStatusChange: true }
     )
 
     return response

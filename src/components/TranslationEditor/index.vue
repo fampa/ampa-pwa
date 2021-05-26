@@ -139,11 +139,11 @@
       </q-card>
     </q-dialog>
     <q-page-sticky position="bottom-right" :offset="[18, 18]">
-      <q-btn :loading="loading" fab icon="save" color="primary" @click="preSave" />
-    </q-page-sticky>
-
-    <q-page-sticky position="bottom-left" :offset="[18, 18]">
-      <q-btn fab icon="las la-trash" color="negative" @click="remove" />
+       <q-fab external-label color="primary" icon="keyboard_arrow_up" direction="up">
+          <q-fab-action external-label label-position="left" :label="$t('content.save')" :disable="loading" color="secondary" @click="preSave" icon="las la-save" />
+          <q-fab-action external-label label-position="left" :label="$t('content.see')" :disable="loading" color="secondary" @click="$router.push(`/${content.type}/${content.id}/${content.translations.find(t => t.language === lang).slug}`)" icon="las la-eye" />
+          <q-fab-action external-label label-position="left" :label="$t('content.delete')" :disable="loading" color="negative" @click="remove" icon="las la-trash" />
+        </q-fab>
     </q-page-sticky>
   </form>
 </template>

@@ -8,9 +8,12 @@ export default {
   },
   content: {
     content: 'Contingut',
+    delete: 'Esborrar',
     draft: 'Esborrany',
     isMenu: 'Incloure al menú',
     published: 'Publicat',
+    save: 'Desa',
+    see: 'Visualitzar',
     title: 'Títol',
     type: {
       article: 'Article',
