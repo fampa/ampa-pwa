@@ -24,7 +24,7 @@
       <div class="col-md-4">
         <div class="row">
           <div class="col-12">
-            <q-select outlined v-model="lang" :options="langOptions" label="Selecciona idioma a editar" emit-value map-options />
+            <q-select bg-color="teal-2" outlined v-model="lang" :options="langOptions" label="Selecciona idioma a editar" emit-value map-options />
           </div>
         </div>
         <div class="row">
@@ -35,7 +35,7 @@
 
         <div class="row">
           <div class="col-12">
-            <q-input filled v-model="content.createdAt">
+            <q-input outlined v-model="content.createdAt">
               <template v-slot:prepend>
                 <q-icon name="event" class="cursor-pointer">
                   <q-popup-proxy transition-show="scale" transition-hide="scale">
@@ -84,7 +84,7 @@
           <div class="row">
              <div style="min-width: 250px; max-width: 300px">
               <q-select
-                filled
+                outlined
                 v-model="selectedTags"
                 multiple
                 :options="tagsOptions"
@@ -98,6 +98,7 @@
               <q-btn flat dense icon="add" :label="$t('admin.tags')" to="/admin/tag" />
             </div>
           </div>
+          <br>
           <div class="row" v-if="content.image">
             <div class="image-wrapper-2">
               <q-img
@@ -116,7 +117,7 @@
 
           <div class="row" v-if="!content.image">
             <div class="col">
-              <q-btn @click="getImagesPrompt = true" color="accent" label="Añadir imagen de portada" />
+              <q-btn @click="getImagesPrompt = true" color="accent" :label="$t('content.addImage')" />
             </div>
           </div>
         </div>
@@ -128,7 +129,7 @@
       <q-card>
         <q-card-section class="row items-center">
           <q-avatar icon="save" color="primary" text-color="white" />
-          <span class="q-ml-sm">El artículo se encuentra en estado de borrador. ¿Quieres solo guardar o guardar y publicar?</span>
+          <span class="q-ml-sm">{{$t('content.publishOrSave')}}</span>
         </q-card-section>
 
         <q-card-actions align="right">

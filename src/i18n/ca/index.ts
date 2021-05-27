@@ -7,11 +7,13 @@ export default {
     tags: 'Gestió d\'etiquetes'
   },
   content: {
+    addImage: 'Afegeix una imatge de portada',
     content: 'Contingut',
     delete: 'Esborrar',
     draft: 'Esborrany',
     isMenu: 'Incloure al menú',
     placeholder: 'Escriu alguna cosa ací...',
+    publishOrSave: 'L\'article es troba en estat esborrany. Voleu només desar-lo o desar-lo i publicar-lo?',
     published: 'Publicat',
     save: 'Desa',
     see: 'Visualitzar',

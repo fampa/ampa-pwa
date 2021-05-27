@@ -7,11 +7,13 @@ export default {
     tags: 'Gestión de etiquetas'
   },
   content: {
+    addImage: 'Añadir imagen de portada',
     content: 'Contenido',
     delete: 'Borrar',
     draft: 'Borrador',
     isMenu: 'Incluir al menú',
     placeholder: 'Escribe alguna cosa aquí...',
+    publishOrSave: 'El artículo se encuentra en estado de borrador. ¿Quieres solo guardar o guardar y publicar?',
     published: 'Publicado',
     save: 'Desa',
     see: 'Visualizar',
