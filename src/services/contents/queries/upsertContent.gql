@@ -1,5 +1,5 @@
 mutation upsertContent($content: content_insert_input!, $translations: [content_translations_insert_input!] = {}) {
-  insert_content_one(object: $content, on_conflict: {constraint: content_pkey, update_columns: [authorId, isPublished, isMenu, image, icon, createdAt]}) {
+  insert_content_one(object: $content, on_conflict: {constraint: content_pkey, update_columns: [authorId, isPublished, isMenu, image, price, spots, icon, createdAt]}) {
     id
     createdAt
     updatedAt
@@ -7,6 +7,8 @@ mutation upsertContent($content: content_insert_input!, $translations: [content_
     icon
     isPublished
     isMenu
+    price
+    spots
     image
     author {
       firstName
