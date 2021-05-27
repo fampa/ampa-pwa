@@ -1,4 +1,4 @@
-query getContentById($id: Int!) {
+query getContentById($id: Int!, $isAdmin: Boolean = false) {
   content_by_pk(id: $id) {
     createdAt
     id
@@ -12,6 +12,8 @@ query getContentById($id: Int!) {
     participants {
       child {
         firstName
+        lastName  @include(if: $isAdmin)
+        birthDate @include(if: $isAdmin)
       }
       childId
     }

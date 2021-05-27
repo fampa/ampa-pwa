@@ -35,6 +35,16 @@
           </div>
         </div>
       </div>
+      <div v-if="member?.isAdmin" class="row">
+        <div id="participants">
+        <h2 class="text-h5">{{$t('service.edit.participants')}}</h2>
+        <ul>
+          <li v-for="(participant, index) in service.participants" :key="index">
+            {{participant.child.firstName}} {{participant.child.lastName}} ({{participant.child.birthDate}}) <q-btn flat round color="red" icon="las la-trash" @click="remove(participant.childId)" />
+          </li>
+        </ul>
+      </div>
+      </div>
     </div>
 </template>
 
@@ -112,6 +122,7 @@ export default defineComponent({
 
     const remove = async (childId: number) => {
       loading.value = true
+      console.log(childId)
       await unJoinMutation({
         childId,
         serviceId: id.value

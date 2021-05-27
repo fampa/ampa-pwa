@@ -42,10 +42,10 @@ export class ContentsService {
     return response
   }
 
-  getContentById = (id: number) => {
+  getContentById = (id: number, isAdmin = false) => {
     const response = useQuery<ContentData>(
       getContentById,
-      () => ({ id })
+      () => ({ id, isAdmin })
     )
 
     return response

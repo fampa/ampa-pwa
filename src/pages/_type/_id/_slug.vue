@@ -94,7 +94,7 @@ export default defineComponent({
     const content = ref<Content>()
     const contentsList = ref<Content[]>(null)
 
-    const { result, onResult, loading, error, onError, refetch } = contentsService.getContentById(id.value)
+    const { result, onResult, loading, error, onError, refetch } = contentsService.getContentById(id.value, isAdmin.value)
 
     const formatedDate = computed(() => date.formatDate(result.value?.content_by_pk?.createdAt, 'DD/MM/YYYY, HH:mm'))
     const formatedUpdatedDate = computed(() => date.formatDate(result.value?.content_by_pk?.updatedAt, 'DD/MM/YYYY, HH:mm'))
