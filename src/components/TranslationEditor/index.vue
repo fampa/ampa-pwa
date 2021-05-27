@@ -76,8 +76,11 @@
             </template>
           </q-input>
         </div>
-        <div v-if="['service'].includes(type)">
-          Especific de servei
+
+        <!-- is service -->
+        <div class="row q-col-gutter-md" v-if="['service'].includes(type)">
+          <q-input style="width:50%" prefix="€" type="number" step="0.01" outlined v-model.number="content.price" :label="$t('service.edit.price')" :rules="[val => !!val || $t('forms.required')]" />
+          <q-input style="width:50%" type="number" outlined v-model.number="content.spots" :label="$t('service.edit.spots')" :rules="[val => !!val || $t('forms.required')]" />
         </div>
 
         <div v-if="['article', 'service'].includes(type)">
