@@ -35,6 +35,7 @@
           </div>
         </div>
       </div>
+      <!-- is admin -->
       <div v-if="member?.isAdmin" class="row">
         <div id="participants">
         <h2 class="text-h5">{{$t('service.edit.participants')}}</h2>

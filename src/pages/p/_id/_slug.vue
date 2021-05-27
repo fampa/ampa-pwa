@@ -69,7 +69,7 @@ export default defineComponent({
     })
 
     const getPage = () => {
-      page.value = result.value.content_by_pk
+      page.value = result.value?.content_by_pk
     }
 
     watch(() => id.value,

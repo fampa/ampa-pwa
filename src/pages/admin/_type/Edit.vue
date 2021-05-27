@@ -41,7 +41,7 @@ export default {
     const id = computed(() => Number(route.params?.id))
     const content = ref<Content>(null)
     const type = ref(route.params?.type as string)
-    const { result, onResult } = contentsService.getContentById(id.value)
+    const { result, onResult, onError } = contentsService.getContentById(id.value, true)
     const { mutate: upsertContent, loading: upsertLoading } = contentsService.upsertContent()
     const { mutate: removeContent } = contentsService.deleteContent()
     const { mutate: insertContent, loading: insertLoading } = contentsService.insertContent()
@@ -147,8 +147,8 @@ export default {
     onMounted(() => {
       if (id.value) {
         onResult(() => {
-          const contentTemp = Object.assign({ ...result.value.content_by_pk }) as Content
-          contentTemp.createdAt = formatDate(result.value.content_by_pk.createdAt)
+          const contentTemp = Object.assign({ ...result.value?.content_by_pk }) as Content
+          contentTemp.createdAt = formatDate(result.value?.content_by_pk.createdAt)
           // per si algú introdueix manualment una url amb un tipus que no es correspon amb el ID
           if (contentTemp.type) {
             type.value = contentTemp.type
@@ -174,6 +174,16 @@ export default {
           })
         }
       }
+    })
+
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+    onError(async () => {
+      console.error(i18n.t('errorNetwork'))
+      await router.push('/')
+      // $q.notify({
+      //   type: 'negative',
+      //   message: `${i18n.t('errorNetwork')}? ${error}`
+      // })
     })
 
     return {

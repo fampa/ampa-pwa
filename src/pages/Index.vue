@@ -75,7 +75,7 @@ export default defineComponent({
     const { result, loading, error, fetchMore, onResult, onError } = contentsService.getContentsFrontPage({ offset: data.page, limit: data.pageSize })
 
     onResult(() => {
-      articles.value = result.value.content
+      articles.value = result.value?.content
     })
 
     const onLoad = async () => {

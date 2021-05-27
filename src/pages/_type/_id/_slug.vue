@@ -56,8 +56,8 @@
 
 <script lang="ts">
 import { defineComponent, computed, ref } from 'vue'
-import { date, useQuasar } from 'quasar'
-import { useRoute, onBeforeRouteUpdate } from 'vue-router'
+import { date } from 'quasar'
+import { useRoute, useRouter, onBeforeRouteUpdate } from 'vue-router'
 import { useStore } from 'src/services/store'
 import { useI18n } from 'vue-i18n'
 import { ContentsService } from 'src/services/contents'
@@ -82,9 +82,10 @@ export default defineComponent({
   setup () {
     const contentsService = new ContentsService()
     const route = useRoute()
+    const router = useRouter()
     const id = computed(() => Number(route.params.id))
     const store = useStore()
-    const $q = useQuasar()
+    // const $q = useQuasar()
     const i18n = useI18n()
     const isAdmin = computed(() => store.state.user.isAdmin)
 
@@ -94,7 +95,7 @@ export default defineComponent({
     const content = ref<Content>()
     const contentsList = ref<Content[]>(null)
 
-    const { result, onResult, loading, error, onError, refetch } = contentsService.getContentById(id.value, isAdmin.value)
+    const { result, onResult, loading, onError, refetch } = contentsService.getContentById(id.value, isAdmin.value)
 
     const formatedDate = computed(() => date.formatDate(result.value?.content_by_pk?.createdAt, 'DD/MM/YYYY, HH:mm'))
     const formatedUpdatedDate = computed(() => date.formatDate(result.value?.content_by_pk?.updatedAt, 'DD/MM/YYYY, HH:mm'))
@@ -135,12 +136,14 @@ export default defineComponent({
       await refetch(newVariables)
     })
 
-    onError(() => {
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+    onError(async () => {
       console.error(i18n.t('errorNetwork'))
-      $q.notify({
-        type: 'negative',
-        message: `${i18n.t('errorNetwork')}? ${error}`
-      })
+      await router.push('/')
+      // $q.notify({
+      //   type: 'negative',
+      //   message: `${i18n.t('errorNetwork')}? ${error}`
+      // })
     })
 
     return {

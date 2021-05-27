@@ -136,8 +136,8 @@ export default {
 
       if (id.value) {
         onResult(() => {
-          const contentTemp = Object.assign({ ...result.value.content_by_pk }) as Content
-          contentTemp.createdAt = formatDate(result.value.content_by_pk.createdAt)
+          const contentTemp = Object.assign({ ...result.value?.content_by_pk }) as Content
+          contentTemp.createdAt = formatDate(result.value?.content_by_pk.createdAt)
           // console.log(contentTemp)
           content.value = contentTemp
         })
