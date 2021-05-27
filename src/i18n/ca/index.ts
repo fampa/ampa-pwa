@@ -11,6 +11,7 @@ export default {
     delete: 'Esborrar',
     draft: 'Esborrany',
     isMenu: 'Incloure al menú',
+    placeholder: 'Escriu alguna cosa ací...',
     published: 'Publicat',
     save: 'Desa',
     see: 'Visualitzar',

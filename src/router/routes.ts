@@ -56,52 +56,11 @@ const routes: RouteRecordRaw[] = [
       { path: 'users/edit/:id', component: () => import('pages/user/Index.vue') },
       { path: 'family/edit/:id', component: () => import('pages/user/Family.vue') },
       { path: 'payment/edit/:id', component: () => import('pages/user/Payment.vue') },
-      // { path: 'pages', component: () => import('pages/admin/pages/Index.vue') },
-      // { path: 'pages/edit/:id?', component: () => import('pages/admin/pages/Edit.vue') },
-      { path: 'services', component: () => import('pages/admin/services/Index.vue') },
-      { path: 'services/s/edit/:id?', component: () => import('pages/admin/services/s/Edit.vue') },
-      {
-        path: 'services/edit/:id?',
-        component: () => import('pages/admin/services/Edit.vue'),
-        children: [
-          { path: '', component: () => import('pages/admin/services/list/Index.vue') }
-        ]
-      },
       { path: ':type/edit/:id?', component: () => import('src/pages/admin/_type/Edit.vue') },
-      { path: ':type', component: () => import('src/pages/admin/_type/Index.vue') },
-      // { path: 'blog/edit/:id?', component: () => import('src/pages/admin/blog/Edit.vue') },
-      { path: 'tags', component: () => import('src/pages/admin/tags/Index.vue') },
-      { path: 'tags/edit/:id?', component: () => import('src/pages/admin/tags/Edit.vue') }
+      { path: ':type', component: () => import('src/pages/admin/_type/Index.vue') }
 
     ]
   },
-  {
-    path: '/services',
-    component: () => import('layouts/MainLayout.vue'),
-    children: [
-      { path: ':id/:slug?', component: () => import('pages/services/_id/_slug.vue') }
-    ]
-  },
-  {
-    path: '/s',
-    component: () => import('layouts/MainLayout.vue'),
-    children: [
-      { path: ':id/:slug?', component: () => import('pages/s/_id/_slug.vue') }
-    ]
-  },
-  {
-    path: '/p',
-    component: () => import('layouts/MainLayout.vue'),
-    children: [
-      { path: ':id/:slug?', component: () => import('pages/p/_id/_slug.vue') }
-    ]
-  },
-  {
-    path: '/blog/:id/:slug?',
-    component: () => import('layouts/MainLayout.vue'),
-    children: [{ path: '', component: () => import('pages/blog/_id/_slug.vue') }]
-  },
-
   // Always leave this as last one,
   // but you can also remove it
   {

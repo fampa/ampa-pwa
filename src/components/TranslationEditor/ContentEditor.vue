@@ -1,6 +1,6 @@
 <template>
 <div class="editor">
-      <div class="menubar">
+      <div class="menubar" v-if="hasFocus">
 
         <q-btn
           icon="las la-bold"
@@ -180,7 +180,7 @@
 </template>
 
 <script>
-import { watch, onBeforeUnmount } from 'vue'
+import { watch, ref, onBeforeUnmount } from 'vue'
 import { useEditor, EditorContent } from '@tiptap/vue-3'
 import StarterKit from '@tiptap/starter-kit'
 import TextAlign from '@tiptap/extension-text-align'
@@ -188,6 +188,8 @@ import Highlight from '@tiptap/extension-highlight'
 import Underline from '@tiptap/extension-underline'
 import Link from '@tiptap/extension-link'
 import Image from '@tiptap/extension-image'
+import Placeholder from '@tiptap/extension-placeholder'
+import { useI18n } from 'vue-i18n'
 
 export default {
   components: {
@@ -201,6 +203,8 @@ export default {
   },
   emits: ['update:modelValue'],
   setup (props, { emit }) {
+    const hasFocus = ref(false)
+    const i18n = useI18n()
     const editor = useEditor({
       content: props.modelValue,
       extensions: [
@@ -209,10 +213,17 @@ export default {
         Highlight,
         Underline,
         Link,
-        Image
+        Image,
+        Placeholder.configure({
+          placeholder: i18n.t('content.placeholder')
+        })
       ],
       onUpdate: () => {
         emit('update:modelValue', editor.value.getHTML())
+      },
+      onFocus (/* { editor, event } */) {
+        // The editor is focused.
+        hasFocus.value = true
       }
     })
 
@@ -248,7 +259,8 @@ export default {
     return {
       editor,
       setLink,
-      addImage
+      addImage,
+      hasFocus
     }
   }
 }
@@ -259,6 +271,13 @@ export default {
 $color-black: rgb(32, 32, 32);
 $color-white: white;
 $color-grey: rgb(70, 70, 70);
+.ProseMirror p.is-editor-empty:first-child::before {
+    content: attr(data-placeholder);
+    float: left;
+    color: #ced4da;
+    pointer-events: none;
+    height: 0;
+}
 .ProseMirror{
   min-height: 300px;
   padding: 1rem;

@@ -5,7 +5,7 @@
         <div class="row">
           <div class="col-12">
             <div v-for="(translation, index) in translations" :key="index">
-              <q-input v-if="translation.language === lang" borderless ref="title" class="title-input" v-model="translation.title"  :placeholder="$t('content.title')" :rules="[val => !!val || $t('forms.required')]" />
+              <q-input autogrow v-if="translation.language === lang" borderless ref="title" class="title-input" v-model="translation.title"  :placeholder="$t('content.title')" :rules="[val => !!val || $t('forms.required')]" />
             </div>
           </div>
         </div>
@@ -337,6 +337,10 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
+.title-input textarea{
+    line-height: 3rem !important;
+    font-weight: 700 !important;
+}
 .image-wrapper-2 {
   position: relative;
   width: 100%;
@@ -347,8 +351,7 @@ export default defineComponent({
 }
 
 .title-input {
-    font-size: 2.5rem;
-    line-height: 2.5rem;
+    font-size: 2.125rem;
     color: lightgray;
   }
 .content-editor {
