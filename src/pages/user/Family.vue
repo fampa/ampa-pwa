@@ -63,7 +63,7 @@
                 </template>
               </q-input>
               <br>
-              <div v-if="child.hiredServices.length > 0">
+              <div v-if="child.hiredServices?.length > 0">
                 <h3 class="text-h5">{{$t('family.hiredServices', { name: child.firstName })}}</h3>
                 <ul>
                   <li v-for="(hiredService, index) in child.hiredServices" :key="index">
@@ -74,7 +74,7 @@
               <q-separator/>
               <br>
             </div>
-            <q-btn :loading="isLoading" :disable="children.length === 0" color="primary" :label="$t('forms.save')" type="submit" />
+            <q-btn :loading="isLoading" :disable="children?.length === 0" color="primary" :label="$t('forms.save')" type="submit" />
           </q-form>
 
         </div>
