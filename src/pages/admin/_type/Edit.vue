@@ -55,6 +55,7 @@ export default {
       cleanObject(translations)
       delete content.translations
       delete content.tags
+      delete content.participants
       cleanObject(content)
       const variables = {
         content,
