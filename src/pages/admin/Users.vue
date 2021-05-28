@@ -12,10 +12,16 @@
         :loading="loading"
         :filter="filter"
         @request="onRequest"
+        :selected-rows-label="getSelectedString"
+        selection="multiple"
         binary-state-sort
         sortBy="lastName"
+        v-model:selected="selected"
       >
-      <template v-slot:top-right>
+      <template v-slot:top>
+        <q-btn v-if="selected.length > 0" @click="generaRemesa" color="primary" icon="las la-money-check-alt" :disable="loading" :label="$t('table.remesa')"  />
+        <q-btn v-if="selected.length > 0" :loading="sendingMessage" @click="openSendMessage = true" class="q-ml-sm" icon="las la-envelope" color="primary" :disable="loading" :label="$t('table.sendMessage')" />
+        <q-space />
         <q-input borderless dense debounce="300" v-model="filter" clearable clear-icon="close" :placeholder="$t('table.search')">
           <template v-slot:append>
             <q-icon name="search" />
@@ -35,6 +41,8 @@
       <q-page-sticky position="bottom-right" :offset="[18, 18]">
         <q-btn fab icon="add" color="primary" to="/admin/users/edit" />
       </q-page-sticky>
+      <!-- send message -->
+      <send-message :prompt="openSendMessage" @send="sendMessage($event)"></send-message>
     </div>
   </q-page>
 </template>
@@ -47,10 +55,12 @@ import { AdminService } from 'src/services/admin'
 import { formatDate } from 'src/utilities/formatDate'
 import { Member } from 'src/models/Member'
 import { useI18n } from 'vue-i18n'
+import SendMessage from 'src/components/SendMessage.vue'
 
 export default {
   name: 'AdminMembers',
   emits: ['row-click'],
+  components: { SendMessage },
   setup () {
     const i18n = useI18n()
     const router = useRouter()
@@ -66,6 +76,9 @@ export default {
       rowsPerPage: 5,
       rowsNumber: 10
     })
+    const selected = ref([])
+    const openSendMessage = ref(false)
+    const sendingMessage = ref(false)
     const columns = reactive([
       {
         name: 'createdAt',
@@ -109,6 +122,10 @@ export default {
         sortable: true
       }
     ])
+
+    const getSelectedString = () => {
+      return selected.value.length === 0 ? '' : `${selected.value.length} registre${selected.value.length > 1 ? 's' : ''} seleccionats de ${pagination.value.rowsNumber}`
+    }
 
     // Methods
     const onRowClick = (evt, row) => {
@@ -171,14 +188,31 @@ export default {
       // console.log('pagination', pagination)
     }
 
+    const generaRemesa = () => {
+      console.log(selected.value)
+    }
+
+    const sendMessage = ($event) => {
+      sendingMessage.value = true
+      console.log('$event', $event)
+      console.log(selected.value)
+      sendingMessage.value = false
+    }
+
     return {
       members,
+      getSelectedString,
+      selected,
       pagination,
       columns,
       loading,
       filter,
       onRowClick,
-      onRequest
+      onRequest,
+      generaRemesa,
+      sendMessage,
+      openSendMessage,
+      sendingMessage
     }
   }
 
