@@ -61,7 +61,7 @@
               </template>
             </q-input>
           </div>
-        </div><!--  datetime row -->
+        </div><!--  dateTime row -->
 
         <div v-if="['page', 'tag'].includes(type)">
           <div class="q-gutter-sm">
