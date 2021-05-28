@@ -3,17 +3,19 @@
               appear
               enter-active-class="animated fadeInLeft"
               leave-active-class="animated fadeOutLeft">
-    <q-page padding class="q-pa-md">
+    <q-page padding class="q-pa-md bg-grey-2">
       <div v-if="loading">
         <q-skeleton type="text" height="60px" />
         <q-skeleton height="200px" square />
         <q-skeleton type="text" />
         <q-skeleton type="text" />
       </div>
-      <div class="article" v-else-if="!content">
-        404. No hem trobat el que buscaves
+      <div class="article bg-white" v-else-if="!content">
+        <h1 class="title">Error 404</h1>
+        <p>{{$t('error.404')}}</p>
+        <q-btn color="primary" icon="home" to="/" :label="$t('backToHome')" />
       </div>
-      <div class="article" v-else-if="content">
+      <div class="article" :class="{'bg-white': content.type !== 'tag'}" v-else-if="content">
         <h1 class="title">{{title}}</h1>
         <div class="subtitle" v-if="content.type === 'article'"><strong>{{formatedDate}}</strong>. <span class="updated" v-if="content.createdAt !== content.updatedAt">{{$t('updatedAt', {date: formatedUpdatedDate})}}</span></div>
           <div class="row">
@@ -33,7 +35,7 @@
         <div v-if="content.type === 'tag'">
           <div class="row items-start">
             <div
-              class="col-12 col-sm-6 col-md-4 q-pa-sm"
+              class="col-12 col-sm-6 col-md-6 q-pa-sm"
               v-for="article in contentsList"
               :key="article.id"
             >
@@ -179,7 +181,9 @@ export default defineComponent({
   hyphens: auto;
 }
 .article {
-  max-width: 600px;
+  max-width: 650px;
   margin: auto auto;
+  padding: 2rem;
+  border-radius: 15px;
 }
 </style>

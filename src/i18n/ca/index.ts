@@ -6,6 +6,7 @@ export default {
     blog: 'Gestió del blog',
     tags: 'Gestió d\'etiquetes'
   },
+  backToHome: 'Torna a la pàgina principal',
   content: {
     addImage: 'Afegeix una imatge de portada',
     content: 'Contingut',
@@ -35,6 +36,9 @@ export default {
     phone: 'Telèfon',
     subject: 'Assumpte',
     title: 'Contacte'
+  },
+  error: {
+    404: 'No hem trobat el que buscaves'
   },
   errorNetwork: 'No tens connexió a internet',
   es: 'Castellano',
