@@ -5,9 +5,9 @@ import 'firebase/database'
 import 'firebase/storage'
 import { ref } from 'vue'
 import type { BootFileParams } from '@quasar/app'
-import { apolloClients } from 'src/extensions/apollo/boot'
-import getMemberById from 'src/services/members/queries/getMemberById.gql'
-import { MemberData } from 'src/models/Member'
+// import { apolloClients } from 'src/extensions/apollo/boot'
+// import getMemberById from 'src/services/members/queries/getMemberById.gql'
+// import { MemberData } from 'src/models/Member'
 
 const config = {
   apiKey: process.env.FIREBASE_API_KEY,
@@ -34,11 +34,12 @@ export default boot((context: BootFileParams<unknown>) => {
       const firebaseUserIsAdmin = hasuraClaim ? hasuraClaim['x-hasura-default-role'] === 'admin' : false
       isAdmin.value = firebaseUserIsAdmin
       firebaseUser.value = user
-      await apolloClients?.default?.query<MemberData>({ query: getMemberById, variables: { id: user.uid }, fetchPolicy: 'cache-first' })
-        .then((res) => {
-          const member = res.data.members_by_pk
-          context.store.commit('user/setMember', member)
-        })
+      // await apolloClients?.default?.query<MemberData>({ query: getMemberById, variables: { id: user.uid }, fetchPolicy: 'cache-first' })
+      //   .then((res) => {
+      //     const member = res.data.members_by_pk
+      //     context.store.commit('user/setMember', member)
+      //   })
+      await context.store.dispatch('user/setMember', user.uid)
         .then(() => context.store.commit('user/setAdmin', firebaseUserIsAdmin))
         .then(() => context.store.commit('user/setUser', firebaseUser.value))
     } else {

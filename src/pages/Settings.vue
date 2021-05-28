@@ -31,7 +31,10 @@
 
       <q-separator />
 
-      <q-item-label header>{{ $t("settings.notifications") }} <span v-if="!member">({{ $t("member.needLogin") }}: <router-link :to="`/login?next=${$route.path}`">{{$t('login')}}</router-link>)</span></q-item-label>
+      <q-item-label header>{{ $t("settings.notifications") }}</q-item-label>
+      <q-item  v-if="!member">
+        <q-item-label>({{ $t("member.needLogin") }}: <router-link :to="`/login?next=${$route.path}`">{{$t('login')}}</router-link>)</q-item-label>
+      </q-item>
       <q-item>
         <q-item-section avatar>
           <q-icon name="las la-envelope"></q-icon>
@@ -91,10 +94,8 @@ export default {
 
     const setCanEmail = async () => {
       await mutateMember({ id: member.value?.id, member: { canEmail: canEmail.value } })
-        .then((res) => {
-          const newMemberValue = res.data?.update_members_by_pk
-          // console.log('res', res)
-          store.commit('user/setMember', newMemberValue)
+        .then(async () => {
+          await store.dispatch('user/setMember', member.value?.id)
         })
     }
 
