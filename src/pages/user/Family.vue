@@ -84,7 +84,7 @@
 </template>
 
 <script lang="ts">
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { MembersService } from 'src/services/members'
 import { computed, ref, reactive, toRefs, watch } from 'vue'
 import firebase from 'firebase/app'
@@ -107,6 +107,7 @@ export default {
     const i18n = useI18n()
     const membersService = new MembersService()
     const route = useRoute()
+    const router = useRouter()
     const store = useStore()
     const user = computed(() => store.state.user.user)
     const datePattern = /^-?[\d]+-[0-1]\d-[0-3]\d$/
@@ -335,7 +336,10 @@ export default {
         }
       })
 
-    onError(() => window.location.reload())
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+    onError(async () => {
+      await router.push('/')
+    })
 
     return {
       member,

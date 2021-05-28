@@ -27,7 +27,7 @@
 
 <script lang="ts">
 import { MembersService } from 'src/services/members'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { computed, reactive, toRefs } from 'vue'
 import firebase from 'firebase/app'
 import 'firebase/auth'
@@ -42,6 +42,7 @@ export default {
   setup () {
     const membersService = new MembersService()
     const route = useRoute()
+    const router = useRouter()
     const $q = useQuasar()
     const i18n = useI18n()
 
@@ -64,7 +65,7 @@ export default {
     })
 
     const { member, loading, onResult, onError: onGetMemberError } = membersService.getById(id.value)
-    const { mutate, loading: mutateLoading, onError, error } = membersService.updateFamily()
+    const { mutate, loading: mutateLoading, onError } = membersService.updateFamily()
 
     onResult(() => {
       if (member) {
@@ -78,12 +79,9 @@ export default {
       $q.notify(i18n.t('forms.savedOk'))
     }
 
-    onError(() => {
-      $q.notify({
-        type: 'negative',
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-        message: error.value.message
-      })
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+    onError(async () => {
+      await router.push('/')
     })
 
     onGetMemberError(() => window.location.reload())

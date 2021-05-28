@@ -32,7 +32,7 @@
 </template>
 
 <script lang="ts">
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { MembersService } from 'src/services/members'
 import { computed, ref, reactive, toRefs, onMounted } from 'vue'
 import firebase from 'firebase/app'
@@ -71,6 +71,7 @@ export default {
 
     const membersService = new MembersService()
     const route = useRoute()
+    const router = useRouter()
     const id = computed(() => {
       const params = route.params?.id?.toString()
       if (params) {
@@ -95,7 +96,10 @@ export default {
         data.isAdmin = member.value?.isAdmin
       })
 
-      onError(() => window.location.reload())
+      // eslint-disable-next-line @typescript-eslint/no-misused-promises
+      onError(async () => {
+        await router.push('/')
+      })
     })
 
     const i18n = useI18n()
@@ -122,12 +126,9 @@ export default {
       })
     }
 
-    onError(() => {
-      $q.notify({
-        type: 'negative',
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-        message: updateMemberError.value.message
-      })
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+    onError(async () => {
+      await router.push('/')
     })
 
     const makeAdminLoading = ref<boolean>(false)
