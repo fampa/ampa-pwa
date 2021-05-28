@@ -20,8 +20,8 @@
         <div class="subtitle" v-if="content.type === 'article'"><strong>{{formatedDate}}</strong>. <span class="updated" v-if="content.createdAt !== content.updatedAt">{{$t('updatedAt', {date: formatedUpdatedDate})}}</span></div>
           <div class="row">
             <div v-for="(t, index) in content.tags" :key="index">
-              <q-chip dense clickable @click="$router.push(`/tag/${t.tag.id}/${t.tag.translations.find(tr => tr.language === $store.state.settings.language).slug}`)" color="accent" text-color="white" icon="las la-tag">
-                {{t.tag.translations.find(tr => tr.language === $store.state.settings.language).title}}
+              <q-chip dense clickable @click="$router.push(`/tag/${t.tag.id}/${t.tag.translations?.find(tr => tr.language === $store.state.settings.language).slug}`)" color="accent" text-color="white" icon="las la-tag">
+                {{t.tag.translations?.find(tr => tr.language === $store.state.settings.language).title}}
               </q-chip>
             </div>
           </div>
@@ -103,17 +103,17 @@ export default defineComponent({
     const formatedUpdatedDate = computed(() => date.formatDate(result.value?.content_by_pk?.updatedAt, 'DD/MM/YYYY, HH:mm'))
 
     const title = computed(() => {
-      if (result.value?.content_by_pk?.translations.find(t => t.language === language.value)?.title) {
-        return result.value?.content_by_pk?.translations.find(t => t.language === language.value)?.title
+      if (result.value?.content_by_pk?.translations?.find(t => t.language === language.value)?.title) {
+        return result.value?.content_by_pk?.translations?.find(t => t.language === language.value)?.title
       } else {
-        return result.value?.content_by_pk?.translations.find(t => t.language === fallbackLanguage.value)?.title
+        return result.value?.content_by_pk?.translations?.find(t => t.language === fallbackLanguage.value)?.title
       }
     })
     const contentText = computed(() => {
-      if (result.value?.content_by_pk?.translations.find(t => t.language === language.value)?.content) {
-        return result.value?.content_by_pk?.translations.find(t => t.language === language.value)?.content
+      if (result.value?.content_by_pk?.translations?.find(t => t.language === language.value)?.content) {
+        return result.value?.content_by_pk?.translations?.find(t => t.language === language.value)?.content
       } else {
-        return result.value?.content_by_pk?.translations.find(t => t.language === fallbackLanguage.value)?.content
+        return result.value?.content_by_pk?.translations?.find(t => t.language === fallbackLanguage.value)?.content
       }
     })
 

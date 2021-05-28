@@ -145,7 +145,7 @@
     <q-page-sticky position="bottom-right" :offset="[18, 18]">
        <q-fab external-label color="primary" icon="keyboard_arrow_up" direction="up">
           <q-fab-action external-label label-position="left" :label="$t('content.save')" :disable="loading" color="secondary" @click="preSave" icon="las la-save" />
-          <q-fab-action external-label label-position="left" :label="$t('content.see')" :disable="loading" color="secondary" @click="$router.push(`/${content.type}/${content.id}/${content.translations.find(t => t.language === lang).slug}`)" icon="las la-eye" />
+          <q-fab-action external-label label-position="left" :label="$t('content.see')" :disable="loading" color="secondary" @click="$router.push(`/${content.type}/${content.id}/${content.translations?.find(t => t.language === lang).slug}`)" icon="las la-eye" />
           <q-fab-action external-label label-position="left" :label="$t('content.delete')" :disable="loading" color="negative" @click="remove" icon="las la-trash" />
         </q-fab>
     </q-page-sticky>
@@ -211,7 +211,7 @@ export default defineComponent({
     const selectedTags = ref<{label: string, value: number}[]>(props.inputContent.tags?.map(t => {
       return {
         value: t.tag.id,
-        label: t.tag.translations.find(tr => tr.language === lang.value).title
+        label: t.tag.translations?.find(tr => tr.language === lang.value).title
       }
     }))
     const langOptions = ref(availableLocales)
@@ -239,7 +239,7 @@ export default defineComponent({
       tagsOptions.value = tagsResult.value.content?.map(tag => {
         return {
           value: tag.id,
-          label: tag.translations.find(t => t.language === lang.value).title
+          label: tag.translations?.find(t => t.language === lang.value).title
         }
       })
     })
@@ -271,7 +271,7 @@ export default defineComponent({
       if (publicar) {
         content.value.isPublished = true
       }
-      content.value.translations = translations.value
+      content.value.translations = translations?.value
       const tags = selectedTags.value?.map(t => t.value)
       content.value.authorId = user.value.uid
       content.value.type = props.type

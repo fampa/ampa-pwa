@@ -105,7 +105,7 @@ export default {
         required: true,
         label: i18n.t('table.title'),
         align: 'left',
-        field: row => row.translations.find(t => t.language === currentLanguage).title || row.translations.find(t => t.language === fallbackLanguage).title,
+        field: row => row.translations?.find(t => t.language === currentLanguage).title || row.translations?.find(t => t.language === fallbackLanguage).title,
         sortable: true
       },
       {
