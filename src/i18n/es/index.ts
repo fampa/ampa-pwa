@@ -139,11 +139,15 @@ export default {
       name: 'Nombre'
     }
   },
-  settings: 'Preferencias',
-  settingsPage: {
+  settings: {
+    title: 'Preferencias',
+    email: 'Recibir comunicaciones por email',
     general: 'Preferencias generales',
     language: 'Idioma',
-    notifications: 'Notificaciones'
+    notifications: 'Notificaciones',
+    push: {
+      deviceSpecific: 'Activa esta opción en cada dispositivo donde quieras recibir notificacions push'
+    }
   },
   update: 'ACTUALIZAR',
   updatedAt: 'Actualizado el {date}',

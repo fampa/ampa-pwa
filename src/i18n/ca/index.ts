@@ -111,11 +111,15 @@ export default {
     <p>Podeu exercir els vostres drets d'accés, rectificació i cancel·lació mitjançant el formulari de contacte.</p> 
     `
   },
-  settings: 'Preferències',
-  settingsPage: {
+  settings: {
+    title: 'Preferències',
+    email: 'Rebre comunicacions per email',
     general: 'Preferències generals',
     language: 'Idioma',
-    notifications: 'Notificacions'
+    notifications: 'Notificacions',
+    push: {
+      deviceSpecific: 'Activa aquesta opció en cada dispositiu on hi vulgues rebre notificacions push'
+    }
   },
   status: {
     PUBLISHED: 'PUBLICAT',

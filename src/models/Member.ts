@@ -13,6 +13,7 @@ export interface Member {
   photoURL?: string
   isAdmin?: boolean
   phone?: string
+  canEmail?: boolean
   joinFamilyRequest?: Record<string, unknown>
   hasRequestedJoinFamily?: boolean
   createdAt?: Date
@@ -40,4 +41,8 @@ export interface MemberData {
 export interface GetMembersData {
   members_aggregate: Aggregate
   members: Member[]
+}
+
+export interface UpdateMemberData {
+  update_members_by_pk: Member
 }

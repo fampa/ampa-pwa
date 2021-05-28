@@ -10,6 +10,7 @@ query memberById($id: String!) {
     hasRequestedJoinFamily
     joinFamilyRequest
     isAdmin
+    canEmail
     family {
       id
       name

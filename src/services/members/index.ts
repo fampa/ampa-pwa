@@ -9,7 +9,7 @@ import updateFamily from 'src/services/members/queries/updateFamily.gql'
 import firebase from 'firebase/app'
 import 'firebase/auth'
 
-import { MemberData, MembersData, MemberVars, MembersVars, Member } from 'src/models/Member'
+import { MemberData, MembersData, MemberVars, MembersVars, Member, UpdateMemberData } from 'src/models/Member'
 import { apolloClient } from 'src/boot/apollo'
 import { FamilyData, FamilyVars, FamilyUpdateVars, FamilySearchData } from 'src/models/Family'
 import { ChildrenData, ChildrenVars } from 'src/models/Child'
@@ -35,7 +35,7 @@ export class MembersService {
   }
 
   updateMember = () => {
-    const response = useMutation<MemberData, MemberVars>(
+    const response = useMutation<UpdateMemberData, MemberVars>(
       updateMember
     )
     return response
@@ -113,15 +113,6 @@ export class MembersService {
     const response = await axios
       .post(endpoint, data, { headers: { authorization: `Bearer ${token}` } })
     return response
-  }
-
-  getCurrentUser = () => {
-    return new Promise((resolve, reject) => {
-      const unsubscribe = firebase.auth().onAuthStateChanged(user => {
-        unsubscribe()
-        resolve(user)
-      }, reject)
-    })
   }
 
   clearCache = async () => {

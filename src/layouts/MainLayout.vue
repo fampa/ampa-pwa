@@ -19,7 +19,7 @@
           <q-list>
             <q-item :to="'/settings'" clickable v-close-popup>
               <q-item-section>
-                <q-item-label>{{$t('settings')}}</q-item-label>
+                <q-item-label>{{$t('settings.title')}}</q-item-label>
               </q-item-section>
             </q-item>
           </q-list>

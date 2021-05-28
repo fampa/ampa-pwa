@@ -6,10 +6,39 @@ mutation updateMember(
     pk_columns: {id: $id},
     _set: $member
   ) {
-    email,
-    firstName,
-    lastName,
-    phone,
+    id
+    firstName
+    lastName
+    email
+    phone
     nif
+    familyId
+    hasRequestedJoinFamily
+    joinFamilyRequest
+    isAdmin
+    canEmail
+    family {
+      id
+      name
+      iban
+      children {
+        id
+        firstName
+        lastName
+        birthDate
+        familyId
+        hiredServices {
+          service {
+            type
+            translations {
+              language
+              slug
+              title
+            }
+            id
+          }
+        }
+      }
+    }
   }
 }
