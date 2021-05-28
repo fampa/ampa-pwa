@@ -16,7 +16,7 @@ export default {
     placeholder: 'Escribe alguna cosa aquí...',
     publishOrSave: 'El artículo se encuentra en estado de borrador. ¿Quieres solo guardar o guardar y publicar?',
     published: 'Publicado',
-    save: 'Desa',
+    save: 'Guardar',
     see: 'Visualizar',
     title: 'Título',
     type: {

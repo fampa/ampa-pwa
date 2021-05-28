@@ -271,7 +271,6 @@ export default defineComponent({
       content.value.type = props.type
       const obj = { ...content.value }
       cleanObject(obj)
-      console.log('obj', obj)
       if (content.value.image || !pendingImages.value) return emit('guardar', { content: obj, tags })
       // this.$refs.uploader.upload()
     }
