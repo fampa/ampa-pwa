@@ -62,6 +62,7 @@ import 'firebase/auth'
 import { useI18n } from 'vue-i18n'
 import { Child } from 'src/models/Child'
 import { Content } from 'src/models/Content'
+import { fallbackContent } from 'src/utilities/fallbackContent'
 
 export default defineComponent({
   name: 'PageServei',
@@ -106,7 +107,7 @@ export default defineComponent({
           emit('refetch')
           await contentsService.serviceMessage({
             from: member.value.email,
-            message: `<p>El xiquet/a ${child.firstName} ${child.lastName} (${child.birthDate})  ha sol·licitat el servei <a href="https://${process.env.FIREBASE_PROJECT_ID}.web.app${route.path}" target="_blank">${props.service.translations?.find(t => t.language === i18n.locale.value).title}</a></p>`
+            message: `<p>El xiquet/a ${child.firstName} ${child.lastName} (${child.birthDate})  ha sol·licitat el servei <a href="https://${process.env.FIREBASE_PROJECT_ID}.web.app${route.path}" target="_blank">${fallbackContent(props.service, 'title')}</a></p>`
           })
         })
         .then(() => {
@@ -165,7 +166,8 @@ export default defineComponent({
       route,
       join,
       remove,
-      participants
+      participants,
+      fallbackContent
     }
   }
 })

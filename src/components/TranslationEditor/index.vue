@@ -1,7 +1,7 @@
 <template>
   <form class="content-editor q-pa-md">
     <main class="row q-col-gutter-sm">
-      <div class="col-md-8">
+      <div class="col-md-8 col-sm-8">
         <div class="row">
           <div class="col-12">
             <div v-for="(translation, index) in translations" :key="index">
@@ -21,7 +21,7 @@
 
       </div> <!-- Fin columna principal -->
 
-      <div class="col-md-4">
+      <div class="col-md-4 col-sm-4">
         <div class="row">
           <div class="col-12">
             <q-select bg-color="teal-2" outlined v-model="lang" :options="langOptions" label="Selecciona idioma a editar" emit-value map-options />
@@ -85,7 +85,7 @@
 
         <div v-if="['article', 'service'].includes(type)">
           <div class="row">
-             <div style="min-width: 250px; max-width: 300px">
+             <div class="col-12">
               <q-select
                 outlined
                 v-model="selectedTags"
@@ -145,7 +145,7 @@
     <q-page-sticky position="bottom-right" :offset="[18, 18]">
        <q-fab external-label color="primary" icon="keyboard_arrow_up" direction="up">
           <q-fab-action external-label label-position="left" :label="$t('content.save')" :disable="loading" color="secondary" @click="preSave" icon="las la-save" />
-          <q-fab-action external-label label-position="left" :label="$t('content.see')" :disable="loading" color="secondary" @click="$router.push(`/${content.type}/${content.id}/${content.translations?.find(t => t.language === lang).slug}`)" icon="las la-eye" />
+          <q-fab-action external-label label-position="left" :label="$t('content.see')" :disable="loading" color="secondary" @click="$router.push(`/${content.type}/${content.id}/${fallbackContent(content, 'slug')}`)" icon="las la-eye" />
           <q-fab-action external-label label-position="left" :label="$t('content.delete')" :disable="loading" color="negative" @click="remove" icon="las la-trash" />
         </q-fab>
     </q-page-sticky>
@@ -164,7 +164,7 @@ import { Content } from 'src/models/Content'
 import { ContentTranslation } from 'src/models/ContentTranslation'
 import { useStore } from 'src/services/store'
 import { cleanObject } from 'src/utilities/cleanObject'
-// import { Tag } from 'src/models/Tag'
+import { fallbackContent } from 'src/utilities/fallbackContent'
 import { ContentsService } from 'src/services/contents'
 
 const formatDate = (inputDate: Date) => {
@@ -211,7 +211,7 @@ export default defineComponent({
     const selectedTags = ref<{label: string, value: number}[]>(props.inputContent.tags?.map(t => {
       return {
         value: t.tag.id,
-        label: t.tag.translations?.find(tr => tr.language === lang.value).title
+        label: fallbackContent(t.tag, 'title')
       }
     }))
     const langOptions = ref(availableLocales)
@@ -223,23 +223,17 @@ export default defineComponent({
     const translations = ref<ContentTranslation[]>(i18n.availableLocales.map(l => {
       return {
         parentId: props.inputContent?.id,
-        title: props.inputContent?.translations?.find(t => t.language === l).title,
+        title: fallbackContent(props.inputContent, 'title'),
         language: l,
-        content: props.inputContent?.translations?.find(t => t.language === l).content
+        content: fallbackContent(props.inputContent, 'content')
       }
     }))
-    // const tags = ref<Tag[]>(props.inputContent.tags?.map(t => {
-    //   return {
-    //     id: t.tag.id,
-    //     translations: t.tag.translations
-    //   }
-    // }))
 
     onTagsResult(() => {
       tagsOptions.value = tagsResult.value.content?.map(tag => {
         return {
           value: tag.id,
-          label: tag.translations?.find(t => t.language === lang.value).title
+          label: fallbackContent(tag, 'title')
         }
       })
     })
@@ -277,6 +271,7 @@ export default defineComponent({
       content.value.type = props.type
       const obj = { ...content.value }
       cleanObject(obj)
+      console.log('obj', obj)
       if (content.value.image || !pendingImages.value) return emit('guardar', { content: obj, tags })
       // this.$refs.uploader.upload()
     }
@@ -334,7 +329,8 @@ export default defineComponent({
       pathPrefix,
       tagsOptions,
       selectedTags,
-      removeContentTag
+      removeContentTag,
+      fallbackContent
     }
   }
 })

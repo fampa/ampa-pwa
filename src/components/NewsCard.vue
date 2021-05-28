@@ -1,5 +1,5 @@
 <template>
-  <router-link class="card" :to="`/${article.type}/${article.id}/${slug}`">
+  <router-link class="card" :to="`/${article.type}/${article.id}/${fallbackContent(article, 'slug')}`">
     <q-card class="news-card" v-ripple>
       <div class="img-container">
         <q-img
@@ -11,7 +11,7 @@
             <div v-for="(t, index) in article.tags" :key="index">
               <div v-for="(tr, index) in t.tag.translations" :key="index">
                 <q-chip class="col" dense v-if="tr.language === $store.state.settings.language" color="accent" text-color="white" icon="las la-tag">
-                  {{tr.title}}
+                  {{fallbackContent(t.tag, 'title')}}
                 </q-chip>
               </div>
             </div>
@@ -20,9 +20,9 @@
       </div>
       <q-card-section class="card-section">
         <div class="text-h6 titular">
-          {{title}}
+          {{fallbackContent(article, 'title')}}
           <q-tooltip>
-            {{title}}
+            {{fallbackContent(article, 'title')}}
           </q-tooltip>
         </div>
         <div class="row justify-between">
@@ -36,8 +36,8 @@
 <script lang="ts">
 import { defineComponent, PropType, toRefs, computed } from 'vue'
 import { date } from 'quasar'
-import { useStore } from 'src/services/store'
 import { Content } from 'src/models/Content'
+import { fallbackContent } from 'src/utilities/fallbackContent'
 
 export default defineComponent({
   name: 'NewsCard',
@@ -48,30 +48,12 @@ export default defineComponent({
     }
   },
   setup (props) {
-    const store = useStore()
-    const language = computed(() => store.state.settings.language)
-    const fallbackLanguage = computed(() => store.state.settings.fallbackLanguage)
-    const title = computed(() => {
-      if (props.article?.translations?.find(t => t.language === language.value)?.title) {
-        return props.article?.translations?.find(t => t.language === language.value)?.title
-      } else {
-        return props.article?.translations?.find(t => t.language === fallbackLanguage.value)?.title
-      }
-    })
-    const slug = computed(() => {
-      if (props.article?.translations?.find(t => t.language === language.value)?.slug) {
-        return props.article?.translations?.find(t => t.language === language.value)?.slug
-      } else {
-        return props.article?.translations?.find(t => t.language === fallbackLanguage.value)?.slug
-      }
-    })
     const formatedDate = computed(() => date.formatDate(props.article.createdAt, 'DD/MM/YYYY'))
     return {
       ...toRefs(props),
       date,
-      title,
       formatedDate,
-      slug
+      fallbackContent
     }
   }
 })

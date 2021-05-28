@@ -67,7 +67,7 @@
                 <h3 class="text-h5">{{$t('family.hiredServices', { name: child.firstName })}}</h3>
                 <ul>
                   <li v-for="(hiredService, index) in child.hiredServices" :key="index">
-                    <router-link :to="`/${hiredService.service.type}/${hiredService.service.id}/${hiredService.service.translations?.find(t => t.language === $store.state.settings.language).slug}`">{{ hiredService.service.translations?.find(t => t.language === $store.state.settings.language).title }}</router-link>
+                    <router-link :to="`/${hiredService.service.type}/${hiredService.service.id}/${fallbackContent(hiredService.service, 'slug')}`">{{ fallbackContent(hiredService.service, 'title') }}</router-link>
                   </li>
                 </ul>
               </div>
@@ -97,7 +97,7 @@ import { cleanObject } from 'src/utilities/cleanObject'
 import { Member } from 'src/models/Member'
 import { useI18n } from 'vue-i18n'
 import { useStore } from 'src/services/store'
-import { slugify } from 'src/utilities/slugify'
+import { fallbackContent } from 'src/utilities/fallbackContent'
 
 export default {
   name: 'PagePersonalData',
@@ -354,7 +354,7 @@ export default {
       resolveJoin,
       rejectJoin,
       abortJoin,
-      slugify
+      fallbackContent
     }
   }
 }

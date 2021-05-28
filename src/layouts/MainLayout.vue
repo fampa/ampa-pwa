@@ -150,8 +150,8 @@
 import { defineComponent, ref, computed, watch } from 'vue'
 import { useStore } from 'src/services/store'
 import { ContentsService } from 'src/services/contents'
-import { slugify } from 'src/utilities/slugify'
 import { useI18n } from 'vue-i18n'
+import { fallbackContent } from 'src/utilities/fallbackContent'
 
 export default defineComponent({
   name: 'MainLayout',
@@ -162,7 +162,6 @@ export default defineComponent({
     const store = useStore()
     const contentsService = new ContentsService()
     const currentLanguage = computed(() => store.state.settings.language)
-    const fallbackLanguage = computed(() => store.state.settings.fallbackLanguage)
     const user = computed(() => {
       return store.state.user.user
     })
@@ -180,20 +179,20 @@ export default defineComponent({
     const { result: menuItems, onResult: onMenuItemsResult } = contentsService.getMenuItems()
     const getMenuItems = () => {
       pagesItems.value = menuItems.value?.content?.filter(m => m.type === 'page').map(page => {
-        const title = page.translations?.find(p => p.language === currentLanguage.value)?.title || page.translations?.find(p => p.language === fallbackLanguage.value)?.title
+        const title = fallbackContent(page, 'title')
         return {
           title,
           icon: page.icon,
-          to: `/page/${page.id}/${slugify(title)}`
+          to: `/page/${page.id}/${fallbackContent(page, 'slug')}`
         }
       })
 
       tagItems.value = menuItems.value?.content?.filter(m => m.type === 'tag').map(page => {
-        const title = page.translations?.find(p => p.language === currentLanguage.value)?.title || page.translations?.find(p => p.language === fallbackLanguage.value)?.title
+        const title = fallbackContent(page, 'title')
         return {
           title,
           icon: page.icon,
-          to: `/tag/${page.id}/${slugify(title)}`
+          to: `/tag/${page.id}/${fallbackContent(page, 'slug')}`
         }
       })
     }

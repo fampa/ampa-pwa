@@ -24,7 +24,7 @@
       </template>
       <template v-slot:body-cell-isPublished="props">
         <q-td :props="props">
-          <q-badge :color="props.value === ('Publicat' || 'Publicado') ? 'positive' : 'warning'">
+          <q-badge :color="['Publicat','Publicado'].includes(props.value) ? 'positive' : 'warning'">
             {{props.value}}
           </q-badge>
         </q-td>
@@ -41,13 +41,13 @@
 
 <script lang="ts">
 import { ref, reactive, computed } from 'vue'
-import { useStore } from 'src/services/store'
 import { useRouter, useRoute, onBeforeRouteUpdate } from 'vue-router'
 import { cleanObject } from 'src/utilities/cleanObject'
 import { AdminService } from 'src/services/admin'
 import { formatDate } from 'src/utilities/formatDate'
 import { useI18n } from 'vue-i18n'
 import { Content } from 'src/models/Content'
+import { fallbackContent } from 'src/utilities/fallbackContent'
 
 export default {
   name: 'AdminPages',
@@ -63,9 +63,6 @@ export default {
     }
   },
   setup () {
-    const store = useStore()
-    const currentLanguage = store.state.settings.language
-    const fallbackLanguage = store.state.settings.fallbackLanguage
     const i18n = useI18n()
     const router = useRouter()
     const route = useRoute()
@@ -105,7 +102,7 @@ export default {
         required: true,
         label: i18n.t('table.title'),
         align: 'left',
-        field: row => row.translations?.find(t => t.language === currentLanguage).title || row.translations?.find(t => t.language === fallbackLanguage).title,
+        field: row => fallbackContent(row, 'title'),
         sortable: true
       },
       {

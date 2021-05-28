@@ -16,12 +16,12 @@
         <q-btn color="primary" icon="home" to="/" :label="$t('backToHome')" />
       </div>
       <div class="article" :class="{'bg-white': content.type !== 'tag'}" v-else-if="content">
-        <h1 class="title">{{title}}</h1>
+        <h1 class="title">{{fallbackContent(content, 'title')}}</h1>
         <div class="subtitle" v-if="content.type === 'article'"><strong>{{formatedDate}}</strong>. <span class="updated" v-if="content.createdAt !== content.updatedAt">{{$t('updatedAt', {date: formatedUpdatedDate})}}</span></div>
           <div class="row">
             <div v-for="(t, index) in content.tags" :key="index">
-              <q-chip dense clickable @click="$router.push(`/tag/${t.tag.id}/${t.tag.translations?.find(tr => tr.language === $store.state.settings.language).slug}`)" color="accent" text-color="white" icon="las la-tag">
-                {{t.tag.translations?.find(tr => tr.language === $store.state.settings.language).title}}
+              <q-chip dense clickable @click="$router.push(`/tag/${t.tag.id}/${fallbackContent(t.tag, 'slug')}`)" color="accent" text-color="white" icon="las la-tag">
+                {{fallbackContent(t.tag, 'title')}}
               </q-chip>
             </div>
           </div>
@@ -30,7 +30,7 @@
           v-if="content.image"
           :src="content.image">
         </q-img>
-        <div class="content" v-html="contentText"></div>
+        <div class="content" v-html="fallbackContent(content, 'content')"></div>
         <!-- is tag -->
         <div v-if="content.type === 'tag'">
           <div class="row items-start">
@@ -66,6 +66,7 @@ import { ContentsService } from 'src/services/contents'
 import { Content } from 'src/models/Content'
 import NewsCard from 'src/components/NewsCard.vue'
 import ServiceComponent from 'src/components/ServiceComponent.vue'
+import { fallbackContent } from 'src/utilities/fallbackContent'
 
 export default defineComponent({
   name: 'NewsDetails',
@@ -92,8 +93,6 @@ export default defineComponent({
     const isAdmin = computed(() => store.state.user.isAdmin)
 
     // Data
-    const language = computed(() => store.state.settings.language)
-    const fallbackLanguage = computed(() => store.state.settings.fallbackLanguage)
     const content = ref<Content>()
     const contentsList = ref<Content[]>(null)
 
@@ -101,21 +100,6 @@ export default defineComponent({
 
     const formatedDate = computed(() => date.formatDate(result.value?.content_by_pk?.createdAt, 'DD/MM/YYYY, HH:mm'))
     const formatedUpdatedDate = computed(() => date.formatDate(result.value?.content_by_pk?.updatedAt, 'DD/MM/YYYY, HH:mm'))
-
-    const title = computed(() => {
-      if (result.value?.content_by_pk?.translations?.find(t => t.language === language.value)?.title) {
-        return result.value?.content_by_pk?.translations?.find(t => t.language === language.value)?.title
-      } else {
-        return result.value?.content_by_pk?.translations?.find(t => t.language === fallbackLanguage.value)?.title
-      }
-    })
-    const contentText = computed(() => {
-      if (result.value?.content_by_pk?.translations?.find(t => t.language === language.value)?.content) {
-        return result.value?.content_by_pk?.translations?.find(t => t.language === language.value)?.content
-      } else {
-        return result.value?.content_by_pk?.translations?.find(t => t.language === fallbackLanguage.value)?.content
-      }
-    })
 
     // methods
     onResult(() => {
@@ -151,13 +135,12 @@ export default defineComponent({
     return {
       content,
       loading,
-      title,
       formatedDate,
       formatedUpdatedDate,
-      contentText,
       isAdmin,
       contentsList,
-      refetchContent
+      refetchContent,
+      fallbackContent
     }
   }
 })
