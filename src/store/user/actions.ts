@@ -4,7 +4,7 @@ import { StateInterface } from '../index'
 import { UserStateInterface } from './state'
 import firebase from 'firebase/app'
 import 'firebase/auth'
-import { ArticlesService } from 'src/services/articles'
+import { ContentsService } from 'src/services/contents'
 
 const actions: ActionTree<UserStateInterface, StateInterface> = {
   setUser ({ commit }, payload: firebase.User) {
@@ -16,9 +16,9 @@ const actions: ActionTree<UserStateInterface, StateInterface> = {
   },
 
   async logout ({ commit }) {
-    const articlesService = new ArticlesService()
+    const contentsService = new ContentsService()
     await firebase.auth().signOut()
-    await articlesService.clearCache()
+    await contentsService.clearCache()
     commit('setUser', null)
     // window.location.reload()
   }

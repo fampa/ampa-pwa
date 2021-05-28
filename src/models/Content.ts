@@ -69,3 +69,17 @@ export interface DeleteContentTagResponse {
     tag_id: number
   }
 }
+
+export interface UpsertContentTagsResponse {
+  insert_content_tags: {
+    affected_rows: number
+  }
+}
+
+export interface JoinServiceResponse {
+  insert_childService_one: unknown
+}
+
+export interface UnJoinServiceResponse {
+  delete_childService_by_pk: Record<string, unknown>
+}

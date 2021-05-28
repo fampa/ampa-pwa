@@ -1,9 +1,6 @@
 import { useQuery, useMutation } from '@vue/apollo-composable'
-import getTipusServeis from './queries/getTipusServeis.gql'
 import getMenuItems from './queries/getMenuItems.gql'
 import getContentById from './queries/getContentById.gql'
-import getServicesByType from './queries/getServicesByType.gql'
-import getServiceById from './queries/getServiceById.gql'
 import unJoinService from './queries/unJoinService.gql'
 import joinService from './queries/joinService.gql'
 import upsertContent from './queries/upsertContent.gql'
@@ -11,29 +8,18 @@ import upsertContentTags from './queries/upsertContentTags.gql'
 import insertContent from './queries/insertContent.gql'
 import deleteContent from './queries/deleteContent.gql'
 import getTags from './queries/getTags.gql'
-import getTagById from './queries/getTagById.gql'
-import upsertTag from './queries/upsertTag.gql'
-import getContentsByType from './queries/getContentsByType.gql'
 import getContentsByTagId from './queries/getContentsByTagId.gql'
 import getContentsFrontPage from './queries/getContentsFrontPage.gql'
 import removeContentTags from './queries/removeContentTags.gql'
-import { ServicesTypeData, UnJoinServiceResponse, ServicesData, ServiceData, JoinServiceResponse } from 'src/models/Service'
 import { MembersService } from '../members'
 import axios from 'axios'
-import { ContentData, ContentsData, DeleteContentResponse, DeleteContentTagResponse, InsertContentResponse, UpsertContentResponse } from 'src/models/Content'
-import { TagData, UpsertContentTagsResponse, UpsertTagResponse } from 'src/models/Tag'
+import { ContentData, ContentsData, DeleteContentResponse, DeleteContentTagResponse, InsertContentResponse, JoinServiceResponse, UnJoinServiceResponse, UpsertContentResponse, UpsertContentTagsResponse } from 'src/models/Content'
+import { apolloClient } from 'src/boot/apollo'
+import { CachePersistor } from 'apollo3-cache-persist'
 
 const membersService = new MembersService()
 
 export class ContentsService {
-  getTipusServeis = () => {
-    const response = useQuery<ServicesTypeData>(
-      getTipusServeis
-    )
-
-    return response
-  }
-
   getMenuItems = () => {
     const response = useQuery<ContentsData>(
       getMenuItems
@@ -60,38 +46,11 @@ export class ContentsService {
     return response
   }
 
-  getContentsByType = (type = 'article') => {
-    const response = useQuery<ContentsData>(
-      getContentsByType,
-      () => ({ type })
-    )
-
-    return response
-  }
-
   getContentsFrontPage = ({ type = 'article', offset = 0, limit = 10 }) => {
     const response = useQuery<ContentsData>(
       getContentsFrontPage,
       () => ({ type, offset, limit }),
       { notifyOnNetworkStatusChange: true }
-    )
-
-    return response
-  }
-
-  getServicesByTypeId = (typeId: number) => {
-    const response = useQuery<ServicesData>(
-      getServicesByType,
-      { typeId }
-    )
-
-    return response
-  }
-
-  getServiceById = (id: number) => {
-    const response = useQuery<ServiceData>(
-      getServiceById,
-      { id }
     )
 
     return response
@@ -168,22 +127,14 @@ export class ContentsService {
     return response
   }
 
-  getTagById = (id: number) => {
-    const response = useQuery<TagData>(
-      getTagById,
-      {
-        id
-      }
-    )
-
-    return response
-  }
-
-  upsertTag = () => {
-    const response = useMutation<UpsertTagResponse>(
-      upsertTag
-    )
-
-    return response
+  clearCache = async () => {
+    const persistor = new CachePersistor({
+      cache: apolloClient.cache,
+      storage: window.localStorage
+    })
+    await apolloClient.clearStore()
+    await apolloClient.resetStore()
+    await apolloClient.cache.reset()
+    await persistor.purge()
   }
 }

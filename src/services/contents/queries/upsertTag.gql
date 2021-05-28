@@ -1,5 +1,0 @@
-mutation upsertTag($tag: tags_insert_input = {}) {
-  insert_tags_one(object: $tag, on_conflict: {constraint: article_tags_pkey, update_columns: [icon, isMenu, type]}) {
-    id
-  }
-}

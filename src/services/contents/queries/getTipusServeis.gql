@@ -1,8 +1,0 @@
-query getTipusServeis {
-  service_types {
-    name
-    id
-    description
-    icon
-  }
-}

@@ -1,5 +1,0 @@
-mutation removeService($id: Int!) {
-  delete_services_by_pk(id: $id) {
-    updatedAt
-  }
-}

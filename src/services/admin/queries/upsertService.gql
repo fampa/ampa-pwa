@@ -1,6 +1,0 @@
-mutation upsertService($insertInput: services_insert_input!) {
-  insert_services_one(object: $insertInput, on_conflict: {constraint: services_pkey, update_columns: [name, description, typeId, image, price, periodicity, spots, isAvailable]}) {
-    id
-    updatedAt
-  }
-}

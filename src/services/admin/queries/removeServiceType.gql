@@ -1,5 +1,0 @@
-mutation removeServiceType($id: Int!) {
-  delete_service_types_by_pk(id: $id) {
-    updatedAt
-  }
-}
