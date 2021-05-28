@@ -26,7 +26,7 @@
       </div>
     </div>
     <div v-else-if="articles">
-      <q-infinite-scroll :offset="200" @load="onLoad">
+      <q-infinite-scroll :offset="100" @load="onLoad">
         <div class="row items-start">
           <div
             class="col-12 col-sm-6 col-md-4 q-pa-sm"
@@ -52,7 +52,7 @@
 import { defineComponent, reactive, ref } from 'vue'
 // import { useStore } from 'src/services/store'
 import NewsCard from 'components/NewsCard.vue'
-import { useQuasar } from 'quasar'
+// import { useQuasar } from 'quasar'
 import { ContentsService } from 'src/services/contents'
 import { Content } from 'src/models/Content'
 // import { useI18n } from 'vue-i18n'
@@ -62,9 +62,9 @@ export default defineComponent({
   components: { NewsCard },
   setup () {
     const contentsService = new ContentsService()
-    const articles = ref<Content[] | null>(null)
+    const articles = ref<Content[]>([])
     // const store = useStore()
-    const $q = useQuasar()
+    // const $q = useQuasar()
     // const i18n = useI18n()
 
     const data = reactive({
@@ -75,27 +75,37 @@ export default defineComponent({
     const { result, loading, error, fetchMore, onResult, onError } = contentsService.getContentsFrontPage({ offset: data.page, limit: data.pageSize })
 
     onResult(() => {
-      articles.value = result.value?.content
+      articles.value = [...result.value?.content]
     })
 
-    const onLoad = async () => {
+    const onLoad = async (_, done) => {
       // console.log('onLoad')
       data.page++
-      const moreData = await fetchMore({
+
+      await fetchMore({
         variables: {
           offset: (data.page * data.pageSize)
+        },
+        updateQuery: (prev, { fetchMoreResult }) => {
+          // console.log('fetchMoreResult', fetchMoreResult)
+          if (fetchMoreResult.content?.length === 0) {
+            done(true)
+            return prev
+          }
+          done()
+          return Object.assign({}, prev, {
+            content: [...prev.content, ...fetchMoreResult.content]
+          })
         }
       })
-      const articlesTemp = Object.assign([], articles.value)
-      moreData.data.content.forEach(art => articlesTemp.push(art))
-      articles.value = articlesTemp
     }
 
     onError(() => {
-      $q.notify({
-        type: 'negative',
-        message: error.value.message
-      })
+      console.error(error.value.message)
+      // $q.notify({
+      //   type: 'negative',
+      //   message: error.value.message
+      // })
     })
 
     return {
