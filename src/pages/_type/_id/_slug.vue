@@ -106,7 +106,6 @@ export default defineComponent({
     onResult(() => {
       content.value = result.value?.content_by_pk
       const dif = date.getDateDiff(content.value?.updatedAt, content.value?.createdAt, 'hours')
-      console.log('dif', dif)
       showUpdate.value = dif > 1
       if (result.value?.content_by_pk.type === 'tag') {
         const { result: contentsByTagResult, onResult: onContentsByTagIdResult } = contentsService.getContentsByTagId(result.value?.content_by_pk?.id)
