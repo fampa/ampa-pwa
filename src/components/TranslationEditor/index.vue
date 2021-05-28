@@ -197,7 +197,7 @@ export default defineComponent({
     const dialog = ref(false)
     // const image = ref<string>(null)
     const triggerUpload = ref(false)
-    const pendingImages = ref(false)
+    // const pendingImages = ref(false)
     const lang = ref(i18n.availableLocales[0])
     const availableLocales = i18n.availableLocales.map(l => {
       return {
@@ -272,17 +272,18 @@ export default defineComponent({
       const obj = { ...content.value }
       cleanObject(obj)
       obj.createdAt = new Date(obj.createdAt)
-      if (content.value.image || !pendingImages.value) return emit('guardar', { content: obj, tags })
+      // if (content.value.image || !pendingImages.value) return emit('guardar', { content: obj, tags })
       // this.$refs.uploader.upload()
+      emit('guardar', { content: obj, tags })
     }
 
-    const imageAdded = () => {
-      pendingImages.value = true
-    }
+    // const imageAdded = () => {
+    //   pendingImages.value = true
+    // }
 
-    const imageRemoved = () => {
-      pendingImages.value = false
-    }
+    // const imageRemoved = () => {
+    //   pendingImages.value = false
+    // }
 
     const removeImage = () => {
       content.value.image = null
@@ -317,8 +318,8 @@ export default defineComponent({
       statusOptions,
       imageSelected,
       preSave,
-      imageAdded,
-      imageRemoved,
+      // imageAdded,
+      // imageRemoved,
       removeImage,
       deleteImage,
       uploadImage,

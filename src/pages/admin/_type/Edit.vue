@@ -49,6 +49,7 @@ export default {
     const { mutate: removeContentTagMutation } = contentsService.deleteContentTags()
     // Methods
     const guardar = async (obj) => {
+      // console.log('obj', obj)
       const content = obj.content
       const translations = content.translations
       const tags = obj.tags
