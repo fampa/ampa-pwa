@@ -17,7 +17,7 @@
       </div>
       <div class="article" :class="{'bg-white': content.type !== 'tag'}" v-else-if="content">
         <h1 class="title">{{fallbackContent(content, 'title')}}</h1>
-        <div class="subtitle" v-if="content.type === 'article'"><strong>{{formatedDate}}</strong>. <span class="updated" v-if="formatedDate !== formatedUpdatedDate">{{$t('updatedAt', {date: formatedUpdatedDate})}}</span></div>
+        <div class="subtitle" v-if="content.type === 'article'"><strong>{{formatedDate}}</strong>. <span class="updated" v-if="showUpdate">{{$t('updatedAt', {date: formatedUpdatedDate})}}</span></div>
           <div class="row">
             <div v-for="(t, index) in content.tags" :key="index">
               <q-chip dense clickable @click="$router.push(`/tag/${t.tag.id}/${fallbackContent(t.tag, 'slug')}`)" color="accent" text-color="white" icon="las la-tag">
@@ -95,6 +95,7 @@ export default defineComponent({
     // Data
     const content = ref<Content>()
     const contentsList = ref<Content[]>(null)
+    const showUpdate = ref<boolean>(false)
 
     const { result, onResult, loading, onError, refetch } = contentsService.getContentById(id.value, isAdmin.value)
 
@@ -104,6 +105,9 @@ export default defineComponent({
     // methods
     onResult(() => {
       content.value = result.value?.content_by_pk
+      const dif = date.getDateDiff(content.value?.updatedAt, content.value?.createdAt, 'hours')
+      console.log('dif', dif)
+      showUpdate.value = dif > 1
       if (result.value?.content_by_pk.type === 'tag') {
         const { result: contentsByTagResult, onResult: onContentsByTagIdResult } = contentsService.getContentsByTagId(result.value?.content_by_pk?.id)
         onContentsByTagIdResult(() => {
@@ -140,7 +144,8 @@ export default defineComponent({
       isAdmin,
       contentsList,
       refetchContent,
-      fallbackContent
+      fallbackContent,
+      showUpdate
     }
   }
 })
