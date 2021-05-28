@@ -124,7 +124,6 @@ export default defineComponent({
 
     const remove = async (childId: number) => {
       loading.value = true
-      console.log(childId)
       await unJoinMutation({
         childId,
         serviceId: id.value
