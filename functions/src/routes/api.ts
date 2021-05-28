@@ -15,7 +15,10 @@ admin.initializeApp()
 
 import { updateClaims } from '../utils/customClaims'
 
-const whitelist = [functions.config().env.template.siteUrl]
+const mainUrl = functions.config().env.template.siteUrl
+const otherUrl = functions.config().env.otherUrls?.replace(' ', '')?.split(',')
+
+const whitelist = [...otherUrl, mainUrl]
 const dev = !!process.env.FUNCTIONS_EMULATOR
 if (dev) {
   whitelist.push('http://localhost:8080')
