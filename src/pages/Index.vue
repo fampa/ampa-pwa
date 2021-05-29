@@ -26,7 +26,7 @@
       </div>
     </div>
     <div v-else-if="articles">
-      <q-infinite-scroll :offset="100" @load="onLoad">
+      <q-infinite-scroll @load="onLoad">
         <div class="row items-start">
           <div
             class="col-12 col-sm-6 col-md-4 q-pa-sm"
@@ -75,7 +75,9 @@ export default defineComponent({
     const { result, loading, error, fetchMore, onResult, onError } = contentsService.getContentsFrontPage({ offset: data.page, limit: data.pageSize })
 
     onResult(() => {
-      articles.value = [...result.value?.content]
+      if (result.value?.content?.length > 0) {
+        articles.value = [...result.value?.content]
+      }
     })
 
     const onLoad = async (_, done) => {
@@ -85,19 +87,16 @@ export default defineComponent({
       await fetchMore({
         variables: {
           offset: (data.page * data.pageSize)
-        },
-        updateQuery: (prev, { fetchMoreResult }) => {
-          // console.log('fetchMoreResult', fetchMoreResult)
-          if (fetchMoreResult.content?.length === 0) {
-            done(true)
-            return prev
-          }
-          done()
-          return Object.assign({}, prev, {
-            content: [...prev.content, ...fetchMoreResult.content]
-          })
         }
       })
+        .then(res => {
+          const moreContent = res.data.content
+          if (moreContent?.length === 0) {
+            done(true)
+          } else {
+            done()
+          }
+        })
     }
 
     onError(() => {
