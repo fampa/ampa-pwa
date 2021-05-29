@@ -33,15 +33,17 @@
         <div class="content" v-html="fallbackContent(content, 'content')"></div>
         <!-- is tag -->
         <div v-if="content.type === 'tag'">
-          <div class="row items-start">
-            <div
-              class="col-12 col-sm-6 col-md-6 q-pa-sm"
-              v-for="article in contentsList"
-              :key="article.id"
-            >
-              <news-card :article="article"></news-card>
+          <q-infinite-scroll @load="onLoad">
+            <div class="row items-start">
+              <div
+                class="col-12 col-sm-6 col-md-6 q-pa-sm"
+                v-for="article in contentsList"
+                :key="article.id"
+              >
+                <news-card :article="article"></news-card>
+              </div>
             </div>
-          </div>
+           </q-infinite-scroll>
         </div>
         <!-- is service -->
         <div v-if="content.type === 'service'">
@@ -57,7 +59,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, ref } from 'vue'
+import { defineComponent, computed, ref, reactive } from 'vue'
 import { date } from 'quasar'
 import { useRoute, useRouter, onBeforeRouteUpdate } from 'vue-router'
 import { useStore } from 'src/services/store'
@@ -96,27 +98,63 @@ export default defineComponent({
     const content = ref<Content>()
     const contentsList = ref<Content[]>(null)
     const showUpdate = ref<boolean>(false)
+    const tagId = ref<number>(null)
+
+    const data = reactive({
+      page: 0,
+      pageSize: 6
+    })
 
     const { result, onResult, loading, onError, refetch } = contentsService.getContentById(id.value, isAdmin.value)
 
     const formatedDate = computed(() => date.formatDate(result.value?.content_by_pk?.createdAt, 'DD/MM/YYYY, HH:mm'))
     const formatedUpdatedDate = computed(() => date.formatDate(result.value?.content_by_pk?.updatedAt, 'DD/MM/YYYY, HH:mm'))
-
+    const variables = ref({
+      id: tagId.value,
+      offset: data.page,
+      limit: data.pageSize
+    })
+    const { result: contentsByTagResult, onResult: onContentsByTagIdResult, fetchMore: fetchMoreTags, refetch: refetchTags } = contentsService.getContentsByTagId({ ...variables.value, id: tagId.value })
     // methods
-    onResult(() => {
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+    onResult(async () => {
       content.value = result.value?.content_by_pk
       const dif = date.getDateDiff(content.value?.updatedAt, content.value?.createdAt, 'hours')
       showUpdate.value = dif > 1
-      if (result.value?.content_by_pk.type === 'tag') {
-        const { result: contentsByTagResult, onResult: onContentsByTagIdResult } = contentsService.getContentsByTagId(result.value?.content_by_pk?.id)
-        onContentsByTagIdResult(() => {
-          contentsList.value = contentsByTagResult.value?.content
-        })
+      if (content.value?.type === 'tag') {
+        tagId.value = content.value?.id
+        await refetchTags({ ...variables.value, id: content.value?.id })
+      }
+    })
+
+    onContentsByTagIdResult(() => {
+      if (content.value?.type === 'tag') {
+        contentsList.value = contentsByTagResult.value?.content
+        tagId.value = result.value?.content_by_pk?.id
       }
     })
 
     const refetchContent = async () => {
       await refetch()
+    }
+
+    const onLoad = async (_, done) => {
+      // console.log('onLoad')
+      data.page++
+
+      await fetchMoreTags({
+        variables: {
+          offset: (data.page * data.pageSize)
+        }
+      })
+        .then(res => {
+          const moreContent = res.data?.content
+          if (moreContent?.length === 0) {
+            done(true)
+          } else {
+            done()
+          }
+        })
     }
 
     onBeforeRouteUpdate(async (to, _) => {
@@ -144,7 +182,8 @@ export default defineComponent({
       contentsList,
       refetchContent,
       fallbackContent,
-      showUpdate
+      showUpdate,
+      onLoad
     }
   }
 })

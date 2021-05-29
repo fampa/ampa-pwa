@@ -1,5 +1,5 @@
-query GetContentsByTagId($id: Int!) {
-  content(where: {tags: {tag_id: {_eq: $id}}}, order_by: {createdAt: desc}) {
+query GetContentsByTagId($id: Int!, $offset: Int = 0, $limit: Int = 5) {
+  content(where: {tags: {tag_id: {_eq: $id}}}, order_by: {createdAt: desc}, offset: $offset, limit: $limit) {
     id
     createdAt
     icon

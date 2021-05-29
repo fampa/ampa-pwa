@@ -18,6 +18,8 @@ import { apolloClient } from 'src/boot/apollo'
 import { CachePersistor } from 'apollo3-cache-persist'
 
 const membersService = new MembersService()
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+// const nullResponse = { result: null, onResult: () => null, loading: false, onError: () => null, refetch: () => null, fetchMore: () => new Promise<{data: Record<string, unknown>}>((resolve, reject) => { resolve({ data: null }) }) }
 
 export class ContentsService {
   getMenuItems = () => {
@@ -37,10 +39,11 @@ export class ContentsService {
     return response
   }
 
-  getContentsByTagId = (id: number) => {
+  getContentsByTagId = ({ id, offset = 0, limit = 10 }) => {
     const response = useQuery<ContentsData>(
       getContentsByTagId,
-      () => ({ id })
+      () => ({ id, offset, limit }),
+      { notifyOnNetworkStatusChange: true }
     )
 
     return response
@@ -50,7 +53,10 @@ export class ContentsService {
     const response = useQuery<ContentsData>(
       getContentsFrontPage,
       () => ({ type, offset, limit }),
-      { notifyOnNetworkStatusChange: true }
+      {
+        nextFetchPolicy: 'no-cache',
+        notifyOnNetworkStatusChange: true
+      }
     )
 
     return response
@@ -121,7 +127,12 @@ export class ContentsService {
 
   getTags = () => {
     const response = useQuery<ContentsData>(
-      getTags
+      getTags,
+      {},
+      {
+        fetchPolicy: 'no-cache',
+        nextFetchPolicy: 'no-cache'
+      }
     )
 
     return response
