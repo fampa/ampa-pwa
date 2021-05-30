@@ -3,11 +3,11 @@ import getContentsByType from './queries/getContentsByType.gql'
 import getMembers from './queries/getMembers.gql'
 import { QueryTableOptions } from 'src/models/QueryTable'
 import { GetMembersData } from 'src/models/Member'
-import { GetContentsData } from 'src/models/Content'
+import { ContentsData } from 'src/models/Content'
 
 export class AdminService {
   getContentsByType = (options: QueryTableOptions) => {
-    const response = useQuery<GetContentsData, QueryTableOptions>(
+    const response = useQuery<ContentsData, QueryTableOptions>(
       getContentsByType,
       { ...options },
       {

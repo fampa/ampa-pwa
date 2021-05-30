@@ -39,11 +39,15 @@ export class ContentsService {
     return response
   }
 
-  getContentsByTagId = ({ id, offset = 0, limit = 10 }) => {
+  getContentsByTagId = ({ id }) => {
     const response = useQuery<ContentsData>(
       getContentsByTagId,
-      () => ({ id, offset, limit }),
-      { notifyOnNetworkStatusChange: true }
+      () => ({ id }),
+      {
+        notifyOnNetworkStatusChange: true,
+        nextFetchPolicy: 'no-cache',
+        fetchPolicy: 'no-cache'
+      }
     )
 
     return response

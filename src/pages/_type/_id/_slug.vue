@@ -33,7 +33,6 @@
         <div class="content" v-html="fallbackContent(content, 'content')"></div>
         <!-- is tag -->
         <div v-if="content.type === 'tag'">
-          <q-infinite-scroll @load="onLoad">
             <div class="row items-start">
               <div
                 class="col-12 col-sm-6 col-md-6 q-pa-sm"
@@ -43,7 +42,6 @@
                 <news-card :article="article"></news-card>
               </div>
             </div>
-           </q-infinite-scroll>
         </div>
         <!-- is service -->
         <div v-if="content.type === 'service'">
@@ -59,7 +57,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, ref, reactive } from 'vue'
+import { defineComponent, computed, ref, reactive, toRefs } from 'vue'
 import { date } from 'quasar'
 import { useRoute, useRouter, onBeforeRouteUpdate } from 'vue-router'
 import { useStore } from 'src/services/store'
@@ -101,8 +99,9 @@ export default defineComponent({
     const tagId = ref<number>(null)
 
     const data = reactive({
-      page: 0,
-      pageSize: 6
+      page: 1,
+      pageSize: 6,
+      pages: 5
     })
 
     const { result, onResult, loading, onError, refetch } = contentsService.getContentById(id.value, isAdmin.value)
@@ -111,7 +110,7 @@ export default defineComponent({
     const formatedUpdatedDate = computed(() => date.formatDate(result.value?.content_by_pk?.updatedAt, 'DD/MM/YYYY, HH:mm'))
     const variables = ref({
       id: tagId.value,
-      offset: data.page,
+      offset: data.page - 1,
       limit: data.pageSize
     })
     const { result: contentsByTagResult, onResult: onContentsByTagIdResult, fetchMore: fetchMoreTags, refetch: refetchTags } = contentsService.getContentsByTagId({ ...variables.value, id: tagId.value })
@@ -130,6 +129,9 @@ export default defineComponent({
     onContentsByTagIdResult(() => {
       if (content.value?.type === 'tag') {
         contentsList.value = contentsByTagResult.value?.content
+        const pages = contentsByTagResult.value?.content_aggregate?.aggregate?.count / data.pageSize
+        // TODO implement pagination
+        data.pages = Math.ceil(pages)
         tagId.value = result.value?.content_by_pk?.id
       }
     })
@@ -174,6 +176,7 @@ export default defineComponent({
     })
 
     return {
+      ...toRefs(data),
       content,
       loading,
       formatedDate,

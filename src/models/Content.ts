@@ -30,6 +30,7 @@ export interface Content {
 
 export interface ContentsData {
   content: Content[];
+  content_aggregate?: Aggregate;
 }
 
 export interface ContentsVars {
@@ -43,11 +44,6 @@ export interface ContentVars {
 
 export interface ContentData {
   content_by_pk: Content
-}
-
-export interface GetContentsData {
-  content_aggregate: Aggregate,
-  content: Content[]
 }
 
 export interface UpsertContentResponse {
