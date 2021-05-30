@@ -11,7 +11,7 @@
         </q-card-section>
 
         <q-card-actions align="right" class="text-primary">
-          <q-btn flat label="Cancelar" @click="$emit('cancel')" />
+          <q-btn flat label="Cancelar" @click="cancel" />
           <q-btn color="primary" label="Envia" @click="sendMessage" />
         </q-card-actions>
       </q-card>
@@ -29,7 +29,7 @@ export default {
   name: 'SendMessage',
   setup (props, { emit }) {
     // data
-    const open = ref(false)
+    const open = ref(props.prompt)
 
     const message = ref({
       title: '',
@@ -41,6 +41,11 @@ export default {
       open.value = false
     })
 
+    const cancel = () => {
+      emit('cancel')
+      open.value = false
+    }
+
     const sendMessage = () => {
       emit('send', message.value)
       open.value = false
@@ -48,6 +53,8 @@ export default {
 
     watch(() => props.prompt,
       () => {
+        console.log('props.prompt', props.prompt)
+        console.log('open.value', open.value)
         open.value = props.prompt
       }
     )
@@ -55,7 +62,8 @@ export default {
     return {
       open,
       message,
-      sendMessage
+      sendMessage,
+      cancel
     }
   }
 

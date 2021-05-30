@@ -42,7 +42,7 @@
         <q-btn fab icon="add" color="primary" to="/admin/users/edit" />
       </q-page-sticky>
       <!-- send message -->
-      <send-message :prompt="openSendMessage" @send="sendMessage($event)"></send-message>
+      <send-message :prompt="openSendMessage" @cancel="messageCancel" @send="sendMessage($event)"></send-message>
     </div>
   </q-page>
 </template>
@@ -199,6 +199,10 @@ export default {
       sendingMessage.value = false
     }
 
+    const messageCancel = () => {
+      openSendMessage.value = false
+    }
+
     return {
       members,
       getSelectedString,
@@ -212,7 +216,8 @@ export default {
       generaRemesa,
       sendMessage,
       openSendMessage,
-      sendingMessage
+      sendingMessage,
+      messageCancel
     }
   }
 
