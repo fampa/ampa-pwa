@@ -1,5 +1,6 @@
 import { Aggregate } from './QueryTable'
 import { Family } from './Family'
+import { Message } from './Message'
 
 /* eslint-disable camelcase */
 export interface Member {
@@ -14,6 +15,9 @@ export interface Member {
   isAdmin?: boolean
   phone?: string
   canEmail?: boolean
+  messages?: {
+    message: Message
+  }[]
   joinFamilyRequest?: Record<string, unknown>
   hasRequestedJoinFamily?: boolean
   createdAt?: Date

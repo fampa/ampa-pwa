@@ -192,9 +192,9 @@ export default {
       console.log(selected.value)
     }
 
-    const sendMessage = ($event) => {
+    const sendMessage = (message) => {
       sendingMessage.value = true
-      console.log('$event', $event)
+      console.log('message', message)
       console.log(selected.value)
       sendingMessage.value = false
     }

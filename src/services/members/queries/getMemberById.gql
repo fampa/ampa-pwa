@@ -11,6 +11,7 @@ query memberById($id: String!) {
     joinFamilyRequest
     isAdmin
     canEmail
+    createdAt
     family {
       id
       name
@@ -31,6 +32,17 @@ query memberById($id: String!) {
             }
             id
           }
+        }
+      }
+    }
+    messages {
+      message {
+        content
+        createdAt
+        id
+        title
+        status {
+          read
         }
       }
     }
