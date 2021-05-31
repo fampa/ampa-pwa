@@ -18,6 +18,7 @@ export interface Member {
   messages?: {
     message: Message
   }[]
+  messages_aggregate?: Aggregate,
   joinFamilyRequest?: Record<string, unknown>
   hasRequestedJoinFamily?: boolean
   createdAt?: Date

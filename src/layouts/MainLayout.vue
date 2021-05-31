@@ -15,6 +15,19 @@
           AMPA
         </q-toolbar-title>
 
+        <q-btn-dropdown v-if="member" dropdown-icon="las la-bell" :label="member?.messages_aggregate?.aggregate?.count" flat rounded no-icon-animation>
+          <q-list>
+            <q-item v-for="m in member.messages" :key="m.message.id" :to="`/message/${m.message.id}`" clickable v-close-popup>
+              <q-item-section>
+                <q-item-label><span :class="{unRead: !m.message.status.read}">{{m.message.title}}</span></q-item-label>
+              </q-item-section>
+              <q-item-section avatar>
+                <q-icon :name="m.message.status.read ? 'las la-eye' : 'las la-low-vision'" />
+              </q-item-section>
+            </q-item>
+          </q-list>
+        </q-btn-dropdown>
+
         <q-btn-dropdown dropdown-icon="more_vert" flat rounded no-icon-animation >
           <q-list>
             <q-item :to="'/settings'" clickable v-close-popup>
@@ -165,6 +178,9 @@ export default defineComponent({
     const user = computed(() => {
       return store.state.user.user
     })
+    const member = computed(() => {
+      return store.state.user.member
+    })
 
     interface menuItem {
       title: string
@@ -288,7 +304,8 @@ export default defineComponent({
       leftDrawerOpen,
       logout,
       toggleLeftDrawer,
-      isAdmin
+      isAdmin,
+      member
     }
   }
 })
@@ -301,5 +318,8 @@ export default defineComponent({
   background: transparent;
   right: 0;
   z-index: 999;
+}
+.unRead {
+  font-weight: 700;
 }
 </style>

@@ -35,7 +35,7 @@ query memberById($id: String!) {
         }
       }
     }
-    messages {
+    messages(where: {memberId: {_eq: $id}}, distinct_on: messageId) {
       message {
         content
         createdAt
@@ -44,6 +44,11 @@ query memberById($id: String!) {
         status {
           read
         }
+      }
+    }
+    messages_aggregate(where: {read: {_eq: false}}) {
+      aggregate {
+        count
       }
     }
   }
