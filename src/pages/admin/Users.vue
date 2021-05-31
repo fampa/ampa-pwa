@@ -19,7 +19,6 @@
         v-model:selected="selected"
       >
       <template v-slot:top>
-        <q-btn v-if="selected.length > 0" @click="generaRemesa" color="primary" icon="las la-money-check-alt" :disable="loading" :label="$t('table.remesa')"  />
         <q-btn v-if="selected.length > 0" :loading="sendingMessage" @click="openSendMessage = true" class="q-ml-sm" icon="las la-envelope" color="primary" :disable="loading" :label="$t('table.sendMessage')" />
         <q-space />
         <q-input borderless dense debounce="300" v-model="filter" clearable clear-icon="close" :placeholder="$t('table.search')">
@@ -146,7 +145,8 @@ export default {
     }
     const sanitizeVariables = cleanObject(variables)
     const { result, onResult, loading, fetchMore } = adminService.getMembers(sanitizeVariables)
-
+    const { mutate: sendMessageMutate } = adminService.addMessage()
+    const { mutate: addMessageMembersMutate } = adminService.addMessageMembers()
     onResult(() => {
       members.value = result.value?.members
       pagination.value.rowsNumber = result.value?.members_aggregate?.aggregate?.count
@@ -188,15 +188,33 @@ export default {
       // console.log('pagination', pagination)
     }
 
-    const generaRemesa = () => {
-      console.log(selected.value)
-    }
-
-    const sendMessage = (message) => {
+    const sendMessage = async ($event) => {
       sendingMessage.value = true
-      console.log('message', message)
-      console.log(selected.value)
-      sendingMessage.value = false
+      console.log('$event', $event)
+      const variables = {
+        message: { ...$event }
+      }
+      console.log(variables)
+      await sendMessageMutate(variables)
+        .then(async res => {
+          const messageId = res.data.insert_messages_one.id
+          const objects = []
+          for (const member of selected.value) {
+            objects.push({ memberId: member.id, messageId })
+          }
+          await addMessageMembersMutate({ objects })
+            .then(() => {
+              sendingMessage.value = false
+            })
+            .catch((err) => {
+              console.error(err)
+              sendingMessage.value = false
+            })
+        })
+        .catch((err) => {
+          console.error(err)
+          sendingMessage.value = false
+        })
     }
 
     const messageCancel = () => {
@@ -213,7 +231,6 @@ export default {
       filter,
       onRowClick,
       onRequest,
-      generaRemesa,
       sendMessage,
       openSendMessage,
       sendingMessage,
