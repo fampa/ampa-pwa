@@ -16,6 +16,8 @@
         <q-btn color="primary" icon="home" to="/" :label="$t('backToHome')" />
       </div>
       <div class="article bg-white" v-else-if="message">
+       <q-btn class="float-right" @click="remove" size="sm" color="negative" :label="$t('content.delete')" icon="las la-trash"/>
+
         <h1 class="title">{{message.title}}</h1>
         <div class="subtitle"><strong>{{formatedDate}}</strong></div>
 
@@ -29,10 +31,10 @@
 
 <script lang="ts">
 import { defineComponent, computed, ref, onMounted } from 'vue'
-import { date } from 'quasar'
+import { date, useQuasar } from 'quasar'
 import { useRoute, onBeforeRouteUpdate, useRouter } from 'vue-router'
 import { useStore } from 'src/services/store'
-// import { useI18n } from 'vue-i18n'
+import { useI18n } from 'vue-i18n'
 import { ContentsService } from 'src/services/contents'
 import { Message } from 'src/models/Message'
 
@@ -45,15 +47,15 @@ export default defineComponent({
     const id = computed(() => Number(route.params.id))
     const store = useStore()
     const member = computed(() => store.state.user.member)
-    // const $q = useQuasar()
-    // const i18n = useI18n()
+    const $q = useQuasar()
+    const i18n = useI18n()
 
     // Data
     const message = ref<Message>()
 
     const { result, onResult, loading, onError, error, refetch } = contentsService.getMessageById(id.value)
     const { mutate: setMessageReadMutation } = contentsService.setMessageRead()
-
+    const { mutate: deleteMessageMemberMutation } = contentsService.deleteMessageMember()
     const formatedDate = computed(() => date.formatDate(result.value?.messages_by_pk?.createdAt, 'DD/MM/YYYY, HH:mm'))
 
     // methods
@@ -63,6 +65,25 @@ export default defineComponent({
 
     const refetchContent = async () => {
       await refetch()
+    }
+
+    const remove = () => {
+      $q.dialog({
+        title: i18n.t('remove.title'),
+        message: i18n.t('remove.question'),
+        cancel: true,
+        persistent: true
+      }).onOk(async () => {
+        await deleteMessageMemberMutation({ memberId: member.value.id, messageId: id.value })
+      }).onOk(async () => {
+        // console.log('>>>> second OK catcher')
+        $q.notify(i18n.t('remove.confirm'))
+        await router.replace('/')
+      }).onCancel(() => {
+        // console.log('>>>> Cancel')
+      }).onDismiss(() => {
+        // console.log('I am triggered on both OK and Cancel')
+      })
     }
 
     onMounted(async () => {
@@ -90,7 +111,8 @@ export default defineComponent({
       message,
       loading,
       formatedDate,
-      refetchContent
+      refetchContent,
+      remove
     }
   }
 })

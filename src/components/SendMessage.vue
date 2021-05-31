@@ -7,7 +7,8 @@
 
         <q-card-section class="q-gutter-md">
           <q-input outlined ref="title" v-model="message.title"  :placeholder="$t('content.title')" :rules="[val => !!val || $t('forms.required')]" />
-          <q-input outlined ref="content" type="textarea" v-model="message.content"  :placeholder="$t('content.content')" :rules="[val => !!val || $t('forms.required')]" />
+          <!-- <q-input outlined ref="content" type="textarea" v-model="message.content"  :placeholder="$t('content.content')" :rules="[val => !!val || $t('forms.required')]" /> -->
+          <content-editor v-model="message.content" />
         </q-card-section>
 
         <q-card-actions align="right" class="text-primary">
@@ -20,10 +21,14 @@
 
 <script lang="ts">
 import { ref, watch, onBeforeUnmount } from 'vue'
+import ContentEditor from 'src/components/TranslationEditor/ContentEditor.vue'
 
 export default {
   props: {
     prompt: Boolean
+  },
+  components: {
+    ContentEditor
   },
   emits: ['send', 'cancel'],
   name: 'SendMessage',
@@ -53,8 +58,6 @@ export default {
 
     watch(() => props.prompt,
       () => {
-        console.log('props.prompt', props.prompt)
-        console.log('open.value', open.value)
         open.value = props.prompt
       }
     )

@@ -1,0 +1,6 @@
+mutation DeleteMessageMember($messageId: Int!, $memberId: String!) {
+  delete_members_messages_by_pk(memberId: $memberId, messageId: $messageId) {
+    memberId
+    messageId
+  }
+}

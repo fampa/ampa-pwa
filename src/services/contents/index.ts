@@ -14,6 +14,7 @@ import getContentsFrontPage from './queries/getContentsFrontPage.gql'
 import removeContentTags from './queries/removeContentTags.gql'
 import getMessageById from './queries/getMessageById.gql'
 import setMessageRead from './queries/setMessageRead.gql'
+import deleteMessageMember from './queries/deleteMessageMember.gql'
 import { MembersService } from '../members'
 import axios from 'axios'
 import { ContentData, ContentsData, DeleteContentResponse, DeleteContentTagResponse, InsertContentResponse, JoinServiceResponse, UnJoinServiceResponse, UpsertContentResponse, UpsertContentTagsResponse } from 'src/models/Content'
@@ -163,6 +164,14 @@ export class ContentsService {
   setMessageRead = () => {
     const response = useMutation<{update_members_messages_by_pk: { read: true}}, {memberId: string, messageId: number}>(
       setMessageRead
+    )
+
+    return response
+  }
+
+  deleteMessageMember = () => {
+    const response = useMutation<{delete_members_messages_by_pk: { memberId: string, messageId: number }}>(
+      deleteMessageMember
     )
 
     return response

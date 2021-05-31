@@ -10,6 +10,7 @@ import { Member } from '../../../src/models/Member'
 import { sendEmail, MailObject } from '../utils/sendEmail'
 import { validateFirebaseIdToken } from '../utils/validateFirebaseToken'
 import cookieParser from 'cookie-parser'
+import { manageCommunications } from '../utils/manageComunications'
 
 admin.initializeApp()
 
@@ -231,4 +232,61 @@ appApi.post('/service', async (req: express.Request, res:express.Response /*, ne
     functions.logger.error(error)
     return res.status(500).json({ error })
   }
+})
+
+// eslint-disable-next-line @typescript-eslint/no-misused-promises
+appApi.post('/webhook/message', async (req: express.Request, res:express.Response /*, next:express.NextFunction */) => {
+  functions.logger.log('req.body', req.body)
+
+  const message = req.body?.event?.data?.new
+
+  const query = `query getMembersMessagesByMessageId($messageId: Int!) {
+    members_messages(where: {messageId: {_eq: $messageId}}) {
+      message {
+        title
+        content
+      }
+      member {
+        id
+        canEmail
+        firstName
+        lastName
+        email
+      }
+    }
+  }`
+
+  const variables = {
+    messageId: message.id
+  }
+  try {
+    const data = await client.request(query, variables)
+    const memberMessages = data.members_messages
+    for (const m of memberMessages) {
+      const member = m.member
+      const message = m.message
+      await manageCommunications({ member, message })
+    }
+    return res.json({ success: true, error: null })
+  } catch (error) {
+    functions.logger.error(error)
+    return res.json({ success: false, error: error })
+  }
+  // const obj = req.body as MailObject
+  // obj.to = functions.config().env.template.email
+  // obj.bcc = obj.from
+  // obj.subject = 'Servei de l\'AMPA sol.licitat'
+  // obj.sender = obj.from
+  // obj.replyTo = obj.from
+  // obj.from = `AMPA <${functions.config().env.template.email}>`
+
+  // try {
+  //   const result = await sendEmail(obj)
+
+  //   functions.logger.info('Service Requested:', result)
+  //   return res.json(result)
+  // } catch (error) {
+  //   functions.logger.error(error)
+  //   return res.status(500).json({ error })
+  // }
 })

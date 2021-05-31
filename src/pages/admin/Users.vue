@@ -190,7 +190,6 @@ export default {
 
     const sendMessage = async ($event) => {
       sendingMessage.value = true
-      console.log('$event', $event)
       const variables = {
         message: { ...$event }
       }
@@ -205,15 +204,18 @@ export default {
           await addMessageMembersMutate({ objects })
             .then(() => {
               sendingMessage.value = false
+              openSendMessage.value = false
             })
             .catch((err) => {
               console.error(err)
               sendingMessage.value = false
+              openSendMessage.value = false
             })
         })
         .catch((err) => {
           console.error(err)
           sendingMessage.value = false
+          openSendMessage.value = false
         })
     }
 
