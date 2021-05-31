@@ -16,7 +16,7 @@ const actions: ActionTree<UserStateInterface, StateInterface> = {
   async setMember ({ commit }, id: string) {
     await apolloClients?.default?.query<MemberData>({ query: getMemberById, variables: { id }, fetchPolicy: 'network-only' })
       .then((res) => {
-        const member = res.data.members_by_pk
+        const member = res?.data?.members_by_pk
         // console.log('member', member)
         commit('setMember', member)
       })
