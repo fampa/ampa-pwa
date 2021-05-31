@@ -67,9 +67,6 @@ export default defineComponent({
 
     onMounted(async () => {
       await setMessageReadMutation({ memberId: member.value.id, messageId: id.value })
-        .then(async () => {
-          await store.dispatch('user/setMember', member.value.id)
-        })
     })
 
     onBeforeRouteUpdate(async (to, _) => {
