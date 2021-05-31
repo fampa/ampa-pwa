@@ -1,5 +1,5 @@
 query GetContentsByTagId($id: Int!) {
-  content(where: {tags: {tag_id: {_eq: $id}}}) {
+  content(order_by: {createdAt: desc}, where: {tags: {tag_id: {_eq: $id}}}) {
     id
     createdAt
     icon
