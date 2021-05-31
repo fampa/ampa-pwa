@@ -109,6 +109,7 @@ export async function getClientOptions(/* {app, router, ...}: Partial<BootFilePa
     {
       link: concat(authMiddleware, httpLink),
       cache: cache,
+      connectToDevTools: true,
       defaultOptions: {
         watchQuery: {
           fetchPolicy: 'cache-and-network',
