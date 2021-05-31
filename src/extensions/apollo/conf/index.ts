@@ -3,13 +3,15 @@ import type { ApolloClientOptions } from '@apollo/client'
 import {
   createHttpLink,
   InMemoryCache,
-  from,
   ApolloLink,
-  Observable
+  Observable,
+  split,
+  concat
 } from '@apollo/client/core'
 /* import type { BootFileParams } from '@quasar/app' */
-import { offsetLimitPagination } from '@apollo/client/utilities'
+import { offsetLimitPagination, getMainDefinition } from '@apollo/client/utilities'
 import { persistCache, LocalStorageWrapper } from 'apollo3-cache-persist'
+import { WebSocketLink } from '@apollo/client/link/ws'
 import firebase from 'firebase/app'
 import 'firebase/auth'
 
@@ -74,13 +76,38 @@ export async function getClientOptions(/* {app, router, ...}: Partial<BootFilePa
     uri: process.env.GRAPHQL_URI || 'http://api.example.com'
   })
 
+const wsLink = new WebSocketLink({
+  uri: process.env.GRAPHQL_WS_URI || 'http://api.example.com',
+  options: {
+    reconnect: true,
+    connectionParams: async () => {
+      const token = await firebase.auth().currentUser.getIdToken()
+      return {
+        headers: {
+          Authorization: token ? `Bearer ${token}` : ''
+        }
+      }
+    }
+  }
+})
+
+const splitLink = split(
+  ({ query }) => {
+    const definition = getMainDefinition(query);
+    return (
+      definition.kind === 'OperationDefinition' &&
+      definition.operation === 'subscription'
+    );
+  },
+  wsLink,
+  concat(authMiddleware, httpLink)
+)
+
+
   return <ApolloClientOptions<unknown>>Object.assign(
     // General options.
     {
-      link: from([
-        authMiddleware,
-        httpLink
-      ]),
+      link: splitLink,
       cache: cache,
       defaultOptions: {
         watchQuery: {

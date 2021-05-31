@@ -151,7 +151,7 @@ export default {
     //
     // load data
     //
-    const { member, loading, error, onError, onResult, refetch: refetchMemberData } = membersService.getById(id.value)
+    const { member, loading, error, onError, onResult } = membersService.getById(id.value)
 
     onResult(() => {
       familyData.id = member.value?.familyId
@@ -236,7 +236,6 @@ export default {
       const variablesMember = cleanObject({ ...memberData })
       await mutateMember({ id: id.value, member: { ...variablesMember } })
       familyData.id = familyId
-      await refetchMemberData()
       $q.notify(i18n.t('forms.savedOk'))
     }
 
@@ -248,7 +247,6 @@ export default {
         const variables = cleanObject({ ...memberData })
         await mutateMember({ id: id.value, member: { ...variables } })
         loading.value = false
-        await refetchMemberData()
         $q.notify(i18n.t('forms.savedOk'))
       }
     }
@@ -278,7 +276,6 @@ export default {
       memberData.hasRequestedJoinFamily = false
       await mutateMember({ id: id.value, member: { joinFamilyRequest: null } })
       loading.value = false
-      await refetchMemberData()
       $q.notify(i18n.t('forms.savedOk'))
     }
 
@@ -286,7 +283,6 @@ export default {
       loading.value = true
       await mutateMember({ id: id.value, member: { joinFamilyRequest: null } })
       loading.value = false
-      await refetchMemberData()
       $q.notify(i18n.t('forms.savedOk'))
     }
 
@@ -294,7 +290,6 @@ export default {
       loading.value = true
       await mutateMember({ id: id.value, member: { hasRequestedJoinFamily: false } })
       loading.value = false
-      await refetchMemberData()
       $q.notify(i18n.t('forms.savedOk'))
     }
 
