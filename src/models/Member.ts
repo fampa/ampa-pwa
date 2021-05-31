@@ -16,7 +16,8 @@ export interface Member {
   phone?: string
   canEmail?: boolean
   messages?: {
-    message: Message
+    read?: boolean
+    message?: Message
   }[]
   messages_aggregate?: Aggregate,
   joinFamilyRequest?: Record<string, unknown>

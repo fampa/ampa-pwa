@@ -1,4 +1,4 @@
-import { useQuery, useResult, useMutation, useSubscription } from '@vue/apollo-composable'
+import { useQuery, useResult, useMutation } from '@vue/apollo-composable'
 import getMembers from './queries/getMembers.gql'
 import getMemberById from './queries/getMemberById.gql'
 import updateMember from 'src/services/members/queries/updateMember.gql'
@@ -26,7 +26,7 @@ export class MembersService {
 
   getById = (id: string) => {
     if (!id) return
-    const response = useSubscription<MemberData, MemberVars>(
+    const response = useQuery<MemberData, MemberVars>(
       getMemberById,
       { id }
     )

@@ -30,7 +30,7 @@
 <script lang="ts">
 import { defineComponent, computed, ref, onMounted } from 'vue'
 import { date } from 'quasar'
-import { useRoute, onBeforeRouteUpdate } from 'vue-router'
+import { useRoute, onBeforeRouteUpdate, useRouter } from 'vue-router'
 import { useStore } from 'src/services/store'
 // import { useI18n } from 'vue-i18n'
 import { ContentsService } from 'src/services/contents'
@@ -41,7 +41,7 @@ export default defineComponent({
   setup () {
     const contentsService = new ContentsService()
     const route = useRoute()
-    // const router = useRouter()
+    const router = useRouter()
     const id = computed(() => Number(route.params.id))
     const store = useStore()
     const member = computed(() => store.state.user.member)
@@ -66,7 +66,12 @@ export default defineComponent({
     }
 
     onMounted(async () => {
-      await setMessageReadMutation({ memberId: member.value.id, messageId: id.value })
+      if (!message.value?.status?.read) {
+        await setMessageReadMutation({ memberId: member.value.id, messageId: id.value })
+          .then(async () => {
+            await store.dispatch('user/setMember', member.value.id)
+          })
+      }
     })
 
     onBeforeRouteUpdate(async (to, _) => {
@@ -76,9 +81,9 @@ export default defineComponent({
     })
 
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
-    onError(() => {
+    onError(async () => {
       console.error(error.value.message)
-      // await router.push('/')
+      await router.push('/')
     })
 
     return {

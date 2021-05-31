@@ -1,5 +1,7 @@
 mutation setMessageRead($memberId: String!, $messageId: Int!) {
   update_members_messages_by_pk(_set: {read: true}, pk_columns: {memberId: $memberId, messageId: $messageId}) {
     read
+    messageId
+    memberId
   }
 }

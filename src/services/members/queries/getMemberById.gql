@@ -35,16 +35,14 @@ query memberById($id: String!) {
         }
       }
     }
-    messages(where: {memberId: {_eq: $id}}, distinct_on: messageId) {
+    messages(where: {memberId: {_eq: $id}}, limit: 10, order_by: {message: {createdAt: desc}}) {
       message {
-        content
-        createdAt
         id
         title
-        status {
-          read
-        }
+        content
+        createdAt
       }
+      read
     }
     messages_aggregate(where: {read: {_eq: false}}) {
       aggregate {

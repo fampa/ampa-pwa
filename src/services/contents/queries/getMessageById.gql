@@ -4,5 +4,8 @@ query getMessageById($id: Int = 10) {
     title
     content
     createdAt
+    status {
+      read
+    }
   }
 }

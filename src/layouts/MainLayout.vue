@@ -17,12 +17,12 @@
 
         <q-btn-dropdown v-if="member" dropdown-icon="las la-bell" :label="member?.messages_aggregate?.aggregate?.count" flat rounded no-icon-animation>
           <q-list>
-            <q-item v-for="m in member.messages" :key="m.message.id" :to="`/message/${m.message.id}`" clickable v-close-popup>
+            <q-item class="message" :class="{unRead: !m.read}" v-for="m in member.messages" :key="m.message.id" :to="`/user/message/${m.message.id}`" clickable v-close-popup>
               <q-item-section>
-                <q-item-label><span :class="{unRead: !m.message.status.read}">{{m.message.title}}</span></q-item-label>
+                <q-item-label>{{m.message.title}}</q-item-label>
               </q-item-section>
               <q-item-section avatar>
-                <q-icon :name="m.message.status.read ? 'las la-eye' : 'las la-low-vision'" />
+                <q-icon :name="m.read ? 'las la-eye' : 'las la-low-vision'" />
               </q-item-section>
             </q-item>
           </q-list>
@@ -319,7 +319,11 @@ export default defineComponent({
   right: 0;
   z-index: 999;
 }
+.message{
+  opacity: 0.5;
+}
 .unRead {
   font-weight: 700;
+  opacity: 1;
 }
 </style>
