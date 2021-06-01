@@ -19,6 +19,9 @@ export interface Member {
     read?: boolean
     message?: Message
   }[]
+  pushTokens?: {
+    token: string
+  }[]
   messages_aggregate?: Aggregate,
   joinFamilyRequest?: Record<string, unknown>
   hasRequestedJoinFamily?: boolean

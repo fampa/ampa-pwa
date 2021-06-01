@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import { useQuery, useResult, useMutation } from '@vue/apollo-composable'
 import getMembers from './queries/getMembers.gql'
 import getMemberById from './queries/getMemberById.gql'
@@ -6,6 +7,8 @@ import upsertFamily from 'src/services/members/queries/upsertFamily.gql'
 import updateChildren from 'src/services/members/queries/updateChildren.gql'
 import searchFamilies from 'src/services/members/queries/searchFamilies.gql'
 import updateFamily from 'src/services/members/queries/updateFamily.gql'
+import upsertMembersToken from './queries/upsertMembersToken.gql'
+import deleteMembersToken from './queries/deleteMembersToken.gql'
 import firebase from 'firebase/app'
 import 'firebase/auth'
 
@@ -112,6 +115,20 @@ export class MembersService {
     const endpoint = `${this.axiosEndpoint}/admin/change-claims/`
     const response = await axios
       .post(endpoint, data, { headers: { authorization: `Bearer ${token}` } })
+    return response
+  }
+
+  upsertMembersToken = () => {
+    const response = useMutation<{insert_members_tokens_one: { token: string }}, { memberId: string, token: string }>(
+      upsertMembersToken
+    )
+    return response
+  }
+
+  deleteMembersToken = () => {
+    const response = useMutation<{delete_members_tokens_by_pk: { token: string }}, { memberId: string, token: string }>(
+      deleteMembersToken
+    )
     return response
   }
 

@@ -51,8 +51,7 @@
         </q-item-section>
         <q-item-section>
           <q-item-label>
-            Push notifications (WIP)
-        <!-- <push-toggle :label="$t('settings.push')" @childState="onChildEmit" @pushToken="pushChange" /> -->
+            <push-toggle :label="$t('settings.push.title')"  />
           </q-item-label>
           <q-item-label caption>
             {{ $t("settings.push.deviceSpecific") }}
@@ -68,9 +67,11 @@ import { useStore } from 'src/services/store'
 import { computed, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { MembersService } from 'src/services/members'
+import PushToggle from 'src/components/PushToggle.vue'
 
 export default {
   name: 'PageSettings',
+  components: { PushToggle },
   setup () {
     const store = useStore()
     const i18n = useI18n()

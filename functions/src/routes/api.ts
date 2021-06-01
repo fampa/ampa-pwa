@@ -245,6 +245,7 @@ appApi.post('/webhook/message', async (req: express.Request, res:express.Respons
       message {
         title
         content
+        createdAt
       }
       member {
         id
@@ -252,6 +253,9 @@ appApi.post('/webhook/message', async (req: express.Request, res:express.Respons
         firstName
         lastName
         email
+        pushTokens {
+          token
+        }
       }
     }
   }`

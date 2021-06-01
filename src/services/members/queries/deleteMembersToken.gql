@@ -1,0 +1,5 @@
+mutation deleteMembersToken($memberId: String!, $token: String!) {
+  delete_members_tokens_by_pk(memberId: $memberId, token: $token) {
+    token
+  }
+}

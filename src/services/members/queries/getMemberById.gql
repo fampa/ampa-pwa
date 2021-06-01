@@ -12,6 +12,9 @@ query memberById($id: String!) {
     isAdmin
     canEmail
     createdAt
+    pushTokens {
+      token
+    }
     family {
       id
       name

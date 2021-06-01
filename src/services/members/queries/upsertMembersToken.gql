@@ -1,0 +1,5 @@
+mutation upsertMembersToken($memberId: String!, $token: String!) {
+  insert_members_tokens_one(object: {memberId: $memberId, token: $token}, on_conflict: {constraint: members_tokens_pkey, update_columns: [memberId, token]}) {
+    token
+  }
+}

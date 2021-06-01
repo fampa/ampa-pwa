@@ -119,6 +119,7 @@ export default {
     language: 'Idioma',
     notifications: 'Notificacions',
     push: {
+      title: 'Notificacions push',
       deviceSpecific: 'Activa aquesta opció en cada dispositiu on hi vulgues rebre notificacions push'
     }
   },

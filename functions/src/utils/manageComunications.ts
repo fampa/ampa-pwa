@@ -3,6 +3,7 @@ import 'firebase-functions'
 import { Member } from '../../../src/models/Member'
 import { Message } from '../../../src/models/Message'
 import { sendEmail } from './sendEmail'
+import { sendPushNotification } from './sendNotification'
 
 export const manageCommunications = async (params: {message: Message, member: Member}) => {
   const { member, message } = params
@@ -17,4 +18,7 @@ export const manageCommunications = async (params: {message: Message, member: Me
     await sendEmail(mailObj)
   }
   // TODO implementar enviaments push
+  if (member.pushTokens.length > 0) {
+    await sendPushNotification({ member, message })
+  }
 }

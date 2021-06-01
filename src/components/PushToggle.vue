@@ -1,16 +1,18 @@
 <template>
   <div>
-    <q-toggle ref="toggleBtn" :disabled="loading || notServiceWorker" :label="label" v-model="toggleState" @input="toggleManager()" />
+    <q-toggle ref="toggleBtn" :disable="!user || loading || notServiceWorker" :label="label" v-model="toggleState" @update:model-value="toggleManager()" />
     <q-spinner size="30px" v-if="loading" />
   </div>
 </template>
 
-<script>
-import * as firebase from 'firebase/app'
+<script lang="ts">
+import firebase from 'firebase/app'
 import 'firebase/messaging'
 import 'firebase/database'
 import { defineComponent, onMounted, computed, ref } from 'vue'
 import { useQuasar } from 'quasar'
+import { useStore } from 'src/services/store'
+import { MembersService } from 'src/services/members'
 
 export default defineComponent({
   props: [
@@ -19,9 +21,11 @@ export default defineComponent({
   emits: ['pushToken', 'childState'],
   setup (props, { emit }) {
     const $q = useQuasar()
+    const membersService = new MembersService()
+    const store = useStore()
+    const user = computed(() => store.state.user?.user)
     const loading = ref(false)
     const toggleState = ref<boolean>($q.localStorage.getItem('toggleState') || false)
-
     const notServiceWorker = computed(() => {
       if ('serviceWorker' in navigator) {
         return false
@@ -30,11 +34,14 @@ export default defineComponent({
       }
     })
 
+    const { mutate: upsertMembersTokenMutation } = membersService.upsertMembersToken()
+    const { mutate: deleteMembersTokenMutation } = membersService.deleteMembersToken()
+
     const refreshSubscribeToken = () => {
       const messaging = firebase.messaging()
       return messaging.onTokenRefresh(function () {
         messaging.getToken()
-          .then(function (refreshedToken) {
+          .then(async function (refreshedToken) {
             $q.localStorage.set('pushToken', refreshedToken)
             emit('pushToken', refreshedToken)
             // console.log('Token refreshed.', refreshedToken)
@@ -42,12 +49,11 @@ export default defineComponent({
             // app server.
             setTokenSentToServer(false)
             // Send Instance ID token to app server.
-            sendTokenToServer(refreshedToken)
+            await sendTokenToServer(refreshedToken)
             // ...
           })
           .catch(function (err) {
             console.log('Unable to retrieve refreshed token ', err)
-            showToken('Unable to retrieve refreshed token ', err)
           })
       })
     }
@@ -56,9 +62,9 @@ export default defineComponent({
       const pushToken = $q.localStorage.getItem('pushToken')
       console.log('pushToken', pushToken)
       if (pushToken) {
-        this.updateUIForPushEnabled(pushToken)
+        updateUIForPushEnabled()
       } else {
-        this.updateUIForPushPermissionRequired()
+        updateUIForPushPermissionRequired()
       }
     }
     onMounted(() => {
@@ -67,37 +73,38 @@ export default defineComponent({
     const toggleManager = () => {
       pushToggle()
       if (!toggleState.value) {
-        // console.log('In toggleManager, toggleState is false?', this.toggleState)
+        console.log('In toggleManager, toggleState is false?', toggleState)
         return subscribe()
       } else {
-        // console.log('In toggleManager, toggleState is true?', this.toggleState)
+        console.log('In toggleManager, toggleState is true?', toggleState)
         return unsubscribe()
       }
     }
     const subscribe = () => {
       loading.value = true
+      console.log('subscription initiated')
       const messaging = firebase.messaging()
-      messaging.requestPermission()
+      Notification.requestPermission()
         .then(async function (result) {
           console.log('Notification permission granted. Result:', result)
           if (result === 'granted') {
             await navigator.serviceWorker.ready.then(function (registration) {
               // eslint-disable-next-line @typescript-eslint/no-floating-promises
-              registration.showNotification('#coixinet', {
+              registration.showNotification('AMPA', {
                 body: 'Molt be! Ja pots rebre notificacions push',
                 icon: '../statics/icons/icon-192x192.png',
                 vibrate: [200, 100, 200, 100, 200, 100, 200],
-                tag: 'coixinet-tag'
+                tag: 'ampa-tag'
               })
             })
           }
           return messaging.getToken()
-            .then(function (currentToken) {
+            .then(async function (currentToken) {
               if (currentToken) {
-                sendTokenToServer(currentToken)
+                await sendTokenToServer(currentToken)
                 $q.localStorage.set('pushToken', currentToken)
                 emit('pushToken', currentToken)
-                updateUIForPushEnabled(currentToken)
+                updateUIForPushEnabled()
                 loading.value = false
               } else {
                 // Show permission request.
@@ -110,7 +117,6 @@ export default defineComponent({
             })
             .catch(function (err) {
               console.log('An error occurred while retrieving token. ', err)
-              showToken('Error retrieving Instance ID token. ', err)
               setTokenSentToServer(false)
               loading.value = false
             })
@@ -119,11 +125,11 @@ export default defineComponent({
           console.log('Unable to get permission to notify.', err)
         })
     }
-    const unsubscribe = () => {
+    const unsubscribe = async () => {
       const messaging = firebase.messaging()
-      const pushToken = this.$q.localStorage.getItem('pushToken')
-      this.deleteTokenFromServer(pushToken)
-      messaging.deleteToken(pushToken)
+      const pushToken = $q.localStorage.getItem('pushToken')
+      await deleteTokenFromServer(pushToken)
+      await messaging.deleteToken()
         .then(function () {
           $q.localStorage.remove('pushToken')
           emit('pushToken')
@@ -131,18 +137,27 @@ export default defineComponent({
           updateUIForPushPermissionRequired()
         })
     }
-    const sendTokenToServer = (currentToken) => {
+    const sendTokenToServer = async (currentToken) => {
       // const pushDBKey = this.$firebaseRefs.tokenDB.push().key
       // this.$q.localStorage.set('pushDBKey', pushDBKey)
-      this.$firebaseRefs.tokenDB.child(currentToken).set(true)
-      // console.log('Token sent to server:', currentToken)
+      const variables = {
+        memberId: user.value.uid,
+        token: currentToken
+      }
+      await upsertMembersTokenMutation(variables)
+      console.log('Token sent to server:', currentToken)
     }
-    const deleteTokenFromServer = () => {
-      const pushToken = this.$q.localStorage.getItem('pushToken')
-      this.$firebaseRefs.tokenDB.child(pushToken).remove()
-      this.$emit('pushToken')
-      this.$q.localStorage.remove('pushToken')
-      // console.log('Token deleted from server')
+    const deleteTokenFromServer = async (pushToken) => {
+      const variables = {
+        memberId: user.value.uid,
+        token: pushToken
+      }
+      await deleteMembersTokenMutation(variables)
+        .then(() => {
+          emit('pushToken')
+          $q.localStorage.remove('pushToken')
+          console.log('Token deleted from server')
+        })
     }
     const updateUIForPushEnabled = (/* currentToken */) => {
       emit('childState', true)
@@ -154,9 +169,6 @@ export default defineComponent({
     }
     const setTokenSentToServer = (state) => {
       console.log('setTokenSentToServer', state)
-    }
-    const showToken = (msg) => {
-      console.log(msg)
     }
 
     return {
@@ -170,9 +182,9 @@ export default defineComponent({
       updateUIForPushEnabled,
       updateUIForPushPermissionRequired,
       setTokenSentToServer,
-      showToken,
       notServiceWorker,
-      refreshSubscribeToken
+      refreshSubscribeToken,
+      user
     }
   }
 })
