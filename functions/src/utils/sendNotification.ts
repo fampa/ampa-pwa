@@ -3,7 +3,7 @@ import * as functions from 'firebase-functions'
 
 export const sendPushNotification = async obj => {
   const tokens = obj.member.pushTokens.map(t => t.token)
-  functions.logger.log(`Initiated sending notifications ${tokens}`)
+  functions.logger.log(`Initiated sending notifications ${tokens.toString()}`)
   const message = {
     tokens,
     webpush: {
