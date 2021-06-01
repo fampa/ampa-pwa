@@ -20,6 +20,7 @@
             <q-item class="message" :class="{unRead: !m.read}" v-for="m in member.messages" :key="m.message.id" :to="`/user/message/${m.message.id}`" clickable v-close-popup>
               <q-item-section>
                 <q-item-label>{{m.message.title}}</q-item-label>
+                <q-item-label caption>{{date.formatDate(m.message.createdAt, 'DD-MM-YYYY HH:mm')}}</q-item-label>
               </q-item-section>
               <q-item-section avatar>
                 <q-icon :name="m.read ? 'las la-eye' : 'las la-low-vision'" />
@@ -165,6 +166,7 @@ import { useStore } from 'src/services/store'
 import { ContentsService } from 'src/services/contents'
 import { useI18n } from 'vue-i18n'
 import { fallbackContent } from 'src/utilities/fallbackContent'
+import { date } from 'quasar'
 
 export default defineComponent({
   name: 'MainLayout',
@@ -305,7 +307,8 @@ export default defineComponent({
       logout,
       toggleLeftDrawer,
       isAdmin,
-      member
+      member,
+      date
     }
   }
 })
