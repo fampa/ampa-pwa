@@ -58,6 +58,7 @@ export default defineComponent({
     const formatedDate = computed(() => date.formatDate(result.value?.messages_by_pk?.createdAt, 'DD/MM/YYYY, HH:mm'))
 
     // methods
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
     onResult(() => {
       message.value = result?.value?.messages_by_pk
     })
@@ -74,6 +75,9 @@ export default defineComponent({
         persistent: true
       }).onOk(async () => {
         await deleteMessageMemberMutation({ memberId: member.value.id, messageId: id.value })
+          .then(async () => {
+            await store.dispatch('user/setMember', member.value.id)
+          })
       }).onOk(async () => {
         // console.log('>>>> second OK catcher')
         $q.notify(i18n.t('remove.confirm'))
@@ -85,6 +89,18 @@ export default defineComponent({
       })
     }
 
+    onBeforeRouteUpdate(async (to, _) => {
+      const id = Number(to.params?.id.toString())
+      const newVariables = { id }
+      await refetch(newVariables)
+      if (!message.value?.status?.read) {
+        await setMessageReadMutation({ memberId: member.value.id, messageId: newVariables.id })
+          .then(async () => {
+            await store.dispatch('user/setMember', member.value.id)
+          })
+      }
+    })
+
     onMounted(async () => {
       if (!message.value?.status?.read) {
         await setMessageReadMutation({ memberId: member.value.id, messageId: id.value })
@@ -92,12 +108,6 @@ export default defineComponent({
             await store.dispatch('user/setMember', member.value.id)
           })
       }
-    })
-
-    onBeforeRouteUpdate(async (to, _) => {
-      const id = to.params?.id.toString()
-      const newVariables = { id }
-      await refetch(newVariables)
     })
 
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
