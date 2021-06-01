@@ -47,7 +47,7 @@
 </template>
 
 <script lang="ts">
-import { ref, reactive } from 'vue'
+import { ref, reactive, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { cleanObject } from 'src/utilities/cleanObject'
 import { AdminService } from 'src/services/admin'
@@ -55,6 +55,8 @@ import { formatDate } from 'src/utilities/formatDate'
 import { Member } from 'src/models/Member'
 import { useI18n } from 'vue-i18n'
 import SendMessage from 'src/components/SendMessage.vue'
+import { useStore } from 'src/services/store'
+import { useQuasar } from 'quasar'
 
 export default {
   name: 'AdminMembers',
@@ -64,6 +66,9 @@ export default {
     const i18n = useI18n()
     const router = useRouter()
     const adminService = new AdminService()
+    const store = useStore()
+    const member = computed(() => store.state.user.member)
+    const $q = useQuasar()
 
     // Data
     const members = ref<Member[]>([])
@@ -193,7 +198,6 @@ export default {
       const variables = {
         message: { ...$event }
       }
-      console.log(variables)
       await sendMessageMutate(variables)
         .then(async res => {
           const messageId = res.data.insert_messages_one.id
@@ -205,6 +209,12 @@ export default {
             .then(() => {
               sendingMessage.value = false
               openSendMessage.value = false
+            })
+            .then(async () => {
+              await store.dispatch('user/setMember', member.value.id)
+              $q.notify({
+                message: i18n.t('contact.messageSent')
+              })
             })
             .catch((err) => {
               console.error(err)
