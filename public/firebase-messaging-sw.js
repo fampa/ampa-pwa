@@ -32,6 +32,7 @@ firebase.initializeApp(firebaseConfig)
 
 // Retrieve an instance of Firebase Messaging so that it can handle background
 // messages.
+// eslint-disable-next-line no-unused-vars
 const messaging = firebase.messaging()
 
 // Handle incoming messages. Called when:
@@ -45,6 +46,19 @@ messaging.onBackgroundMessage((payload) => {
   const notificationTitle = 'Background Message Title'
   const notificationOptions = {
     body: 'Background Message body.',
+    icon: '/firebase-logo.png'
+  }
+
+  self.registration.showNotification(notificationTitle,
+    notificationOptions)
+})
+
+messaging.onMessage((payload) => {
+  console.log('[firebase-messaging-sw.js] Received foreground message ', payload)
+  // Customize notification here
+  const notificationTitle = 'Foreground Message Title'
+  const notificationOptions = {
+    body: 'Foreground Message body.',
     icon: '/firebase-logo.png'
   }
 

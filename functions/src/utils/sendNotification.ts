@@ -4,6 +4,7 @@ import * as functions from 'firebase-functions'
 export const sendPushNotification = async obj => {
   const tokens = obj.member.pushTokens.map(t => t.token)
   functions.logger.log(`Initiated sending notifications ${tokens.toString()}`)
+  const content = obj.message.content.replace(/(<([^>]+)>)/gi, '')
   const message = {
     tokens,
     webpush: {
@@ -12,7 +13,7 @@ export const sendPushNotification = async obj => {
       },
       notification: {
         title: obj.message.title,
-        body: obj.message.content,
+        body: content,
         requireInteraction: true,
         timestamp: obj.message.createdAt || Date.parse(new Date().toString()),
         badge: '/statics/icons/icon-512x512.png',

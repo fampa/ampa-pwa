@@ -42,17 +42,18 @@ registerRoute(
 )
 
 self.addEventListener('push', (event) => {
+  console.log('Notification received', event)
   const title = 'AMPA'
   const options = {
-    body: event.data.text(),
+    body: event.data?.text(),
     renotify: true,
-    icon: event.data.notification.icon || '/statics/icons/icon-512x512.png',
-    badge: event.data.notification.badge || '/statics/icons/icon-128x128.png',
-    image: event.data.notification.image || '',
-    timestamp: event.data.notification.timestamp || Date.parse(new Date()),
-    vibrate: event.data.notification.vibrate || [200, 100, 200, 100, 200, 100, 200],
-    tag: event.data.notification.tag || 'ampa-tag',
-    click_action: event.data.notification.click_action
+    icon: event.data?.notification?.icon || '/icons/icon-512x512.png',
+    badge: event.data?.notification?.badge || '/icons/icon-128x128.png',
+    image: event.data?.notification?.image || '',
+    timestamp: event.data?.notification?.timestamp || Date.parse(new Date()),
+    vibrate: event.data?.notification?.vibrate || [200, 100, 200, 100, 200, 100, 200],
+    tag: event.data?.notification?.tag || 'ampa-tag',
+    click_action: event.data?.notification?.click_action
   }
   event.waitUntil(self.registration.showNotification(title, options))
 })
