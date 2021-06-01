@@ -21,8 +21,7 @@
         <h1 class="title">{{message.title}}</h1>
         <div class="subtitle"><strong>{{formatedDate}}</strong></div>
 
-        <div class="content">
-          {{message.content}}
+        <div class="content" v-html="message.content">
         </div>
       </div>
     </q-page>
