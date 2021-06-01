@@ -2,6 +2,7 @@ export default {
   admin: {
     users: 'Gestión de usuarios',
     pages: 'Gestión de págines',
+    family: 'Gestión de familias',
     services: 'Gestión de servicios',
     blog: 'Gestión del blog',
     tags: 'Gestión de etiquetas'
@@ -158,6 +159,7 @@ export default {
   table: {
     article: 'Artículos',
     date: 'Fecha',
+    families: 'Famílies',
     firstName: 'Nombre',
     lastName: 'Apellidos',
     members: 'Miembros',

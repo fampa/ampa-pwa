@@ -9,5 +9,6 @@ export interface QueryTableOptions {
   limit?: number,
   orderBy?: Record<string, unknown>
   filter?: string,
-  type?: string
+  type?: string,
+  ibanIsNull?: boolean
 }

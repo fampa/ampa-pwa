@@ -3,7 +3,7 @@
     <div class="max-900">
       <q-table
         class="content"
-        :rows="members"
+        :rows="families"
         :columns="columns"
         @row-click="onRowClick"
         row-key="id"
@@ -18,8 +18,11 @@
         v-model:selected="selected"
       >
       <template v-slot:top>
-        <h2>{{$t('table.members')}}</h2>
-        <q-btn v-if="selected.length > 0" :loading="sendingMessage" @click="openSendMessage = true" class="q-ml-sm" icon="las la-envelope" color="primary" :disable="loading" :label="$t('table.sendMessage')" />
+        <h2>{{$t('table.families')}}</h2>
+        <q-space />
+        <q-btn v-if="ibanIsNull" flat icon="las la-eye" :disable="loading" :label="$t('table.showWithIban')" @click="toggleIsIbanNull" />
+        <q-btn v-if="!ibanIsNull" flat icon="las la-eye-slash" :disable="loading" :label="$t('table.showWithoutIban')" @click="toggleIsIbanNull" />
+        <q-btn v-if="selected.length > 0" @click="openSendMessage = true" class="q-ml-sm" icon="las la-money-check-alt" color="primary" :disable="loading" :label="$t('table.remesa')" />
         <q-space />
         <q-input borderless dense debounce="300" v-model="filter" clearable clear-icon="close" :placeholder="$t('table.search')">
           <template v-slot:append>
@@ -41,48 +44,41 @@
         <q-btn fab icon="add" color="primary" to="/admin/users/edit" />
       </q-page-sticky>
       <!-- send message -->
-      <send-message :prompt="openSendMessage" @cancel="messageCancel" @send="sendMessage($event)"></send-message>
     </div>
   </q-page>
 </template>
 
 <script lang="ts">
-import { ref, reactive, computed } from 'vue'
-import { useRouter } from 'vue-router'
+import { ref, reactive } from 'vue'
 import { cleanObject } from 'src/utilities/cleanObject'
 import { AdminService } from 'src/services/admin'
 import { formatDate } from 'src/utilities/formatDate'
-import { Member } from 'src/models/Member'
 import { useI18n } from 'vue-i18n'
-import SendMessage from 'src/components/SendMessage.vue'
-import { useStore } from 'src/services/store'
-import { useQuasar } from 'quasar'
+import { useRouter } from 'vue-router'
+// import { useQuasar } from 'quasar'
+import { Family } from 'src/models/Family'
 
 export default {
   name: 'AdminMembers',
   emits: ['row-click'],
-  components: { SendMessage },
   setup () {
     const i18n = useI18n()
-    const router = useRouter()
     const adminService = new AdminService()
-    const store = useStore()
-    const member = computed(() => store.state.user.member)
-    const $q = useQuasar()
+    const router = useRouter()
+    // const $q = useQuasar()
 
     // Data
-    const members = ref<Member[]>([])
+    const families = ref<Family[]>([])
     const filter = ref<string | null>(null)
+    const ibanIsNull = ref(false)
     const pagination = ref({
-      sortBy: 'lastName',
-      descending: false,
+      sortBy: 'createdAt',
+      descending: true,
       page: 1,
       rowsPerPage: 5,
       rowsNumber: 10
     })
     const selected = ref([])
-    const openSendMessage = ref(false)
-    const sendingMessage = ref(false)
     const columns = reactive([
       {
         name: 'createdAt',
@@ -94,35 +90,19 @@ export default {
         sortable: true
       },
       {
-        name: 'lastName',
-        required: true,
-        label: i18n.t('table.lastName'),
-        align: 'left',
-        field: 'lastName',
-        sortable: true
-      },
-      {
-        name: 'firstName',
+        name: 'name',
         required: true,
         label: i18n.t('table.firstName'),
         align: 'left',
-        field: 'firstName',
+        field: 'name',
         sortable: true
       },
       {
-        name: 'email',
+        name: 'iban',
         required: true,
-        label: 'Email',
+        label: 'IBAN',
         align: 'left',
-        field: 'email',
-        sortable: true
-      },
-      {
-        name: 'isAdmin',
-        required: true,
-        label: '',
-        align: 'right',
-        field: 'isAdmin',
+        field: 'iban',
         sortable: true
       }
     ])
@@ -133,8 +113,7 @@ export default {
 
     // Methods
     const onRowClick = (evt, row) => {
-      // console.log(row)
-      const id = row.id
+      const id = row.owner?.id
       return router.push(`/admin/users/edit/${id}`)
     }
 
@@ -146,15 +125,15 @@ export default {
       limit,
       offset,
       orderBy,
+      ibanIsNull: ibanIsNull.value,
       filter: filter.value
     }
     const sanitizeVariables = cleanObject(variables)
-    const { result, onResult, loading, fetchMore } = adminService.getMembers(sanitizeVariables)
-    const { mutate: sendMessageMutate } = adminService.addMessage()
-    const { mutate: addMessageMembersMutate } = adminService.addMessageMembers()
+    const { result, onResult, loading, fetchMore, refetch } = adminService.getFamilies(sanitizeVariables)
+
     onResult(() => {
-      members.value = result.value?.members
-      pagination.value.rowsNumber = result.value?.members_aggregate?.aggregate?.count
+      families.value = result.value?.families
+      pagination.value.rowsNumber = result.value?.families_aggregate?.aggregate?.count
       // console.log('articles', result.value?.articles)
     })
 
@@ -175,7 +154,8 @@ export default {
         limit,
         offset,
         orderBy,
-        filter
+        filter,
+        ibanIsNull: ibanIsNull.value
       }
       const sanitizeVariables = cleanObject(variables)
       // console.log(sanitizeVariables)
@@ -184,69 +164,32 @@ export default {
           ...sanitizeVariables
         }
       })
-      members.value = more.data.members
+      families.value = more.data.families
       pagination.value.page = page
       pagination.value.rowsPerPage = rowsPerPage
       pagination.value.sortBy = sortBy
       pagination.value.descending = descending
-      pagination.value.rowsNumber = result.value?.members_aggregate?.aggregate?.count
+      pagination.value.rowsNumber = result.value?.families_aggregate?.aggregate?.count
       // console.log('pagination', pagination)
     }
 
-    const sendMessage = async ($event) => {
-      sendingMessage.value = true
-      const variables = {
-        message: { ...$event }
-      }
-      await sendMessageMutate(variables)
-        .then(async res => {
-          const messageId = res.data.insert_messages_one.id
-          const objects = []
-          for (const member of selected.value) {
-            objects.push({ memberId: member.id, messageId })
-          }
-          await addMessageMembersMutate({ objects })
-            .then(() => {
-              sendingMessage.value = false
-              openSendMessage.value = false
-            })
-            .then(async () => {
-              await store.dispatch('user/setMember', member.value.id)
-              $q.notify({
-                message: i18n.t('contact.messageSent')
-              })
-            })
-            .catch((err) => {
-              console.error(err)
-              sendingMessage.value = false
-              openSendMessage.value = false
-            })
-        })
-        .catch((err) => {
-          console.error(err)
-          sendingMessage.value = false
-          openSendMessage.value = false
-        })
-    }
-
-    const messageCancel = () => {
-      openSendMessage.value = false
+    const toggleIsIbanNull = async () => {
+      ibanIsNull.value = !ibanIsNull.value
+      await refetch({ ...variables, ibanIsNull: ibanIsNull.value })
     }
 
     return {
-      members,
+      families,
       getSelectedString,
       selected,
       pagination,
       columns,
       loading,
       filter,
-      onRowClick,
       onRequest,
-      sendMessage,
-      openSendMessage,
-      sendingMessage,
-      messageCancel
+      onRowClick,
+      ibanIsNull,
+      toggleIsIbanNull
     }
   }
 

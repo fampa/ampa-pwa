@@ -263,6 +263,11 @@ export default defineComponent({
           to: '/admin/users'
         },
         {
+          title: i18n.t('admin.family'),
+          icon: 'las la-users-cog',
+          to: '/admin/families'
+        },
+        {
           title: i18n.t('admin.pages'),
           icon: 'las la-file-alt',
           to: '/admin/page'

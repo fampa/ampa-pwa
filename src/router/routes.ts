@@ -54,6 +54,7 @@ const routes: RouteRecordRaw[] = [
     meta: { requiresScope: 'admin' },
     children: [
       { path: 'users', component: () => import('pages/admin/Users.vue') },
+      { path: 'families', component: () => import('pages/admin/Families.vue') },
       { path: 'users/edit/:id', component: () => import('pages/user/Index.vue') },
       { path: 'family/edit/:id', component: () => import('pages/user/Family.vue') },
       { path: 'payment/edit/:id', component: () => import('pages/user/Payment.vue') },

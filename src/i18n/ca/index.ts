@@ -3,6 +3,7 @@ export default {
     users: 'Gestió d\'usuaris',
     pages: 'Gestió de pàgines',
     services: 'Gestió de serveis',
+    family: 'Gestió de famílies',
     blog: 'Gestió del blog',
     tags: 'Gestió d\'etiquetes'
   },
@@ -158,6 +159,7 @@ export default {
   table: {
     article: 'Articles',
     date: 'Data',
+    families: 'Famílies',
     firstName: 'Nom',
     lastName: 'Cognoms',
     members: 'Membres',
@@ -168,6 +170,8 @@ export default {
     sendMessage: 'Envia un missatge',
     service: 'Serveis',
     serviceTypes: 'Tipus de serveis',
+    showWithIban: 'Mostra els amb IBAN',
+    showWithoutIban: 'Mostra els sense IBAN',
     status: 'Estat',
     tag: 'Etiquetes',
     type: 'Tipus'
