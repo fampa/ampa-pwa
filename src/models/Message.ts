@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 export interface Message {
   id?: number
   title: string,
@@ -6,5 +7,6 @@ export interface Message {
   updatedAt?: Date | string,
   status?: {
     read: boolean
-  }
+  },
+  click_action?: string
 }

@@ -4,7 +4,7 @@ import * as functions from 'firebase-functions'
 export const sendPushNotification = async obj => {
   const tokens = obj.member.pushTokens.map(t => t.token)
   functions.logger.log(`Initiated sending notifications ${tokens.toString()}`)
-  const content = obj.message.content.replace(/(<([^>]+)>)/gi, '')
+  const content = obj.message?.content?.replace(/(<([^>]+)>)/gi, '')
   const message = {
     tokens,
     webpush: {
@@ -12,13 +12,13 @@ export const sendPushNotification = async obj => {
         Urgency: 'high'
       },
       notification: {
-        title: obj.message.title,
+        title: obj.message?.title,
         body: content,
         requireInteraction: true,
-        timestamp: obj.message.createdAt || Date.parse(new Date().toString()),
-        badge: '/statics/icons/icon-512x512.png',
-        icon: '/statics/icons/icon-128x128.png',
-        click_action: obj.click_action || functions.config().env.template.siteUrl
+        timestamp: obj.message?.createdAt || Date.parse(new Date().toString()),
+        badge: '/icons/icon-512x512.png',
+        icon: '/icons/icon-128x128.png',
+        click_action: obj.message?.click_action || functions.config().env.template.siteUrl
       }
     }
   }

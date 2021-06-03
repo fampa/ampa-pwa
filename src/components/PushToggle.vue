@@ -37,27 +37,6 @@ export default defineComponent({
     const { mutate: upsertMembersTokenMutation } = membersService.upsertMembersToken()
     const { mutate: deleteMembersTokenMutation } = membersService.deleteMembersToken()
 
-    // const refreshSubscribeToken = () => {
-    //   const messaging = firebase.messaging()
-    //   return messaging.onTokenRefresh(function () {
-    //     messaging.getToken()
-    //       .then(async function (refreshedToken) {
-    //         $q.localStorage.set('pushToken', refreshedToken)
-    //         emit('pushToken', refreshedToken)
-    //         // console.log('Token refreshed.', refreshedToken)
-    //         // Indicate that the new Instance ID token has not yet been sent to the
-    //         // app server.
-    //         setTokenSentToServer(false)
-    //         // Send Instance ID token to app server.
-    //         await sendTokenToServer(refreshedToken)
-    //         // ...
-    //       })
-    //       .catch(function (err) {
-    //         console.log('Unable to retrieve refreshed token ', err)
-    //       })
-    //   })
-    // }
-
     const pushToggle = () => {
       const pushToken = $q.localStorage.getItem('pushToken')
       console.log('pushToken', pushToken)
@@ -92,7 +71,9 @@ export default defineComponent({
               // eslint-disable-next-line @typescript-eslint/no-floating-promises
               registration.showNotification('AMPA', {
                 body: 'Molt be! Ja pots rebre notificacions push',
-                icon: '../icons/icon-192x192.png',
+                icon: '/icons/icon-192x192.png',
+                requireInteraction: true,
+                badge: '/icons/icon-512x512.png',
                 vibrate: [200, 100, 200, 100, 200, 100, 200],
                 tag: 'ampa-tag'
               })

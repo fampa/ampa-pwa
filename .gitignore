@@ -39,3 +39,5 @@ firebase-debug.log
 functions/.runtimeconfig.json
 functions/env.json
 functions/lib
+
+public/firebase-messaging-sw.js

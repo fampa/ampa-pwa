@@ -103,6 +103,10 @@ export default {
     YourData: 'TUS DATOS'
   },
   newVersion: 'Nueva versión disponible. Actualice pulsando el botón',
+  notification: {
+    close: 'Cerrar',
+    read: 'Leer'
+  },
   personalData: 'Datos personales',
   privacy: {
     title: 'Política de privacidad',

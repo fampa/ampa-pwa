@@ -243,6 +243,7 @@ appApi.post('/webhook/message', async (req: express.Request, res:express.Respons
   const query = `query getMembersMessagesByMessageId($messageId: Int!) {
     members_messages(where: {messageId: {_eq: $messageId}}) {
       message {
+        id
         title
         content
         createdAt
@@ -276,21 +277,4 @@ appApi.post('/webhook/message', async (req: express.Request, res:express.Respons
     functions.logger.error(error)
     return res.json({ success: false, error: error })
   }
-  // const obj = req.body as MailObject
-  // obj.to = functions.config().env.template.email
-  // obj.bcc = obj.from
-  // obj.subject = 'Servei de l\'AMPA sol.licitat'
-  // obj.sender = obj.from
-  // obj.replyTo = obj.from
-  // obj.from = `AMPA <${functions.config().env.template.email}>`
-
-  // try {
-  //   const result = await sendEmail(obj)
-
-  //   functions.logger.info('Service Requested:', result)
-  //   return res.json(result)
-  // } catch (error) {
-  //   functions.logger.error(error)
-  //   return res.status(500).json({ error })
-  // }
 })

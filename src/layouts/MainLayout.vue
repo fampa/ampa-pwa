@@ -161,12 +161,14 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, watch } from 'vue'
+import { defineComponent, ref, computed, watch, onMounted } from 'vue'
 import { useStore } from 'src/services/store'
 import { ContentsService } from 'src/services/contents'
 import { useI18n } from 'vue-i18n'
 import { fallbackContent } from 'src/utilities/fallbackContent'
-import { date } from 'quasar'
+import { date, useQuasar } from 'quasar'
+import firebase from 'firebase/app'
+import 'firebase/messaging'
 
 export default defineComponent({
   name: 'MainLayout',
@@ -175,6 +177,8 @@ export default defineComponent({
     const leftDrawerOpen = ref(false)
     const i18n = useI18n()
     const store = useStore()
+    const $q = useQuasar()
+    const messaging = firebase.messaging()
     const contentsService = new ContentsService()
     const currentLanguage = computed(() => store.state.settings.language)
     const user = computed(() => {
@@ -216,6 +220,36 @@ export default defineComponent({
     }
     onMenuItemsResult(() => {
       getMenuItems()
+    })
+
+    onMounted(() => {
+      // eslint-disable-next-line @typescript-eslint/no-misused-promises
+      messaging.onMessage(async (payload) => {
+        console.log('[firebase-messaging-sw.js] Received foreground message ', payload)
+        await store.dispatch('user/setUser', user.value.uid)
+        $q.notify({
+          type: 'info',
+          timeout: 0,
+          message: payload.notification?.title,
+          caption: payload.notification?.body,
+          avatar: payload.notification?.badge,
+          actions: [
+            {
+              label: i18n.t('notification.close'),
+              attrs: {
+                'aria-label': 'Dismiss'
+              }
+            },
+            {
+              label: i18n.t('notification.read'),
+              color: 'white',
+              handler: () => {
+                window.location.href = payload.notification?.click_action
+              }
+            }
+          ]
+        })
+      })
     })
 
     watch(() => currentLanguage.value,

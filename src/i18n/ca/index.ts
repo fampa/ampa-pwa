@@ -11,14 +11,14 @@ export default {
   content: {
     addImage: 'Afegeix una imatge de portada',
     content: 'Contingut',
-    delete: 'Esborrar',
+    delete: 'Esborra',
     draft: 'Esborrany',
     isMenu: 'Incloure al menú',
     placeholder: 'Escriu alguna cosa ací...',
     publishOrSave: 'L\'article es troba en estat esborrany. Voleu només desar-lo o desar-lo i publicar-lo?',
     published: 'Publicat',
     save: 'Desa',
-    see: 'Visualitzar',
+    see: 'Visualitza',
     title: 'Títol',
     type: {
       article: 'Article',
@@ -103,6 +103,10 @@ export default {
     YourData: 'LES TEUES DADES'
   },
   newVersion: 'Nova versió disponible. Actualitza polsant el botó',
+  notification: {
+    close: 'Tanca',
+    read: 'Llegeix'
+  },
   personalData: 'Dades personals',
   privacy: {
     title: 'Política de privadesa',
@@ -144,7 +148,7 @@ export default {
       participants: 'Actualment inscrits',
       periodicity: 'Periodicitat',
       price: 'Preu',
-      remove: 'Esborrar a {name}',
+      remove: 'Esborra a {name}',
       spots: 'Capacitat',
       title: 'Edita un servei'
     },

@@ -19,6 +19,7 @@ export const manageCommunications = async (params: {message: Message, member: Me
   }
   // TODO implementar enviaments push
   if (member.pushTokens.length > 0) {
+    message.click_action = `${functions.config().env.template.siteUrl}/user/message/${message.id}`
     await sendPushNotification({ member, message })
   }
 }
