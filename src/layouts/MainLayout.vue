@@ -236,6 +236,7 @@ export default defineComponent({
           actions: [
             {
               label: i18n.t('notification.close'),
+              color: 'white',
               attrs: {
                 'aria-label': 'Dismiss'
               }
