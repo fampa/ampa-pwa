@@ -231,7 +231,7 @@ export default defineComponent({
           type: 'info',
           timeout: 0,
           message: payload.notification?.title,
-          caption: payload.notification?.body,
+          caption: date.formatDate(payload.notification?.timestamp, 'DD/MM/YYYY HH:mm'),
           avatar: payload.notification?.badge,
           actions: [
             {
