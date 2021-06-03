@@ -15,7 +15,7 @@ export const sendPushNotification = async obj => {
         title: obj.message?.title,
         body: content,
         requireInteraction: true,
-        timestamp: obj.message?.createdAt || Date.parse(new Date().toString()),
+        timestamp: Date.parse(obj.message?.createdAt) || Date.parse(new Date().toString()),
         badge: '/icons/icon-512x512.png',
         icon: '/icons/icon-128x128.png',
         click_action: obj.message?.click_action || functions.config().env.template.siteUrl
