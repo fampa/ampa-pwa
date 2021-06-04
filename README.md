@@ -2,6 +2,10 @@
 
 PWA de gestió del AMPA
 
+## Fork this repo
+
+`git clone https://github.com/fampa/ampa-pwa.git`
+
 ## Set environmental variables
 
 Copy or rename `.env.example` file to `.env`, and `functions/env.json.example` to `functions/env.json`, and fill the variables.
