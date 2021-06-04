@@ -15,7 +15,7 @@
           AMPA
         </q-toolbar-title>
 
-        <q-btn-dropdown v-if="member" dropdown-icon="las la-bell" :label="member?.messages_aggregate?.aggregate?.count" flat rounded no-icon-animation>
+        <q-btn-dropdown aria-label="messages-button" v-if="member" dropdown-icon="las la-bell" :label="member?.messages_aggregate?.aggregate?.count" flat rounded no-icon-animation>
           <q-list>
             <q-item class="message" :class="{unRead: !m.read}" v-for="m in member.messages" :key="m.message.id" :to="`/user/message/${m.message.id}`" clickable v-close-popup>
               <q-item-section>
@@ -29,7 +29,7 @@
           </q-list>
         </q-btn-dropdown>
 
-        <q-btn-dropdown dropdown-icon="more_vert" flat rounded no-icon-animation >
+        <q-btn-dropdown aria-label="settings-dropdown-button" dropdown-icon="more_vert" flat rounded no-icon-animation >
           <q-list>
             <q-item :to="'/settings'" clickable v-close-popup>
               <q-item-section>
