@@ -128,6 +128,7 @@ export default {
       image: 'Imagen',
       join: 'Apuntar a {name}',
       name: 'Nombre del servicio',
+      noParticipants: 'Todavía no hay inscritos',
       participants: 'Actualmente inscritos',
       periodicity: 'Periodicidad',
       price: 'Precio',

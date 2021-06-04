@@ -2,7 +2,9 @@
     <div class="max-600" v-if="service">
       <div class="row justify-between">
         <div class="col-md-6 q-pa-md">
-          <p>{{formatCurrency(service.price)}}</p>
+          <p>
+            <q-chip icon="las la-coins" color="accent" text-color="white">{{formatCurrency(service.price)}}</q-chip>
+          </p>
           <p>{{$t('service.edit.participants')}}: {{Number(participants)}} de {{Number(service.spots)}}</p>
           <q-linear-progress :value="Number(participants)/Number(service.spots)" class="q-mt-md" />
           <p v-if="!user" class="text-caption">{{$t('member.needLogin')}}: <router-link :to="`/login?next=${route.path}`">{{$t('login')}}</router-link></p>
@@ -44,6 +46,7 @@
             {{participant.child.firstName}} {{participant.child.lastName}} ({{participant.child.birthDate}}) <q-btn flat round color="red" icon="las la-trash" @click="remove(participant.childId)" />
           </li>
         </ul>
+        <p v-if="service.participants?.length === 0">{{$t('service.edit.noParticipants')}}</p>
       </div>
       </div>
     </div>
