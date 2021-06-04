@@ -67,7 +67,7 @@ module.exports = configure(function (/* ctx */) {
       // transpileDependencies: [],
 
       // rtl: false, // https://quasar.dev/options/rtl-support
-      // preloadChunks: true,
+      preloadChunks: true,
       // showProgress: false,
       // gzip: true,
       // analyze: true,
