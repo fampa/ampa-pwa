@@ -39,7 +39,7 @@ export default defineComponent({
 
     const pushToggle = () => {
       const pushToken = $q.localStorage.getItem('pushToken')
-      console.log('pushToken', pushToken)
+      // console.log('pushToken', pushToken)
       if (pushToken) {
         updateUIForPushEnabled()
       } else {
@@ -52,10 +52,10 @@ export default defineComponent({
     const toggleManager = () => {
       pushToggle()
       if (!toggleState.value) {
-        console.log('In toggleManager, toggleState is false?', toggleState)
+        // console.log('In toggleManager, toggleState is false?', toggleState)
         return subscribe()
       } else {
-        console.log('In toggleManager, toggleState is true?', toggleState)
+        // console.log('In toggleManager, toggleState is true?', toggleState)
         return unsubscribe()
       }
     }
@@ -65,7 +65,7 @@ export default defineComponent({
       const messaging = firebase.messaging()
       Notification.requestPermission()
         .then(async function (result) {
-          console.log('Notification permission granted. Result:', result)
+          // console.log('Notification permission granted. Result:', result)
           if (result === 'granted') {
             await navigator.serviceWorker.ready.then(function (registration) {
               // eslint-disable-next-line @typescript-eslint/no-floating-promises
@@ -92,13 +92,13 @@ export default defineComponent({
                 console.log('No Instance ID token available. Request permission to generate one.')
                 // Show permission UI.
                 updateUIForPushPermissionRequired()
-                setTokenSentToServer(false)
+                // setTokenSentToServer(false)
                 loading.value = false
               }
             })
             .catch(function (err) {
               console.log('An error occurred while retrieving token. ', err)
-              setTokenSentToServer(false)
+              // setTokenSentToServer(false)
               loading.value = false
             })
         })
@@ -126,7 +126,7 @@ export default defineComponent({
         token: currentToken
       }
       await upsertMembersTokenMutation(variables)
-      console.log('Token sent to server:', currentToken)
+      // console.log('Token sent to server:', currentToken)
     }
     const deleteTokenFromServer = async (pushToken) => {
       const variables = {
@@ -137,7 +137,7 @@ export default defineComponent({
         .then(() => {
           emit('pushToken')
           $q.localStorage.remove('pushToken')
-          console.log('Token deleted from server')
+          // console.log('Token deleted from server')
         })
     }
     const updateUIForPushEnabled = (/* currentToken */) => {
@@ -148,9 +148,9 @@ export default defineComponent({
       emit('childState', false)
       toggleState.value = false
     }
-    const setTokenSentToServer = (state) => {
-      console.log('setTokenSentToServer', state)
-    }
+    // const setTokenSentToServer = (state) => {
+    //   console.log('setTokenSentToServer', state)
+    // }
 
     return {
       loading,
@@ -162,7 +162,6 @@ export default defineComponent({
       deleteTokenFromServer,
       updateUIForPushEnabled,
       updateUIForPushPermissionRequired,
-      setTokenSentToServer,
       notServiceWorker,
       user
     }
