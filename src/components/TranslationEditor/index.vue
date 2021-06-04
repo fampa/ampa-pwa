@@ -5,7 +5,7 @@
         <div class="row">
           <div class="col-12">
             <div v-for="(translation, index) in translations" :key="index">
-              <q-input autogrow v-if="translation.language === lang" borderless ref="title" class="title-input" v-model="translation.title"  :placeholder="$t('content.title')" :rules="[val => !!val || $t('forms.required')]" />
+              <q-input v-if="translation.language === lang" autogrow borderless ref="title" class="title-input" v-model="translation.title"  :placeholder="$t('content.title')" :rules="[val => !!val || $t('forms.required')]" />
             </div>
           </div>
         </div>
@@ -223,9 +223,9 @@ export default defineComponent({
     const translations = ref<ContentTranslation[]>(i18n.availableLocales.map(l => {
       return {
         parentId: props.inputContent?.id,
-        title: fallbackContent(props.inputContent, 'title'),
+        title: fallbackContent(props.inputContent, 'title', l),
         language: l,
-        content: fallbackContent(props.inputContent, 'content')
+        content: fallbackContent(props.inputContent, 'content', l)
       }
     }))
 

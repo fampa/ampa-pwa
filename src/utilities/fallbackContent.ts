@@ -1,8 +1,9 @@
 import { Content } from 'src/models/Content'
 import { i18n } from 'src/boot/i18n'
 
-export const fallbackContent = (content: Content, field: string) => {
-  const availableContent = content.translations.find(tr => tr.language === i18n.global.locale)[field]
+export const fallbackContent = (content: Content, field: string, currentLocale?: string) => {
+  currentLocale = currentLocale || i18n.global.locale
+  const availableContent = content.translations.find(tr => tr.language === currentLocale)[field]
 
   if (availableContent?.length > 0) {
     // console.log('availableContent', availableContent)
