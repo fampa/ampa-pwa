@@ -151,7 +151,7 @@ module.exports = configure(function (/* ctx */) {
         short_name: 'AMPA APP',
         description: 'PWA del AMPA',
         display: 'standalone',
-        orientation: 'portrait-primary',
+        orientation: 'any',
         background_color: '#ffffff',
         theme_color: '#ff8000',
         icons: [
