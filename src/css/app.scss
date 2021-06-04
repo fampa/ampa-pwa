@@ -59,3 +59,11 @@ h5 {
 .q-field__inner.relative-position.col.self-stretch {
     background: white;
 }
+
+.q-item.q-router-link--active, .q-item--active {
+    background: lighten($primary, 10%);
+    color: white;
+    .q-item__label--caption {
+        color: white;
+    }
+}
