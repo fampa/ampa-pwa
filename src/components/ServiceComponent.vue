@@ -24,7 +24,7 @@
                 <q-btn
                   v-else
                   color="primary"
-                  :disable="!user || member?.family?.iban === (null || undefined || '') || (Number(service.spots) === 0) || (Number(participants)/Number(service.spots) === 1)"
+                  :disable="!user || [null, undefined, ''].includes(member?.family?.iban) || (Number(service.spots) === 0) || (Number(participants)/Number(service.spots) === 1)"
                   @click="join(child)"
                   :loading="loading"
                 >
