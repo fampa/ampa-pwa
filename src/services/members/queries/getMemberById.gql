@@ -38,7 +38,7 @@ query memberById($id: String!) {
         }
       }
     }
-    messages(where: {memberId: {_eq: $id}}, limit: 10, order_by: {read: asc, message: {createdAt: desc}}) {
+    messages(where: {memberId: {_eq: $id}}, order_by: {message: {createdAt: desc}}) {
       message {
         id
         title
