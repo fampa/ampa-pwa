@@ -40,6 +40,7 @@ register('service-worker.js', {
         {
           icon: 'las la-sync',
           label: translate.t('update'),
+          color: 'white',
           handler: () => {
             registration?.waiting?.postMessage('skipWaiting')
             window.location.reload()
