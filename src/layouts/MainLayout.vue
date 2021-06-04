@@ -72,7 +72,7 @@
             </q-avatar>
             <div class="text-weight-bold">{{user.email}}</div>
             <div v-if="isAdmin">
-              <q-badge color="primary">
+              <q-badge color="accent">
                   Administrador
               </q-badge>
             </div>
