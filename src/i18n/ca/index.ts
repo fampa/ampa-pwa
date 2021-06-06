@@ -145,6 +145,7 @@ export default {
       image: 'Imatge',
       join: 'Apuntar a {name}',
       name: 'Nom del servei',
+      noParticipants: 'Encara no hi ha inscrits',
       participants: 'Actualment inscrits',
       periodicity: 'Periodicitat',
       price: 'Preu',

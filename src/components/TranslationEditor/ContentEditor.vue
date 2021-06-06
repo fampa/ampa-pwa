@@ -1,6 +1,6 @@
 <template>
 <div class="editor">
-      <div class="menubar" v-if="hasFocus">
+      <div class="menubar" :class="{show: hasFocus}">
 
         <q-btn
           icon="las la-bold"
@@ -271,6 +271,14 @@ export default {
 $color-black: rgb(32, 32, 32);
 $color-white: white;
 $color-grey: rgb(70, 70, 70);
+.menubar {
+  opacity: 0;
+  transition: ease-in-out 0.6s;
+}
+.show {
+  opacity: 1;
+  transition: ease-in-out 0.6s;
+}
 .ProseMirror p.is-editor-empty:first-child::before {
     content: attr(data-placeholder);
     float: left;
