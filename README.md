@@ -2,6 +2,10 @@
 
 PWA de gestió del AMPA
 
+## Database and GraphQL API
+
+Before you begin you will need to have the database and GraphQL API up and running. Visit <https://github.com/fampa/ampa-graphql>
+
 ## Fork this repo
 
 `git clone https://github.com/fampa/ampa-pwa.git`
