@@ -5,6 +5,7 @@ import {
   InMemoryCache,
   ApolloLink,
   Observable,
+  from,
   split,
   concat
 } from '@apollo/client/core'
@@ -45,7 +46,7 @@ export async function getClientOptions(/* {app, router, ...}: Partial<BootFilePa
                 operation.setContext({
                   headers: {
                     ...customHeaders,
-                    authorization: token ? `Bearer ${token}` : ''
+                    Authorization: token ? `Bearer ${token}` : ''
                   }
                 })
               })
@@ -107,7 +108,10 @@ export async function getClientOptions(/* {app, router, ...}: Partial<BootFilePa
   return <ApolloClientOptions<unknown>>Object.assign(
     // General options.
     {
-      link: concat(authMiddleware, httpLink),
+      link: from([
+        authMiddleware,
+        httpLink
+      ]),
       cache: cache,
       connectToDevTools: true,
       defaultOptions: {
