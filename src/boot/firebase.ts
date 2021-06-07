@@ -31,6 +31,10 @@ export default boot((context: BootFileParams<unknown>) => {
       const tokenResult = await user.getIdTokenResult(true)
       // console.log('tokenResult', tokenResult)
       const hasuraClaim = tokenResult?.claims ? tokenResult.claims['https://hasura.io/jwt/claims'] as Record<string, unknown> : null
+      // si no té claims, s'acaba de registrar, recarrega la finestra
+      if (!hasuraClaim) {
+        window.location.reload()
+      }
       const firebaseUserIsAdmin = hasuraClaim ? hasuraClaim['x-hasura-default-role'] === 'admin' : false
       isAdmin.value = firebaseUserIsAdmin
       firebaseUser.value = user
