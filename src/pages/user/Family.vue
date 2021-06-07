@@ -228,16 +228,15 @@ export default {
     const upsertFamily = async () => {
       familyData.ownerId = member.value?.id
       const variables = cleanObject({ ...familyData })
-      console.log(variables)
+      // console.log(variables)
       const { data } = await mutateFamily({ family: variables })
-      console.log('data', data)
+      // console.log('data', data)
       const familyId = memberData.familyId || data?.insert_families_one?.id
-      console.log('memberData.familyId', memberData.familyId)
-      console.log('data?.insert_families_one?.id', data?.insert_families_one?.id)
       memberData.hasRequestedJoinFamily = false
       memberData.familyId = familyId
       const variablesMember = cleanObject({ ...memberData })
       await mutateMember({ id: id.value, member: { ...variablesMember } })
+        .then(() => store.dispatch('user/setMember', id.value))
       familyData.id = familyId
       $q.notify(i18n.t('forms.savedOk'))
     }
@@ -249,6 +248,7 @@ export default {
         memberData.hasRequestedJoinFamily = true
         const variables = cleanObject({ ...memberData })
         await mutateMember({ id: id.value, member: { ...variables } })
+          .then(() => store.dispatch('user/setMember', id.value))
         loading.value = false
         $q.notify(i18n.t('forms.savedOk'))
       }
@@ -263,6 +263,7 @@ export default {
           await mutateChildren({ children: childrenData.children })
           if (shouldUpdateFamilyName.value) {
             await upsertFamily()
+              .then(() => store.dispatch('user/setMember', id.value))
           }
           $q.notify(i18n.t('forms.savedOk'))
         } else {
