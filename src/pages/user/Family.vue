@@ -179,7 +179,7 @@ export default {
         firstName: '',
         lastName: '',
         birthDate: '',
-        familyId: member.value?.familyId
+        familyId: memberData.familyId
       }
       const childrenTemp = Object.assign([], childrenData.children || []) as Child[]
       childrenTemp.push(child)
@@ -228,9 +228,12 @@ export default {
     const upsertFamily = async () => {
       familyData.ownerId = member.value?.id
       const variables = cleanObject({ ...familyData })
-      // console.log(variables)
+      console.log(variables)
       const { data } = await mutateFamily({ family: variables })
+      console.log('data', data)
       const familyId = memberData.familyId || data?.insert_families_one?.id
+      console.log('memberData.familyId', memberData.familyId)
+      console.log('data?.insert_families_one?.id', data?.insert_families_one?.id)
       memberData.hasRequestedJoinFamily = false
       memberData.familyId = familyId
       const variablesMember = cleanObject({ ...memberData })
