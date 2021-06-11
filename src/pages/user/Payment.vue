@@ -14,10 +14,8 @@
       <div v-else-if="member && id">
         <q-input mask="ES## #### #### #### #### ####" outlined v-model.trim="iban" label="IBAN" placeholder="ES" :rules="[val => !!val || $t('forms.required'), val => validateIban(val.replace(/\s/g, '')) || $t('forms.validIBAN')]">
         </q-input>
-        <p class="text-caption">
-          {{$t('forms.ibanNotice')}}
-        </p>
-        <q-btn :loading="loading" :disable="!iban" color="primary" :label="$t('forms.sendMandate', { email: member?.email })" @click="updateIban"/>
+        <br>
+        <q-btn v-if="!member.family?.signatureDate" :loading="loading" :disable="!iban" color="primary" :label="$t('forms.sendMandate')" @click="updateIban"/>
         <br>
         <br>
       </div>

@@ -13,6 +13,8 @@ import cookieParser from 'cookie-parser'
 import { manageCommunications } from '../utils/manageComunications'
 import { v4 as uuidv4 } from 'uuid'
 import { generatePdf } from '../utils/generatePdf'
+import { formatDate } from '../utils/formatDate'
+import { signedSubject, signedMessage, subject, message, title, mandateIdText, mandateText, debtorName, ibanNumber, paymentTypeText, recurrentPayment, oneOffPayment, signaturePlaceText, signatureText, signature, signatureDateText } from '../utils/mandateTranslations'
 
 admin.initializeApp()
 
@@ -295,72 +297,46 @@ appApi.post('/mandate/send', async (req: express.Request, res:express.Response /
 
   // Generate signature code
   const mandateSignatureCode = uuidv4()
+  const now = Date.now()
+  const mandateId = `${member.nif}T${now}`
 
   const mutation = gql`
-          mutation updateFamilyMandateSignatureCode($id: Int!, $mandateSignatureCode: uuid!) {
-              update_families_by_pk(pk_columns: {id: $id}, _set: {mandateSignatureCode: $mandateSignatureCode}) {
+          mutation updateFamilyMandateSignatureCode($id: Int!, $mandateSignatureCode: uuid!, $mandateId: String!) {
+              update_families_by_pk(pk_columns: {id: $id}, _set: {mandateSignatureCode: $mandateSignatureCode, mandateId: $mandateId}) {
                 mandateSignatureCode
+                mandateId
               }
             }
           `
   const variables = {
     id,
-    mandateSignatureCode
+    mandateSignatureCode,
+    mandateId
   }
   try {
     await client.request(mutation, variables)
+    const mandateLink = `${functions.config().env.template.siteUrl}/user/payment/t=${now}&c=${mandateSignatureCode}`
 
-    const signatureCodeGenerationTime = Date.now()
-    const mandateLink = `${functions.config().env.template.siteUrl}/user/payment/t=${signatureCodeGenerationTime}&c=${mandateSignatureCode}`
+    const messageTemp = message({ mandateLink, name })
+    const mandateIdTemp = mandateIdText({ mandateId })
+    const mandateTextTemp = mandateText({ schoolName: functions.config().env.template.schoolName })
 
-    const subject = {
-      ca: 'Manament de domiciliació per a la firma',
-      es: 'Mandato de domiciliación para su firma'
+    const pdfData = {
+      title: title[language],
+      mandateId: mandateIdTemp[language],
+      mandateText: mandateTextTemp[language],
+      debtorName: debtorName[language],
+      ibanNumber: ibanNumber[language],
+      debtor: `${member.firstName} ${member.lastName}`,
+      iban: member?.family?.iban,
+      paymentTypeText: paymentTypeText[language],
+      recurrentPayment: recurrentPayment[language],
+      oneOffPayment: oneOffPayment[language],
+      signaturePlaceText: signaturePlaceText[language],
+      signaturePlace: 'Alboraia',
+      signatureText: signatureText[language],
+      signatureDateText: signatureDateText[language]
     }
-
-    const message = {
-      ca: `
-      <h2>Manament de domiciliació bancària</h2>
-
-      <p>Hola ${name}.</p>
-
-      <p>Si estàs d'acord amb el contingut del manament de domiciliació adjunt, fes click al següent botó per a signar-lo:</p>
-
-      <p style="text-align: center">
-        <a href="${mandateLink}" class="button" target="_blank" rel="noopener noreferrer">Signa el manament</a>
-      </p>
-
-      <p>Si ho prefereixes també pots copiar i enganxar el següent enllaç al teu navegador:</p>
-
-      <p>${mandateLink}</p>
-
-      <p>Aquest enllaç només serà vàlid 24 hores.</p>
-      `,
-      es: `
-      <h2>Mandato de domiciliación bancaria</h2>
-
-      <p>Hola ${name}.</p>
-
-      <p>Si estás de acuerdo con el contenido del mandato de domiciliación bancaria adjunto, haz click en el siguiente enlace apara firmarlo:</p>
-
-      <p style="text-align: center">
-        <a href="${mandateLink}" class="button" target="_blank" rel="noopener noreferrer">Firmar el mandato</a>
-      </p>
-      
-      <p>Si lo prefieres también puedes copiar y pegar el siguiente enlace en tu navegador:</p>
-
-      <p>${mandateLink}</p>
-
-      <p>Este enlace sólo será válido 24 horas</p>
-      `
-    }
-
-    const title = {
-      ca: 'Ordre SEPA de domiciliació de dèbit directe ',
-      es: 'Orden de domiciliación de adeudo directo SEPA'
-    }
-
-    const pdfData = { title: title[language] }
 
     const pdf = await generatePdf(pdfData)
 
@@ -368,10 +344,85 @@ appApi.post('/mandate/send', async (req: express.Request, res:express.Response /
       to: email,
       subject: subject[language],
       from: `AMPA <${functions.config().env.template.email}>`,
-      message: message[language],
+      message: messageTemp[language],
       attachments: [
         {
-          filename: 'mandate.pdf',
+          filename: `mandate-${mandateId}.pdf`,
+          content: pdf
+        }
+      ] as Attachment[]
+    }
+    await sendEmail(messageObj)
+    return res.json({ success: true, error: null })
+  } catch (error) {
+    functions.logger.error(error)
+    return res.json({ success: false, error: error })
+  }
+})
+
+// eslint-disable-next-line @typescript-eslint/no-misused-promises
+appApi.post('/mandate/sign', async (req: express.Request, res:express.Response /*, next:express.NextFunction */) => {
+  functions.logger.log('mandate/sign req.body', req.body)
+
+  const id = req.body.id
+  const member = req.body.member as Member
+  const language = req.body.language || 'ca'
+
+  const email = member.email
+
+  // Generate signature code
+  const signatureDate = new Date()
+
+  const mutation = gql`
+          mutation updateFamilyMandateSignatureCode($id: Int!, $signatureDate: date!) {
+              update_families_by_pk(pk_columns: {id: $id}, _set: {signatureDate: $signatureDate}) {
+                mandateSignatureCode
+                mandateId
+                signatureDate
+              }
+            }
+          `
+  const variables = {
+    id,
+    signatureDate
+  }
+  try {
+    const result = await client.request(mutation, variables)
+    const mandateId = result.data?.update_families_by_pk?.mandateId
+    const mandateIdTemp = mandateIdText({ mandateId })
+    const mandateTextTemp = mandateText({ schoolName: functions.config().env.template.schoolName })
+    const signatureDate = result.data?.update_families_by_pk?.signatureDate
+
+    const pdfData = {
+      title: title[language],
+      mandateId: mandateIdTemp[language],
+      mandateText: mandateTextTemp[language],
+      debtorName: debtorName[language],
+      ibanNumber: ibanNumber[language],
+      debtor: `${member.firstName} ${member.lastName}`,
+      iban: member?.family?.iban,
+      paymentTypeText: paymentTypeText[language],
+      recurrentPayment: recurrentPayment[language],
+      oneOffPayment: oneOffPayment[language],
+      signaturePlaceText: signaturePlaceText[language],
+      signaturePlace: 'Alboraia',
+      signatureText: signatureText[language],
+      signature: signature[language],
+      signatureDateText: signatureDateText[language],
+      signatureDate: formatDate(signatureDate)
+    }
+
+    const pdf = await generatePdf(pdfData)
+
+    const messageObj = {
+      to: email,
+      subject: signedSubject[language],
+      from: `AMPA <${functions.config().env.template.email}>`,
+      bcc: `AMPA <${functions.config().env.template.email}>`,
+      message: signedMessage[language],
+      attachments: [
+        {
+          filename: `mandate-${mandateId}-signed.pdf`,
           content: pdf
         }
       ] as Attachment[]
