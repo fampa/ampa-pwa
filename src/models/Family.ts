@@ -7,8 +7,11 @@ export interface Family {
   children?: Child[]
   iban?: string
   ownerId?: string
-  createdAt?: Date
-  updatedAt?: Date
+  mandateId?: string
+  mandateSignatureCode?: string
+  signatureDate?: Date | string
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export interface FamilyData {

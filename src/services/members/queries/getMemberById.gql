@@ -19,6 +19,8 @@ query memberById($id: String!) {
       id
       name
       iban
+      mandateId
+      signatureDate
       children {
         id
         firstName

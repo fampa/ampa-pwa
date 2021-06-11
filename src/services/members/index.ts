@@ -132,6 +132,14 @@ export class MembersService {
     return response
   }
 
+  sendMandateMail = async (id: number, member: Member, language?: string) => {
+    const data = { id, member, language }
+    const endpoint = `${this.axiosEndpoint}/mandate/send/`
+    const response = await axios
+      .post(endpoint, data)
+    return response
+  }
+
   clearCache = async () => {
     await apolloClient.clearStore()
   }

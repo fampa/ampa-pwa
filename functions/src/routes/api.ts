@@ -11,10 +11,13 @@ import { sendEmail, MailObject } from '../utils/sendEmail'
 import { validateFirebaseIdToken } from '../utils/validateFirebaseToken'
 import cookieParser from 'cookie-parser'
 import { manageCommunications } from '../utils/manageComunications'
+import { v4 as uuidv4 } from 'uuid'
+import { generatePdf } from '../utils/generatePdf'
 
 admin.initializeApp()
 
 import { updateClaims } from '../utils/customClaims'
+import { Attachment } from 'nodemailer/lib/mailer'
 
 const mainUrl = functions.config().env.template.siteUrl
 const otherUrl = functions.config().env.otherUrls?.replace(' ', '')?.split(',')
@@ -272,6 +275,108 @@ appApi.post('/webhook/message', async (req: express.Request, res:express.Respons
       const message = m.message
       await manageCommunications({ member, message })
     }
+    return res.json({ success: true, error: null })
+  } catch (error) {
+    functions.logger.error(error)
+    return res.json({ success: false, error: error })
+  }
+})
+
+// eslint-disable-next-line @typescript-eslint/no-misused-promises
+appApi.post('/mandate/send', async (req: express.Request, res:express.Response /*, next:express.NextFunction */) => {
+  functions.logger.log('mandate/send req.body', req.body)
+
+  const id = req.body.id
+  const member = req.body.member as Member
+  const language = req.body.language || 'ca'
+
+  const email = member.email
+  const name = member.firstName
+
+  // Generate signature code
+  const mandateSignatureCode = uuidv4()
+
+  const mutation = gql`
+          mutation updateFamilyMandateSignatureCode($id: Int!, $mandateSignatureCode: uuid!) {
+              update_families_by_pk(pk_columns: {id: $id}, _set: {mandateSignatureCode: $mandateSignatureCode}) {
+                mandateSignatureCode
+              }
+            }
+          `
+  const variables = {
+    id,
+    mandateSignatureCode
+  }
+  try {
+    await client.request(mutation, variables)
+
+    const signatureCodeGenerationTime = Date.now()
+    const mandateLink = `${functions.config().env.template.siteUrl}/user/payment/t=${signatureCodeGenerationTime}&c=${mandateSignatureCode}`
+
+    const subject = {
+      ca: 'Manament de domiciliació per a la firma',
+      es: 'Mandato de domiciliación para su firma'
+    }
+
+    const message = {
+      ca: `
+      <h2>Manament de domiciliació bancària</h2>
+
+      <p>Hola ${name}.</p>
+
+      <p>Si estàs d'acord amb el contingut del manament de domiciliació adjunt, fes click al següent botó per a signar-lo:</p>
+
+      <p style="text-align: center">
+        <a href="${mandateLink}" class="button" target="_blank" rel="noopener noreferrer">Signa el manament</a>
+      </p>
+
+      <p>Si ho prefereixes també pots copiar i enganxar el següent enllaç al teu navegador:</p>
+
+      <p>${mandateLink}</p>
+
+      <p>Aquest enllaç només serà vàlid 24 hores.</p>
+      `,
+      es: `
+      <h2>Mandato de domiciliación bancaria</h2>
+
+      <p>Hola ${name}.</p>
+
+      <p>Si estás de acuerdo con el contenido del mandato de domiciliación bancaria adjunto, haz click en el siguiente enlace apara firmarlo:</p>
+
+      <p style="text-align: center">
+        <a href="${mandateLink}" class="button" target="_blank" rel="noopener noreferrer">Firmar el mandato</a>
+      </p>
+      
+      <p>Si lo prefieres también puedes copiar y pegar el siguiente enlace en tu navegador:</p>
+
+      <p>${mandateLink}</p>
+
+      <p>Este enlace sólo será válido 24 horas</p>
+      `
+    }
+
+    const title = {
+      ca: 'Ordre SEPA de domiciliació de dèbit directe ',
+      es: 'Orden de domiciliación de adeudo directo SEPA'
+    }
+
+    const pdfData = { title: title[language] }
+
+    const pdf = await generatePdf(pdfData)
+
+    const messageObj = {
+      to: email,
+      subject: subject[language],
+      from: `AMPA <${functions.config().env.template.email}>`,
+      message: message[language],
+      attachments: [
+        {
+          filename: 'mandate.pdf',
+          content: pdf
+        }
+      ] as Attachment[]
+    }
+    await sendEmail(messageObj)
     return res.json({ success: true, error: null })
   } catch (error) {
     functions.logger.error(error)

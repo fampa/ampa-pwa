@@ -21,8 +21,11 @@
     "firebase-functions": "^3.14.1",
     "graphql": "^15.5.0",
     "graphql-request": "^3.4.0",
+    "node-fetch": "^2.6.1",
     "nodemailer": "^6.5.0",
-    "nodemailer-express-handlebars": "^4.0.0"
+    "nodemailer-express-handlebars": "^4.0.0",
+    "pdfkit": "^0.12.1",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "@types/express": "^4.17.11",

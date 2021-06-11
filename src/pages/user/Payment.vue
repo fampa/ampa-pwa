@@ -2,7 +2,7 @@
   <q-page padding class="bg-grey-2  q-pa-md">
     <div class="max-600">
       <h1 class="text-h4">{{$t('member.paymentData')}}</h1>
-      <div v-if="loading">
+      <div v-if="getMemberLoading">
         <q-skeleton height="50px" square />
       </div>
       <q-banner v-else-if="member && !id" class="bg-red text-white">
@@ -17,7 +17,7 @@
         <p class="text-caption">
           {{$t('forms.ibanNotice')}}
         </p>
-        <q-btn :loading="mutateLoading" color="primary" :label="$t('forms.save')" @click="updateIban"/>
+        <q-btn :loading="loading" :disable="!iban" color="primary" :label="$t('forms.sendMandate', { email: member?.email })" @click="updateIban"/>
         <br>
         <br>
       </div>
@@ -28,7 +28,7 @@
 <script lang="ts">
 import { MembersService } from 'src/services/members'
 import { useRoute, useRouter } from 'vue-router'
-import { computed, reactive, toRefs } from 'vue'
+import { computed, reactive, toRefs, ref } from 'vue'
 import firebase from 'firebase/app'
 import 'firebase/auth'
 import { Family } from 'src/models/Family'
@@ -64,8 +64,10 @@ export default {
       }
     })
 
-    const { member, loading, onResult, onError: onGetMemberError } = membersService.getById(id.value)
+    const { member, loading: getMemberLoading, onResult, onError: onGetMemberError } = membersService.getById(id.value)
     const { mutate, loading: mutateLoading, onError } = membersService.updateFamily()
+
+    const loading = ref<boolean>(false)
 
     onResult(() => {
       if (member) {
@@ -75,8 +77,36 @@ export default {
     })
 
     const updateIban = async () => {
+      if (!validateIban(familyData.iban?.replace(/\s/g, ''))) return
+      loading.value = true
       await mutate({ id: familyData.id, family: { iban: familyData.iban.replace(/\s/g, '') } })
-      $q.notify(i18n.t('forms.savedOk'))
+        .then(async () => {
+          const id = familyData.id
+          loading.value = true
+          const language = i18n.locale
+          await membersService.sendMandateMail(id, member.value, language.value)
+            .then(() => {
+              $q.notify({
+                timeout: 0,
+                type: 'info',
+                message: i18n.t('forms.sendMandateMessage', { email: member.value?.email }),
+                actions: [
+                  {
+                    label: i18n.t('notification.close'),
+                    color: 'white',
+                    attrs: {
+                      'aria-label': 'Dismiss'
+                    }
+                  }
+                ]
+              })
+              loading.value = false
+            })
+        })
+        .catch(err => {
+          console.error(err)
+          loading.value = false
+        })
     }
 
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
@@ -88,6 +118,7 @@ export default {
 
     return {
       loading,
+      getMemberLoading,
       member,
       user,
       ...toRefs(familyData),

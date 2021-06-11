@@ -4,6 +4,7 @@ import * as functions from 'firebase-functions'
 import 'firebase-functions'
 import SMTPTransport from 'nodemailer/lib/smtp-transport'
 import path from 'path'
+import { Attachment } from 'nodemailer/lib/mailer'
 
 export interface MailObject {
   name?: string,
@@ -14,6 +15,8 @@ export interface MailObject {
   message: string,
   bcc?: string | Array<string>,
   phone?: string,
+  mandateLink?: string,
+  attachments?: Attachment[],
   replyTo?: string,
   template?: string
 }
@@ -58,9 +61,8 @@ export async function sendEmail (obj: MailObject): Promise<Result> {
     replyTo: obj.replyTo || obj.from, // List of recipients
     bcc: obj.bcc,
     subject: obj.subject,
-    // text: obj.message,
-    // html: html
     template: obj.template || 'default',
+    attachments: obj.attachments || [],
     context: {
       name: obj.name,
       email: obj.sender || `AMPA <${functions.config().env.smtp.username}>`,
