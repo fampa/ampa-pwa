@@ -15,7 +15,8 @@
         <q-input mask="ES## #### #### #### #### ####" outlined v-model.trim="iban" label="IBAN" placeholder="ES" :rules="[val => !!val || $t('forms.required'), val => validateIban(val.replace(/\s/g, '')) || $t('forms.validIBAN')]">
         </q-input>
         <br>
-        <q-btn v-if="!member.family?.signatureDate" :loading="loading" :disable="!iban" color="primary" :label="$t('forms.sendMandate')" @click="updateIban"/>
+        <p  v-if="member.family?.signatureDate">{{$t('forms.ibanNotice')}}</p>
+        <q-btn :loading="loading" :disable="!iban" color="primary" :label="$t('forms.sendMandate')" @click="updateIban"/>
         <br>
         <br>
       </div>
@@ -26,14 +27,15 @@
 <script lang="ts">
 import { MembersService } from 'src/services/members'
 import { useRoute, useRouter } from 'vue-router'
-import { computed, reactive, toRefs, ref } from 'vue'
+import { computed, reactive, toRefs, ref, onMounted } from 'vue'
 import firebase from 'firebase/app'
 import 'firebase/auth'
 import { Family } from 'src/models/Family'
 // import { cleanObject } from 'src/utilities/cleanObject'
-import { useQuasar } from 'quasar'
+import { useQuasar, date } from 'quasar'
 import { useI18n } from 'vue-i18n'
 import { validateIban } from 'src/utilities/validations'
+import { useStore } from 'src/services/store'
 
 export default {
   name: 'PagePayment',
@@ -43,6 +45,7 @@ export default {
     const router = useRouter()
     const $q = useQuasar()
     const i18n = useI18n()
+    const store = useStore()
 
     const familyData = reactive<Family>({
       id: undefined,
@@ -51,6 +54,14 @@ export default {
 
     const user = computed(() => {
       return firebase.auth().currentUser
+    })
+
+    const timeCheck = computed(() => {
+      const created = Number(route.query?.t)
+      const unit = 'hours'
+      const today = Date.now()
+      const diff = date.getDateDiff(today, created, unit)
+      return diff
     })
 
     const id = computed(() => {
@@ -62,7 +73,7 @@ export default {
       }
     })
 
-    const { member, loading: getMemberLoading, onResult, onError: onGetMemberError } = membersService.getById(id.value)
+    const { member, loading: getMemberLoading, onResult, onError: onGetMemberError, refetch } = membersService.getById(id.value)
     const { mutate, loading: mutateLoading, onError } = membersService.updateFamily()
 
     const loading = ref<boolean>(false)
@@ -78,12 +89,12 @@ export default {
       if (!validateIban(familyData.iban?.replace(/\s/g, ''))) return
       loading.value = true
       await mutate({ id: familyData.id, family: { iban: familyData.iban.replace(/\s/g, '') } })
+        .then(async () => await refetch())
         .then(async () => {
           const id = familyData.id
-          loading.value = true
           const language = i18n.locale
           await membersService.sendMandateMail(id, member.value, language.value)
-            .then(() => {
+            .then(async () => {
               $q.notify({
                 timeout: 0,
                 type: 'info',
@@ -98,6 +109,7 @@ export default {
                   }
                 ]
               })
+              await refetch()
               loading.value = false
             })
         })
@@ -106,6 +118,56 @@ export default {
           loading.value = false
         })
     }
+
+    onMounted(async () => {
+      if (route.query && route.query.t && route.query.c) {
+        const member = computed(() => store.state.user?.member)
+        if (member.value?.family?.signatureDate) return
+        loading.value = true
+        if (timeCheck.value < 24) {
+          console.log('make signature')
+          const code = route.query.c as string
+          await membersService.signMandate(member.value?.familyId, member.value, code, i18n.locale.value)
+            .then(async () => {
+              $q.notify({
+                timeout: 0,
+                type: 'info',
+                message: i18n.t('forms.mandateSigned'),
+                actions: [
+                  {
+                    label: i18n.t('notification.close'),
+                    color: 'white',
+                    attrs: {
+                      'aria-label': 'Dismiss'
+                    }
+                  }
+                ]
+              })
+              await refetch()
+              loading.value = false
+            })
+            .catch(err => {
+              console.error(err)
+              loading.value = false
+            })
+        } else {
+          $q.notify({
+            timeout: 0,
+            type: 'negative',
+            message: i18n.t('forms.needNewMandate'),
+            actions: [
+              {
+                label: i18n.t('notification.close'),
+                color: 'white',
+                attrs: {
+                  'aria-label': 'Dismiss'
+                }
+              }
+            ]
+          })
+        }
+      }
+    })
 
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
     onError(async () => {
@@ -122,7 +184,8 @@ export default {
       ...toRefs(familyData),
       updateIban,
       validateIban,
-      mutateLoading
+      mutateLoading,
+      timeCheck
     }
   }
 }

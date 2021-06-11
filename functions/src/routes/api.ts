@@ -302,9 +302,10 @@ appApi.post('/mandate/send', async (req: express.Request, res:express.Response /
 
   const mutation = gql`
           mutation updateFamilyMandateSignatureCode($id: Int!, $mandateSignatureCode: uuid!, $mandateId: String!) {
-              update_families_by_pk(pk_columns: {id: $id}, _set: {mandateSignatureCode: $mandateSignatureCode, mandateId: $mandateId}) {
+              update_families_by_pk(pk_columns: {id: $id}, _set: {mandateSignatureCode: $mandateSignatureCode, mandateId: $mandateId, signatureDate: null}) {
                 mandateSignatureCode
                 mandateId
+                signatureDate
               }
             }
           `
@@ -315,7 +316,7 @@ appApi.post('/mandate/send', async (req: express.Request, res:express.Response /
   }
   try {
     await client.request(mutation, variables)
-    const mandateLink = `${functions.config().env.template.siteUrl}/user/payment/t=${now}&c=${mandateSignatureCode}`
+    const mandateLink = `${functions.config().env.template.siteUrl}/user/payment?t=${now}&c=${mandateSignatureCode}`
 
     const messageTemp = message({ mandateLink, name })
     const mandateIdTemp = mandateIdText({ mandateId })
@@ -367,6 +368,7 @@ appApi.post('/mandate/sign', async (req: express.Request, res:express.Response /
   const id = req.body.id
   const member = req.body.member as Member
   const language = req.body.language || 'ca'
+  const mandateSignatureCode = req.body.mandateSignatureCode
 
   const email = member.email
 
@@ -374,24 +376,26 @@ appApi.post('/mandate/sign', async (req: express.Request, res:express.Response /
   const signatureDate = new Date()
 
   const mutation = gql`
-          mutation updateFamilyMandateSignatureCode($id: Int!, $signatureDate: date!) {
-              update_families_by_pk(pk_columns: {id: $id}, _set: {signatureDate: $signatureDate}) {
-                mandateSignatureCode
+          mutation updateFamilyMandateSignatureDate($id: Int!, $signatureDate: date!, $mandateSignatureCode: uuid!) {
+            update_families(_set: {signatureDate: $signatureDate}, where: {id: {_eq: $id}, mandateSignatureCode: {_eq: $mandateSignatureCode}}) {
+              returning {
                 mandateId
                 signatureDate
               }
             }
+          }
           `
   const variables = {
     id,
-    signatureDate
+    signatureDate,
+    mandateSignatureCode
   }
   try {
     const result = await client.request(mutation, variables)
-    const mandateId = result.data?.update_families_by_pk?.mandateId
+    const mandateId = result.data?.update_families?.returning[0]?.mandateId
     const mandateIdTemp = mandateIdText({ mandateId })
     const mandateTextTemp = mandateText({ schoolName: functions.config().env.template.schoolName })
-    const signatureDate = result.data?.update_families_by_pk?.signatureDate
+    const signatureDate = result.data?.update_families?.returning[0]?.signatureDate
 
     const pdfData = {
       title: title[language],

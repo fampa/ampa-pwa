@@ -140,6 +140,14 @@ export class MembersService {
     return response
   }
 
+  signMandate = async (id: number, member: Member, mandateSignatureCode?: string, language?: string) => {
+    const data = { id, member, language, mandateSignatureCode }
+    const endpoint = `${this.axiosEndpoint}/mandate/sign/`
+    const response = await axios
+      .post(endpoint, data)
+    return response
+  }
+
   clearCache = async () => {
     await apolloClient.clearStore()
   }
