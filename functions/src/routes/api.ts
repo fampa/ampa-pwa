@@ -392,10 +392,11 @@ appApi.post('/mandate/sign', async (req: express.Request, res:express.Response /
   }
   try {
     const result = await client.request(mutation, variables)
-    const mandateId = result.data?.update_families?.returning[0]?.mandateId
+    functions.logger.info('result from updateFamilyMandateSignatureDate', result)
+    const mandateId = result.update_families?.returning[0]?.mandateId
     const mandateIdTemp = mandateIdText({ mandateId })
     const mandateTextTemp = mandateText({ schoolName: functions.config().env.template.schoolName })
-    const signatureDate = result.data?.update_families?.returning[0]?.signatureDate
+    const signatureDate = result.update_families?.returning[0]?.signatureDate
 
     const pdfData = {
       title: title[language],
