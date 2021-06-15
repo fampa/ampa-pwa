@@ -180,8 +180,8 @@ export default {
     sendMessage: 'Envia un missatge',
     service: 'Serveis',
     serviceTypes: 'Tipus de serveis',
-    showWithIban: 'Mostra els amb IBAN',
-    showWithoutIban: 'Mostra els sense IBAN',
+    showWithIban: 'Mostra amb domiciliació',
+    showWithoutIban: 'Mostra sense domiciliació',
     status: 'Estat',
     tag: 'Etiquetes',
     type: 'Tipus'

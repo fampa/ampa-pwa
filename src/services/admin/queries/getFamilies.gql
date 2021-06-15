@@ -1,49 +1,14 @@
 query getFamilies($filter: String = "%%", $limit: Int, $offset: Int, $orderBy: [families_order_by!] = {createdAt: desc}, $ibanIsNull: Boolean = false) {
-  families_aggregate(where: {
-    iban: {_is_null: $ibanIsNull},
-    _or: [
-      {
-        owner: {
-          _or: [
-          {firstName: {_ilike: $filter}},
-          {lastName: {_ilike: $filter}},
-          {email: {_ilike: $filter}}
-          ]
-        }
-      },
-      {
-        name: { _ilike: $filter }
-      }
-    ]
-  }) {
+  families_aggregate(where: { signatureDate: {_is_null: $ibanIsNull}, _or: [{owner: {_or: [{firstName: {_ilike: $filter}}, {lastName: {_ilike: $filter}}, {email: {_ilike: $filter}}]}}, {name: {_ilike: $filter}}]}) {
     aggregate {
       count
     }
   }
-  families(where: {
-    iban: {_is_null: $ibanIsNull},
-    _or: [
-      {
-        owner: {
-          _or: [
-          {firstName: {_ilike: $filter}},
-          {lastName: {_ilike: $filter}},
-          {email: {_ilike: $filter}}
-          ]
-        }
-      },
-      {
-        name: { _ilike: $filter }
-      }
-    ]
-  },
-    limit: $limit,
-    offset: $offset,
-    order_by: $orderBy) {
+  families(where: {_or: [{owner: {_or: [{firstName: {_ilike: $filter}}, {lastName: {_ilike: $filter}}, {email: {_ilike: $filter}}]}}, {name: {_ilike: $filter}}], signatureDate: {_is_null: $ibanIsNull}}, limit: $limit, offset: $offset, order_by: $orderBy) {
     createdAt
     updatedAt
-    name,
-    iban,
+    name
+    iban
     owner {
       id
       firstName
