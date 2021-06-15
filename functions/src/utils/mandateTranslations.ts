@@ -115,3 +115,8 @@ export const signedMessage = {
   ca: 'Adjuntem el manament de domiciliació signat per correu electrònic',
   es: 'Adjuntamos el mandato de domiciliación firmado por correo electrónico'
 }
+
+export const signatureCodeText = {
+  ca: 'Codi de signatura ',
+  es: 'Código de firma '
+}

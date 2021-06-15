@@ -13,8 +13,8 @@ import cookieParser from 'cookie-parser'
 import { manageCommunications } from '../utils/manageComunications'
 import { v4 as uuidv4 } from 'uuid'
 import { generatePdf } from '../utils/generatePdf'
-import { formatDate } from '../utils/formatDate'
-import { signedSubject, signedMessage, subject, message, title, mandateIdText, mandateText, debtorName, ibanNumber, paymentTypeText, recurrentPayment, oneOffPayment, signaturePlaceText, signatureText, signature, signatureDateText } from '../utils/mandateTranslations'
+import { convertTZ } from '../utils/formatDate'
+import { signatureCodeText, signedSubject, signedMessage, subject, message, title, mandateIdText, mandateText, debtorName, ibanNumber, paymentTypeText, recurrentPayment, oneOffPayment, signaturePlaceText, signatureText, signature, signatureDateText } from '../utils/mandateTranslations'
 
 admin.initializeApp()
 
@@ -357,7 +357,7 @@ appApi.post('/mandate/send', async (req: express.Request, res:express.Response /
     return res.json({ success: true, error: null })
   } catch (error) {
     functions.logger.error(error)
-    return res.json({ success: false, error: error })
+    return res.status(500).json({ success: false, error: error })
   }
 })
 
@@ -373,14 +373,14 @@ appApi.post('/mandate/sign', async (req: express.Request, res:express.Response /
   const email = member.email
 
   // Generate signature code
-  const signatureDate = new Date()
-
+  const signatureDate = convertTZ(new Date(), 'Europe/Madrid')
   const mutation = gql`
-          mutation updateFamilyMandateSignatureDate($id: Int!, $signatureDate: date!, $mandateSignatureCode: uuid!) {
+          mutation updateFamilyMandateSignatureDate($id: Int!, $signatureDate: timestamptz!, $mandateSignatureCode: uuid!) {
             update_families(_set: {signatureDate: $signatureDate}, where: {id: {_eq: $id}, mandateSignatureCode: {_eq: $mandateSignatureCode}}) {
               returning {
                 mandateId
-                signatureDate
+                signatureDate,
+                mandateSignatureCode
               }
             }
           }
@@ -390,10 +390,13 @@ appApi.post('/mandate/sign', async (req: express.Request, res:express.Response /
     signatureDate,
     mandateSignatureCode
   }
+  functions.logger.info('variables from sign mutation', variables)
   try {
     const result = await client.request(mutation, variables)
-    functions.logger.info('result from updateFamilyMandateSignatureDate', result)
+    functions.logger.info('mutation result', result)
+    if (result.update_families?.returning?.length === 0) return res.status(500).json({ success: false, error: 'Wrong signature code' })
     const mandateId = result.update_families?.returning[0]?.mandateId
+    const signatureCode = result.update_families?.returning[0]?.mandateSignatureCode
     const mandateIdTemp = mandateIdText({ mandateId })
     const mandateTextTemp = mandateText({ schoolName: functions.config().env.template.schoolName })
     const signatureDate = result.update_families?.returning[0]?.signatureDate
@@ -414,7 +417,10 @@ appApi.post('/mandate/sign', async (req: express.Request, res:express.Response /
       signatureText: signatureText[language],
       signature: signature[language],
       signatureDateText: signatureDateText[language],
-      signatureDate: formatDate(signatureDate)
+      signatureDate: signatureDate,
+      fullName: `${member.firstName} ${member.lastName}`,
+      signatureCodeText: signatureCodeText[language],
+      signatureCode
     }
 
     const pdf = await generatePdf(pdfData)
@@ -436,6 +442,6 @@ appApi.post('/mandate/sign', async (req: express.Request, res:express.Response /
     return res.json({ success: true, error: null })
   } catch (error) {
     functions.logger.error(error)
-    return res.json({ success: false, error: error })
+    return res.status(500).json({ success: false, error: error })
   }
 })

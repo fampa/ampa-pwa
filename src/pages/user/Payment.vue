@@ -95,6 +95,7 @@ export default {
           const language = i18n.locale
           await membersService.sendMandateMail(id, member.value, language.value)
             .then(async () => {
+              loading.value = false
               $q.notify({
                 timeout: 0,
                 type: 'info',
@@ -110,7 +111,6 @@ export default {
                 ]
               })
               await refetch()
-              loading.value = false
             })
         })
         .catch(err => {
@@ -149,8 +149,24 @@ export default {
             .catch(err => {
               console.error(err)
               loading.value = false
+              const error = err.response?.data?.error
+              $q.notify({
+                timeout: 0,
+                type: 'negative',
+                message: error,
+                actions: [
+                  {
+                    label: i18n.t('notification.close'),
+                    color: 'white',
+                    attrs: {
+                      'aria-label': 'Dismiss'
+                    }
+                  }
+                ]
+              })
             })
         } else {
+          loading.value = false
           $q.notify({
             timeout: 0,
             type: 'negative',

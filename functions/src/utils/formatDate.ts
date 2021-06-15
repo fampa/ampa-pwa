@@ -7,3 +7,8 @@ export const formatDate = (date) => {
   if (day.length < 2) day = `0${day}`
   return [day, month, year].join('/')
 }
+
+export const convertTZ = (date: Date, tzString?: string) => {
+  tzString = tzString || 'Europe/Madrid'
+  return new Date((typeof date === 'string' ? new Date(date) : date).toLocaleString('en-US', { timeZone: tzString }))
+}

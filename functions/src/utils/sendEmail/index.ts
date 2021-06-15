@@ -73,7 +73,7 @@ export async function sendEmail (obj: MailObject): Promise<Result> {
     }
   }
 
-  functions.logger.info('Contingut del missatge', message)
+  // functions.logger.info('Contingut del missatge', message)
 
   return new Promise((resolve, reject) => {
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
