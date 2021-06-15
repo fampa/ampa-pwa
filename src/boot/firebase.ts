@@ -5,6 +5,7 @@ import 'firebase/database'
 import 'firebase/storage'
 import { ref } from 'vue'
 import type { BootFileParams } from '@quasar/app'
+import { Loading } from 'quasar'
 // import { apolloClients } from 'src/extensions/apollo/boot'
 // import getMemberById from 'src/services/members/queries/getMemberById.gql'
 // import { MemberData } from 'src/models/Member'
@@ -31,9 +32,14 @@ export default boot((context: BootFileParams<unknown>) => {
       const tokenResult = await user.getIdTokenResult(true)
       // console.log('tokenResult', tokenResult)
       const hasuraClaim = tokenResult?.claims ? tokenResult.claims['https://hasura.io/jwt/claims'] as Record<string, unknown> : null
-      // si no té claims, s'acaba de registrar, recarrega la finestra
+      // si no té claims, s'acaba de registrar, mostra loading i recarrega la finestra
       if (!hasuraClaim) {
-        window.location.reload()
+        Loading.show()
+        setTimeout(() => {
+          window.location.reload()
+        }, 2000)
+      } else {
+        Loading.hide()
       }
       const firebaseUserIsAdmin = hasuraClaim ? hasuraClaim['x-hasura-default-role'] === 'admin' : false
       isAdmin.value = firebaseUserIsAdmin
