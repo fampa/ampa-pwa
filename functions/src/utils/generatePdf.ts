@@ -35,6 +35,8 @@ export const generatePdf = async (data: { image?: string, title?: string, mandat
       .text(`NIF ${functions.config().env.template.nif}`, 200, 155, { align: 'right' })
       .text(`Reg. Assoc.: ${functions.config().env.template.numRegAssoc}`, 200, 170, { align: 'right' })
       .text(functions.config().env.template.address, 200, 185, { align: 'right' })
+      .text(`${functions.config().env.template.postalCode}-${functions.config().env.template.city}`, 200, 200, { align: 'right' })
+      .text(`(${functions.config().env.template.province})`, 200, 215, { align: 'right' })
       .moveDown()
 
     // Body

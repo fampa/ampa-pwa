@@ -410,7 +410,7 @@ appApi.post('/mandate/sign', async (req: express.Request, res:express.Response /
       recurrentPayment: recurrentPayment[language],
       oneOffPayment: oneOffPayment[language],
       signaturePlaceText: signaturePlaceText[language],
-      signaturePlace: 'Alboraia',
+      signaturePlace: functions.config().env.template.city,
       signatureText: signatureText[language],
       signature: signature[language],
       signatureDateText: signatureDateText[language],

@@ -25,10 +25,16 @@
                         {{#if template.address}}
                           <span>{{template.address}}</span><br>
                         {{/if}}
+                        {{#if template.postalCode}}
+                          <span>{{template.postalCode}} - {{template.city}}</span><br>
+                        {{/if}}
+                        {{#if template.province}}
+                          <span>{{template.province}}</span><br>
+                        {{/if}}
                         {{#if template.email}}
                           <span><em>{{template.email}}</em></span><br>
                         {{/if}}
-                      Pots gestionar les teues dades i els missatges que reps en aquest <a href="{{template.siteUrl}}" target="_blank" style="text-decoration: underline; color: #999999; font-size: 12px; text-align: center;">enllaç</a>.
+                      Pots gestionar les teues dades i els missatges que reps en aquest <a href="{{template.siteUrl}}/settings" target="_blank" style="text-decoration: underline; color: #999999; font-size: 12px; text-align: center;">enllaç</a>.
                     </td>
                   </tr>
                   <tr>
