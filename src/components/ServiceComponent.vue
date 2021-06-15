@@ -8,7 +8,7 @@
           <p>{{$t('service.edit.participants')}}: {{Number(participants)}} de {{Number(service.spots)}}</p>
           <q-linear-progress :value="Number(participants)/Number(service.spots)" class="q-mt-md" />
           <p v-if="!user" class="text-caption">{{$t('member.needLogin')}}: <router-link :to="`/login?next=${route.path}`">{{$t('login')}}</router-link></p>
-          <p v-if="user && member?.family?.iban == null" class="text-caption">{{$t('member.needPayment')}}: <router-link to="/user/payment">{{$t('member.paymentData')}}</router-link></p>
+          <p v-if="user && member?.family?.signatureDate" class="text-caption">{{$t('member.needPayment')}}: <router-link to="/user/payment">{{$t('member.paymentData')}}</router-link></p>
         </div>
         <div class="col-md-6">
           <div v-if="member?.family">
@@ -17,7 +17,7 @@
                 <q-btn
                   v-if="child.hiredServices.find((h) => h.service.id === service.id)"
                   color="accent"
-                  :disable="!user || member?.family?.iban === (null || undefined || '')"
+                  :disable="!user || !member?.family?.signatureDate"
                   @click="remove(child.id)"
                   :loading="loading"
                 >
@@ -26,7 +26,7 @@
                 <q-btn
                   v-else
                   color="primary"
-                  :disable="!user || [null, undefined, ''].includes(member?.family?.iban) || (Number(service.spots) === 0) || (Number(participants)/Number(service.spots) === 1)"
+                  :disable="!user || !member?.family?.signatureDate || (Number(service.spots) === 0) || (Number(participants)/Number(service.spots) === 1)"
                   @click="join(child)"
                   :loading="loading"
                 >

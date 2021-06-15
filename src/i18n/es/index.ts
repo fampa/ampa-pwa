@@ -93,7 +93,7 @@ export default {
     lastName: 'Apellidos',
     email: 'Correo electrónico',
     needLogin: 'Necesitas estar identificado para poder proseguir',
-    needPayment: 'Necesitas facilitar los datos de domiciliación para poder proseguir',
+    needPayment: 'Necesitas facilitar los datos de domiciliación y firmar el mandato por correo electrónico para poder proseguir',
     phone: 'Teléfono',
     paymentData: 'Datos de domiciliación',
     removeAdmin: 'Quitar admin',

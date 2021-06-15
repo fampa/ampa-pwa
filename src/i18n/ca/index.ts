@@ -95,7 +95,7 @@ export default {
     phone: 'Telèfon',
     removeAdmin: 'Llevar admin',
     needLogin: 'Necessites estar identificat per poder prosseguir',
-    needPayment: 'Necessites omplir les dades de domiciliació per poder prosseguir',
+    needPayment: 'Necessites omplir les dades de domiciliació i signar el manament per correu electrònic per poder prosseguir',
     paymentData: 'Dades de domiciliació',
     userDataNotice: 'Omple primer les dades personals',
     userDataNoticeBtn: 'Aneu a Dades Personals'
