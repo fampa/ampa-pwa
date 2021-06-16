@@ -8,7 +8,7 @@
           <p>{{$t('service.edit.participants')}}: {{Number(participants)}} de {{Number(service.spots)}}</p>
           <q-linear-progress :value="Number(participants)/Number(service.spots)" class="q-mt-md" />
           <p v-if="!user" class="text-caption">{{$t('member.needLogin')}}: <router-link :to="`/login?next=${route.path}`">{{$t('login')}}</router-link></p>
-          <p v-if="user && member?.family?.signatureDate" class="text-caption">{{$t('member.needPayment')}}: <router-link to="/user/payment">{{$t('member.paymentData')}}</router-link></p>
+          <p v-if="user && !member?.family?.signatureDate" class="text-caption">{{$t('member.needPayment')}}: <router-link to="/user/payment">{{$t('member.paymentData')}}</router-link></p>
         </div>
         <div class="col-md-6">
           <div v-if="member?.family">
