@@ -63,6 +63,7 @@ export default {
     ibanNotice: 'Molt bé! Ja teniu una ordre de domiciliació en vigor. Useu el següent botó només en cas de canviar de compte.',
     mandateSigned: 'El manament de domiciliació s\'ha signat correctament',
     needNewMandate: 'Aquest enllaç de signatura ha caducat o no és vàlid. Genera un nou manament usant el botó.',
+    needSignature: 'Reviseu el vostre correu. Teniu un manament pendent de signatura.',
     required: 'Aquest camp és necessari',
     save: 'Desa',
     savedOk: 'Desat correctament',

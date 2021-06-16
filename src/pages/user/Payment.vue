@@ -16,6 +16,7 @@
         </q-input>
         <br>
         <p  v-if="member.family?.signatureDate">{{$t('forms.ibanNotice')}}</p>
+        <p  v-if="member.family?.mandateId && !member.family?.signatureDate">{{$t('forms.needSignature')}}</p>
         <q-btn :loading="loading" :disable="!iban" color="primary" :label="$t('forms.sendMandate')" @click="updateIban"/>
         <br>
         <br>

@@ -63,6 +63,7 @@ export default {
     ibanNotice: '¡Muy bién! Ya tienes una orden de domiciliación vigente. Usa el siguiente botón sólo en caso de cambio de cuenta bancaria',
     mandateSigned: 'El mandato de domiciliación se ha firmado correctamente',
     needNewMandate: 'Este enlace de firma ha caducado o no es válido. Genera un nuevo mandato usando el botón.',
+    needSignature: 'Revise su correo. Tiene un mandato pendiente de firma.',
     required: 'Este campo es necesario',
     save: 'Guardar',
     savedOk: 'Se ha guardado correctamente',
