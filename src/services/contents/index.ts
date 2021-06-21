@@ -36,9 +36,17 @@ export class ContentsService {
   }
 
   getContentById = (id: number, isAdmin = false) => {
+    const context = isAdmin ? null : {
+      context: {
+        headers: {
+          'x-hasura-role': 'public'
+        }
+      }
+    }
     const response = useQuery<ContentData>(
       getContentById,
-      () => ({ id, isAdmin })
+      () => ({ id, isAdmin }),
+      context
     )
 
     return response

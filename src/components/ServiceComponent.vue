@@ -110,7 +110,7 @@ export default defineComponent({
           emit('refetch')
           await contentsService.serviceMessage({
             from: member.value.email,
-            message: `<p>El xiquet/a ${child.firstName} ${child.lastName} (${child.birthDate})  ha sol·licitat el servei <a href="https://${process.env.FIREBASE_PROJECT_ID}.web.app${route.path}" target="_blank">${fallbackContent(props.service, 'title')}</a></p>`
+            message: `<p>${child.firstName} ${child.lastName} (${child.birthDate})  ha sol·licitat el servei <a href="https://${process.env.FIREBASE_PROJECT_ID}.web.app${route.path}" target="_blank">${fallbackContent(props.service, 'title')}</a></p>`
           })
         })
         .then(() => {
