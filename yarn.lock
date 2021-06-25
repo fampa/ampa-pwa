@@ -8105,6 +8105,13 @@ send@0.17.1:
     range-parser "~1.2.1"
     statuses "~1.5.0"
 
+sepa@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/sepa/-/sepa-1.0.3.tgz#0368622216ccb2c4407c9d8cd61a1a7768e9243e"
+  integrity sha512-Fk9swYfE+HigEZo99f98rfx85DWkgqM5dSTjvo6DYiDrHfc+YtywB0HAl3C90Sfpei8DlMhMtkNvVLdsBRH2Mg==
+  dependencies:
+    xmldom "*"
+
 serialize-error@^7.0.1:
   version "7.0.1"
   resolved "https://registry.yarnpkg.com/serialize-error/-/serialize-error-7.0.1.tgz#f1360b0447f61ffb483ec4157c737fab7d778e18"
@@ -9605,6 +9612,11 @@ xmlbuilder@^9.0.7:
   version "9.0.7"
   resolved "https://registry.yarnpkg.com/xmlbuilder/-/xmlbuilder-9.0.7.tgz#132ee63d2ec5565c557e20f4c22df9aca686b10d"
   integrity sha1-Ey7mPS7FVlxVfiD0wi35rKaGsQ0=
+
+xmldom@*:
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/xmldom/-/xmldom-0.6.0.tgz#43a96ecb8beece991cef382c08397d82d4d0c46f"
+  integrity sha512-iAcin401y58LckRZ0TkI4k0VSM1Qg0KGSc3i8rU+xrxe19A/BN1zHyVSJY7uoutVlaTSzYyk/v5AmkewAP7jtg==
 
 xmldom@^0.5.0:
   version "0.5.0"

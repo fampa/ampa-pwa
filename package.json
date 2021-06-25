@@ -36,6 +36,7 @@
     "ibantools": "^3.3.0",
     "path": "^0.12.7",
     "quasar": "^2.0.0-beta.1",
+    "sepa": "^1.0.3",
     "spain-id": "^1.1.4",
     "subscriptions-transport-ws": "^0.9.18",
     "vue-i18n": "^9.0.0-beta.0",

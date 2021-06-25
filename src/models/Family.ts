@@ -1,11 +1,13 @@
 /* eslint-disable camelcase */
 import { Child } from './Child'
+import { Member } from './Member'
 
 export interface Family {
   id?: number
   name?: string
   children?: Child[]
   iban?: string
+  owner?: Member
   ownerId?: string
   mandateId?: string
   mandateSignatureCode?: string

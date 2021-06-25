@@ -135,7 +135,7 @@ export default {
       type: type.value
     }
     const sanitizeVariables = cleanObject(variables)
-    const { result, onResult, loading, fetchMore, refetch } = adminService.getContentsByType(sanitizeVariables)
+    const { result, onResult, onError, loading, fetchMore, refetch } = adminService.getContentsByType(sanitizeVariables)
 
     onResult(() => {
       contents.value = result.value?.content
@@ -182,6 +182,13 @@ export default {
       const type = to.params?.type.toString()
       const newVariables = { ...variables, type }
       await refetch(newVariables)
+    })
+
+    // Error management
+
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+    onError(async () => {
+      await router.push('/')
     })
 
     return {

@@ -126,6 +126,11 @@ export default {
     question: '¿Seguro que queréis eliminar eso?',
     confirm: 'Eliminado correctamente'
   },
+  remesa: {
+    concept: 'Concepto',
+    amount: 'Cuantía',
+    generate: 'Generar'
+  },
   service: {
     edit: {
       availability: 'Disponibilidad',

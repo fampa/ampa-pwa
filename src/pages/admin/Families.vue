@@ -22,7 +22,7 @@
         <q-space />
         <q-btn v-if="ibanIsNull" flat icon="las la-eye" :disable="loading" :label="$t('table.showWithIban')" @click="toggleIsIbanNull" />
         <q-btn v-if="!ibanIsNull" flat icon="las la-eye-slash" :disable="loading" :label="$t('table.showWithoutIban')" @click="toggleIsIbanNull" />
-        <q-btn v-if="selected.length > 0" @click="openSendMessage = true" class="q-ml-sm" icon="las la-money-check-alt" color="primary" :disable="loading" :label="$t('table.remesa')" />
+        <q-btn v-if="selected.length > 0" :disable="ibanIsNull || loading" @click="openXmlGenerator" class="q-ml-sm" icon="las la-money-check-alt" color="primary"  :label="$t('table.remesa')" />
         <q-space />
         <q-input borderless dense debounce="300" v-model="filter" clearable clear-icon="close" :placeholder="$t('table.search')">
           <template v-slot:append>
@@ -43,7 +43,8 @@
       <q-page-sticky position="bottom-right" :offset="[18, 18]">
         <q-btn fab icon="add" color="primary" to="/admin/users/edit" />
       </q-page-sticky>
-      <!-- send message -->
+      <!-- xml generator -->
+      <xml-generator :prompt="isXmlGeneratorOpen" @cancel="xmlCancel" @generate="generateXml($event)"></xml-generator>
     </div>
   </q-page>
 </template>
@@ -57,9 +58,14 @@ import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 // import { useQuasar } from 'quasar'
 import { Family } from 'src/models/Family'
+import SEPA from 'sepa'
+import xmlGenerator from 'src/components/xml-generator.vue'
 
 export default {
   name: 'AdminMembers',
+  components: {
+    xmlGenerator
+  },
   emits: ['row-click'],
   setup () {
     const i18n = useI18n()
@@ -70,6 +76,7 @@ export default {
     // Data
     const families = ref<Family[]>([])
     const filter = ref<string | null>(null)
+    const isXmlGeneratorOpen = ref(false)
     const ibanIsNull = ref(false)
     const pagination = ref({
       sortBy: 'createdAt',
@@ -129,7 +136,7 @@ export default {
       filter: filter.value
     }
     const sanitizeVariables = cleanObject(variables)
-    const { result, onResult, loading, fetchMore, refetch } = adminService.getFamilies(sanitizeVariables)
+    const { result, onResult, onError, loading, fetchMore, refetch } = adminService.getFamilies(sanitizeVariables)
 
     onResult(() => {
       families.value = result.value?.families
@@ -178,6 +185,62 @@ export default {
       await refetch({ ...variables, ibanIsNull: ibanIsNull.value })
     }
 
+    const openXmlGenerator = () => { isXmlGeneratorOpen.value = true }
+
+    const download = (filename, text) => {
+      const element = document.createElement('a')
+      element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text))
+      element.setAttribute('download', filename)
+
+      element.style.display = 'none'
+      document.body.appendChild(element)
+
+      element.click()
+
+      document.body.removeChild(element)
+    }
+
+    const generateXml = (remesa) => {
+      const families = selected.value as Family[]
+      const doc = new SEPA.Document('pain.008.001.02')
+      doc.grpHdr.id = `XMPL.${Date.now()}.TR0`
+      doc.grpHdr.created = new Date()
+      doc.grpHdr.initiatorName = `AMPA ${process.env.SCHOOL_NAME}`
+
+      const info = doc.createPaymentInfo()
+      info.collectionDate = new Date()
+      info.creditorIBAN = process.env.AMPA_IBAN
+      info.creditorName = `AMPA ${process.env.SCHOOL_NAME}`
+      info.creditorId = 'DE98ZZZ09999999999'
+      info.batchBooking = true // optional
+      doc.addPaymentInfo(info)
+
+      for (const family of families) {
+        const tx = info.createTransaction()
+        tx.debtorName = `${family.owner.firstName} ${family.owner.lastName}`
+        tx.debtorIBAN = family.iban
+        // tx.debtorBIC = family.bic
+        tx.mandateId = family.mandateId
+        tx.mandateSignatureDate = new Date(family.signatureDate)
+        tx.amount = Number(remesa?.amount)
+        tx.currency = 'EUR' // optional
+        tx.remittanceInfo = remesa?.concept
+        // tx.end2endId = 'XMPL.CUST487.INVOICE.54'
+        info.addTransaction(tx)
+      }
+
+      // console.log(doc.toString())
+
+      download('remesa.xml', doc.toString())
+    }
+
+    // Error management
+
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+    onError(async () => {
+      await router.push('/')
+    })
+
     return {
       families,
       getSelectedString,
@@ -189,7 +252,11 @@ export default {
       onRequest,
       onRowClick,
       ibanIsNull,
-      toggleIsIbanNull
+      toggleIsIbanNull,
+      generateXml,
+      openXmlGenerator,
+      isXmlGeneratorOpen,
+      xmlCancel: () => { isXmlGeneratorOpen.value = !isXmlGeneratorOpen.value }
     }
   }
 

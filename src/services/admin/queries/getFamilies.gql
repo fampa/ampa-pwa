@@ -9,6 +9,8 @@ query getFamilies($filter: String = "%%", $limit: Int, $offset: Int, $orderBy: [
     updatedAt
     name
     iban
+    mandateId
+    signatureDate
     owner {
       id
       firstName

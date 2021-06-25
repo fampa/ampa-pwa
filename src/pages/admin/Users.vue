@@ -149,7 +149,7 @@ export default {
       filter: filter.value
     }
     const sanitizeVariables = cleanObject(variables)
-    const { result, onResult, loading, fetchMore } = adminService.getMembers(sanitizeVariables)
+    const { result, onResult, onError, loading, fetchMore } = adminService.getMembers(sanitizeVariables)
     const { mutate: sendMessageMutate } = adminService.addMessage()
     const { mutate: addMessageMembersMutate } = adminService.addMessageMembers()
     onResult(() => {
@@ -232,6 +232,13 @@ export default {
     const messageCancel = () => {
       openSendMessage.value = false
     }
+
+    // Error management
+
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+    onError(async () => {
+      await router.push('/')
+    })
 
     return {
       members,

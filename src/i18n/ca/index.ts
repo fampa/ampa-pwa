@@ -121,6 +121,11 @@ export default {
     <p>Podeu exercir els vostres drets d'accés, rectificació i cancel·lació mitjançant el formulari de contacte.</p> 
     `
   },
+  remesa: {
+    concept: 'Concepte',
+    amount: 'Quantia',
+    generate: 'Genera'
+  },
   settings: {
     title: 'Preferències',
     email: 'Rebre comunicacions per email',
