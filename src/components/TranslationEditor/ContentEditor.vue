@@ -8,6 +8,7 @@
           :flat="!editor?.isActive('bold')"
           color="primary"
           size="sm"
+          :disable="!hasFocus"
           round
         />
 
@@ -17,6 +18,7 @@
           :flat="!editor?.isActive('italic')"
           color="primary"
           size="sm"
+          :disable="!hasFocus"
           round
         />
 
@@ -26,6 +28,7 @@
           :flat="!editor?.isActive('strike')"
           color="primary"
           size="sm"
+          :disable="!hasFocus"
           round
         />
 
@@ -35,6 +38,7 @@
           :flat="!editor?.isActive('underline')"
           color="primary"
           size="sm"
+          :disable="!hasFocus"
           round
         />
 
@@ -44,6 +48,7 @@
           :flat="!editor?.isActive('link')"
           color="primary"
           size="sm"
+          :disable="!hasFocus"
           round
         />
 
@@ -54,6 +59,7 @@
           :flat="!editor?.isActive('link')"
           color="primary"
           size="sm"
+          :disable="!hasFocus"
           round
         />
 
@@ -63,6 +69,7 @@
           :flat="!editor?.isActive('paragraph')"
           color="primary"
           size="sm"
+          :disable="!hasFocus"
           round
         /> -->
 
@@ -72,6 +79,7 @@
           color="primary"
           size="sm"
           round
+          :disable="!hasFocus"
           label="H1"
         />
 
@@ -81,6 +89,7 @@
           color="primary"
           size="sm"
           round
+          :disable="!hasFocus"
           label="H2"
         />
 
@@ -90,6 +99,7 @@
           color="primary"
           size="sm"
           round
+          :disable="!hasFocus"
           label="H3"
         />
 
@@ -99,6 +109,7 @@
           :flat="!editor?.isActive('bulletList')"
           color="primary"
           size="sm"
+          :disable="!hasFocus"
           round
         />
 
@@ -108,6 +119,7 @@
           :flat="!editor?.isActive('orderedList')"
           color="primary"
           size="sm"
+          :disable="!hasFocus"
           round
         />
 
@@ -117,6 +129,7 @@
           :flat="!editor?.isActive('blockquote')"
           color="primary"
           size="sm"
+          :disable="!hasFocus"
           round
         />
 
@@ -126,6 +139,7 @@
           :flat="!editor?.isActive('image')"
           color="primary"
           size="sm"
+          :disable="!hasFocus"
           round
         />
 
@@ -135,6 +149,7 @@
           color="primary"
           size="sm"
           flat
+          :disable="!hasFocus"
           round
         />
 
@@ -144,6 +159,7 @@
           color="primary"
           size="sm"
           flat
+          :disable="!hasFocus"
           round
         />
 
@@ -153,6 +169,7 @@
           color="primary"
           size="sm"
           flat
+          :disable="!hasFocus"
           round
         />
 
@@ -162,6 +179,7 @@
           :flat="!editor?.isActive('code')"
           color="primary"
           size="sm"
+          :disable="!hasFocus"
           round
         />
 
@@ -171,6 +189,7 @@
           :flat="!editor?.isActive('codeBlock')"
           color="primary"
           size="sm"
+          :disable="!hasFocus"
           round
         /> -->
 
