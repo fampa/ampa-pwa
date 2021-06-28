@@ -1,4 +1,4 @@
-# AMPA PWA (ampa-pwa)
+# AMPA OBERTA (ampa-pwa)
 
 PWA de gestió del AMPA
 
