@@ -260,7 +260,15 @@ export default {
         if (success) {
         // yay, models are correct
           // console.log('success')
-          await mutateChildren({ children: childrenData.children })
+          const children = childrenData?.children.map(child => {
+            return {
+              familyId: child.familyId,
+              firstName: child.firstName,
+              lastName: child.lastName,
+              birthDate: child.birthDate
+            }
+          })
+          await mutateChildren({ children })
           if (shouldUpdateFamilyName.value) {
             await upsertFamily()
               .then(() => store.dispatch('user/setMember', id.value))
