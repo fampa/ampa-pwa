@@ -14,6 +14,7 @@ import { manageCommunications } from '../utils/manageComunications'
 import { v4 as uuidv4 } from 'uuid'
 import { generatePdf } from '../utils/generatePdf'
 import { convertTZ } from '../utils/formatDate'
+// import { importUsers } from '../utils/users'
 import { signatureCodeText, signedSubject, signedMessage, subject, message, title, mandateIdText, mandateText, debtorName, ibanNumber, paymentTypeText, recurrentPayment, oneOffPayment, signaturePlaceText, signatureText, signature, signatureDateText } from '../utils/mandateTranslations'
 
 admin.initializeApp()
@@ -445,3 +446,11 @@ appApi.post('/mandate/sign', async (req: express.Request, res:express.Response /
     return res.status(500).json({ success: false, error: error })
   }
 })
+
+// // eslint-disable-next-line @typescript-eslint/no-misused-promises
+// appApi.get('/importUsers', async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+//   // eslint-disable-next-line @typescript-eslint/no-var-requires
+//   const users = require('./users.json')
+//   await importUsers(users)
+//   return res.status(200).json({ success: true, error: null })
+// })

@@ -56,3 +56,17 @@ export const userRemoved = async (user: admin.auth.UserRecord) => {
 
   await removeUser(id)
 }
+
+export const importUsers = async (users) => {
+  await admin
+    .auth()
+    .importUsers(users)
+    .then((results) => {
+      results.errors.forEach((indexedError) => {
+        functions.logger.info(`Error importing user ${indexedError.index}`)
+      })
+    })
+    .catch((error) => {
+      functions.logger.error('Error importing users :', error)
+    })
+}
