@@ -11,6 +11,11 @@ query getFamilies($filter: String = "%%", $limit: Int, $offset: Int, $orderBy: [
     iban
     mandateId
     signatureDate
+    members {
+      id
+      firstName
+      lastName
+    }
     owner {
       id
       firstName
