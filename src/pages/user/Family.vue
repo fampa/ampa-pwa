@@ -261,12 +261,8 @@ export default {
         // yay, models are correct
           // console.log('success')
           const children = childrenData?.children.map(child => {
-            return {
-              familyId: child.familyId,
-              firstName: child.firstName,
-              lastName: child.lastName,
-              birthDate: child.birthDate
-            }
+            delete child.hiredServices
+            return child
           })
           await mutateChildren({ children })
           if (shouldUpdateFamilyName.value) {
