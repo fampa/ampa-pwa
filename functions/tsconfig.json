@@ -10,7 +10,7 @@
     "noImplicitAny": false,
     "skipLibCheck": true,
     "esModuleInterop": true,
-    "strictNullChecks": false,
+    "strictNullChecks": false
   },
   "compileOnSave": true,
   "include": [
