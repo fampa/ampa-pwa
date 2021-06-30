@@ -211,13 +211,13 @@ export default {
       info.collectionDate = new Date()
       info.creditorIBAN = process.env.AMPA_IBAN
       info.creditorName = `AMPA ${process.env.SCHOOL_NAME}`
-      info.creditorId = 'DE98ZZZ09999999999'
+      info.creditorId = process.env.CREDITOR_ID
       info.batchBooking = true // optional
       doc.addPaymentInfo(info)
 
       for (const family of families) {
         const tx = info.createTransaction()
-        tx.debtorName = `${family.owner.firstName} ${family.owner.lastName}`
+        tx.debtorName = family.owner ? `${family.owner?.firstName} ${family.owner?.lastName}` : `${family.members[0]?.firstName} ${family.members[0]?.lastName}`
         tx.debtorIBAN = family.iban
         // tx.debtorBIC = family.bic
         tx.mandateId = family.mandateId

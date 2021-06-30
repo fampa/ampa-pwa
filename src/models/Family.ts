@@ -10,6 +10,7 @@ export interface Family {
   owner?: Member
   ownerId?: string
   mandateId?: string
+  members?: Member[]
   mandateSignatureCode?: string
   signatureDate?: Date | string
   createdAt?: Date | string
