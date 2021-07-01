@@ -1,7 +1,7 @@
 export default {
   admin: {
     users: 'Gestión de usuarios',
-    pages: 'Gestión de págines',
+    pages: 'Gestión de páginas',
     family: 'Gestión de familias',
     services: 'Gestión de servicios',
     blog: 'Gestión del blog',
@@ -103,7 +103,7 @@ export default {
   },
   menu: {
     AmpaServices: 'LOS SERVICIOS DEL AMPA',
-    contact: 'Contacte',
+    contact: 'Contacto',
     featured: 'DESTACADO',
     YourData: 'TUS DATOS'
   },
