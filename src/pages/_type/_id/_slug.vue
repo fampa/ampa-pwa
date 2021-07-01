@@ -183,33 +183,33 @@ export default defineComponent({
       titleTemplate: title => `${title} - AMPA`,
       // meta tags
       meta: {
+        description: { name: 'description', content: `${fallbackContent(content.value, 'title')}` },
+        ogTitle: { name: 'og:title', content: `${fallbackContent(content.value, 'title')} - AMPA` },
+        ogDescription: { name: 'og:description', content: `${fallbackContent(content.value, 'title')}` },
+        ogUrl: {
+          name: 'og:url',
+          content: `${mainUrl}${route?.fullPath}`
+        },
+        ogImage: {
+          name: 'og:image',
+          content: content.value?.image
+        },
+        ogType: { name: 'og:type', content: 'website' },
         twitterCard: {
           property: 'twitter:card',
-          // optional; similar to titleTemplate, but allows templating with other meta properties
-          template () {
-            return 'summary_large_image'
-          }
+          content: 'summary_large_image'
         },
         twitterTitle: {
           property: 'twitter:title',
-          // optional; similar to titleTemplate, but allows templating with other meta properties
-          template () {
-            return `${fallbackContent(content.value, 'title')} - AMPA`
-          }
+          content: `${fallbackContent(content.value, 'title')} - AMPA`
         },
         twitterDescription: {
           property: 'twitter:description',
-          // optional; similar to titleTemplate, but allows templating with other meta properties
-          template () {
-            return fallbackContent(content.value, 'title')
-          }
+          content: `${fallbackContent(content.value, 'title')}`
         },
         twitterImage: {
           property: 'twitter:image',
-          // optional; similar to titleTemplate, but allows templating with other meta properties
-          template () {
-            return content.value?.image
-          }
+          content: `${content.value?.image}`
         }
       }
     })
