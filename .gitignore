@@ -41,3 +41,5 @@ functions/env.json
 functions/lib
 
 public/firebase-messaging-sw.js
+
+.firebaserc

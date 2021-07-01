@@ -3,6 +3,9 @@ import { i18n } from 'src/boot/i18n'
 
 export const fallbackContent = (content: Content, field: string, currentLocale?: string) => {
   currentLocale = currentLocale || i18n.global.locale
+  if (content.translations.length === 0) {
+    return ''
+  }
   const availableContent = content.translations.find(tr => tr.language === currentLocale)[field]
 
   if (availableContent?.length > 0) {
