@@ -71,7 +71,8 @@ export class ContentsService {
       getContentsFrontPage,
       () => ({ type, offset, limit }),
       {
-        nextFetchPolicy: 'no-cache',
+        fetchPolicy: 'cache-and-network',
+        nextFetchPolicy: 'cache-and-network',
         notifyOnNetworkStatusChange: true
       }
     )
