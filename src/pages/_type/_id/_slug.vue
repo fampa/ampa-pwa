@@ -75,7 +75,7 @@ export default defineComponent({
     // called before the route that renders this component is confirmed.
     // does NOT have access to `this` component instance,
     // because it has not been created yet when this guard is called!
-    const allowedTypes = ['page', 'article', 'service', 'tag']
+    const allowedTypes = ['page', 'article', 'blog', 'service', 'tag']
     if (allowedTypes.includes(to.params?.type as string)) {
       next()
     } else {
