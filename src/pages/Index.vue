@@ -10,6 +10,7 @@
           class="col-12 col-sm-6 col-md-4 q-pa-sm"
           v-for="(item, index) in 6"
           :key="index"
+          :class="{'col-md-6': index === 0 || index === 1, 'col-sm-12': index === 0 }"
         >
           <q-card class="news-card">
             <q-skeleton height="200px" square />
@@ -30,8 +31,9 @@
         <div class="row items-start">
           <div
             class="col-12 col-sm-6 col-md-4 q-pa-sm"
-            v-for="article in articles"
+            v-for="(article, index) in articles"
             :key="article.id"
+            :class="{'col-md-6': index === 0 || index === 1, 'col-sm-12': index === 0 }"
           >
             <news-card :article="article"></news-card>
           </div>
@@ -115,3 +117,10 @@ export default defineComponent({
   }
 })
 </script>
+
+<style lang="scss">
+.items-start > .card-holder {
+  width: 50%;
+}
+
+</style>
