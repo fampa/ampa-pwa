@@ -175,7 +175,7 @@ export default {
   table: {
     article: 'Artículos',
     date: 'Fecha',
-    families: 'Famílies',
+    families: 'Familias',
     firstName: 'Nombre',
     lastName: 'Apellidos',
     members: 'Miembros',
