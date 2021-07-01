@@ -193,11 +193,11 @@ export default {
     type: 'Tipo'
   },
   tag: {
-    add: 'Afegeix etiquetes',
-    edit: 'Edita una etiqueta'
+    add: 'Añadir etiquetas',
+    edit: 'Editar una etiqueta'
   },
   terms: {
-    title: 'Condicions del servei',
+    title: 'Condicions del servicio',
     content: `
     <p>Mediante el uso de esta aplicación entendemos que estás de acuerdo en recibir información sobre el AMPA así como formar parte de ella de forma activa, facilitando tus datos reales y actualizados. </p>
     <p>El AMPA es una organización sin ánimo de lucro que se financia mediante las cuotas de sus afiliados y los servicios que ofrece pueden ser subcontratados, y pueden ser retirados o sustituidos sin previo aviso. </p>
