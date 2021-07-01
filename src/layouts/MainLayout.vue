@@ -12,7 +12,7 @@
         />
 
         <q-toolbar-title>
-          AMPA
+          AMPA {{schoolName}}
         </q-toolbar-title>
 
         <q-btn-dropdown aria-label="messages-button" v-if="member" dropdown-icon="las la-bell" :label="member?.messages_aggregate?.aggregate?.count" flat rounded no-icon-animation>
@@ -181,6 +181,7 @@ export default defineComponent({
     const messaging = firebase.messaging()
     const contentsService = new ContentsService()
     const currentLanguage = computed(() => store.state.settings.language)
+    const schoolName = process.env.SCHOOL_NAME
     const user = computed(() => {
       return store.state.user.user
     })
@@ -348,7 +349,8 @@ export default defineComponent({
       toggleLeftDrawer,
       isAdmin,
       member,
-      date
+      date,
+      schoolName
     }
   }
 })
