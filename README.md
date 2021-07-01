@@ -14,7 +14,7 @@ Before you begin you will need to have the database and GraphQL API up and runni
 
 Copy or rename `.env.example` file to `.env`, and `functions/env.json.example` to `functions/env.json`, and fill the variables.
 
-Change `.firebaserc` file content with your firebase project id.
+Rename `.firebaserc.example` to `.firebaserc` and change your default firebase project id.
 
 ## Prerequisits to be able to deploy to firebase
 
