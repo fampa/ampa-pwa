@@ -33,7 +33,8 @@ module.exports = configure(function (/* ctx */) {
       'apollo',
       'store',
       'firebase',
-      'quasar-lang-pack'
+      'quasar-lang-pack',
+      'vue-social-sharing'
     ],
 
     // https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-css
@@ -122,7 +123,8 @@ module.exports = configure(function (/* ctx */) {
       plugins: [
         'Notify',
         'Dialog',
-        'LocalStorage'
+        'LocalStorage',
+        'Meta'
       ]
     },
 

@@ -17,7 +17,7 @@
       </div>
       <div class="article" :class="{'bg-white': content.type !== 'tag'}" v-else-if="content">
         <h1 class="title">{{fallbackContent(content, 'title')}}</h1>
-        <div class="subtitle" v-if="content.type === 'article'"><strong>{{formatedDate}}</strong>. <span class="updated" v-if="showUpdate">{{$t('updatedAt', {date: formatedUpdatedDate})}}</span></div>
+        <div class="subtitle" v-if="content.type === 'article'"><strong>{{formatedDate}}</strong>. <br> <span class="updated" v-if="showUpdate">{{$t('updatedAt', {date: formatedUpdatedDate})}}</span></div>
           <div class="row">
             <div v-for="(t, index) in content.tags" :key="index">
               <q-chip dense clickable @click="$router.push(`/tag/${t.tag.id}/${fallbackContent(t.tag, 'slug')}`)" color="accent" text-color="white" icon="las la-tag">
@@ -31,6 +31,21 @@
           :src="content.image">
         </q-img>
         <div class="content" v-html="fallbackContent(content, 'content')"></div>
+
+        <!-- is article -->
+        <div v-if="content.type === 'article'" class="content share-network-list">
+          <ShareNetwork
+          v-for="network in networks"
+          :key="network.network"
+          :network="network.network"
+          :url="mainUrl + $route.fullPath"
+          :title="fallbackContent(content, 'title')"
+            hashtags="ampa"
+        >
+          <q-btn :style="`background: ${network.color}; color: white; margin: 0.5rem 0;`" :icon="network.icon" :label="network.name" />
+        </ShareNetwork>
+        </div>
+
         <!-- is tag -->
         <div v-if="content.type === 'tag'">
             <div class="row items-start">
@@ -58,7 +73,7 @@
 
 <script lang="ts">
 import { defineComponent, computed, ref, reactive, toRefs } from 'vue'
-import { date } from 'quasar'
+import { date, useMeta } from 'quasar'
 import { useRoute, useRouter, onBeforeRouteUpdate } from 'vue-router'
 import { useStore } from 'src/services/store'
 import { useI18n } from 'vue-i18n'
@@ -90,13 +105,48 @@ export default defineComponent({
     const store = useStore()
     // const $q = useQuasar()
     const i18n = useI18n()
+    const mainUrl = process.env.MAIN_URL
     const isAdmin = computed(() => store.state.user.isAdmin)
+    const networks = [
+      {
+        network: 'email',
+        name: 'Email',
+        icon: 'las la-envelope',
+        color: '#333333'
+      },
+      {
+        network: 'facebook',
+        name: 'Facebook',
+        icon: 'lab la-facebook',
+        color: '#3B5998'
+      },
+
+      {
+        network: 'telegram',
+        name: 'Telegram',
+        icon: 'lab la-telegram',
+        color: '#0088cc'
+      },
+      {
+        network: 'twitter',
+        name: 'Twitter',
+        icon: 'lab la-twitter',
+        color: '#1da1f2'
+      },
+      {
+        network: 'whatsapp',
+        name: 'Whatsapp',
+        icon: 'lab la-whatsapp',
+        color: '#25d366'
+      }
+    ]
 
     // Data
     const content = ref<Content>()
     const contentsList = ref<Content[]>(null)
     const showUpdate = ref<boolean>(false)
     const tagId = ref<number>(null)
+    // const type = computed(() => route.params?.type)
 
     const data = reactive({
       page: 1,
@@ -125,6 +175,46 @@ export default defineComponent({
         await refetchTags({ ...variables.value, id: content.value?.id })
       }
     })
+
+    const metaData = ref({
+      // sets document title
+      title: fallbackContent(content?.value, 'title'),
+      // optional; sets final title as "Index Page - My Website", useful for multiple level meta
+      titleTemplate: title => `${title} - AMPA`,
+      // meta tags
+      meta: {
+        twitterCard: {
+          property: 'twitter:card',
+          // optional; similar to titleTemplate, but allows templating with other meta properties
+          template () {
+            return 'summary_large_image'
+          }
+        },
+        twitterTitle: {
+          property: 'twitter:title',
+          // optional; similar to titleTemplate, but allows templating with other meta properties
+          template () {
+            return `${fallbackContent(content.value, 'title')} - AMPA`
+          }
+        },
+        twitterDescription: {
+          property: 'twitter:description',
+          // optional; similar to titleTemplate, but allows templating with other meta properties
+          template () {
+            return fallbackContent(content.value, 'title')
+          }
+        },
+        twitterImage: {
+          property: 'twitter:image',
+          // optional; similar to titleTemplate, but allows templating with other meta properties
+          template () {
+            return content.value?.image
+          }
+        }
+      }
+    })
+
+    useMeta(metaData.value)
 
     onContentsByTagIdResult(() => {
       if (content.value?.type === 'tag') {
@@ -186,7 +276,9 @@ export default defineComponent({
       refetchContent,
       fallbackContent,
       showUpdate,
-      onLoad
+      onLoad,
+      networks,
+      mainUrl
     }
   }
 })
@@ -214,5 +306,10 @@ export default defineComponent({
   margin: auto auto;
   padding: 2rem;
   border-radius: 15px;
+}
+.share-network-list * {
+  margin-right: 1rem;
+  color: white;
+  font-size: 0.8rem;
 }
 </style>
