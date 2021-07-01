@@ -8,11 +8,8 @@ const routes: RouteRecordRaw[] = [
     children: [{ path: '', component: () => import('pages/Index.vue') }]
   },
   {
-    path: '/es/blog/:id/:slug?',
-    redirect: '/:type/:id/:slug?'
-  },
-  {
     path: '/:type/:id/:slug?',
+    alias: ['/es/:type/:id/:slug?', '/ca/:type/:id/:slug?'],
     component: () => import('layouts/MainLayout.vue'),
     children: [{ path: '', component: () => import('pages/_type/_id/_slug.vue') }]
   },
