@@ -73,7 +73,7 @@
           round
         /> -->
 
-        <q-btn
+        <!-- <q-btn
           @click="editor.commands.toggleHeading({ level: 1 })"
           :flat="!editor?.isActive('heading', { level: 1 })"
           color="primary"
@@ -81,7 +81,7 @@
           round
           :disable="!hasFocus"
           label="H1"
-        />
+        /> -->
 
         <q-btn
           @click="editor.commands.toggleHeading({ level: 2 })"
