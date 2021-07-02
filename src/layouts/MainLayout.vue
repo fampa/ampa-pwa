@@ -178,7 +178,10 @@ export default defineComponent({
     const i18n = useI18n()
     const store = useStore()
     const $q = useQuasar()
-    const messaging = firebase.messaging()
+    let messaging
+    if (firebase.messaging.isSupported()) {
+      messaging = firebase.messaging()
+    }
     const contentsService = new ContentsService()
     const currentLanguage = computed(() => store.state.settings.language)
     const schoolName = process.env.SCHOOL_NAME
@@ -224,6 +227,7 @@ export default defineComponent({
     })
 
     onMounted(() => {
+      if (!firebase.messaging.isSupported()) return
       // eslint-disable-next-line @typescript-eslint/no-misused-promises
       messaging.onMessage(async (payload) => {
         console.log('[firebase-messaging-sw.js] Received foreground message ', payload)
