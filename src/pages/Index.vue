@@ -4,7 +4,7 @@
             enter-active-class="animated fadeOutLeft"
             leave-active-class="animated fadeInRight">
   <q-page class="bg-grey-2 q-pa-md">
-    <div v-if="!articles && loading">
+    <div v-if="!cleanArticles && loading">
       <div class="row items-start">
         <div
           class="col-12 col-sm-6 col-md-4 q-pa-sm"
@@ -26,13 +26,13 @@
         </div>
       </div>
     </div>
-    <div v-else-if="articles">
+    <div v-else-if="cleanArticles">
       <q-infinite-scroll @load="onLoad">
         <div class="row items-start">
           <div
             class="col-12 col-sm-6 col-md-4 q-pa-sm"
-            v-for="(article, index) in articles"
-            :key="article.id"
+            v-for="(article, index) in cleanArticles"
+            :key="article?.id"
             :class="{'col-md-6': index === 0 || index === 1, 'col-sm-12': index === 0 }"
           >
             <news-card :article="article"></news-card>
@@ -51,7 +51,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, ref } from 'vue'
+import { defineComponent, reactive, ref, computed } from 'vue'
 // import { useStore } from 'src/services/store'
 import NewsCard from 'components/NewsCard.vue'
 // import { useQuasar } from 'quasar'
@@ -82,6 +82,12 @@ export default defineComponent({
       }
     })
 
+    const cleanArticles = computed(() => {
+      const array = articles.value
+      const articlesOutput = array.filter((v, i, a) => a.findIndex(t => (t.id === v.id)) === i)
+      return articlesOutput
+    })
+
     const onLoad = async (_, done) => {
       // console.log('onLoad')
       data.page++
@@ -110,7 +116,7 @@ export default defineComponent({
     })
 
     return {
-      articles,
+      cleanArticles,
       loading,
       onLoad
     }
