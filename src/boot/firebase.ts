@@ -24,6 +24,9 @@ const config = {
 export default boot((context: BootFileParams<unknown>) => {
   firebase.initializeApp(config)
 
+  // add analytics capabilities
+  firebase.analytics()
+
   // monitor user
   const firebaseUser = ref<firebase.User | null>(null)
   const isAdmin = ref<boolean>(false)
