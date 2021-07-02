@@ -72,7 +72,7 @@ export class ContentsService {
       () => ({ type, offset, limit }),
       {
         fetchPolicy: 'cache-and-network',
-        nextFetchPolicy: 'cache-and-network',
+        nextFetchPolicy: 'cache-first',
         notifyOnNetworkStatusChange: true
       }
     )
