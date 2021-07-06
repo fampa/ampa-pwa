@@ -43,6 +43,7 @@ query getContentsByType($filter: String = "%%", $limit: Int, $offset: Int, $orde
     icon
     isPublished
     isMenu
+    link
     tags {
     	tag {
         id

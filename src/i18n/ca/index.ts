@@ -5,7 +5,8 @@ export default {
     services: 'Gestió de serveis',
     family: 'Gestió de famílies',
     blog: 'Gestió del blog',
-    tags: 'Gestió d\'etiquetes'
+    tags: 'Gestió d\'etiquetes',
+    link: 'Gestió d\'enllaços'
   },
   backToHome: 'Torna a la pàgina principal',
   content: {
@@ -14,6 +15,7 @@ export default {
     delete: 'Esborra',
     draft: 'Esborrany',
     isMenu: 'Incloure al menú',
+    link: 'Url de l\'enllaç',
     placeholder: 'Escriu alguna cosa ací...',
     publishOrSave: 'L\'article es troba en estat esborrany. Voleu només desar-lo o desar-lo i publicar-lo?',
     published: 'Publicat',
@@ -178,6 +180,7 @@ export default {
     families: 'Famílies',
     firstName: 'Nom',
     lastName: 'Cognoms',
+    link: 'Enllaços',
     members: 'Membres',
     page: 'Pàgines',
     title: 'Títol',

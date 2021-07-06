@@ -120,6 +120,22 @@
             </q-item-section>
           </q-item>
         </div>
+        <div v-if="linkItems">
+          <q-separator />
+            <q-item>
+              <q-item-section>
+                  <q-item-label overline>{{$t('table.link')}}</q-item-label>
+              </q-item-section>
+            </q-item>
+          <q-item v-for="(item, index) in linkItems" :key="index" clickable v-ripple @click="goTo(item.to)" exact>
+            <q-item-section avatar>
+              <q-icon :name="item.icon" />
+            </q-item-section>
+            <q-item-section>
+              {{item.title}}
+            </q-item-section>
+          </q-item>
+        </div>
         <div v-if="user">
           <q-separator />
             <q-item>
@@ -200,6 +216,8 @@ export default defineComponent({
 
     const tagItems = ref<menuItem[]>([])
 
+    const linkItems = ref<menuItem[]>([])
+
     const pagesItems = ref<menuItem[]>([])
 
     const { result: menuItems, onResult: onMenuItemsResult } = contentsService.getMenuItems()
@@ -219,6 +237,15 @@ export default defineComponent({
           title,
           icon: page.icon,
           to: `/tag/${page.id}/${fallbackContent(page, 'slug')}`
+        }
+      })
+
+      linkItems.value = menuItems.value?.content?.filter(m => m.type === 'link').map(page => {
+        const title = fallbackContent(page, 'title')
+        return {
+          title,
+          icon: page.icon,
+          to: page.link
         }
       })
     }
@@ -326,6 +353,11 @@ export default defineComponent({
           title: i18n.t('admin.tags'),
           icon: 'las la-tags',
           to: '/admin/tag'
+        },
+        {
+          title: i18n.t('admin.link'),
+          icon: 'las la-external-link-alt',
+          to: '/admin/link'
         }
       ]
     })
@@ -354,7 +386,9 @@ export default defineComponent({
       isAdmin,
       member,
       date,
-      schoolName
+      schoolName,
+      linkItems,
+      goTo: (to) => window.open(to, '_blank')
     }
   }
 })
