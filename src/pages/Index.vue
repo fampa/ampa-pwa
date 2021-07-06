@@ -85,7 +85,7 @@ export default defineComponent({
     // This is a bit of a hack but we need to manually remove duplicated results due to this issue: https://github.com/apollographql/apollo-client/issues/6916
     const cleanArticles = computed(() => {
       const array = articles.value
-      const articlesOutput = array.filter((v, i, a) => a.findIndex(t => (t.id === v.id)) === i)
+      const articlesOutput = array?.filter((v, i, a) => a.findIndex(t => (t.id === v.id)) === i)
       return articlesOutput
     })
 
