@@ -74,8 +74,8 @@ export default {
     const members = ref<Member[]>([])
     const filter = ref<string | null>(null)
     const pagination = ref({
-      sortBy: 'lastName',
-      descending: false,
+      sortBy: 'id',
+      descending: true,
       page: 1,
       rowsPerPage: 5,
       rowsNumber: 10

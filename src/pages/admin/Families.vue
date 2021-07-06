@@ -79,7 +79,7 @@ export default {
     const isXmlGeneratorOpen = ref(false)
     const ibanIsNull = ref(false)
     const pagination = ref({
-      sortBy: 'createdAt',
+      sortBy: 'id',
       descending: true,
       page: 1,
       rowsPerPage: 5,

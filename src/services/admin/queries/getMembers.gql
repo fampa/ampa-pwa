@@ -1,4 +1,4 @@
-query getMembers($filter: String = "%%", $limit: Int, $offset: Int, $orderBy: [members_order_by!] = {lastName: asc}) {
+query getMembers($filter: String = "%%", $limit: Int, $offset: Int, $orderBy: [members_order_by!] = {lastName: asc, id:desc}) {
   members_aggregate(where: {
     _or: [
       {email: {_ilike: $filter}},
