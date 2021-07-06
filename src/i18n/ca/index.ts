@@ -82,6 +82,9 @@ export default {
     validPhone: 'Per favor, poseu un telèfon vàlid'
   },
   home: 'Inici',
+  homePage: {
+    banner: 'Tant si ja eres membre de l\'AMPA com si no, pots <strong>identificar-te o donar-te d\'alta</strong> fent click ací.'
+  },
   login: 'Entrar',
   logout: 'Eixir',
   member: {
