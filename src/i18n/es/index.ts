@@ -82,6 +82,9 @@ export default {
     validPhone: 'Por favor, introduce un teléfono válido'
   },
   home: 'Inicio',
+  homePage: {
+    banner: 'Tanto si ya eres miembro del AMPA com si no, puedes <strong>identificarte o darte de alta</strong> haciendo click aquí.'
+  },
   login: 'Entrar',
   logout: 'Salir',
   member: {

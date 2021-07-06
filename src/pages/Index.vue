@@ -4,6 +4,7 @@
             enter-active-class="animated fadeOutLeft"
             leave-active-class="animated fadeInRight">
   <q-page class="bg-grey-2 q-pa-md">
+    <home-banner v-if="!user"></home-banner>
     <div v-if="!cleanArticles && loading">
       <div class="row items-start">
         <div
@@ -52,8 +53,9 @@
 
 <script lang="ts">
 import { defineComponent, reactive, ref, computed } from 'vue'
-// import { useStore } from 'src/services/store'
+import { useStore } from 'src/services/store'
 import NewsCard from 'components/NewsCard.vue'
+import HomeBanner from 'components/homeBanner.vue'
 // import { useQuasar } from 'quasar'
 import { ContentsService } from 'src/services/contents'
 import { Content } from 'src/models/Content'
@@ -61,11 +63,12 @@ import { Content } from 'src/models/Content'
 
 export default defineComponent({
   name: 'PageIndex',
-  components: { NewsCard },
+  components: { NewsCard, HomeBanner },
   setup () {
     const contentsService = new ContentsService()
     const articles = ref<Content[]>([])
-    // const store = useStore()
+    const store = useStore()
+    const user = computed(() => store.state.user?.user)
     // const $q = useQuasar()
     // const i18n = useI18n()
 
@@ -85,7 +88,7 @@ export default defineComponent({
     // This is a bit of a hack but we need to manually remove duplicated results due to this issue: https://github.com/apollographql/apollo-client/issues/6916
     const cleanArticles = computed(() => {
       const array = articles.value
-      const articlesOutput = array?.filter((v, i, a) => a.findIndex(t => (t.id === v.id)) === i)
+      const articlesOutput = array?.filter((v, i, a) => a.findIndex(t => (t?.id === v?.id)) === i)
       return articlesOutput
     })
 
@@ -119,7 +122,8 @@ export default defineComponent({
     return {
       cleanArticles,
       loading,
-      onLoad
+      onLoad,
+      user
     }
   }
 })
