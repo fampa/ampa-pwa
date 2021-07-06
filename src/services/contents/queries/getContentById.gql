@@ -9,6 +9,7 @@ query getContentById($id: Int!, $isAdmin: Boolean = false) {
     isMenu
     price
     spots
+    link
     participants {
       child {
         firstName

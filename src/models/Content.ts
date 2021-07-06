@@ -14,6 +14,7 @@ export interface Content {
   authorId?: string
   icon?: string
   type?: string
+  link?: string
   tags?: {
     tag: Content
   }[]

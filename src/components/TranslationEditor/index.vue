@@ -63,7 +63,15 @@
           </div>
         </div><!--  dateTime row -->
 
-        <div v-if="['page', 'tag'].includes(type)">
+                <!-- is link -->
+        <div class="row">
+          <div class="col-12">
+            <q-input outlined v-if="['link'].includes(type)" v-model="content.link"  :placeholder="$t('content.link')" :rules="[val => !!val || $t('forms.required')]" />
+          </div>
+        </div>
+
+        <!-- is page, tag or link -->
+        <div v-if="['page', 'tag', 'link'].includes(type)">
           <div class="q-gutter-sm">
             <q-checkbox v-model="content.isMenu" :label="$t('content.isMenu')" />
           </div>

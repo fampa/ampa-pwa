@@ -5,7 +5,8 @@ export default {
     family: 'Gestión de familias',
     services: 'Gestión de servicios',
     blog: 'Gestión del blog',
-    tags: 'Gestión de etiquetas'
+    tags: 'Gestión de etiquetas',
+    link: 'Gestión de enlaces'
   },
   backToHome: 'Volver a la página principal',
   content: {
@@ -14,6 +15,7 @@ export default {
     delete: 'Borrar',
     draft: 'Borrador',
     isMenu: 'Incluir al menú',
+    link: 'Url del anlace',
     placeholder: 'Escribe alguna cosa aquí...',
     publishOrSave: 'El artículo se encuentra en estado de borrador. ¿Quieres solo guardar o guardar y publicar?',
     published: 'Publicado',
@@ -178,6 +180,7 @@ export default {
     families: 'Familias',
     firstName: 'Nombre',
     lastName: 'Apellidos',
+    link: 'Enlaces',
     members: 'Miembros',
     page: 'Páginas',
     title: 'Título',
