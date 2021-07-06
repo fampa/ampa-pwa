@@ -271,7 +271,11 @@ export default defineComponent({
       content.value.type = props.type
       const obj = { ...content.value }
       cleanObject(obj)
-      obj.createdAt = new Date(obj.createdAt)
+      console.log('obj.createdAt', obj.createdAt)
+      const createdAt = `${obj.createdAt}`.replace(':', '-').replace(' ', '-').split('-').map(i => Number(i))
+      console.log('createdAt', createdAt)
+      obj.createdAt = new Date(...createdAt as ConstructorParameters<typeof Date>)
+      console.log(obj.createdAt)
       // if (content.value.image || !pendingImages.value) return emit('guardar', { content: obj, tags })
       // this.$refs.uploader.upload()
       emit('guardar', { content: obj, tags })
