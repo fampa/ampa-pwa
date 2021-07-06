@@ -53,7 +53,7 @@
             <div class="row items-start">
               <div
                 class="col-12 col-sm-6 col-md-6 q-pa-sm"
-                v-for="article in contentsList"
+                v-for="article in cleanArticles"
                 :key="article.id"
               >
                 <news-card :article="article"></news-card>
@@ -228,6 +228,13 @@ export default defineComponent({
       }
     })
 
+    // This is a bit of a hack but we need to manually remove duplicated results due to this issue: https://github.com/apollographql/apollo-client/issues/6916
+    const cleanArticles = computed(() => {
+      const array = contentsList.value
+      const articlesOutput = array?.filter((v, i, a) => a.findIndex(t => (t.id === v.id)) === i)
+      return articlesOutput
+    })
+
     const refetchContent = async () => {
       await refetch()
     }
@@ -274,7 +281,7 @@ export default defineComponent({
       formatedDate,
       formatedUpdatedDate,
       isAdmin,
-      contentsList,
+      cleanArticles,
       refetchContent,
       fallbackContent,
       showUpdate,
