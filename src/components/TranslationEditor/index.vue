@@ -276,7 +276,7 @@ export default defineComponent({
         if (index === 1) return Number(i) - 1
         return Number(i)
       })
-      console.log('createdAt', createdAt)
+      // console.log('createdAt', createdAt)
       obj.createdAt = new Date(...createdAt as ConstructorParameters<typeof Date>)
       // console.log(obj.createdAt)
       // if (content.value.image || !pendingImages.value) return emit('guardar', { content: obj, tags })
