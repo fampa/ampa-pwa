@@ -1,4 +1,4 @@
-query GetContentsFrontPage($type: String = "article", $offset: Int = 0, $limit: Int = 5) {
+query GetContentsFrontPage($type: String = "article", $offset: Int = 0, $limit: Int = 10) {
   content(where: {type: {_eq: $type}, isPublished: {_eq: true}}, order_by: {createdAt: desc}, offset: $offset, limit: $limit) {
     id
     createdAt

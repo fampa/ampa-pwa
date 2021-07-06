@@ -9,7 +9,7 @@
       <div class="row items-start">
         <div
           class="col-12 col-sm-6 col-md-4 q-pa-sm"
-          v-for="(item, index) in 6"
+          v-for="(item, index) in 12"
           :key="index"
           :class="{'col-md-6': index === 0 || index === 1, 'col-sm-12': index === 0 }"
         >
@@ -74,7 +74,7 @@ export default defineComponent({
 
     const data = reactive({
       page: 0,
-      pageSize: 6
+      pageSize: 12
     })
 
     const { result, loading, error, fetchMore, onResult, onError } = contentsService.getContentsFrontPage({ offset: data.page, limit: data.pageSize })
