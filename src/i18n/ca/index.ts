@@ -107,6 +107,7 @@ export default {
     AmpaServices: 'ELS SERVEIS DE L\'AMPA',
     contact: 'Contacte',
     featured: 'DESTACAT',
+    link: 'ENLLAÇOS',
     YourData: 'LES TEUES DADES'
   },
   newVersion: 'Nova versió disponible. Actualitza polsant el botó',

@@ -124,7 +124,7 @@
           <q-separator />
             <q-item>
               <q-item-section>
-                  <q-item-label overline>{{$t('table.link')}}</q-item-label>
+                  <q-item-label overline>{{$t('menu.link')}}</q-item-label>
               </q-item-section>
             </q-item>
           <q-item v-for="(item, index) in linkItems" :key="index" clickable v-ripple @click="goTo(item.to)" exact>
