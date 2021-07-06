@@ -13,7 +13,7 @@
 
         <q-card-actions align="right" class="text-primary">
           <q-btn flat label="Cancelar" @click="cancel" />
-          <q-btn color="primary" label="Envia" @click="sendMessage" />
+          <q-btn :disable="!message.title || !message.content" color="primary" label="Envia" @click="sendMessage" />
         </q-card-actions>
       </q-card>
     </q-dialog>
