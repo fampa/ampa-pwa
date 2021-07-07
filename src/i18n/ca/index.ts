@@ -12,6 +12,7 @@ export default {
   content: {
     addImage: 'Afegeix una imatge de portada',
     content: 'Contingut',
+    createdAt: 'Data',
     delete: 'Esborra',
     draft: 'Esborrany',
     isMenu: 'Incloure al menú',
