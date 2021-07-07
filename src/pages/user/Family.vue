@@ -5,7 +5,7 @@
       <div v-if="!member && isLoading">
         <q-skeleton height="50px" square />
       </div>
-      <q-banner v-else-if="user && !nif" class="bg-red text-white">
+      <q-banner v-else-if="user && !isAdmin && !nif" class="bg-red text-white">
         {{$t('member.userDataNotice')}}
         <template v-slot:action>
           <q-btn flat color="white" :label="$t('member.userDataNoticeBtn')" :to="'/user'" />
@@ -110,6 +110,7 @@ export default {
     const router = useRouter()
     const store = useStore()
     const user = computed(() => store.state.user.user)
+    const isAdmin = computed(() => store.state.user.isAdmin)
     const datePattern = /^-?[\d]+-[0-1]\d-[0-3]\d$/
 
     // Reactive data
@@ -361,7 +362,8 @@ export default {
       resolveJoin,
       rejectJoin,
       abortJoin,
-      fallbackContent
+      fallbackContent,
+      isAdmin
     }
   }
 }
