@@ -1,8 +1,8 @@
 {
   "name": "ampa-pwa",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "PWA de gestió del AMPA",
-  "productName": "AMPA PWA",
+  "productName": "AMPA OBERTA",
   "author": "Josep V. Monjo <jvmonjo@gmail.com>",
   "private": true,
   "scripts": {
