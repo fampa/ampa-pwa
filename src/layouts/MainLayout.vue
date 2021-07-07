@@ -17,6 +17,14 @@
 
         <q-btn-dropdown aria-label="messages-button" v-if="member" dropdown-icon="las la-bell" :label="member?.messages_aggregate?.aggregate?.count" flat rounded no-icon-animation>
           <q-list>
+            <q-item v-if="member?.messages?.length === 0" class="message" clickable v-close-popup>
+              <q-item-section>
+                <q-item-label>{{$t('messages.empty')}}</q-item-label>
+              </q-item-section>
+              <q-item-section avatar>
+                <q-icon name="las la-comments" />
+              </q-item-section>
+            </q-item>
             <q-item class="message" :class="{unRead: !m.read}" v-for="m in member.messages" :key="m.message.id" :to="`/user/message/${m.message.id}`" clickable v-close-popup>
               <q-item-section>
                 <q-item-label>{{m.message.title}}</q-item-label>

@@ -113,6 +113,9 @@ export default {
     link: 'ENLACES',
     YourData: 'TUS DATOS'
   },
+  messages: {
+    empty: 'No tienes mensajes'
+  },
   newVersion: 'Nueva versión disponible. Actualice pulsando el botón',
   notification: {
     close: 'Cerrar',
