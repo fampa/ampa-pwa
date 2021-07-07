@@ -5,10 +5,12 @@
               leave-active-class="animated fadeOutLeft">
     <q-page padding class="q-pa-md bg-grey-2">
       <div v-if="loading">
-        <q-skeleton type="text" height="60px" />
-        <q-skeleton height="200px" square />
-        <q-skeleton type="text" />
-        <q-skeleton type="text" />
+        <div class="article bg-white">
+          <q-skeleton type="text" height="60px" />
+          <q-skeleton height="200px" square />
+          <q-skeleton type="text" />
+          <q-skeleton type="text" />
+        </div>
       </div>
       <div class="article bg-white" v-else-if="!content">
         <h1 class="title">Error 404</h1>
