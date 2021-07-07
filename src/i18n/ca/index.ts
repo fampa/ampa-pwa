@@ -113,6 +113,9 @@ export default {
     link: 'ENLLAÇOS',
     YourData: 'LES TEUES DADES'
   },
+  messages: {
+    empty: 'No tens missatges'
+  },
   newVersion: 'Nova versió disponible. Actualitza polsant el botó',
   notification: {
     close: 'Tanca',
