@@ -35,7 +35,7 @@
 
         <div class="row">
           <div class="col-12">
-            <q-input outlined v-model="content.createdAt">
+            <q-input outlined v-model="content.createdAt" :label="$t('content.createdAt')">
               <template v-slot:prepend>
                 <q-icon name="event" class="cursor-pointer">
                   <q-popup-proxy transition-show="scale" transition-hide="scale">
@@ -66,7 +66,7 @@
                 <!-- is link -->
         <div class="row">
           <div class="col-12">
-            <q-input outlined v-if="['link'].includes(type)" v-model="content.link"  :placeholder="$t('content.link')" :rules="[val => !!val || $t('forms.required')]" />
+            <q-input outlined v-if="['link'].includes(type)" v-model="content.link" :label="$t('content.link')"  placeholder="https://" :rules="[val => !!val || $t('forms.required')]" />
           </div>
         </div>
 

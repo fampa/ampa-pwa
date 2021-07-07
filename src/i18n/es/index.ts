@@ -12,6 +12,7 @@ export default {
   content: {
     addImage: 'Añadir imagen de portada',
     content: 'Contenido',
+    createdAt: 'Fecha',
     delete: 'Borrar',
     draft: 'Borrador',
     isMenu: 'Incluir al menú',
