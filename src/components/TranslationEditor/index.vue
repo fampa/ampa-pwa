@@ -247,7 +247,7 @@ export default defineComponent({
       })
     })
 
-    const pathPrefix = computed(() => `media/${user.value.uid}/`)
+    const pathPrefix = 'media'
 
     // methods
     const imageSelected = (image) => {

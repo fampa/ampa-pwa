@@ -111,14 +111,14 @@ export default createUploaderComponent({
                 fullPath,
                 uploadTime
               )
-              emit('uploaded', {
-                downloadURL,
-                fileName,
-                fileSize,
-                fileType,
-                fullPath,
-                uploadTime
-              })
+              // emit('uploaded', {
+              //   downloadURL,
+              //   fileName,
+              //   fileSize,
+              //   fileType,
+              //   fullPath,
+              //   uploadTime
+              // })
               helpers.uploadedSize.value += file.size - file.__uploaded
               // helpers.uploadedSize.value = 0;
             })

@@ -10,6 +10,11 @@
             <q-btn class="remove-button" round flat size="xm" color="primary" @click="deleteImage(image)" icon="delete" />
           </div>
         </q-card-section>
+        <q-card-section>
+          <div class="row">
+            <q-btn :loading="loading" @click="getImages" v-if="nextToken" color="primary">{{$t('images.own.more')}}</q-btn>
+          </div>
+        </q-card-section>
 
         <q-card-section>
             <q-input type="text" :label="$t('images.own.caption')" v-model="caption"></q-input>
@@ -42,6 +47,10 @@ export default {
     const pendingImages = ref(false)
     const $q = useQuasar()
     const caption = ref('')
+    const nextToken = ref(null)
+    const storageRef = firebase.storage().ref()
+    const listRef = storageRef.child('media')
+    const loading = ref(false)
 
     // methods
     const setCommand = (command) => {
@@ -61,37 +70,32 @@ export default {
       emit('selected', img)
     }
     const getImages = async () => {
-      const storageRef = firebase.storage().ref()
-      const listRef = storageRef.child('media')
-      await listRef.listAll()
-        .then((res) => {
-          if (res.items.length === 0) {
-            images.value = []
-          }
-          res.prefixes.forEach((folderRef) => {
-            // All the prefixes under listRef.
-            // You may call listAll() recursively on them.
-            // eslint-disable-next-line @typescript-eslint/no-floating-promises
-            folderRef.listAll()
-              .then(function (res) {
-                const imagesTemp = []
-                // eslint-disable-next-line @typescript-eslint/no-misused-promises
-                res.items.forEach(async (itemRef) => {
-                  // All the items under listRef.
-                  await itemRef.getDownloadURL().then(function (url) {
-                    images.value.push(url)
-                  })
-                })
-                images.value = imagesTemp
-              })
-          })
-          res.items.forEach((/* itemRef */) => {
-            // All the items under listRef.
-          })
-        }).catch((error) => {
-          // Uh-oh, an error occurred!
-          console.error(error)
+      loading.value = true
+      const page = await listRef.list({
+        maxResults: 6,
+        pageToken: nextToken.value
+      })
+      console.log('page', page)
+      // Use the result.
+      // processItems(firstPage.items)
+      const items = page.items
+      // processPrefixes(firstPage.prefixes)
+      if (items.length === 0) {
+        images.value = []
+      }
+
+      // eslint-disable-next-line @typescript-eslint/no-misused-promises
+      items.forEach(async (itemRef) => {
+        // All the items under listRef.
+        console.log('itemRef', itemRef)
+        await itemRef.getDownloadURL().then(function (url) {
+          console.log('url', url)
+          images.value?.push(url)
         })
+      })
+
+      nextToken.value = page.nextPageToken
+      loading.value = false
     }
 
     onMounted(async () => {
@@ -127,7 +131,10 @@ export default {
       imageRemoved,
       uploadImage,
       deleteImage,
-      caption
+      caption,
+      getImages,
+      nextToken,
+      loading
     }
   }
 
