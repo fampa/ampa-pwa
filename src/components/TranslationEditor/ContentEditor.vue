@@ -213,6 +213,7 @@ import Image from '@tiptap/extension-image'
 import Placeholder from '@tiptap/extension-placeholder'
 import { useI18n } from 'vue-i18n'
 import GetImages from './GetImages.vue'
+import { Figure } from './figure'
 
 export default {
   components: {
@@ -239,6 +240,7 @@ export default {
         Underline,
         Link,
         Image,
+        Figure,
         Placeholder.configure({
           placeholder: i18n.t('content.placeholder')
         })
@@ -279,7 +281,17 @@ export default {
 
     const imageSelected = (img) => {
       if (img.url) {
-        editor.value.chain().focus().setImage({ src: img.url }).run()
+        if (img.caption) {
+          editor
+            .value
+            .chain()
+            .focus()
+            .setFigure({ src: img.url, caption: img.caption?.replace(/<[^>]*>?/gm, '') })
+            .run()
+        } else {
+          editor.value.chain().focus().setImage({ src: img.url }).run()
+        }
+
         getImagesPrompt.value = false
       }
     }

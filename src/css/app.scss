@@ -84,20 +84,19 @@ h5 {
     hyphens: auto;
 }
 
-.caption {
+.caption, figcaption {
     font-size: 0.8rem;
     opacity: 0.8;
+    margin-top: 0.2rem;
+    margin-bottom: 1rem;
+    font-style: italic;
 }
 
-.caption a{
+.caption a, figcaption a{
     text-decoration: none;
     color: $primary;
 }
 
 figure {
     margin: 0;
-}
-
-figcaption {
-    margin-top: 0.5rem;
 }

@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "@quasar/extras": "^1.0.0",
+    "@tiptap/core": "^2.0.0-beta.86",
     "@tiptap/extension-highlight": "^2.0.0-beta.13",
     "@tiptap/extension-image": "^2.0.0-beta.13",
     "@tiptap/extension-link": "^2.0.0-beta.17",
@@ -78,5 +79,8 @@
     "node": ">= 10.18.1",
     "npm": ">= 6.13.4",
     "yarn": ">= 1.21.1"
+  },
+  "resolutions": {
+    "prosemirror-model": "1.9.1"
   }
 }
