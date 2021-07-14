@@ -39,6 +39,7 @@
     "sepa": "^1.0.3",
     "spain-id": "^1.1.4",
     "subscriptions-transport-ws": "^0.9.18",
+    "unsplash-js": "^7.0.13",
     "vue-i18n": "^9.0.0-beta.0",
     "vue-social-sharing": "^4.0.0-alpha4",
     "vuex-persistedstate": "^4.0.0-beta.3"

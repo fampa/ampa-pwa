@@ -1,6 +1,19 @@
 <template>
     <q-dialog v-model="open" persistent>
-      <q-card style="width: 80%">
+        <q-tabs
+        v-model="tabs"
+        inline-label
+        class="bg-purple text-white shadow-2"
+      >
+        <q-tab name="unsplash" icon="mail" label="Unsplash">
+        </q-tab>
+
+        <q-tab name="own" icon="alarm" label="Imatges pròpies">
+        </q-tab>
+        <q-tab name="url" icon="movie" label="URl">
+        </q-tab>
+      </q-tabs>
+      <q-card v-if="tabs === 'own'" style="width: 80%">
         <q-card-section>
           <div class="text-h6">Elige una imagen</div>
         </q-card-section>
@@ -46,6 +59,7 @@ export default {
     const open = ref(false)
     const pendingImages = ref(false)
     const $q = useQuasar()
+    const tabs = ref('unsplash')
 
     // methods
     const setCommand = (command) => {
@@ -137,7 +151,8 @@ export default {
       // imageAdded,
       imageRemoved,
       uploadImage,
-      deleteImage
+      deleteImage,
+      tabs
     }
   }
 

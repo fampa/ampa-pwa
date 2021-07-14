@@ -15,7 +15,14 @@
           AMPA {{schoolName}}
         </q-toolbar-title>
 
-        <q-btn-dropdown aria-label="messages-button" v-if="member" dropdown-icon="las la-bell" :label="member?.messages_aggregate?.aggregate?.count" flat rounded no-icon-animation>
+        <q-btn-dropdown aria-label="messages-button" v-if="member" flat rounded no-icon-animation>
+          <template v-slot:label>
+            <div class="row items-center no-wrap">
+              <q-btn flat round icon="las la-bell">
+                <q-badge v-if="member?.messages_aggregate?.aggregate?.count > 0" color="accent" floating>{{member?.messages_aggregate?.aggregate?.count}}</q-badge>
+              </q-btn>
+            </div>
+          </template>
           <q-list>
             <q-item v-if="member?.messages?.length === 0" class="message" clickable v-close-popup>
               <q-item-section>
