@@ -61,7 +61,7 @@ export default defineComponent({
           // handle success here
           images.value = results
           // console.log(`received ${results.length} photos out of ${total}`)
-          console.log('first photo: ', results[0])
+          // console.log('first photo: ', results[0])
           loading.value = false
         }
       })
