@@ -7,6 +7,7 @@ query GetContentsByTagId($id: Int!) {
       firstName
     }
     image
+    caption
     isMenu
     isPublished
     type

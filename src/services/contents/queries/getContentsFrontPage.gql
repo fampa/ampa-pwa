@@ -7,6 +7,7 @@ query GetContentsFrontPage($type: String = "article", $offset: Int = 0, $limit: 
       firstName
     }
     image
+    caption
     isMenu
     isPublished
     type

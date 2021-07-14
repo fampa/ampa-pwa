@@ -12,6 +12,9 @@
         </q-card-section>
 
         <q-card-section>
+            <q-input type="text" :label="$t('images.own.caption')" v-model="caption"></q-input>
+        </q-card-section>
+        <q-card-section>
             <firebase-uploader :path-prefix="pathPrefix" @added="uploadImage" @removed="imageRemoved" @uploaded="uploadImage" :label="$t('images.own.input')" ref="uploader"></firebase-uploader>
         </q-card-section>
       </q-card>
@@ -38,6 +41,7 @@ export default {
     const images = ref<string[]>([])
     const pendingImages = ref(false)
     const $q = useQuasar()
+    const caption = ref('')
 
     // methods
     const setCommand = (command) => {
@@ -49,8 +53,12 @@ export default {
         image: image,
         command: command.value
       }
+      const img = {
+        url: image,
+        caption: caption.value
+      }
       emit('command', obj)
-      emit('selected', image)
+      emit('selected', img)
     }
     const getImages = async () => {
       const storageRef = firebase.storage().ref()
@@ -118,7 +126,8 @@ export default {
       // imageAdded,
       imageRemoved,
       uploadImage,
-      deleteImage
+      deleteImage,
+      caption
     }
   }
 

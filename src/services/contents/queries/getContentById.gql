@@ -3,6 +3,7 @@ query getContentById($id: Int!, $isAdmin: Boolean = false) {
     createdAt
     id
     image
+    caption
     icon
     type
     isPublished
