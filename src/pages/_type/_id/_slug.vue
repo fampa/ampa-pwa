@@ -29,11 +29,14 @@
         <div class="subtitle" v-if="content.type === 'article'">
           <strong>{{formatedDate}}</strong>. <br> <span class="updated" v-if="showUpdate">{{$t('updatedAt', {date: formatedUpdatedDate})}}</span>
         </div>
-        <q-img
-          fit="cover"
-          v-if="content.image"
-          :src="content.image">
-        </q-img>
+        <figure>
+          <q-img
+            fit="cover"
+            v-if="content.image"
+            :src="content.image">
+          </q-img>
+          <figcaption class="caption" v-if="content.caption" v-html="content.caption"></figcaption>
+        </figure>
         <div class="content" v-html="fallbackContent(content, 'content')"></div>
 
         <!-- is article -->

@@ -40,6 +40,7 @@ query getContentsByType($filter: String = "%%", $limit: Int, $offset: Int, $orde
     createdAt
     id
     image
+    caption
     icon
     isPublished
     isMenu

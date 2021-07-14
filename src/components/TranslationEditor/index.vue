@@ -119,8 +119,9 @@
               >
               </q-img>
               <q-btn class="remove-button" round flat size="xm" color="primary" @click="removeImage"  label="X" />
+            </div>
           </div>
-        </div>
+          <div class="caption" v-html="content.caption"></div>
 
           <div>
             <get-images :path-prefix="pathPrefix" @cancel="getImagesPrompt = false" @selected="imageSelected" :prompt="getImagesPrompt" />
@@ -251,7 +252,8 @@ export default defineComponent({
     // methods
     const imageSelected = (image) => {
       // console.log(image)
-      content.value.image = image
+      content.value.image = image.url
+      content.value.caption = image.caption
       getImagesPrompt.value = false
     }
 

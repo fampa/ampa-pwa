@@ -25,9 +25,10 @@
         class="cursor-pointer"
         :src="imageUrl"
         style="max-height: 300px;"
-        @click="selectImage(imageUrl)"
+        @click="selectImage({url: imageUrl, caption: caption})"
         >
         </q-img>
+        <q-input type="text" :label="$t('images.own.caption')" v-model="caption"></q-input>
       </q-card-section>
         <q-card-actions align="right" class="text-primary">
           <q-btn flat label="Cancelar" @click="$emit('cancel')" />
@@ -57,6 +58,7 @@ export default {
     const tabs = ref(process.env.UNSPLASH_ACCESS_KEY ? 'unsplash' : 'url')
     const imageUrl = ref('')
     const unsplashAccessKey = process.env.UNSPLASH_ACCESS_KEY
+    const caption = ref('')
 
     // methods
     const setCommand = (command) => {
@@ -73,7 +75,11 @@ export default {
         command: command.value
       }
       emit('command', obj)
-      emit('selected', image)
+      const img = {
+        url: image.url,
+        caption: image.caption
+      }
+      emit('selected', img)
     }
 
     watch(() => props.prompt,
@@ -89,7 +95,8 @@ export default {
       open,
       tabs,
       imageUrl,
-      unsplashAccessKey
+      unsplashAccessKey,
+      caption
     }
   }
 

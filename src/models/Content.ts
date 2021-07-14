@@ -10,6 +10,7 @@ export interface Content {
   isMenu?: boolean
   translations: ContentTranslation[]
   image?: string
+  caption?: string
   author?: Member
   authorId?: string
   icon?: string

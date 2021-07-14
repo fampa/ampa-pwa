@@ -14,7 +14,7 @@
             class="cursor-pointer"
             style="max-height: 200px;"
             :src="image?.urls?.thumb"
-            @click="selectedImage(image?.urls?.regular)"
+            @click="selectedImage(image)"
             ></q-img>
           </div>
         </div>
@@ -61,7 +61,7 @@ export default defineComponent({
           // handle success here
           images.value = results
           // console.log(`received ${results.length} photos out of ${total}`)
-          // console.log('first photo: ', results[0])
+          console.log('first photo: ', results[0])
           loading.value = false
         }
       })
@@ -78,7 +78,11 @@ export default defineComponent({
     }
 
     const selectedImage = (img) => {
-      emit('selected', img)
+      const image = {
+        url: img?.urls?.regular,
+        caption: `Photo by <a href="${img?.user?.links?.html}?utm_source=AMPA_OBERTA&utm_medium=referral" target="_blank">${img?.user?.first_name} ${img?.user?.last_name ? img?.user?.last_name : ''}</a> on <a href="https://unsplash.com/?utm_source=AMPA_OBERTA&utm_medium=referral" target="_blank">Unsplash</a>`
+      }
+      emit('selected', image)
     }
 
     return {

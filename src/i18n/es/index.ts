@@ -89,7 +89,8 @@ export default {
   images: {
     own: {
       title: 'Elige una imagen',
-      input: 'Sube una imagen'
+      input: 'Sube una imagen',
+      caption: 'Pie de la imagen (opcional)'
     },
     unsplash: {
       title: 'Busca una imagen de stock',
