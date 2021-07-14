@@ -86,6 +86,19 @@ export default {
   homePage: {
     banner: 'Tant si ja eres membre de l\'AMPA com si no, pots <strong>identificar-te o donar-te d\'alta</strong> fent click ací.'
   },
+  images: {
+    own: {
+      title: 'Tria una imatge',
+      input: 'Puja una imatge'
+    },
+    unsplash: {
+      title: 'Cerca una imatge en stock',
+      input: 'Paraula clau (en anglès)',
+      search: 'Cerca',
+      previous: '<< ANTERIOR',
+      next: ' SEGÜENT >>'
+    }
+  },
   login: 'Entrar',
   logout: 'Eixir',
   member: {

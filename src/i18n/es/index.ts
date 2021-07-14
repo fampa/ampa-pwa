@@ -86,6 +86,19 @@ export default {
   homePage: {
     banner: 'Tanto si ya eres miembro del AMPA com si no, puedes <strong>identificarte o darte de alta</strong> haciendo click aquí.'
   },
+  images: {
+    own: {
+      title: 'Elige una imagen',
+      input: 'Sube una imagen'
+    },
+    unsplash: {
+      title: 'Busca una imagen de stock',
+      input: 'Palabra clave (en inglés)',
+      search: 'Buscar',
+      previous: '<< ANTERIOR',
+      next: ' SIGUIENTE >>'
+    }
+  },
   login: 'Entrar',
   logout: 'Salir',
   member: {
