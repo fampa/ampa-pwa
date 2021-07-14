@@ -94,7 +94,7 @@
           </q-item-section>
           <q-item-section>{{item.title}}</q-item-section>
         </q-item>
-        <div v-if="pagesItems">
+        <div v-if="pagesItems && pagesItems.length > 0">
           <q-item v-for="(item, index) in pagesItems" :key="index" clickable v-ripple :to="item.to" exact>
             <q-item-section avatar>
               <q-icon :name="item.icon" />
@@ -112,7 +112,7 @@
               {{$t('menu.contact')}}
             </q-item-section>
           </q-item>
-        <div v-if="tagItems">
+        <div v-if="tagItems && tagItems.length > 0">
           <q-separator />
             <q-item>
               <q-item-section>
@@ -128,7 +128,7 @@
             </q-item-section>
           </q-item>
         </div>
-        <div v-if="linkItems">
+        <div v-if="linkItems && linkItems.length > 0">
           <q-separator />
             <q-item>
               <q-item-section>
