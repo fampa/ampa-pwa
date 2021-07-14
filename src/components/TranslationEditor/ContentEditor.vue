@@ -195,6 +195,9 @@
 
       </div>
   <editor-content :editor="editor" />
+  <div>
+    <get-images path-prefix="media" @cancel="getImagesPrompt = false" @selected="imageSelected" :prompt="getImagesPrompt" />
+  </div>
 </div>
 </template>
 
@@ -209,10 +212,12 @@ import Link from '@tiptap/extension-link'
 import Image from '@tiptap/extension-image'
 import Placeholder from '@tiptap/extension-placeholder'
 import { useI18n } from 'vue-i18n'
+import GetImages from './GetImages.vue'
 
 export default {
   components: {
-    EditorContent
+    EditorContent,
+    GetImages
   },
   props: {
     modelValue: {
@@ -224,6 +229,7 @@ export default {
   setup (props, { emit }) {
     const hasFocus = ref(false)
     const i18n = useI18n()
+    const getImagesPrompt = ref(false)
     const editor = useEditor({
       content: props.modelValue,
       extensions: [
@@ -268,10 +274,13 @@ export default {
     }
 
     const addImage = () => {
-      const url = window.prompt('URL')
+      getImagesPrompt.value = true
+    }
 
-      if (url) {
-        editor.value.chain().focus().setImage({ src: url }).run()
+    const imageSelected = (img) => {
+      if (img.url) {
+        editor.value.chain().focus().setImage({ src: img.url }).run()
+        getImagesPrompt.value = false
       }
     }
 
@@ -279,7 +288,9 @@ export default {
       editor,
       setLink,
       addImage,
-      hasFocus
+      hasFocus,
+      getImagesPrompt,
+      imageSelected
     }
   }
 }
