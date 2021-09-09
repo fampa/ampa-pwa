@@ -1,5 +1,9 @@
 {
   "@ejez/apollo": {
     "typescript": true
+  },
+  "ssg": {
+    "scripts": true,
+    "inlineCriticalCss": true
   }
 }

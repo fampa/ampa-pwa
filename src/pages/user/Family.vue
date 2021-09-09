@@ -263,7 +263,7 @@ export default {
           // console.log('success')
           const children = childrenData?.children.map(child => {
             delete child.hiredServices
-            return child
+            return child as Child
           })
           await mutateChildren({ children })
           if (shouldUpdateFamilyName.value) {

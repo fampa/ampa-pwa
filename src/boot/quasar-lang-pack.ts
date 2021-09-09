@@ -3,7 +3,7 @@ import { Quasar } from 'quasar'
 import { boot } from 'quasar/wrappers'
 import { i18n } from 'src/boot/i18n'
 
-export default boot(async ({ store }) => {
+export default boot(async ({ store, ssrContext }) => {
   const langIso = store.state.settings.language || 'ca'
 
   i18n.global.locale = langIso
@@ -16,7 +16,7 @@ export default boot(async ({ store }) => {
     )
       .then(lang => {
         // console.log('lang', lang)
-        Quasar.lang.set(lang.default)
+        Quasar.lang.set(lang.default, ssrContext)
       })
   } catch (err) {
     console.log(err)

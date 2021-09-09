@@ -113,7 +113,7 @@ export default {
         if (success) {
           // yay, models are correct
 
-          const clean = cleanObject({ ...data })
+          const clean = cleanObject({ ...data }) as Member
           // remove family property since it is not expected on that mutation
           delete clean.family
           // console.log('form submitted', clean)
@@ -135,7 +135,8 @@ export default {
 
     const makeAdmin = () => {
       makeAdminLoading.value = true
-      const result = membersService.makeAdmin(data)
+      const m = data as Member
+      const result = membersService.makeAdmin(m)
       result
         .then((res) => {
           makeAdminLoading.value = false

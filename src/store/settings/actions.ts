@@ -3,12 +3,13 @@ import { StateInterface } from '../index'
 import { SettingsStateInterface } from './state'
 import { i18n } from 'src/boot/i18n'
 import { Quasar } from 'quasar'
+import { useSSRContext } from 'vue'
 
 const actions: ActionTree<SettingsStateInterface, StateInterface> = {
   async setLanguage ({ commit }, payload: string) {
     i18n.global.locale = payload
     const langIso = payload // ... some logic to determine it (use Cookies Plugin?)
-
+    const ssrContext = process.env.SERVER ? useSSRContext() : null
     try {
       await import(
       /* webpackInclude: /(es|ca)\.js$/ */
@@ -16,7 +17,7 @@ const actions: ActionTree<SettingsStateInterface, StateInterface> = {
       )
         .then(lang => {
           // console.log('lang', lang)
-          Quasar.lang.set(lang.default)
+          Quasar.lang.set(lang.default, ssrContext)
         })
     } catch (err) {
     // Requested Quasar Language Pack does not exist,

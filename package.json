@@ -15,10 +15,12 @@
     "deploy": "npm run build && firebase deploy --only hosting",
     "deploy:functions": "npm run build:functions && firebase deploy --only functions",
     "lint": "eslint --ext .js,.ts,.vue ./ --fix",
-    "test": "echo \"No test specified\" && exit 0"
+    "test": "echo \"No test specified\" && exit 0",
+    "build:ssg": "quasar ssg generate",
+    "serve:ssg": "quasar ssg serve dist/ssg"
   },
   "dependencies": {
-    "@quasar/extras": "^1.0.0",
+    "@quasar/extras": "^1.10.12",
     "@tiptap/core": "^2.0.0-beta.86",
     "@tiptap/extension-highlight": "^2.0.0-beta.13",
     "@tiptap/extension-image": "^2.0.0-beta.13",
@@ -36,18 +38,19 @@
     "firebaseui": "^4.8.0",
     "ibantools": "^3.3.0",
     "path": "^0.12.7",
-    "quasar": "^2.0.0-beta.1",
+    "quasar": "^2.0.4",
     "sepa": "^1.0.3",
     "spain-id": "^1.1.4",
     "subscriptions-transport-ws": "^0.9.18",
     "unsplash-js": "^7.0.13",
     "vue-i18n": "^9.0.0-beta.0",
     "vue-social-sharing": "^4.0.0-alpha4",
+    "vuex": "^4.0.2",
     "vuex-persistedstate": "^4.0.0-beta.3"
   },
   "devDependencies": {
     "@ejez/quasar-app-extension-apollo": "^2.0.0-alpha.10",
-    "@quasar/app": "^3.0.0-beta.13",
+    "@quasar/app": "^3.1.0",
     "@types/cors": "^2.8.10",
     "@types/node": "^10.17.15",
     "@typescript-eslint/eslint-plugin": "^4.9.0",
@@ -62,6 +65,7 @@
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-vue": "^7.0.0",
     "localenvify": "^1.0.1",
+    "quasar-app-extension-ssg": "^3.0.3",
     "workbox-webpack-plugin": "^6.0.0"
   },
   "browserslist": [
