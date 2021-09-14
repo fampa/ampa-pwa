@@ -18,5 +18,8 @@
     "**/.quasar/*/**": true,
     "**/.fiirebase/*/**": true,
     "**/.github/*/**": true
-  }
+  },
+  "i18n-ally.localesPaths": [
+    "src/i18n"
+  ]
 }

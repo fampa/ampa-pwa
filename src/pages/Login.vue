@@ -10,7 +10,7 @@
 <script lang="ts">
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import 'firebaseui/dist/firebaseui.css'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 // import { useQuasar } from 'quasar'
 import firebase from 'firebase/app'
 import { onMounted } from 'vue'
@@ -25,6 +25,7 @@ export default {
     // $q.loading.show()
     const initUi = async () => {
       const route = useRoute()
+      const router = useRouter()
       // FirebaseUI config.
       const store = useStore()
       const locale = store.state.settings.language
@@ -47,6 +48,8 @@ export default {
             },
             signInSuccessWithAuthResult: function () {
               console.log('sign in success')
+              const successResponse = async () => await router.replace(route.query && route.query.next ? route.query.next.toString() : '/')
+              console.log(successResponse)
               return true
             }
 
