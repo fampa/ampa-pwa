@@ -271,8 +271,8 @@ export default defineComponent({
 
     onMounted(() => {
       function getLang () {
-        if (navigator.languages !== undefined) { return navigator.languages[0].substring(0, 2) }
-        return navigator.language.substring(0, 2)
+        if (navigator && navigator.languages !== undefined) { return navigator.languages[0].substring(0, 2) }
+        return navigator?.language.substring(0, 2)
       }
       const storeLang = computed(() => store.state.settings.language)
 
