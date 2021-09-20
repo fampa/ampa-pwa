@@ -166,6 +166,21 @@ export default {
     PUBLISHED: 'PUBLICAT',
     DRAFT: 'ESBORRANY'
   },
+  steps: {
+    title: 'Completa la teua alta',
+    personal: {
+      title: 'Dades personals',
+      description: 'Necessites omplir les dades personals'
+    },
+    family: {
+      title: 'Dades familiars',
+      description: 'Necessites omplir les dades familiars'
+    },
+    iban: {
+      title: 'Dades bancàries',
+      description: 'Faciliteu el número de compte i confirmeu la domiciliació fent click a l\'enllaç que rebreu per correu electrònic'
+    }
+  },
   update: 'ACTUALITZA',
   updatedAt: 'Actualitzat el {date}',
   remove: {

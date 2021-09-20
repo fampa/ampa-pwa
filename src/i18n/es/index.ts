@@ -197,6 +197,21 @@ export default {
     PUBLISHED: 'PUBLICADO',
     DRAFT: 'BORRADOR'
   },
+  steps: {
+    title: 'Completa tu alta',
+    personal: {
+      title: 'Datos personales',
+      description: 'Necesitas rellenar los datos personales'
+    },
+    family: {
+      title: 'Datos familiares',
+      description: 'Necesitas rellenar los datos familiares'
+    },
+    iban: {
+      title: 'Datos bancarios',
+      description: 'Facilita el número de cuenta y confirma la domiciliación haciendo click en el enlace que recibirás por correo electrónico'
+    }
+  },
   table: {
     article: 'Artículos',
     date: 'Fecha',

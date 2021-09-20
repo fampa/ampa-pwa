@@ -5,6 +5,7 @@
             leave-active-class="animated fadeInRight">
   <q-page class="bg-grey-2 q-pa-md">
     <home-banner v-if="!user"></home-banner>
+    <initial-steps v-if="user && member && !member.family?.iban" :member="member"></initial-steps>
     <div v-if="!cleanArticles && loading">
       <div class="row items-start">
         <div
@@ -56,6 +57,7 @@ import { defineComponent, reactive, ref, computed } from 'vue'
 import { useStore } from 'src/services/store'
 import NewsCard from 'components/NewsCard.vue'
 import HomeBanner from 'components/homeBanner.vue'
+import InitialSteps from 'components/InitialSteps.vue'
 // import { useQuasar } from 'quasar'
 import { ContentsService } from 'src/services/contents'
 import { Content } from 'src/models/Content'
@@ -63,12 +65,13 @@ import { Content } from 'src/models/Content'
 
 export default defineComponent({
   name: 'PageIndex',
-  components: { NewsCard, HomeBanner },
+  components: { NewsCard, HomeBanner, InitialSteps },
   setup () {
     const contentsService = new ContentsService()
     const articles = ref<Content[]>([])
     const store = useStore()
     const user = computed(() => store.state.user?.user)
+    const member = computed(() => store.state.user?.member)
     // const $q = useQuasar()
     // const i18n = useI18n()
 
@@ -123,7 +126,8 @@ export default defineComponent({
       cleanArticles,
       loading,
       onLoad,
-      user
+      user,
+      member
     }
   }
 })
