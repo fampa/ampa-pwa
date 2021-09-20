@@ -134,8 +134,10 @@ export default {
   },
   newVersion: 'Nova versió disponible. Actualitza polsant el botó',
   notification: {
+    changeLanguage: 'Podeu anar a la configuració per canviar el idioma',
     close: 'Tanca',
-    read: 'Llegeix'
+    read: 'Llegeix',
+    settings: 'Configuració'
   },
   personalData: 'Dades personals',
   privacy: {
@@ -165,6 +167,21 @@ export default {
   status: {
     PUBLISHED: 'PUBLICAT',
     DRAFT: 'ESBORRANY'
+  },
+  steps: {
+    title: 'Completa la teua alta',
+    personal: {
+      title: 'Dades personals',
+      description: 'Necessites omplir les dades personals'
+    },
+    family: {
+      title: 'Dades familiars',
+      description: 'Necessites omplir les dades familiars'
+    },
+    iban: {
+      title: 'Dades bancàries',
+      description: 'Faciliteu el número de compte i confirmeu la domiciliació fent click a l\'enllaç que rebreu per correu electrònic'
+    }
   },
   update: 'ACTUALITZA',
   updatedAt: 'Actualitzat el {date}',

@@ -118,6 +118,8 @@ export default {
           delete clean.family
           // console.log('form submitted', clean)
           await mutate({ id: data.id, member: clean })
+          // update member on store
+          await store.dispatch('user/setMember', data.id)
           $q.notify(i18n.t('forms.savedOk'))
         } else {
           // oh no, user has filled in
