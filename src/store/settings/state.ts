@@ -1,12 +1,14 @@
 export interface SettingsStateInterface {
   language: string
   fallbackLanguage: string
+  presentedChoice: boolean
 }
 
 function state (): SettingsStateInterface {
   return {
     language: 'ca',
-    fallbackLanguage: 'es'
+    fallbackLanguage: 'es',
+    presentedChoice: false
   }
 }
 

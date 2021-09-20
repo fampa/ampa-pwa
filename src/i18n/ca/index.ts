@@ -134,8 +134,10 @@ export default {
   },
   newVersion: 'Nova versió disponible. Actualitza polsant el botó',
   notification: {
+    changeLanguage: 'Podeu anar a la configuració per canviar el idioma',
     close: 'Tanca',
-    read: 'Llegeix'
+    read: 'Llegeix',
+    settings: 'Configuració'
   },
   personalData: 'Dades personals',
   privacy: {

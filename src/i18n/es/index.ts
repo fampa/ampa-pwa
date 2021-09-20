@@ -134,8 +134,10 @@ export default {
   },
   newVersion: 'Nueva versión disponible. Actualice pulsando el botón',
   notification: {
+    changeLanguage: 'Puedes ir a la configuración para cambiar el idioma',
     close: 'Cerrar',
-    read: 'Leer'
+    read: 'Leer',
+    settings: 'Configuración'
   },
   personalData: 'Datos personales',
   privacy: {

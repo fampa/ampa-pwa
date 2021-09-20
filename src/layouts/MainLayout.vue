@@ -200,6 +200,7 @@ import { fallbackContent } from 'src/utilities/fallbackContent'
 import { date, useQuasar } from 'quasar'
 import firebase from 'firebase/app'
 import 'firebase/messaging'
+import { useRouter } from 'vue-router'
 
 export default defineComponent({
   name: 'MainLayout',
@@ -269,6 +270,39 @@ export default defineComponent({
     })
 
     onMounted(() => {
+      function getLang () {
+        if (navigator.languages !== undefined) { return navigator.languages[0].substring(0, 2) }
+        return navigator.language.substring(0, 2)
+      }
+      const storeLang = computed(() => store.state.settings.language)
+
+      if (getLang() !== storeLang.value) {
+        // console.log('getLang', getLang())
+        const presentedChoice = computed(() => store.state.settings.presentedChoice)
+        const router = useRouter()
+        if (!presentedChoice.value) {
+          $q.notify({
+            type: 'info',
+            timeout: 0,
+            message: i18n.t('notification.changeLanguage'),
+            actions: [
+              {
+                label: i18n.t('notification.close'),
+                color: 'white',
+                attrs: {
+                  'aria-label': 'Dismiss'
+                }
+              },
+              {
+                label: i18n.t('notification.settings'),
+                color: 'white',
+                handler: () => router.push('/settings')
+              }
+            ]
+          })
+          store.commit('settings/setPresentedChoice')
+        }
+      }
       if (!firebase.messaging.isSupported()) return
       // eslint-disable-next-line @typescript-eslint/no-misused-promises
       messaging.onMessage(async (payload) => {
