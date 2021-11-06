@@ -14,7 +14,7 @@
         <q-tab name="url" icon="las la-link" label="URL">
         </q-tab>
       </q-tabs>
-      <own-images @selected="selectImage"  v-if="tabs === 'own'">
+      <own-images @selected="selectImage" path-prefix="media"  v-if="tabs === 'own'">
       </own-images>
       <unsplash-component @selected="selectImage" v-if="unsplashAccessKey && tabs === 'unsplash'">
       </unsplash-component>
