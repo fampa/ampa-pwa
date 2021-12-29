@@ -11,8 +11,8 @@ import { userCreated, userRemoved } from './utils/users'
 //   response.status(200).json({ results: 'Hola món' })
 // })
 
-export const api: functions.HttpsFunction = functions.region('europe-west1').https.onRequest(appApi)
+export const api: functions.HttpsFunction = functions.https.onRequest(appApi)
 
-export const onUserCreated: functions.HttpsFunction = functions.region('europe-west1').auth.user().onCreate(userCreated)
+export const onUserCreated: functions.HttpsFunction = functions.auth.user().onCreate(userCreated)
 
-export const onUserRemoved: functions.HttpsFunction = functions.region('europe-west1').auth.user().onDelete(userRemoved)
+export const onUserRemoved: functions.HttpsFunction = functions.auth.user().onDelete(userRemoved)
