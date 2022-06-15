@@ -150,7 +150,7 @@ appApi.post('/request/family-access', async (req: express.Request, res: express.
       subject: `${requester.email} ha sol·licitat accés a la app`,
       message: `
         <p>L'usuari ${requester.email} ha sol·licitat accés a gestionar la família a la app de l'AMPA</p>
-        <p>Per donar-li accés <a href="${functions.config().env.template.siteUrl as string}/user/family">entra a l'aplicació</a> i segueix les instruccions.</p>
+        <p>Per donar-li accés <a href="${functions.config().env.template.siteUrl as string}user/family">entra a l'aplicació</a> i segueix les instruccions.</p>
         `
     }
     if (joinRequest) {
