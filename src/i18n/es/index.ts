@@ -118,6 +118,7 @@ export default {
     needPayment: 'Necesitas facilitar los datos de domiciliación y firmar el mandato por correo electrónico para poder proseguir',
     phone: 'Teléfono',
     paymentData: 'Datos de domiciliación',
+    remove: 'Eliminar este miembro',
     removeAdmin: 'Quitar admin',
     userDataNotice: 'Cumplimenta primero los datos personales',
     userDataNoticeBtn: 'Ir a Datos Personales'

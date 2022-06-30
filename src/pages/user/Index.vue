@@ -24,7 +24,11 @@
         </div>
         <br>
         <div class="q-gutter-md">
-          <q-btn color="red" :label="isAdmin ? $t('member.removeAdmin') : $t('member.addAdmin')" @click="makeAdmin" :loading="makeAdminLoading" />
+          <q-btn color="orange" :label="isAdmin ? $t('member.removeAdmin') : $t('member.addAdmin')" @click="makeAdmin" :loading="makeAdminLoading" />
+        </div>
+      <br>
+        <div class="q-gutter-md">
+          <q-btn color="red" :label="$t('member.remove')" @click="removeMember" :loading="makeAdminLoading" />
         </div>
       </div>
     </div>
@@ -155,6 +159,27 @@ export default {
         })
     }
 
+    const removeMember = () => {
+      if (!confirm('Esteu segur de voler ELIMINAR aquest usuari? Aquesta acció no es pot desfer!!')) return
+      makeAdminLoading.value = true
+      const result = membersService.removeMember(data.id)
+      result
+        .then((res) => {
+          makeAdminLoading.value = false
+          console.log(res)
+          $q.notify(i18n.t('forms.savedOk'))
+        })
+        .then(() => router.replace('/admin/users'))
+        .catch((err) => {
+          makeAdminLoading.value = false
+          $q.notify({
+            type: 'negative',
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+            message: err.message
+          })
+        })
+    }
+
     return {
       ...toRefs(data),
       submitForm,
@@ -166,7 +191,8 @@ export default {
       updateMemberError,
       admin,
       makeAdmin,
-      makeAdminLoading
+      makeAdminLoading,
+      removeMember
     }
   }
 }

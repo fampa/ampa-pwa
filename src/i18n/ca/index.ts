@@ -115,6 +115,7 @@ export default {
     lastName: 'Cognoms',
     email: 'Correu electrònic',
     phone: 'Telèfon',
+    remove: 'Elimina aquest membre',
     removeAdmin: 'Llevar admin',
     needLogin: 'Necessites estar identificat per poder prosseguir',
     needPayment: 'Necessites omplir les dades de domiciliació i signar el manament per correu electrònic per poder prosseguir',

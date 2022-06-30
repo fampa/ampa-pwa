@@ -44,6 +44,16 @@ export class MembersService {
     return response
   }
 
+  removeMember = async (id: string) => {
+    if (!id) return
+    const data = { id }
+    const token = await firebase.auth().currentUser.getIdToken()
+    const endpoint = `${this.axiosEndpoint}/admin/remove-user/`
+    const response = await axios
+      .post(endpoint, data, { headers: { authorization: `Bearer ${token}` } })
+    return response
+  }
+
   upsertFamily = () => {
     const response = useMutation<FamilyData, FamilyVars>(
       upsertFamily
