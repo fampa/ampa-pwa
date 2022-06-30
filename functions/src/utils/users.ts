@@ -57,6 +57,11 @@ export const userRemoved = async (user: admin.auth.UserRecord) => {
   await removeUser(id)
 }
 
+export const deleteUserFromFirebase = async (id: string) => {
+  functions.logger.log('deleteUserFromFirebase', id)
+  await admin.auth().deleteUser(id)
+}
+
 export const importUsers = async (users) => {
   await admin
     .auth()

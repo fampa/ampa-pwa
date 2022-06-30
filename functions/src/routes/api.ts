@@ -3,6 +3,7 @@ import * as functions from 'firebase-functions'
 import 'firebase-functions'
 import { gql } from 'graphql-request'
 import { client } from '../utils/graphql'
+import { deleteUserFromFirebase } from '../utils/users'
 import express from 'express'
 import cors from 'cors'
 export const appApi: express.Application = express()
@@ -95,6 +96,15 @@ appApi.post('/admin/change-claims', async (req: express.Request, res: express.Re
   await updateClaims(id, isAdmin)
   functions.logger.info(`member ${member.email} admin state:`, isAdmin)
   return res.json({ isAdmin: isAdmin })
+})
+
+// eslint-disable-next-line @typescript-eslint/no-misused-promises
+appApi.post('/admin/remove-user', async (req: express.Request, res: express.Response) => {
+  const id = req.body.id
+  functions.logger.info('removing user', id)
+  await deleteUserFromFirebase(id)
+  functions.logger.info(`user ${id} removed`)
+  return res.json({ message: `user ${id} removed` })
 })
 
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
