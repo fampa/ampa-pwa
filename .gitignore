@@ -39,7 +39,10 @@ firebase-debug.log
 functions/.runtimeconfig.json
 functions/env.json
 functions/lib
+functions/ui-debug.log
 
 public/firebase-messaging-sw.js
 
 .firebaserc
+
+ui-debug.log
