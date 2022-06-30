@@ -10,6 +10,7 @@
   "exclude": [
     "functions/lib",
   ],
+  "jsx": "preserve"
   // "strictFunctionTypes": false
 }
 
