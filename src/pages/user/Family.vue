@@ -47,6 +47,7 @@
             </h2>
             <q-form v-if="children" ref="mForm" @submit.prevent="submitForm">
             <div v-for="child in children" :key="child.id">
+              <q-btn rounded flat color="red" icon="delete" class="float-right" @click="deleteChild(child.id)"></q-btn>
               <q-input outlined v-model="child.firstName" :label="$t('member.firstName')" :rules="[val => !!val || $t('forms.required')]" />
               <q-input outlined v-model="child.lastName" :label="$t('member.lastName')" :rules="[val => !!val || $t('forms.required')]" />
               <q-input outlined v-model="child.birthDate" mask="####-##-##" :rules="[val => datePattern.test(val) || $t('forms.validDate'), val => !!val || $t('forms.required')]" :label="$t('member.birthDate')">
@@ -139,6 +140,22 @@ export default {
     const currentUserId = computed(() => {
       return firebase.auth().currentUser?.uid
     })
+
+    const { mutate: deleteChildMutation } = membersService.deleteChild()
+
+    const deleteChild = async (id: number) => {
+      if (!confirm(i18n.t('family.deleteChildConfirm'))) return
+      const child = childrenData.children.find(c => c.id === id)
+      if (!child) {
+        return
+      }
+      const childIndex = childrenData.children.indexOf(child)
+      if (childIndex === -1) {
+        return
+      }
+      childrenData.children.splice(childIndex, 1)
+      await deleteChildMutation({ id })
+    }
 
     const id = computed(() => {
       const params = route.params?.id?.toString()
@@ -363,7 +380,8 @@ export default {
       rejectJoin,
       abortJoin,
       fallbackContent,
-      isAdmin
+      isAdmin,
+      deleteChild
     }
   }
 }

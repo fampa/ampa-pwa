@@ -3,6 +3,7 @@ export default {
     users: 'Gestión de usuarios',
     pages: 'Gestión de páginas',
     family: 'Gestión de familias',
+    children: 'Gestión de niños/as',
     services: 'Gestión de servicios',
     blog: 'Gestión del blog',
     tags: 'Gestión de etiquetas',
@@ -54,7 +55,8 @@ export default {
     requestJoinNoticeAbort: 'Cancela la solicitud',
     requestJoinNotice: 'Has recibido una solicitud de {email} para unirse a gestionar tu familia',
     requestJoinNoticeAccept: 'Aceptar',
-    requestJoinNoticeDecline: 'Rechazar'
+    requestJoinNoticeDecline: 'Rechazar',
+    deleteChildConfirm: '¿Estás seguro de que quieres eliminar este niño/a?'
   },
   firebaseui: {
     google: 'Entra o regístrate con Google',
@@ -234,7 +236,9 @@ export default {
     showWithoutIban: 'Mostrar sin domiciliación',
     status: 'Estado',
     tag: 'Etiquetas',
-    type: 'Tipo'
+    type: 'Tipo',
+    birthday: 'Fecha de nacimiento',
+    children: 'Niños/as'
   },
   tag: {
     add: 'Añadir etiquetas',

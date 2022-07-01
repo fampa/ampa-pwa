@@ -1,0 +1,26 @@
+query getChildren($filter: String = "%%", $limit: Int, $offset: Int, $orderBy: [children_order_by!] = {createdAt: desc, lastName: asc}) {
+  children_aggregate(where: {_or: [{firstName: {_ilike: $filter}}, {lastName: {_ilike: $filter}}]}) {
+    aggregate {
+      count
+    }
+  }
+  children(where: {_or: [{firstName: {_ilike: $filter}}, {lastName: {_ilike: $filter}}]}, limit: $limit, offset: $offset, order_by: $orderBy) {
+    createdAt
+    id
+    updatedAt
+    firstName
+    lastName
+    birthDate
+    familyId
+    family {
+      owner {
+        id
+      }
+      children_aggregate {
+        aggregate {
+          count
+        }
+      }
+    }
+  }
+}

@@ -5,11 +5,13 @@ import getMembers from './queries/getMembers.gql'
 import addMessage from './queries/addMessage.gql'
 import addMessageMembers from './queries/addMessageMembers.gql'
 import getFamilies from './queries/getFamilies.gql'
+import getChildren from './queries/getChildren.gql'
 import { Aggregate, QueryTableOptions } from 'src/models/QueryTable'
 import { GetMembersData } from 'src/models/Member'
 import { ContentsData } from 'src/models/Content'
 import { Message } from 'src/models/Message'
 import { Family } from 'src/models/Family'
+import { Child } from 'src/models/Child'
 
 export class AdminService {
   getContentsByType = (options: QueryTableOptions) => {
@@ -39,6 +41,18 @@ export class AdminService {
   getFamilies = (options: QueryTableOptions) => {
     const response = useQuery<{families_aggregate: Aggregate, families: Family[]}, QueryTableOptions>(
       getFamilies,
+      { ...options },
+      {
+        fetchPolicy: 'no-cache',
+        nextFetchPolicy: 'no-cache'
+      }
+    )
+    return response
+  }
+
+  getChildren = (options: QueryTableOptions) => {
+    const response = useQuery<{children_aggregate: Aggregate, children: Child[]}, QueryTableOptions>(
+      getChildren,
       { ...options },
       {
         fetchPolicy: 'no-cache',

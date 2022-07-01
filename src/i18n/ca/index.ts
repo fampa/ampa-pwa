@@ -4,6 +4,7 @@ export default {
     pages: 'Gestió de pàgines',
     services: 'Gestió de serveis',
     family: 'Gestió de famílies',
+    children: 'Gestió de xiquets/es',
     blog: 'Gestió del blog',
     tags: 'Gestió d\'etiquetes',
     link: 'Gestió d\'enllaços'
@@ -54,7 +55,8 @@ export default {
     requestJoinNotice: 'Has rebut una sol·licitud de {email} per unir-se a gestionar la teua família',
     requestJoinNoticeAbort: 'Cancel·la la sol·licitud',
     requestJoinNoticeAccept: 'Accepta',
-    requestJoinNoticeDecline: 'Rebutja'
+    requestJoinNoticeDecline: 'Rebutja',
+    deleteChildConfirm: 'Estàs segur que vols eliminar aquest fill/a?'
   },
   firebaseui: {
     google: 'Entra o registra\'t amb Google',
@@ -234,7 +236,9 @@ export default {
     showWithoutIban: 'Mostra sense domiciliació',
     status: 'Estat',
     tag: 'Etiquetes',
-    type: 'Tipus'
+    type: 'Tipus',
+    birthday: 'Data de naixement',
+    children: 'Xiquets/es'
   },
   tag: {
     add: 'Afegeix etiquetes',

@@ -1,0 +1,6 @@
+mutation deleteChild($id: Int!) {
+  delete_children_by_pk(id: $id) {
+    lastName
+    firstName
+  }
+}
