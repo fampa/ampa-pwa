@@ -285,7 +285,7 @@ export default {
           await mutateChildren({ children })
           if (shouldUpdateFamilyName.value) {
             await upsertFamily()
-              .then(() => store.dispatch('user/setMember', id.value))
+            // .then(() => store.dispatch('user/setMember', id.value))
           }
           $q.notify(i18n.t('forms.savedOk'))
         } else {
