@@ -1,6 +1,8 @@
 <template>
   <q-page padding class="bg-grey-2  q-pa-md">
     <div class="max-600" v-if="id">
+      <initial-steps v-if="currentUserId && memberData && !memberData.family?.manualPayment && !memberData.family?.iban" :member="memberData"></initial-steps>
+
       <h1 class="text-h4">
         {{$t('personalData')}}
         <q-badge v-if="isAdmin" color="red">
@@ -38,7 +40,7 @@
 <script lang="ts">
 import { useRoute, useRouter } from 'vue-router'
 import { MembersService } from 'src/services/members'
-import { computed, ref, reactive, toRefs, onMounted } from 'vue'
+import { computed, ref, reactive, toRefs } from 'vue'
 import firebase from 'firebase/app'
 import 'firebase/auth'
 import { Member } from 'src/models/Member'
@@ -47,9 +49,13 @@ import { cleanObject } from 'src/utilities/cleanObject'
 import { useStore } from 'src/services/store'
 import { useI18n } from 'vue-i18n'
 import { validateNif, validatePhone, validateEmail } from 'src/utilities/validations'
+import InitialSteps from 'components/InitialSteps.vue'
 
 export default {
   name: 'PagePersonalData',
+  components: {
+    InitialSteps
+  },
   setup () {
     const data = reactive<Member>({
       id: '',
@@ -62,6 +68,8 @@ export default {
       family: undefined,
       isAdmin: false
     })
+
+    const memberData = ref<Member>(null)
 
     const store = useStore()
 
@@ -85,25 +93,25 @@ export default {
       }
     })
 
-    onMounted(() => {
-      const { member, onResult, onError } = membersService.getById(id.value)
+    const { member, onResult, onError: onGetMemberError, refetch } = membersService.getById(id.value)
 
-      onResult(() => {
-        data.id = member.value?.id || ''
-        data.firstName = member.value?.firstName || data.firstName
-        data.lastName = member.value?.lastName || data.lastName
-        data.nif = member.value?.nif || ''
-        data.email = member.value?.email || ''
-        data.phone = member.value?.phone || ''
-        data.familyId = member.value?.familyId
-        data.family = member.value?.family
-        data.isAdmin = member.value?.isAdmin
-      })
+    onResult(() => {
+      memberData.value = member.value
+      data.id = member.value?.id || ''
+      data.firstName = member.value?.firstName || data.firstName
+      data.lastName = member.value?.lastName || data.lastName
+      data.nif = member.value?.nif || ''
+      data.email = member.value?.email || ''
+      data.phone = member.value?.phone || ''
+      data.familyId = member.value?.familyId
+      data.family = member.value?.family
+      data.isAdmin = member.value?.isAdmin
+    })
 
-      // eslint-disable-next-line @typescript-eslint/no-misused-promises
-      onError(async () => {
-        await router.push('/')
-      })
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+    onGetMemberError(async (err) => {
+      console.error(err)
+      await router.push('/')
     })
 
     const i18n = useI18n()
@@ -125,6 +133,7 @@ export default {
           // update member on store
           await store.dispatch('user/setMember', data.id)
           $q.notify(i18n.t('forms.savedOk'))
+          await refetch()
         } else {
           // oh no, user has filled in
           // at least one invalid value
@@ -133,7 +142,8 @@ export default {
     }
 
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
-    onError(async () => {
+    onError(async (err) => {
+      console.error(err)
       await router.push('/')
     })
 
@@ -182,6 +192,8 @@ export default {
 
     return {
       ...toRefs(data),
+      data,
+      memberData,
       submitForm,
       validateNif,
       validatePhone,
@@ -192,7 +204,8 @@ export default {
       admin,
       makeAdmin,
       makeAdminLoading,
-      removeMember
+      removeMember,
+      currentUserId
     }
   }
 }

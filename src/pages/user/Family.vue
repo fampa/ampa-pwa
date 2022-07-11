@@ -1,6 +1,7 @@
 <template>
   <q-page padding class="bg-grey-2  q-pa-md">
     <div class="max-600">
+      <initial-steps v-if="user && memberData && !memberData.family?.manualPayment && !memberData.family?.iban" :member="memberData"></initial-steps>
       <h1 class="text-h4">{{$t('member.familyData')}}</h1>
       <div v-if="!member && isLoading">
         <q-skeleton height="50px" square />
@@ -99,9 +100,13 @@ import { Member } from 'src/models/Member'
 import { useI18n } from 'vue-i18n'
 import { useStore } from 'src/services/store'
 import { fallbackContent } from 'src/utilities/fallbackContent'
+import InitialSteps from 'components/InitialSteps.vue'
 
 export default {
   name: 'PagePersonalData',
+  components: {
+    InitialSteps
+  },
   setup () {
     // utilities and initializations
     const $q = useQuasar()
@@ -113,20 +118,23 @@ export default {
     const user = computed(() => store.state.user.user)
     const isAdmin = computed(() => store.state.user.isAdmin)
     const datePattern = /^-?[\d]+-[0-1]\d-[0-3]\d$/
+    const member = ref<Member>(null)
 
     // Reactive data
     const familyData = reactive<Family>({
       id: undefined,
       name: '',
       iban: undefined,
-      ownerId: undefined
+      ownerId: undefined,
+      manualPayment: undefined
     })
 
     const memberData = reactive<Member>({
       familyId: undefined,
       nif: undefined,
       hasRequestedJoinFamily: false,
-      joinFamilyRequest: undefined
+      joinFamilyRequest: undefined,
+      family: undefined
     })
 
     const childrenData = reactive<ChildrenData>({
@@ -169,17 +177,19 @@ export default {
     //
     // load data
     //
-    const { member, loading, error, onError, onResult } = membersService.getById(id.value)
+    const { member: memberResult, loading, error, onError, onResult, refetch } = membersService.getById(id.value)
 
     onResult(() => {
-      familyData.id = member.value?.familyId
-      familyData.name = member.value?.family?.name
-      familyData.ownerId = member.value?.family?.ownerId
-      memberData.familyId = member.value?.familyId
-      memberData.nif = member.value?.nif
-      memberData.hasRequestedJoinFamily = member.value?.hasRequestedJoinFamily
-      memberData.joinFamilyRequest = member.value?.joinFamilyRequest
-      const childrenTemp = member.value?.family?.children?.map(child => {
+      member.value = memberResult.value
+      familyData.id = memberResult.value?.familyId
+      familyData.name = memberResult.value?.family?.name
+      familyData.ownerId = memberResult.value?.family?.ownerId
+      memberData.familyId = memberResult.value?.familyId
+      memberData.nif = memberResult.value?.nif
+      memberData.family = memberResult.value?.family
+      memberData.hasRequestedJoinFamily = memberResult.value?.hasRequestedJoinFamily
+      memberData.joinFamilyRequest = memberResult.value?.joinFamilyRequest
+      const childrenTemp = memberResult.value?.family?.children?.map(child => {
         const tempChild: Child = { ...child }
         return tempChild
       })
@@ -288,6 +298,7 @@ export default {
             // .then(() => store.dispatch('user/setMember', id.value))
           }
           $q.notify(i18n.t('forms.savedOk'))
+          await refetch()
         } else {
         // oh no, user has filled in
         // at least one invalid value
@@ -368,6 +379,7 @@ export default {
       ...toRefs(familyData),
       ...toRefs(memberData),
       addChild,
+      memberData,
       user,
       datePattern,
       error,

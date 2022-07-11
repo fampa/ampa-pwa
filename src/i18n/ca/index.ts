@@ -121,7 +121,8 @@ export default {
     removeAdmin: 'Llevar admin',
     needLogin: 'Necessites estar identificat per poder prosseguir',
     needPayment: 'Necessites omplir les dades de domiciliació i signar el manament per correu electrònic per poder prosseguir',
-    paymentData: 'Dades de domiciliació',
+    paymentData: 'Dades de pagament',
+    ampaIban: 'Número de compte de l\'AMPA on has de fer l\'ingrés: {iban}',
     userDataNotice: 'Omple primer les dades personals',
     userDataNoticeBtn: 'Aneu a Dades Personals'
   },
@@ -182,7 +183,8 @@ export default {
       description: 'Necessites omplir les dades familiars'
     },
     iban: {
-      title: 'Dades bancàries',
+      title: 'Dades de pagament',
+      subtitle: 'Necessites omplir les dades de pagament',
       description: 'Faciliteu el número de compte i confirmeu la domiciliació fent click a l\'enllaç que rebreu per correu electrònic'
     }
   },

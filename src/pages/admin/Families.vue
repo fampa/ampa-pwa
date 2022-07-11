@@ -237,7 +237,8 @@ export default {
     // Error management
 
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
-    onError(async () => {
+    onError(async (err) => {
+      console.error(err)
       await router.push('/')
     })
 

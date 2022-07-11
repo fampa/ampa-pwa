@@ -21,6 +21,8 @@ query memberById($id: String!) {
       iban
       mandateId
       signatureDate
+      fees
+      manualPayment
       children {
         id
         firstName

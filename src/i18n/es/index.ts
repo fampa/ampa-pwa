@@ -119,7 +119,8 @@ export default {
     needLogin: 'Necesitas estar identificado para poder proseguir',
     needPayment: 'Necesitas facilitar los datos de domiciliación y firmar el mandato por correo electrónico para poder proseguir',
     phone: 'Teléfono',
-    paymentData: 'Datos de domiciliación',
+    paymentData: 'Datos de pago',
+    ampaIban: 'Número de cuenta del AMPA donde has de realizar el ingreso: {iban}',
     remove: 'Eliminar este miembro',
     removeAdmin: 'Quitar admin',
     userDataNotice: 'Cumplimenta primero los datos personales',
@@ -213,7 +214,8 @@ export default {
       description: 'Necesitas rellenar los datos familiares'
     },
     iban: {
-      title: 'Datos bancarios',
+      title: 'Datos de pago',
+      subtitle: 'Necesitas rellenar los datos de pago',
       description: 'Facilita el número de cuenta y confirma la domiciliación haciendo click en el enlace que recibirás por correo electrónico'
     }
   },

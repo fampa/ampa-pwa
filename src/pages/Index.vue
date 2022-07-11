@@ -5,7 +5,7 @@
             leave-active-class="animated fadeInRight">
   <q-page class="bg-grey-2 q-pa-md">
     <home-banner v-if="!user"></home-banner>
-    <initial-steps v-if="user && member && !member.family?.iban" :member="member"></initial-steps>
+    <initial-steps v-if="user && member && !member.family?.manualPayment && !member.family?.iban" :member="member"></initial-steps>
     <div v-if="!cleanArticles && loading">
       <div class="row items-start">
         <div

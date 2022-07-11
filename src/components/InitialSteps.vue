@@ -40,7 +40,7 @@
         prefix="3"
         disable
       >
-        {{$t('steps.iban.description')}}
+        {{$t('steps.iban.subtitle')}}
         <q-stepper-navigation>
           <q-btn to="/user/payment" :label="$t('steps.iban.title')" color="primary" />
         </q-stepper-navigation>
@@ -61,17 +61,18 @@ export default {
   },
   setup (props) {
     const step = computed(() => {
+      // console.log('member:', props.member)
       if (props.member && !props.member.nif) {
         // console.log('step 1')
         return 1
       }
 
-      if (props.member && props.member.nif && !props.member.familyId) {
+      if (props.member && props.member.nif && !(props.member.family?.children?.length > 0)) {
         // console.log('step 2')
         return 2
       }
 
-      if (props.member && props.member.nif && props.member.familyId && !props.member.family?.iban) {
+      if (props.member && props.member.nif && (props.member.family?.children?.length > 0) && !props.member.family?.manualPayment && !props.member.family?.iban) {
         // console.log('step 3')
         return 3
       }
