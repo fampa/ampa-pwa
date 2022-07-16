@@ -1,7 +1,7 @@
 <template>
   <q-page padding class="bg-grey-2  q-pa-md">
     <div class="max-600" v-if="id">
-      <initial-steps v-if="currentUserId && memberData && !memberData.family?.manualPayment && !memberData.family?.iban" :member="memberData"></initial-steps>
+      <initial-steps v-if="currentUserId && loggedInMember && !loggedInMember.family?.manualPayment && !loggedInMember.family?.iban" :member="loggedInMember"></initial-steps>
 
       <h1 class="text-h4">
         {{$t('personalData')}}
@@ -77,6 +77,8 @@ export default {
 
     const $q = useQuasar()
 
+    const loggedInMember = store.state.user.member
+
     const currentUserId = computed(() => {
       return firebase.auth().currentUser?.uid
     })
@@ -144,6 +146,11 @@ export default {
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
     onError(async (err) => {
       console.error(err)
+      $q.notify({
+        color: 'negative',
+        textColor: 'white',
+        message: i18n.t('forms.error', { error: err.message })
+      })
       await router.push('/')
     })
 
@@ -205,7 +212,8 @@ export default {
       makeAdmin,
       makeAdminLoading,
       removeMember,
-      currentUserId
+      currentUserId,
+      loggedInMember
     }
   }
 }

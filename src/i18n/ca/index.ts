@@ -82,7 +82,8 @@ export default {
     validEmail: 'Per favor, poseu una adreça electrònica vàlida',
     validIBAN: 'Per favor, poseu un IBAN vàlid',
     validNif: 'Per favor, poseu un NIF o NIE vàlid',
-    validPhone: 'Per favor, poseu un telèfon vàlid'
+    validPhone: 'Per favor, poseu un telèfon vàlid',
+    error: 's\'ha produït un error: {error}'
   },
   home: 'Inici',
   homePage: {

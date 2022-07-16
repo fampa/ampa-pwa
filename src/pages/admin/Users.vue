@@ -14,7 +14,7 @@
         :selected-rows-label="getSelectedString"
         selection="multiple"
         binary-state-sort
-        sortBy="lastName"
+        sortBy="createdAt"
         v-model:selected="selected"
       >
       <template v-slot:top>
@@ -38,7 +38,7 @@
       </q-table>
 
       <q-page-sticky position="bottom-right" :offset="[18, 18]">
-        <q-btn fab icon="add" color="primary" to="/admin/users/edit" />
+        <q-btn fab icon="add" color="primary" to="/login" />
       </q-page-sticky>
       <!-- send message -->
       <send-message :prompt="openSendMessage" @cancel="messageCancel" @send="sendMessage($event)"></send-message>
@@ -74,7 +74,7 @@ export default {
     const members = ref<Member[]>([])
     const filter = ref<string | null>(null)
     const pagination = ref({
-      sortBy: 'id',
+      sortBy: 'createdAt',
       descending: true,
       page: 1,
       rowsPerPage: 5,

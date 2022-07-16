@@ -1,7 +1,7 @@
 <template>
   <q-page padding class="bg-grey-2  q-pa-md">
     <div class="max-600">
-      <initial-steps v-if="user && memberData && !memberData.family?.manualPayment && !memberData.family?.iban" :member="memberData"></initial-steps>
+      <initial-steps v-if="user && loggedInMember && !loggedInMember.family?.manualPayment && !loggedInMember.family?.iban" :member="loggedInMember"></initial-steps>
       <h1 class="text-h4">{{$t('member.familyData')}}</h1>
       <div v-if="!member && isLoading">
         <q-skeleton height="50px" square />
@@ -119,6 +119,7 @@ export default {
     const isAdmin = computed(() => store.state.user.isAdmin)
     const datePattern = /^-?[\d]+-[0-1]\d-[0-3]\d$/
     const member = ref<Member>(null)
+    const loggedInMember = store.state.user.member
 
     // Reactive data
     const familyData = reactive<Family>({
@@ -393,7 +394,8 @@ export default {
       abortJoin,
       fallbackContent,
       isAdmin,
-      deleteChild
+      deleteChild,
+      loggedInMember
     }
   }
 }

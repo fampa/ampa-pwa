@@ -82,7 +82,8 @@ export default {
     validEmail: 'Por favor, introduce una dirección de correo electrónico válida',
     validIBAN: 'Per favor, introduce un IBAN válido',
     validNif: 'Por favor, introduce un NIF o NIE válido',
-    validPhone: 'Por favor, introduce un teléfono válido'
+    validPhone: 'Por favor, introduce un teléfono válido',
+    error: 'se ha producido un error: {error}'
   },
   home: 'Inicio',
   homePage: {

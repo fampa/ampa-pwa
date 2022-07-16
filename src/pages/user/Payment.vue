@@ -1,7 +1,7 @@
 <template>
   <q-page padding class="bg-grey-2  q-pa-md">
     <div class="max-600">
-    <initial-steps v-if="user && memberData && !memberData.family?.manualPayment && !memberData.family?.iban" :member="memberData"></initial-steps>
+    <initial-steps v-if="user && loggedInMember && !loggedInMember.family?.manualPayment && !loggedInMember.family?.iban" :member="loggedInMember"></initial-steps>
       <h1 class="text-h4">{{$t('member.paymentData')}}</h1>
       <div v-if="getMemberLoading">
         <q-skeleton height="50px" square />
@@ -79,6 +79,7 @@ export default {
     const $q = useQuasar()
     const i18n = useI18n()
     const store = useStore()
+    const loggedInMember = store.state.user.member
 
     const familyData = reactive<Family>({
       id: undefined,
@@ -278,7 +279,8 @@ export default {
       mutateLoading,
       timeCheck,
       AMPA_IBAN,
-      updateFamily
+      updateFamily,
+      loggedInMember
     }
   }
 }
