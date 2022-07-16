@@ -40,9 +40,9 @@
 
       </q-table>
 
-      <q-page-sticky position="bottom-right" :offset="[18, 18]">
+      <!-- <q-page-sticky position="bottom-right" :offset="[18, 18]">
         <q-btn fab icon="add" color="primary" to="/admin/users" />
-      </q-page-sticky>
+      </q-page-sticky> -->
       <!-- xml generator -->
       <xml-generator :prompt="isXmlGeneratorOpen" @cancel="xmlCancel" @generate="generateXml($event)"></xml-generator>
     </div>
