@@ -77,6 +77,11 @@
               <br>
             </div>
             <q-btn :loading="isLoading" :disable="children?.length === 0" color="primary" :label="$t('forms.save')" type="submit" />
+            <br>
+            <section v-if="isAdmin">
+              <h2>ADMIN</h2>
+              <q-btn color="accent" label="Usuari responsable" :to="`/admin/users/edit/${member.id}`" />
+            </section>
           </q-form>
 
         </div>
