@@ -7,7 +7,9 @@ export default {
     services: 'Gestión de servicios',
     blog: 'Gestión del blog',
     tags: 'Gestión de etiquetas',
-    link: 'Gestión de enlaces'
+    link: 'Gestión de enlaces',
+    baixa: '¿Estas seguros que quieres dar de baja?',
+    alta: '¿Estas seguros que quieres volver a dar de alta?'
   },
   backToHome: 'Volver a la página principal',
   content: {

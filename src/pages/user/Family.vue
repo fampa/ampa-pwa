@@ -49,9 +49,9 @@
             <q-form v-if="children" ref="mForm" @submit.prevent="submitForm">
             <div v-for="child in children" :key="child.id">
               <q-btn rounded flat color="red" icon="delete" class="float-right" @click="deleteChild(child.id)"></q-btn>
-              <q-input outlined v-model="child.firstName" :label="$t('member.firstName')" :rules="[val => !!val || $t('forms.required')]" />
-              <q-input outlined v-model="child.lastName" :label="$t('member.lastName')" :rules="[val => !!val || $t('forms.required')]" />
-              <q-input outlined v-model="child.birthDate" mask="####-##-##" :rules="[val => datePattern.test(val) || $t('forms.validDate'), val => !!val || $t('forms.required')]" :label="$t('member.birthDate')">
+              <q-input :disable="child.inactive" outlined v-model="child.firstName" :label="$t('member.firstName')" :rules="[val => !!val || $t('forms.required')]" />
+              <q-input :disable="child.inactive" outlined v-model="child.lastName" :label="$t('member.lastName')" :rules="[val => !!val || $t('forms.required')]" />
+              <q-input :disable="child.inactive" outlined v-model="child.birthDate" mask="####-##-##" :rules="[val => datePattern.test(val) || $t('forms.validDate'), val => !!val || $t('forms.required')]" :label="$t('member.birthDate')">
                 <template v-slot:append>
                   <q-icon name="event" class="cursor-pointer">
                     <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
@@ -66,8 +66,8 @@
               </q-input>
               <div class="q-pa-md">
                 <div class="q-gutter-md row">
-                  <q-select outlined v-model="child.grade" style="width: 50%" :options="GRADES" :label="$t('member.grade')" :rules="[val => (!!val || val === 0 ) || $t('forms.required')]" emit-value map-options />
-                  <q-select outlined v-model="child.group" style="width: 25%" :options="['A', 'B', 'C', 'D']" :label="$t('member.group')" :rules="[val => !!val || $t('forms.required')]" emit-value map-options />
+                  <q-select :disable="child.inactive" outlined v-model="child.grade" style="width: 50%" :options="GRADES" :label="$t('member.grade')" :rules="[val => (!!val || val === 0 ) || $t('forms.required')]" emit-value map-options />
+                  <q-select :disable="child.inactive" outlined v-model="child.group" style="width: 25%" :options="['A', 'B', 'C', 'D']" :label="$t('member.group')" :rules="[val => !!val || $t('forms.required')]" emit-value map-options />
                 </div>
               </div>
               <br>

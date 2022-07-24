@@ -7,7 +7,9 @@ export default {
     children: 'Gestió de xiquets/es',
     blog: 'Gestió del blog',
     tags: 'Gestió d\'etiquetes',
-    link: 'Gestió d\'enllaços'
+    link: 'Gestió d\'enllaços',
+    baixa: 'Esteu segurs que voleu donar de baixa?',
+    alta: 'Esteu segurs que voleu tornar a donar d\'alta?'
   },
   backToHome: 'Torna a la pàgina principal',
   content: {

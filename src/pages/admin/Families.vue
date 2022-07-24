@@ -20,9 +20,12 @@
       <template v-slot:top>
         <h2>{{$t('table.families')}}</h2>
         <q-space />
-        <q-btn v-if="ibanIsNull" flat icon="las la-eye" :disable="loading" :label="$t('table.showWithIban')" @click="toggleIsIbanNull" />
-        <q-btn v-if="!ibanIsNull" flat icon="las la-eye-slash" :disable="loading" :label="$t('table.showWithoutIban')" @click="toggleIsIbanNull" />
+        <q-btn flat icon="las la-eye" :disable="loading" :label="inactive ? $t('table.showAlta') : $t('table.showBaixa')" @click="toggleIsBaixa" />
+        <q-btn flat icon="las la-eye" :disable="loading" :label="ibanIsNull ? $t('table.showWithIban') : $t('table.showWithoutIban')" @click="toggleIsIbanNull" />
         <q-btn v-if="selected.length > 0" :disable="ibanIsNull || loading" @click="openXmlGenerator" class="q-ml-sm" icon="las la-money-check-alt" color="primary"  :label="$t('table.remesa')" />
+        <q-btn v-if="selected.length > 0" class="q-ml-sm" color="red" @click="donarBaixa"  :label="$t('table.donarBaixa')" />
+        <q-btn v-if="selected.length > 0" class="q-ml-sm" color="accent" @click="donarAlta"  :label="$t('table.donarAlta')" />
+
         <q-space />
         <q-input borderless dense debounce="300" v-model="filter" clearable clear-icon="close" :placeholder="$t('table.search')">
           <template v-slot:append>
@@ -30,15 +33,18 @@
           </template>
         </q-input>
       </template>
-      <template v-slot:body-cell-isAdmin="props">
+      <template v-slot:body-cell-inactive="props">
         <q-td :props="props">
           <q-badge v-if="props.value" color="red">
-            ADMIN
+            BAIXA
           </q-badge>
         </q-td>
       </template>
 
       </q-table>
+
+      <h2>ADMIN</h2>
+      <q-btn flat icon="las la-broom" :loading="loadingInactive" :disable="loading" label="Neteja families sense xiquets actius" color="red" @click="togglePendingInactive" />
 
       <!-- <q-page-sticky position="bottom-right" :offset="[18, 18]">
         <q-btn fab icon="add" color="primary" to="/admin/users" />
@@ -60,6 +66,7 @@ import { useRouter } from 'vue-router'
 import { Family } from 'src/models/Family'
 import SEPA from 'sepa'
 import xmlGenerator from 'src/components/xml-generator.vue'
+import { useQuasar } from 'quasar'
 
 export default {
   name: 'AdminMembers',
@@ -71,13 +78,14 @@ export default {
     const i18n = useI18n()
     const adminService = new AdminService()
     const router = useRouter()
-    // const $q = useQuasar()
+    const $q = useQuasar()
 
     // Data
     const families = ref<Family[]>([])
     const filter = ref<string | null>(null)
     const isXmlGeneratorOpen = ref(false)
     const ibanIsNull = ref(false)
+    const inactive = ref(false)
     const pagination = ref({
       sortBy: 'id',
       descending: true,
@@ -111,6 +119,14 @@ export default {
         align: 'left',
         field: 'iban',
         sortable: true
+      },
+      {
+        name: 'inactive',
+        required: true,
+        label: '',
+        align: 'left',
+        field: 'inactive',
+        sortable: true
       }
     ])
 
@@ -137,6 +153,7 @@ export default {
     }
     const sanitizeVariables = cleanObject(variables)
     const { result, onResult, onError, loading, fetchMore, refetch } = adminService.getFamilies(sanitizeVariables)
+    const { result: resultInactive, loading: loadingInactive } = adminService.getFamiliesPendingInactive(sanitizeVariables)
 
     onResult(() => {
       families.value = result.value?.families
@@ -183,6 +200,47 @@ export default {
     const toggleIsIbanNull = async () => {
       ibanIsNull.value = !ibanIsNull.value
       await refetch({ ...variables, ibanIsNull: ibanIsNull.value })
+    }
+
+    const { mutate: doInactiveFamilies } = adminService.donarBaixaFamilies()
+    const togglePendingInactive = async () => {
+      const idsPendingInactive = resultInactive.value?.families.map(f => f.id)
+      console.log('idsPendingInactive', idsPendingInactive)
+      await doInactiveFamilies({
+        ids: idsPendingInactive,
+        inactive: true,
+        manualPayment: true
+      })
+      await refetch({ ...variables, ibanIsNull: ibanIsNull.value })
+      $q.notify(`Families netejades: ${idsPendingInactive.length}`)
+    }
+
+    const toggleIsBaixa = async () => {
+      inactive.value = !inactive.value
+      await refetch({ ...variables, inactive: inactive.value, ibanIsNull: ibanIsNull.value })
+      // getChildren()
+    }
+
+    const { mutate } = adminService.donarBaixaFamilies()
+
+    const donarBaixa = async () => {
+      const ids = selected.value.map(s => Number(s.id))
+      console.log('donarBaixa', ids)
+      confirm(i18n.t('admin.baixa')) && (await mutate({
+        ids,
+        inactive: true,
+        manualPayment: true
+      })) && (await refetch({ ...variables, ibanIsNull: ibanIsNull.value })) && (selected.value = [])
+    }
+
+    const donarAlta = async () => {
+      const ids = selected.value.map(s => Number(s.id))
+      console.log('donarAlta', ids)
+      confirm(i18n.t('admin.alta')) && (await mutate({
+        ids,
+        inactive: false,
+        manualPayment: true
+      })) && (await refetch({ ...variables, ibanIsNull: ibanIsNull.value })) && (selected.value = [])
     }
 
     const openXmlGenerator = () => { isXmlGeneratorOpen.value = true }
@@ -257,7 +315,13 @@ export default {
       generateXml,
       openXmlGenerator,
       isXmlGeneratorOpen,
-      xmlCancel: () => { isXmlGeneratorOpen.value = !isXmlGeneratorOpen.value }
+      xmlCancel: () => { isXmlGeneratorOpen.value = !isXmlGeneratorOpen.value },
+      togglePendingInactive,
+      loadingInactive,
+      donarBaixa,
+      donarAlta,
+      inactive,
+      toggleIsBaixa
     }
   }
 

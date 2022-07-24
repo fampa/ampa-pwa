@@ -7,6 +7,8 @@ import addMessageMembers from './queries/addMessageMembers.gql'
 import getFamilies from './queries/getFamilies.gql'
 import getChildren from './queries/getChildren.gql'
 import toggleBaixaChildren from './queries/toggleBaixaChildren.gql'
+import toggleBaixaFamilies from './queries/toggleBaixaFamilies.gql'
+import familiesPendingInactive from './queries/familiesPendingInactive.gql'
 import { Aggregate, QueryTableOptions } from 'src/models/QueryTable'
 import { GetMembersData } from 'src/models/Member'
 import { ContentsData } from 'src/models/Content'
@@ -51,6 +53,18 @@ export class AdminService {
     return response
   }
 
+  getFamiliesPendingInactive = (options: QueryTableOptions) => {
+    const response = useQuery<{families_aggregate: Aggregate, families: Family[]}, QueryTableOptions>(
+      familiesPendingInactive,
+      { ...options },
+      {
+        fetchPolicy: 'no-cache',
+        nextFetchPolicy: 'no-cache'
+      }
+    )
+    return response
+  }
+
   getChildren = (options: QueryTableOptions) => {
     const response = useQuery<{children_aggregate: Aggregate, children: Child[]}, QueryTableOptions>(
       getChildren,
@@ -73,6 +87,13 @@ export class AdminService {
   donarBaixaChildren = () => {
     const response = useMutation<{update_children: { affected_rows: number}}, { ids: number[], inactive: boolean}>(
       toggleBaixaChildren
+    )
+    return response
+  }
+
+  donarBaixaFamilies = () => {
+    const response = useMutation<{update_families: { affected_rows: number}}, { ids: number[], inactive: boolean, manualPayment: boolean}>(
+      toggleBaixaFamilies
     )
     return response
   }
