@@ -23,8 +23,8 @@
         <q-btn flat icon="las la-eye" :disable="loading" :label="inactive ? $t('table.showAlta') : $t('table.showBaixa')" @click="toggleIsBaixa" />
         <q-btn flat icon="las la-eye" :disable="loading" :label="ibanIsNull ? $t('table.showWithIban') : $t('table.showWithoutIban')" @click="toggleIsIbanNull" />
         <q-btn v-if="selected.length > 0" :disable="ibanIsNull || loading" @click="openXmlGenerator" class="q-ml-sm" icon="las la-money-check-alt" color="primary"  :label="$t('table.remesa')" />
-        <q-btn v-if="selected.length > 0" class="q-ml-sm" color="red" @click="donarBaixa"  :label="$t('table.donarBaixa')" />
-        <q-btn v-if="selected.length > 0" class="q-ml-sm" color="accent" @click="donarAlta"  :label="$t('table.donarAlta')" />
+        <q-btn v-if="selected.length > 0 && !inactive" class="q-ml-sm" color="red" @click="donarBaixa"  :label="$t('table.donarBaixa')" />
+        <q-btn v-if="selected.length > 0 && inactive" class="q-ml-sm" color="accent" @click="donarAlta"  :label="$t('table.donarAlta')" />
 
         <q-space />
         <q-input borderless dense debounce="300" v-model="filter" clearable clear-icon="close" :placeholder="$t('table.search')">
