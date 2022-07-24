@@ -20,6 +20,8 @@
       <template v-slot:top>
         <h2>{{$t('table.children')}}</h2>
         <q-space />
+        <q-btn flat icon="las la-eye" :disable="loading" :label="inactive ? $t('table.showAlta') : $t('table.showBaixa')" @click="toggleIsBaixa" />
+        <q-btn v-if="selected.length > 0" class="q-ml-sm" color="red" @click="donarBaixa"  :label="inactive ? $t('table.donarAlta') : $t('table.donarBaixa')" />
         <q-space />
         <q-input borderless dense debounce="300" v-model="filter" clearable clear-icon="close" :placeholder="$t('table.search')">
           <template v-slot:append>
@@ -27,10 +29,10 @@
           </template>
         </q-input>
       </template>
-      <template v-slot:body-cell-isAdmin="props">
+      <template v-slot:body-cell-inactive="props">
         <q-td :props="props">
           <q-badge v-if="props.value" color="red">
-            ADMIN
+            BAIXA
           </q-badge>
         </q-td>
       </template>
@@ -108,17 +110,93 @@ export default {
         align: 'left',
         field: 'lastName',
         sortable: true
+      },
+      {
+        name: 'grade',
+        required: true,
+        label: i18n.t('member.grade'),
+        align: 'left',
+        field: val => GRADES.find(g => g.value === val.grade)?.label,
+        sortable: true
+      },
+      {
+        name: 'inactive',
+        required: true,
+        label: '',
+        align: 'left',
+        field: 'inactive',
+        sortable: true
       }
     ])
+
+    const GRADES = [
+      {
+        value: -2,
+        label: i18n.t('grade.infantil1')
+      },
+      {
+        value: -1,
+        label: i18n.t('grade.infantil2')
+      },
+      {
+        value: 0,
+        label: i18n.t('grade.infantil3')
+      },
+      {
+        value: 1,
+        label: i18n.t('grade.primaria1')
+      },
+      {
+        value: 2,
+        label: i18n.t('grade.primaria2')
+      },
+      {
+        value: 3,
+        label: i18n.t('grade.primaria3')
+      },
+      {
+        value: 4,
+        label: i18n.t('grade.primaria4')
+      },
+      {
+        value: 5,
+        label: i18n.t('grade.primaria5')
+      },
+      {
+        value: 6,
+        label: i18n.t('grade.primaria6')
+      }
+    ]
 
     const getSelectedString = () => {
       return selected.value.length === 0 ? '' : `${selected.value.length} registre${selected.value.length > 1 ? 's' : ''} seleccionats de ${pagination.value.rowsNumber}`
     }
 
+    const inactive = ref(false)
+
     // Methods
     const onRowClick = (evt, row) => {
       const id = row?.family?.owner?.id
       return router.push(`/admin/family/edit/${id}`)
+    }
+    const { mutate } = adminService.donarBaixaChildren()
+
+    const donarBaixa = async () => {
+      const ids = selected.value.map(s => Number(s.id))
+      console.log('donarBaixa', ids)
+      const variables = {
+        ids,
+        inactive: !inactive.value
+      }
+
+      await mutate(variables).then(res => {
+        console.log('donarBaixa', res)
+      }).catch(err => {
+        console.log('donarBaixa', err)
+      }).finally(() => {
+        selected.value = []
+      })
+      await refetch()
     }
 
     const limit = pagination.value.rowsPerPage === 0 ? pagination.value.rowsNumber : pagination.value.rowsPerPage
@@ -129,10 +207,11 @@ export default {
       limit,
       offset,
       orderBy,
+      inactive: inactive.value,
       filter: filter.value
     }
     const sanitizeVariables = cleanObject(variables)
-    const { result, onResult, onError, loading, fetchMore } = adminService.getChildren(sanitizeVariables)
+    const { result, onResult, onError, loading, fetchMore, refetch } = adminService.getChildren(sanitizeVariables)
 
     onResult(() => {
       children.value = result.value?.children
@@ -157,6 +236,7 @@ export default {
         limit,
         offset,
         orderBy,
+        inactive: inactive.value,
         filter
       }
       const sanitizeVariables = cleanObject(variables)
@@ -175,6 +255,12 @@ export default {
       // console.log('pagination', pagination)
     }
 
+    const toggleIsBaixa = async () => {
+      inactive.value = !inactive.value
+      await refetch({ ...variables, inactive: inactive.value })
+      // getChildren()
+    }
+
     // Error management
 
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
@@ -191,7 +277,10 @@ export default {
       loading,
       filter,
       onRequest,
-      onRowClick
+      onRowClick,
+      inactive,
+      toggleIsBaixa,
+      donarBaixa
     }
   }
 

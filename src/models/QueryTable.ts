@@ -10,5 +10,6 @@ export interface QueryTableOptions {
   orderBy?: Record<string, unknown>
   filter?: string,
   type?: string,
-  ibanIsNull?: boolean
+  ibanIsNull?: boolean,
+  inactive?: boolean,
 }

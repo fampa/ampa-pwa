@@ -125,7 +125,21 @@ export default {
     remove: 'Eliminar este miembro',
     removeAdmin: 'Quitar admin',
     userDataNotice: 'Cumplimenta primero los datos personales',
-    userDataNoticeBtn: 'Ir a Datos Personales'
+    userDataNoticeBtn: 'Ir a Datos Personales',
+    grade: 'Curso',
+    group: 'Grupo',
+    inactive: 'Baja'
+  },
+  grade: {
+    infantil1: '1º Infantil',
+    infantil2: '2º Infantil',
+    infantil3: '3º Infantil',
+    primaria1: '1º Primaria',
+    primaria2: '2º Primaria',
+    primaria3: '3º Primaria',
+    primaria4: '4º Primaria',
+    primaria5: '5º Primaria',
+    primaria6: '6º Primaria'
   },
   menu: {
     AmpaServices: 'LOS SERVICIOS DEL AMPA',
@@ -241,7 +255,11 @@ export default {
     tag: 'Etiquetas',
     type: 'Tipo',
     birthday: 'Fecha de nacimiento',
-    children: 'Niños/as'
+    children: 'Niños/as',
+    showBaixa: 'Mostrar baja',
+    showAlta: 'Mostrar alta',
+    donarBaixa: 'Dar de baja',
+    donarAlta: 'Dar de alta'
   },
   tag: {
     add: 'Añadir etiquetas',

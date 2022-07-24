@@ -125,7 +125,21 @@ export default {
     paymentData: 'Dades de pagament',
     ampaIban: 'Número de compte de l\'AMPA on has de fer l\'ingrés: {iban}',
     userDataNotice: 'Omple primer les dades personals',
-    userDataNoticeBtn: 'Aneu a Dades Personals'
+    userDataNoticeBtn: 'Aneu a Dades Personals',
+    grade: 'Curs',
+    group: 'Grup',
+    inactive: 'Baixa'
+  },
+  grade: {
+    infantil1: '1er Infantil',
+    infantil2: '2n Infantil',
+    infantil3: '3r Infantil',
+    primaria1: '1r Primària',
+    primaria2: '2n Primària',
+    primaria3: '3n Primària',
+    primaria4: '4t Primària',
+    primaria5: '5é Primària',
+    primaria6: '6é Primària'
   },
   menu: {
     AmpaServices: 'ELS SERVEIS DE L\'AMPA',
@@ -241,7 +255,11 @@ export default {
     tag: 'Etiquetes',
     type: 'Tipus',
     birthday: 'Data de naixement',
-    children: 'Xiquets/es'
+    children: 'Xiquets/es',
+    showAlta: 'Mostra alta',
+    showBaixa: 'Mostra baixa',
+    donarBaixa: 'Dona de baixa',
+    donarAlta: 'Dona d\'alta'
   },
   tag: {
     add: 'Afegeix etiquetes',

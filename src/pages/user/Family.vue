@@ -64,6 +64,12 @@
                   </q-icon>
                 </template>
               </q-input>
+              <div class="q-pa-md">
+                <div class="q-gutter-md row">
+                  <q-select outlined v-model="child.grade" style="width: 50%" :options="GRADES" :label="$t('member.grade')" :rules="[val => (!!val || val === 0 ) || $t('forms.required')]" emit-value map-options />
+                  <q-select outlined v-model="child.group" style="width: 25%" :options="['A', 'B', 'C', 'D']" :label="$t('member.group')" :rules="[val => !!val || $t('forms.required')]" emit-value map-options />
+                </div>
+              </div>
               <br>
               <div v-if="child.hiredServices?.length > 0">
                 <h3 class="text-h5">{{$t('family.hiredServices', { name: child.firstName })}}</h3>
@@ -207,12 +213,53 @@ export default {
     const { mutate: mutateMember, loading: updateMemberLoading, error: updateMemberError, onError: updateMemberOnError } = membersService.updateMember()
     const { mutate: mutateChildren, loading: updateChildrenLoading, error: updateChildrenError, onError: updateChildrenOnError } = membersService.updateChildren()
 
+    const GRADES = [
+      {
+        value: -2,
+        label: i18n.t('grade.infantil1')
+      },
+      {
+        value: -1,
+        label: i18n.t('grade.infantil2')
+      },
+      {
+        value: 0,
+        label: i18n.t('grade.infantil3')
+      },
+      {
+        value: 1,
+        label: i18n.t('grade.primaria1')
+      },
+      {
+        value: 2,
+        label: i18n.t('grade.primaria2')
+      },
+      {
+        value: 3,
+        label: i18n.t('grade.primaria3')
+      },
+      {
+        value: 4,
+        label: i18n.t('grade.primaria4')
+      },
+      {
+        value: 5,
+        label: i18n.t('grade.primaria5')
+      },
+      {
+        value: 6,
+        label: i18n.t('grade.primaria6')
+      }
+    ]
     // Methods
     const addChild = () => {
       const child: Child = {
         firstName: '',
         lastName: '',
         birthDate: '',
+        grade: null,
+        group: null,
+        inactive: false,
         familyId: memberData.familyId
       }
       const childrenTemp = Object.assign([], childrenData.children || []) as Child[]
@@ -400,7 +447,8 @@ export default {
       fallbackContent,
       isAdmin,
       deleteChild,
-      loggedInMember
+      loggedInMember,
+      GRADES
     }
   }
 }

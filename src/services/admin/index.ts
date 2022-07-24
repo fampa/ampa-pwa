@@ -6,6 +6,7 @@ import addMessage from './queries/addMessage.gql'
 import addMessageMembers from './queries/addMessageMembers.gql'
 import getFamilies from './queries/getFamilies.gql'
 import getChildren from './queries/getChildren.gql'
+import toggleBaixaChildren from './queries/toggleBaixaChildren.gql'
 import { Aggregate, QueryTableOptions } from 'src/models/QueryTable'
 import { GetMembersData } from 'src/models/Member'
 import { ContentsData } from 'src/models/Content'
@@ -69,8 +70,15 @@ export class AdminService {
     return response
   }
 
+  donarBaixaChildren = () => {
+    const response = useMutation<{update_children: { affected_rows: number}}, { ids: number[], inactive: boolean}>(
+      toggleBaixaChildren
+    )
+    return response
+  }
+
   addMessageMembers = () => {
-    const response = useMutation<{insert_members_messages: { effected_rows: number}}, { objects: {memberId: string, messageId: number}[]}>(
+    const response = useMutation<{insert_members_messages: { affected_rows: number}}, { objects: {memberId: string, messageId: number}[]}>(
       addMessageMembers
     )
     return response

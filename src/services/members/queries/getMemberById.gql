@@ -29,6 +29,9 @@ query memberById($id: String!) {
         lastName
         birthDate
         familyId
+        inactive
+        grade
+        group
         hiredServices {
           service {
             type
