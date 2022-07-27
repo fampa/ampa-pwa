@@ -9,7 +9,9 @@ export default {
     tags: 'Gestió d\'etiquetes',
     link: 'Gestió d\'enllaços',
     baixa: 'Esteu segurs que voleu donar de baixa?',
-    alta: 'Esteu segurs que voleu tornar a donar d\'alta?'
+    alta: 'Esteu segurs que voleu tornar a donar d\'alta?',
+    baixaMemberNotice: 'Per donar de baixa un membre has de donar de baixa la seva família. També pots eliminar-lo de manera individual',
+    limitSendingMessagesNotice: 'Hi ha un límit diari per a enviar missatges. Es recomana no enviar missatges a més de 200 persones el mateix dia.'
   },
   backToHome: 'Torna a la pàgina principal',
   content: {

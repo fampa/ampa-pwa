@@ -9,7 +9,9 @@ export default {
     tags: 'Gestión de etiquetas',
     link: 'Gestión de enlaces',
     baixa: '¿Estas seguros que quieres dar de baja?',
-    alta: '¿Estas seguros que quieres volver a dar de alta?'
+    alta: '¿Estas seguros que quieres volver a dar de alta?',
+    baixaMemberNotice: 'Para dar de baja un miembro has de dar de baja la familia. También puedes eliminarlo de manera individual',
+    limitSendingMessagesNotice: 'Hay un límite diario para enviar mensajes. Se recomienda no enviar mensajes a más de 200 personas el mismo día.'
   },
   backToHome: 'Volver a la página principal',
   content: {

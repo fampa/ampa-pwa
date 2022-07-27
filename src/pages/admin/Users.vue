@@ -19,6 +19,8 @@
       >
       <template v-slot:top>
         <h2>{{$t('table.members')}}</h2>
+        <q-space />
+        <q-btn flat icon="las la-eye" :disable="loading" :label="inactive ? $t('table.showAlta') : $t('table.showBaixa')" @click="toggleIsBaixa" />
         <q-btn v-if="selected.length > 0" :loading="sendingMessage" @click="openSendMessage = true" class="q-ml-sm" icon="las la-envelope" color="primary" :disable="loading" :label="$t('table.sendMessage')" />
         <q-space />
         <q-input borderless dense debounce="300" v-model="filter" clearable clear-icon="close" :placeholder="$t('table.search')">
@@ -29,13 +31,25 @@
       </template>
       <template v-slot:body-cell-isAdmin="props">
         <q-td :props="props">
-          <q-badge v-if="props.value" color="red">
+          <q-badge v-if="props.value" color="accent">
             ADMIN
+          </q-badge>
+        </q-td>
+      </template>
+      <template v-slot:body-cell-inactive="props">
+        <q-td :props="props">
+          <q-badge v-if="props.value" color="red">
+            BAIXA
           </q-badge>
         </q-td>
       </template>
 
       </q-table>
+
+      <section>
+      <p class="notice">*{{$t('admin.baixaMemberNotice')}}</p>
+      <p class="notice">*{{$t('admin.limitSendingMessagesNotice')}}</p>
+      </section>
 
       <q-page-sticky position="bottom-right" :offset="[18, 18]">
         <q-btn fab icon="add" color="primary" to="/login" />
@@ -73,6 +87,7 @@ export default {
     // Data
     const members = ref<Member[]>([])
     const filter = ref<string | null>(null)
+    const inactive = ref(false)
     const pagination = ref({
       sortBy: 'createdAt',
       descending: true,
@@ -124,6 +139,14 @@ export default {
         align: 'right',
         field: 'isAdmin',
         sortable: true
+      },
+      {
+        name: 'inactive',
+        required: true,
+        label: '',
+        align: 'left',
+        field: val => val?.family?.inactive,
+        sortable: true
       }
     ])
 
@@ -149,7 +172,7 @@ export default {
       filter: filter.value
     }
     const sanitizeVariables = cleanObject(variables)
-    const { result, onResult, onError, loading, fetchMore } = adminService.getMembers(sanitizeVariables)
+    const { result, onResult, onError, loading, fetchMore, refetch } = adminService.getMembers(sanitizeVariables)
     const { mutate: sendMessageMutate } = adminService.addMessage()
     const { mutate: addMessageMembersMutate } = adminService.addMessageMembers()
     onResult(() => {
@@ -191,6 +214,12 @@ export default {
       pagination.value.descending = descending
       pagination.value.rowsNumber = result.value?.members_aggregate?.aggregate?.count
       // console.log('pagination', pagination)
+    }
+
+    const toggleIsBaixa = async () => {
+      inactive.value = !inactive.value
+      await refetch({ ...variables, inactive: inactive.value })
+      // getChildren()
     }
 
     const sendMessage = async ($event) => {
@@ -253,7 +282,9 @@ export default {
       sendMessage,
       openSendMessage,
       sendingMessage,
-      messageCancel
+      messageCancel,
+      toggleIsBaixa,
+      inactive
     }
   }
 
@@ -261,4 +292,9 @@ export default {
 </script>
 
 <style>
+.notice {
+  margin-top: 1rem;
+  opacity: 0.5;
+  font-size: small;
+}
 </style>
