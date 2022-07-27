@@ -33,8 +33,10 @@
             <q-btn :loading="isLoading" flat color="white" :label="$t('family.requestJoinNoticeAccept')" @click="resolveJoin()" />
           </template>
         </q-banner>
-
-          <q-input outlined v-model="name" :label="$t('member.familyName')" bottom-slots>
+          <q-badge v-if="family?.inactive" color="red">
+            {{$t('member.inactive')}}
+          </q-badge>
+          <q-input :disable="family?.inactive" outlined v-model="name" :label="$t('member.familyName')" bottom-slots>
             <template v-slot:hint>
             {{$t('family.putChildrenLastName')}}
           </template>
@@ -48,6 +50,9 @@
             </h2>
             <q-form v-if="children" ref="mForm" @submit.prevent="submitForm">
             <div v-for="child in children" :key="child.id">
+            <q-badge v-if="child.inactive" color="red">
+              {{$t('member.inactive')}}
+            </q-badge>
               <q-btn rounded flat color="red" icon="delete" class="float-right" @click="deleteChild(child.id)"></q-btn>
               <q-input :disable="child.inactive" outlined v-model="child.firstName" :label="$t('member.firstName')" :rules="[val => !!val || $t('forms.required')]" />
               <q-input :disable="child.inactive" outlined v-model="child.lastName" :label="$t('member.lastName')" :rules="[val => !!val || $t('forms.required')]" />

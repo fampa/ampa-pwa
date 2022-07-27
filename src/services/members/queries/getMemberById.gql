@@ -22,6 +22,7 @@ query memberById($id: String!) {
       mandateId
       signatureDate
       fees
+      inactive
       manualPayment
       children {
         id

@@ -8,14 +8,17 @@
         <q-badge v-if="isAdmin" color="red">
             ADMIN
         </q-badge>
+        <q-badge v-if="family?.inactive" color="red">
+            {{$t('member.inactive')}}
+        </q-badge>
       </h1>
       <q-form ref="memberForm" @submit.prevent="submitForm">
-        <q-input outlined v-model="firstName" :label="$t('member.firstName')" :rules="[val => !!val || $t('forms.required')]" />
-        <q-input outlined v-model="lastName" :label="$t('member.lastName')" :rules="[val => !!val || $t('forms.required')]" />
-        <q-input outlined v-model="nif" label="NIF o NIE" :rules="[val => !!val || $t('forms.required'), val => validateNif(val) || $t('forms.validNif')]" />
-        <q-input outlined v-model="email" type="email" :label="$t('member.email')" :rules="[val => !!val || $t('forms.required'), val => validateEmail(val) || $t('forms.validEmail')]" />
-        <q-input outlined v-model="phone" type="tel" :label="$t('member.phone')" :rules="[val => !!val || $t('forms.required'), val => validatePhone(val) || $t('forms.validPhone')]" />
-        <q-btn :loading="updateMemberLoading" color="primary" type="submit">{{$t('forms.save')}}</q-btn>
+        <q-input :disable="family?.inactive" outlined v-model="firstName" :label="$t('member.firstName')" :rules="[val => !!val || $t('forms.required')]" />
+        <q-input :disable="family?.inactive" outlined v-model="lastName" :label="$t('member.lastName')" :rules="[val => !!val || $t('forms.required')]" />
+        <q-input :disable="family?.inactive" outlined v-model="nif" label="NIF o NIE" :rules="[val => !!val || $t('forms.required'), val => validateNif(val) || $t('forms.validNif')]" />
+        <q-input :disable="family?.inactive" outlined v-model="email" type="email" :label="$t('member.email')" :rules="[val => !!val || $t('forms.required'), val => validateEmail(val) || $t('forms.validEmail')]" />
+        <q-input :disable="family?.inactive" outlined v-model="phone" type="tel" :label="$t('member.phone')" :rules="[val => !!val || $t('forms.required'), val => validatePhone(val) || $t('forms.validPhone')]" />
+        <q-btn :loading="updateMemberLoading" :disable="family?.inactive" color="primary" type="submit">{{$t('forms.save')}}</q-btn>
       </q-form>
 
       <div v-if="admin && $route.params?.id">
@@ -26,7 +29,7 @@
         </div>
         <br>
         <div class="q-gutter-md">
-          <q-btn color="orange" :label="isAdmin ? $t('member.removeAdmin') : $t('member.addAdmin')" @click="makeAdmin" :loading="makeAdminLoading" />
+          <q-btn :disable="family?.inactive" color="orange" :label="isAdmin ? $t('member.removeAdmin') : $t('member.addAdmin')" @click="makeAdmin" :loading="makeAdminLoading" />
         </div>
       <br>
         <div class="q-gutter-md">
