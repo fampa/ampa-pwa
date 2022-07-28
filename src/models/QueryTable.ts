@@ -12,4 +12,5 @@ export interface QueryTableOptions {
   type?: string,
   ibanIsNull?: boolean,
   inactive?: boolean,
+  grade?: number
 }

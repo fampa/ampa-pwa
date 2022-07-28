@@ -21,6 +21,7 @@
         <h2>{{$t('table.children')}}</h2>
         <q-space />
         <q-btn flat icon="las la-eye" :disable="loading" :label="inactive ? $t('table.showAlta') : $t('table.showBaixa')" @click="toggleIsBaixa" />
+        <q-select v-model="grade" :options="GRADES" @update:modelValue="gradeSelected()" :label="$t('member.grade')" emit-value map-options style="min-width: 6rem;" />
         <q-btn v-if="selected.length > 0" class="q-ml-sm" color="red" @click="donarBaixa"  :label="inactive ? $t('table.donarAlta') : $t('table.donarBaixa')" />
         <q-space />
         <q-input borderless dense debounce="300" v-model="filter" clearable clear-icon="close" :placeholder="$t('table.search')">
@@ -39,6 +40,11 @@
 
       </q-table>
 
+      <section>
+        <h2>ADMIN</h2>
+        <q-btn flat icon="las la-broom" @click="annualIncrement" :label="$t('admin.annualIncrement')" />
+      </section>
+
       <!-- <q-page-sticky position="bottom-right" :offset="[18, 18]">
         <q-btn fab icon="add" color="primary" to="/admin/users/edit" />
       </q-page-sticky> -->
@@ -53,6 +59,7 @@ import { AdminService } from 'src/services/admin'
 import { formatDate } from 'src/utilities/formatDate'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
+import type { Child } from 'src/models/Child'
 // import { useQuasar } from 'quasar'
 import { Family } from 'src/models/Family'
 
@@ -76,6 +83,7 @@ export default {
       rowsPerPage: 5,
       rowsNumber: 10
     })
+    const grade = ref<number | null>(null)
     const selected = ref([])
     const columns = reactive([
       {
@@ -207,6 +215,7 @@ export default {
       limit,
       offset,
       orderBy,
+      grade: grade.value,
       inactive: inactive.value,
       filter: filter.value
     }
@@ -236,6 +245,7 @@ export default {
         limit,
         offset,
         orderBy,
+        grade: grade.value,
         inactive: inactive.value,
         filter
       }
@@ -261,6 +271,33 @@ export default {
       // getChildren()
     }
 
+    const annualIncrement = () => {
+      const newKids = ref<Child[]>([])
+      const ids = ref<number[]>([])
+      const { result, onResult } = adminService.getChildren({
+      })
+
+      onResult(() => {
+        result.value?.children?.forEach(c => {
+          const newChild = { ...c }
+          ids.value.push(c.id)
+          if (newChild.grade === 6) {
+            newChild.inactive = true
+          } else {
+            newChild.grade++
+          }
+          newKids.value = [...newKids.value, newChild]
+        })
+        console.log('annualIncrement', newKids.value)
+        console.log('ids', ids.value)
+      })
+    }
+
+    const gradeSelected = async () => {
+      console.log('gradeSelected', grade.value)
+      await refetch({ ...variables, grade: grade.value })
+    }
+
     // Error management
 
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
@@ -280,7 +317,11 @@ export default {
       onRowClick,
       inactive,
       toggleIsBaixa,
-      donarBaixa
+      donarBaixa,
+      annualIncrement,
+      grade,
+      GRADES,
+      gradeSelected
     }
   }
 

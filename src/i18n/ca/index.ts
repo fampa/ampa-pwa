@@ -5,6 +5,7 @@ export default {
     services: 'Gestió de serveis',
     family: 'Gestió de famílies',
     children: 'Gestió de xiquets/es',
+    annualIncrement: 'Increment anual de curs',
     blog: 'Gestió del blog',
     tags: 'Gestió d\'etiquetes',
     link: 'Gestió d\'enllaços',

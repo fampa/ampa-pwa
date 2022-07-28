@@ -6,6 +6,7 @@ import addMessage from './queries/addMessage.gql'
 import addMessageMembers from './queries/addMessageMembers.gql'
 import getFamilies from './queries/getFamilies.gql'
 import getChildren from './queries/getChildren.gql'
+import getChildrenByGrade from './queries/getChildrenByGrade.gql'
 import toggleBaixaChildren from './queries/toggleBaixaChildren.gql'
 import toggleBaixaFamilies from './queries/toggleBaixaFamilies.gql'
 import familiesPendingInactive from './queries/familiesPendingInactive.gql'
@@ -68,6 +69,18 @@ export class AdminService {
   getChildren = (options: QueryTableOptions) => {
     const response = useQuery<{children_aggregate: Aggregate, children: Child[]}, QueryTableOptions>(
       getChildren,
+      { ...options },
+      {
+        fetchPolicy: 'no-cache',
+        nextFetchPolicy: 'no-cache'
+      }
+    )
+    return response
+  }
+
+  getChildrenByGrade = (options: QueryTableOptions) => {
+    const response = useQuery<{children_aggregate: Aggregate, children: Child[]}, QueryTableOptions>(
+      getChildrenByGrade,
       { ...options },
       {
         fetchPolicy: 'no-cache',

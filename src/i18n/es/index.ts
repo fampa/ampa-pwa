@@ -4,6 +4,7 @@ export default {
     pages: 'Gestión de páginas',
     family: 'Gestión de familias',
     children: 'Gestión de niños/as',
+    annualIncrement: 'Incremento anual de curso',
     services: 'Gestión de servicios',
     blog: 'Gestión del blog',
     tags: 'Gestión de etiquetas',
