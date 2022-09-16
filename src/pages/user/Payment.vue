@@ -1,7 +1,7 @@
 <template>
   <q-page padding class="bg-grey-2  q-pa-md">
     <div class="max-600">
-    <initial-steps v-if="user && loggedInMember && !loggedInMember.family?.manualPayment && !loggedInMember.family?.iban" :member="loggedInMember"></initial-steps>
+    <initial-steps v-if="user && loggedInMember && !loggedInMember.family?.manualPayment && !loggedInMember.family?.signatureDate" :member="loggedInMember"></initial-steps>
       <h1 class="text-h4">{{$t('member.paymentData')}}</h1>
       <div v-if="getMemberLoading">
         <q-skeleton height="50px" square />

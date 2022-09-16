@@ -1,7 +1,7 @@
 <template>
   <q-page padding class="bg-grey-2  q-pa-md">
     <div class="max-600" v-if="id">
-      <initial-steps v-if="currentUserId && loggedInMember && !loggedInMember.family?.manualPayment && !loggedInMember.family?.iban" :member="loggedInMember"></initial-steps>
+      <initial-steps v-if="currentUserId && loggedInMember && !loggedInMember.family?.manualPayment && !loggedInMember.family?.signatureDate" :member="loggedInMember"></initial-steps>
 
       <h1 class="text-h4">
         {{$t('personalData')}}

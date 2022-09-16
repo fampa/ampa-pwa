@@ -72,7 +72,7 @@ export default {
         return 2
       }
 
-      if (props.member && props.member.nif && (props.member.family?.children?.length > 0) && !props.member.family?.manualPayment && !props.member.family?.iban) {
+      if (props.member && props.member.nif && (props.member.family?.children?.length > 0) && !props.member.family?.manualPayment && !props.member.family?.signatureDate) {
         // console.log('step 3')
         return 3
       }
