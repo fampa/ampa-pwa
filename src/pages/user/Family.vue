@@ -75,6 +75,9 @@
                   <q-select :disable="child.inactive" outlined v-model="child.group" style="width: 25%" :options="['A', 'B', 'C', 'D']" :label="$t('member.group')" emit-value map-options />
                 </div>
               </div>
+              <div v-if="isAdmin">
+                <q-checkbox outlined v-model="child.inactive" style="width: 50%" :label="$t('member.inactive')" />
+              </div>
               <br>
               <div v-if="child.hiredServices?.length > 0">
                 <h3 class="text-h5">{{$t('family.hiredServices', { name: child.firstName })}}</h3>
