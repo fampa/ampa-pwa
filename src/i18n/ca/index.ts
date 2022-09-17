@@ -133,7 +133,8 @@ export default {
     userDataNoticeBtn: 'Aneu a Dades Personals',
     grade: 'Curs',
     group: 'Grup',
-    inactive: 'Baixa'
+    inactive: 'Baixa',
+    add: '+ Afegeix'
   },
   grade: {
     infantil1: '1er Infantil',
@@ -264,7 +265,8 @@ export default {
     showAlta: 'Mostra alta',
     showBaixa: 'Mostra baixa',
     donarBaixa: 'Dona de baixa',
-    donarAlta: 'Dona d\'alta'
+    donarAlta: 'Dona d\'alta',
+    exportExcel: 'Exporta a Excel'
   },
   tag: {
     add: 'Afegeix etiquetes',

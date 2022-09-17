@@ -46,7 +46,7 @@
           <div v-if="id">
             <h2 class="text-h4">
               {{$t('member.children')}}
-              <q-btn class="float-right" color="primary" flat label="+ Afegeix" @click="addChild" />
+              <q-btn class="float-right" color="primary" flat :label="$t('member.add')" @click="addChild" />
             </h2>
             <q-form v-if="children" ref="mForm" @submit.prevent="submitForm">
             <div v-for="child in children" :key="child.id">

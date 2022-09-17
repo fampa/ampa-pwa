@@ -21,7 +21,8 @@
         <h2>{{$t('table.children')}}</h2>
         <q-space />
         <q-btn flat icon="las la-eye" :disable="loading" :label="inactive ? $t('table.showAlta') : $t('table.showBaixa')" @click="toggleIsBaixa" />
-        <q-select v-model="grade" :options="GRADES" @update:modelValue="gradeSelected()" :label="$t('member.grade')" emit-value map-options style="min-width: 6rem;" />
+        <q-btn flat icon="las la-file-excel" :disable="loading" :label="$t('table.exportExcel')" @click="exportToExcel" />
+        <!-- <q-select v-model="grade" :options="GRADES" @update:modelValue="gradeSelected()" :label="$t('member.grade')" emit-value map-options style="min-width: 6rem;" /> -->
         <q-btn v-if="selected.length > 0" class="q-ml-sm" color="red" @click="donarBaixa"  :label="inactive ? $t('table.donarAlta') : $t('table.donarBaixa')" />
         <q-space />
         <q-input borderless dense debounce="300" v-model="filter" clearable clear-icon="close" :placeholder="$t('table.search')">
@@ -42,7 +43,7 @@
 
       <section>
         <h2>ADMIN</h2>
-        <q-btn flat icon="las la-broom" @click="annualIncrement" :label="$t('admin.annualIncrement')" />
+        <q-btn flat icon="las la-broom" @click="annualIncrement" :label="$t('admin.annualIncrement')" /> WIP
       </section>
 
       <!-- <q-page-sticky position="bottom-right" :offset="[18, 18]">
@@ -61,7 +62,7 @@ import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import type { Child } from 'src/models/Child'
 // import { useQuasar } from 'quasar'
-import { Family } from 'src/models/Family'
+import { exportToSpreadsheet } from 'src/utilities/exportExcel'
 
 export default {
   name: 'AdminMembers',
@@ -74,7 +75,7 @@ export default {
     // const $q = useQuasar()
 
     // Data
-    const children = ref<Family[]>([])
+    const children = ref<Child[]>([])
     const filter = ref<string | null>(null)
     const pagination = ref({
       sortBy: 'id',
@@ -288,15 +289,16 @@ export default {
           }
           newKids.value = [...newKids.value, newChild]
         })
+        // TODO update children
         console.log('annualIncrement', newKids.value)
         console.log('ids', ids.value)
       })
     }
 
-    const gradeSelected = async () => {
-      console.log('gradeSelected', grade.value)
-      await refetch({ ...variables, grade: grade.value })
-    }
+    // const gradeSelected = async () => {
+    //   console.log('gradeSelected', grade.value)
+    //   await refetch({ ...variables, grade: grade.value })
+    // }
 
     // Error management
 
@@ -304,6 +306,26 @@ export default {
     onError(async () => {
       await router.push('/')
     })
+
+    // Export to excel
+    const exportToExcel = () => {
+      const data = [
+        ['Nom', 'Cognoms', 'Data naixement', 'Curs', 'Grup', 'Baixa']
+      ]
+      children.value.forEach(c => {
+        data.push([
+          c.firstName,
+          c.lastName,
+          c.birthDate,
+          c.grade === 0 ? 'Infantil 3' : c.grade === -1 ? 'Infantil 2' : c.grade === -2 ? 'Infantil 3' : c.grade === 1 ? 'Primària 1' : c.grade === 2 ? 'Primària 2' : c.grade === 3 ? 'Primària 3' : c.grade === 4 ? 'Primària 4' : c.grade === 5 ? 'Primària 5' : c.grade === 6 ? 'Primària 6' : '',
+          c.group,
+          c.inactive ? 'Sí' : 'No'
+
+        ])
+      })
+
+      exportToSpreadsheet(data, 'Llista de nens')
+    }
 
     return {
       children,
@@ -320,8 +342,9 @@ export default {
       donarBaixa,
       annualIncrement,
       grade,
+      // gradeSelected,
       GRADES,
-      gradeSelected
+      exportToExcel
     }
   }
 
