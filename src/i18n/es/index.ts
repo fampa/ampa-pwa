@@ -74,6 +74,7 @@ export default {
     mandateSigned: 'El mandato de domiciliación se ha firmado correctamente',
     needNewMandate: 'Este enlace de firma ha caducado o no es válido. Genera un nuevo mandato usando el botón.',
     needSignature: 'Revise su correo. Tiene un mandato pendiente de firma.',
+    signatureDate: 'Fecha de firma',
     required: 'Este campo es necesario',
     save: 'Guardar',
     savedOk: 'Se ha guardado correctamente',

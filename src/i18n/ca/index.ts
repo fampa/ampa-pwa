@@ -75,6 +75,7 @@ export default {
     needNewMandate: 'Aquest enllaç de signatura ha caducat o no és vàlid. Genera un nou manament usant el botó.',
     needSignature: 'Reviseu el vostre correu. Teniu un manament pendent de signatura.',
     required: 'Aquest camp és necessari',
+    signatureDate: 'Data de signatura',
     save: 'Desa',
     savedOk: 'Desat correctament',
     selectFamily: 'Selecciona la teua família',

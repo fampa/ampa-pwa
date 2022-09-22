@@ -45,6 +45,25 @@
       <section v-if="manualPayment">
         <q-btn :loading="loading" color="primary" :label="$t('forms.save')" @click="updateFamily"/>
       </section>
+      <section v-if="isAdmin && !manualPayment">
+        <h3>ADMIN</h3>
+        <q-input outlined :label="$t('forms.signatureDate')" v-model="signatureDate" mask="date" >
+          <template v-slot:append>
+            <q-icon name="event" class="cursor-pointer">
+              <q-popup-proxy cover transition-show="scale" transition-hide="scale">
+                <q-date v-model="signatureDate">
+                  <div class="row items-center justify-end">
+                    <q-btn v-close-popup label="Close" color="primary" flat />
+                  </div>
+                </q-date>
+              </q-popup-proxy>
+            </q-icon>
+          </template>
+        </q-input>
+          <br>
+          <q-btn :loading="loading" color="accent" :label="$t('forms.save')" @click="updateFamily"/>
+
+      </section>
         <br>
         <br>
       </div>
@@ -79,12 +98,14 @@ export default {
     const $q = useQuasar()
     const i18n = useI18n()
     const store = useStore()
+    const isAdmin = computed(() => store.state.user.isAdmin)
     const loggedInMember = store.state.user.member
 
     const familyData = reactive<Family>({
       id: undefined,
       iban: undefined,
-      manualPayment: undefined
+      manualPayment: undefined,
+      signatureDate: undefined
     })
 
     const memberData = ref<Member>(null)
@@ -125,7 +146,8 @@ export default {
         await mutate({
           id: familyData.id,
           family: {
-            manualPayment: familyData.manualPayment
+            manualPayment: familyData.manualPayment,
+            signatureDate: familyData.signatureDate || null
           }
         })
           .then(() => store.dispatch('user/setMember', member.value?.id))
@@ -157,6 +179,7 @@ export default {
       familyData.id = member.value?.familyId
       familyData.iban = member.value?.family?.iban || ''
       familyData.manualPayment = member.value?.family?.manualPayment || false
+      familyData.signatureDate = member.value?.family?.signatureDate || null
     })
 
     const updateIban = async () => {
@@ -280,7 +303,8 @@ export default {
       timeCheck,
       AMPA_IBAN,
       updateFamily,
-      loggedInMember
+      loggedInMember,
+      isAdmin
     }
   }
 }
