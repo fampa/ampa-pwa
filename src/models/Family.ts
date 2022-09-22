@@ -18,6 +18,7 @@ export interface Family {
   fees?: number
   manualPayment?: boolean
   observations?: string
+  inactive?: boolean
 }
 
 export interface FamilyData {
