@@ -50,7 +50,7 @@
           <q-icon name="las la-sms"></q-icon>
         </q-item-section>
         <q-item-section>
-          <q-item-label v-if="NotificationSupported">
+          <q-item-label v-if="notificationSupported">
             <push-toggle :label="$t('settings.push.title')"  />
           </q-item-label>
           <q-item-label v-else>
@@ -79,7 +79,7 @@ export default {
     const store = useStore()
     const i18n = useI18n()
     const membersService = new MembersService()
-    const NotificationSupported = ('Notification' in window)
+    const notificationSupported = ('Notification' in window)
 
     const { mutate: mutateMember } = membersService.updateMember()
 
@@ -117,7 +117,7 @@ export default {
       availableLocales,
       canEmail,
       setCanEmail,
-      NotificationSupported
+      notificationSupported
     }
   }
 }
