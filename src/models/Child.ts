@@ -11,6 +11,10 @@ export interface Child {
   birthDate: string
   familyId?: number
   hiredServices?: HiredService[]
+  group?: string
+  grade?: number
+  inactive?: boolean
+  observations?: string
   createdAt?: Date
   updatedAt?: Date
 }

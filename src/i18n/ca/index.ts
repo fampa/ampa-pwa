@@ -4,9 +4,15 @@ export default {
     pages: 'Gestió de pàgines',
     services: 'Gestió de serveis',
     family: 'Gestió de famílies',
+    children: 'Gestió de xiquets/es',
+    annualIncrement: 'Increment anual de curs',
     blog: 'Gestió del blog',
     tags: 'Gestió d\'etiquetes',
-    link: 'Gestió d\'enllaços'
+    link: 'Gestió d\'enllaços',
+    baixa: 'Esteu segurs que voleu donar de baixa?',
+    alta: 'Esteu segurs que voleu tornar a donar d\'alta?',
+    baixaMemberNotice: 'Per donar de baixa un membre has de donar de baixa la seva família o eliminar-lo completament entrant al seu perfil.',
+    limitSendingMessagesNotice: 'Hi ha un límit diari per a enviar missatges. Es recomana no enviar missatges a més de 200 persones el mateix dia.'
   },
   backToHome: 'Torna a la pàgina principal',
   content: {
@@ -54,7 +60,8 @@ export default {
     requestJoinNotice: 'Has rebut una sol·licitud de {email} per unir-se a gestionar la teua família',
     requestJoinNoticeAbort: 'Cancel·la la sol·licitud',
     requestJoinNoticeAccept: 'Accepta',
-    requestJoinNoticeDecline: 'Rebutja'
+    requestJoinNoticeDecline: 'Rebutja',
+    deleteChildConfirm: 'Estàs segur que vols eliminar aquest fill/a?'
   },
   firebaseui: {
     google: 'Entra o registra\'t amb Google',
@@ -68,6 +75,7 @@ export default {
     needNewMandate: 'Aquest enllaç de signatura ha caducat o no és vàlid. Genera un nou manament usant el botó.',
     needSignature: 'Reviseu el vostre correu. Teniu un manament pendent de signatura.',
     required: 'Aquest camp és necessari',
+    signatureDate: 'Data de signatura',
     save: 'Desa',
     savedOk: 'Desat correctament',
     selectFamily: 'Selecciona la teua família',
@@ -80,7 +88,8 @@ export default {
     validEmail: 'Per favor, poseu una adreça electrònica vàlida',
     validIBAN: 'Per favor, poseu un IBAN vàlid',
     validNif: 'Per favor, poseu un NIF o NIE vàlid',
-    validPhone: 'Per favor, poseu un telèfon vàlid'
+    validPhone: 'Per favor, poseu un telèfon vàlid',
+    error: 's\'ha produït un error: {error}'
   },
   home: 'Inici',
   homePage: {
@@ -115,12 +124,29 @@ export default {
     lastName: 'Cognoms',
     email: 'Correu electrònic',
     phone: 'Telèfon',
+    remove: 'Elimina aquest membre',
     removeAdmin: 'Llevar admin',
     needLogin: 'Necessites estar identificat per poder prosseguir',
     needPayment: 'Necessites omplir les dades de domiciliació i signar el manament per correu electrònic per poder prosseguir',
-    paymentData: 'Dades de domiciliació',
+    paymentData: 'Dades de pagament',
+    ampaIban: 'Número de compte de l\'AMPA on has de fer l\'ingrés: {iban}',
     userDataNotice: 'Omple primer les dades personals',
-    userDataNoticeBtn: 'Aneu a Dades Personals'
+    userDataNoticeBtn: 'Aneu a Dades Personals',
+    grade: 'Curs',
+    group: 'Grup',
+    inactive: 'Baixa',
+    add: '+ Afegeix'
+  },
+  grade: {
+    infantil1: '1er Infantil',
+    infantil2: '2n Infantil',
+    infantil3: '3r Infantil',
+    primaria1: '1r Primària',
+    primaria2: '2n Primària',
+    primaria3: '3n Primària',
+    primaria4: '4t Primària',
+    primaria5: '5é Primària',
+    primaria6: '6é Primària'
   },
   menu: {
     AmpaServices: 'ELS SERVEIS DE L\'AMPA',
@@ -161,7 +187,8 @@ export default {
     notifications: 'Notificacions',
     push: {
       title: 'Notificacions push',
-      deviceSpecific: 'Activa aquesta opció en cada dispositiu on hi vulgues rebre notificacions push'
+      deviceSpecific: 'Activa aquesta opció en cada dispositiu on hi vulgues rebre notificacions push',
+      notSupported: 'Les notificacions push no estan disponibles en aquest dispositiu'
     }
   },
   status: {
@@ -179,7 +206,8 @@ export default {
       description: 'Necessites omplir les dades familiars'
     },
     iban: {
-      title: 'Dades bancàries',
+      title: 'Dades de pagament',
+      subtitle: 'Necessites omplir les dades de pagament',
       description: 'Faciliteu el número de compte i confirmeu la domiciliació fent click a l\'enllaç que rebreu per correu electrònic'
     }
   },
@@ -233,7 +261,14 @@ export default {
     showWithoutIban: 'Mostra sense domiciliació',
     status: 'Estat',
     tag: 'Etiquetes',
-    type: 'Tipus'
+    type: 'Tipus',
+    birthday: 'Data de naixement',
+    children: 'Xiquets/es',
+    showAlta: 'Mostra alta',
+    showBaixa: 'Mostra baixa',
+    donarBaixa: 'Dona de baixa',
+    donarAlta: 'Dona d\'alta',
+    exportExcel: 'Exporta a Excel'
   },
   tag: {
     add: 'Afegeix etiquetes',

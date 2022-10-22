@@ -1,0 +1,18 @@
+query familiesPendingInactive {
+  families(where: {
+    _and: [
+        {inactive: {_eq: false}},
+        {children: {inactive: {_eq: true}}}
+    ],
+    _not: {children: {inactive: {_eq: false}}}}) {
+    children {
+      firstName
+      lastName
+      grade
+      group
+      inactive
+    }
+    id
+    name
+  }
+}

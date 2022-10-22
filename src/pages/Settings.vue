@@ -50,8 +50,11 @@
           <q-icon name="las la-sms"></q-icon>
         </q-item-section>
         <q-item-section>
-          <q-item-label>
+          <q-item-label v-if="notificationSupported">
             <push-toggle :label="$t('settings.push.title')"  />
+          </q-item-label>
+          <q-item-label v-else>
+            <q-btn flat :label="$t('settings.push.notSupported')" :disable="true" />
           </q-item-label>
           <q-item-label caption>
             {{ $t("settings.push.deviceSpecific") }}
@@ -76,6 +79,7 @@ export default {
     const store = useStore()
     const i18n = useI18n()
     const membersService = new MembersService()
+    const notificationSupported = ('Notification' in window)
 
     const { mutate: mutateMember } = membersService.updateMember()
 
@@ -112,7 +116,8 @@ export default {
       member,
       availableLocales,
       canEmail,
-      setCanEmail
+      setCanEmail,
+      notificationSupported
     }
   }
 }

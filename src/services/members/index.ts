@@ -9,6 +9,7 @@ import searchFamilies from 'src/services/members/queries/searchFamilies.gql'
 import updateFamily from 'src/services/members/queries/updateFamily.gql'
 import upsertMembersToken from './queries/upsertMembersToken.gql'
 import deleteMembersToken from './queries/deleteMembersToken.gql'
+import deleteChild from './queries/deleteChild.gql'
 import firebase from 'firebase/app'
 import 'firebase/auth'
 
@@ -41,6 +42,16 @@ export class MembersService {
     const response = useMutation<UpdateMemberData, MemberVars>(
       updateMember
     )
+    return response
+  }
+
+  removeMember = async (id: string) => {
+    if (!id) return
+    const data = { id }
+    const token = await firebase.auth().currentUser.getIdToken()
+    const endpoint = `${this.axiosEndpoint}/admin/remove-user/`
+    const response = await axios
+      .post(endpoint, data, { headers: { authorization: `Bearer ${token}` } })
     return response
   }
 
@@ -128,6 +139,13 @@ export class MembersService {
   deleteMembersToken = () => {
     const response = useMutation<{delete_members_tokens_by_pk: { token: string }}, { memberId: string, token: string }>(
       deleteMembersToken
+    )
+    return response
+  }
+
+  deleteChild = () => {
+    const response = useMutation<{delete_children_by_pk: { id: number }}, { id: number }>(
+      deleteChild
     )
     return response
   }

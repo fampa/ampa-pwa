@@ -3,6 +3,7 @@ import * as functions from 'firebase-functions'
 import 'firebase-functions'
 import { gql } from 'graphql-request'
 import { client } from '../utils/graphql'
+import { deleteUserFromFirebase } from '../utils/users'
 import express from 'express'
 import cors from 'cors'
 export const appApi: express.Application = express()
@@ -98,6 +99,15 @@ appApi.post('/admin/change-claims', async (req: express.Request, res: express.Re
 })
 
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
+appApi.post('/admin/remove-user', async (req: express.Request, res: express.Response) => {
+  const id = req.body.id
+  functions.logger.info('removing user', id)
+  await deleteUserFromFirebase(id)
+  functions.logger.info(`user ${id} removed`)
+  return res.json({ message: `user ${id} removed` })
+})
+
+// eslint-disable-next-line @typescript-eslint/no-misused-promises
 appApi.post('/request/family-access', async (req: express.Request, res: express.Response, next: express.NextFunction) => {
   try {
     functions.logger.info('request family accés initiated', req.body.member)
@@ -150,7 +160,7 @@ appApi.post('/request/family-access', async (req: express.Request, res: express.
       subject: `${requester.email} ha sol·licitat accés a la app`,
       message: `
         <p>L'usuari ${requester.email} ha sol·licitat accés a gestionar la família a la app de l'AMPA</p>
-        <p>Per donar-li accés <a href="${functions.config().env.template.siteUrl as string}/user/family">entra a l'aplicació</a> i segueix les instruccions.</p>
+        <p>Per donar-li accés <a href="${functions.config().env.template.siteUrl as string}user/family">entra a l'aplicació</a> i segueix les instruccions.</p>
         `
     }
     if (joinRequest) {

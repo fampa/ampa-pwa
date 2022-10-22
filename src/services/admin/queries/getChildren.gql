@@ -1,0 +1,36 @@
+query getChildren($filter: String = "%%", $limit: Int, $offset: Int, $orderBy: [children_order_by!] = {createdAt: desc, lastName: asc}, $inactive: Boolean = false) {
+  children_aggregate(where: {
+    _or: [{firstName: {_ilike: $filter}}, {lastName: {_ilike: $filter}}],
+    inactive: {_eq: $inactive}
+  }) {
+    aggregate {
+      count
+    }
+  }
+  children(where: {
+    _or: [{firstName: {_ilike: $filter}}, {lastName: {_ilike: $filter}}],
+    inactive: {_eq: $inactive}
+  }, limit: $limit, offset: $offset, order_by: $orderBy) {
+    createdAt
+    id
+    updatedAt
+    firstName
+    lastName
+    birthDate
+    familyId
+    grade
+    group
+    observations
+    inactive
+    family {
+      owner {
+        id
+      }
+      children_aggregate {
+        aggregate {
+          count
+        }
+      }
+    }
+  }
+}

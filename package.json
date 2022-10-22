@@ -32,6 +32,7 @@
     "apollo3-cache-persist": "^0.9.1",
     "axios": "^0.21.1",
     "core-js": "^3.6.5",
+    "file-saver": "^2.0.5",
     "firebase": "^8.3.1",
     "firebaseui": "^4.8.0",
     "ibantools": "^3.3.0",
@@ -43,7 +44,8 @@
     "unsplash-js": "^7.0.13",
     "vue-i18n": "^9.0.0-beta.0",
     "vue-social-sharing": "^4.0.0-alpha4",
-    "vuex-persistedstate": "^4.0.0-beta.3"
+    "vuex-persistedstate": "^4.0.0-beta.3",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@ejez/quasar-app-extension-apollo": "^2.0.0-alpha.10",

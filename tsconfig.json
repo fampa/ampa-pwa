@@ -5,7 +5,8 @@
     // "target": "es2017",
     // "noImplicitAny": false,
     "baseUrl": ".",
-    "strict": false
+    "strict": false,
+    "jsx": "preserve"
   },
   "exclude": [
     "functions/lib",

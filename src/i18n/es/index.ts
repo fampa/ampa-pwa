@@ -3,10 +3,16 @@ export default {
     users: 'Gestión de usuarios',
     pages: 'Gestión de páginas',
     family: 'Gestión de familias',
+    children: 'Gestión de niños/as',
+    annualIncrement: 'Incremento anual de curso',
     services: 'Gestión de servicios',
     blog: 'Gestión del blog',
     tags: 'Gestión de etiquetas',
-    link: 'Gestión de enlaces'
+    link: 'Gestión de enlaces',
+    baixa: '¿Estas seguros que quieres dar de baja?',
+    alta: '¿Estas seguros que quieres volver a dar de alta?',
+    baixaMemberNotice: 'Para dar de baja un miembro has de dar de baja la familia o eliminarlo completamente entrando a su perfil.',
+    limitSendingMessagesNotice: 'Hay un límite diario para enviar mensajes. Se recomienda no enviar mensajes a más de 200 personas el mismo día.'
   },
   backToHome: 'Volver a la página principal',
   content: {
@@ -54,7 +60,8 @@ export default {
     requestJoinNoticeAbort: 'Cancela la solicitud',
     requestJoinNotice: 'Has recibido una solicitud de {email} para unirse a gestionar tu familia',
     requestJoinNoticeAccept: 'Aceptar',
-    requestJoinNoticeDecline: 'Rechazar'
+    requestJoinNoticeDecline: 'Rechazar',
+    deleteChildConfirm: '¿Estás seguro de que quieres eliminar este niño/a?'
   },
   firebaseui: {
     google: 'Entra o regístrate con Google',
@@ -67,6 +74,7 @@ export default {
     mandateSigned: 'El mandato de domiciliación se ha firmado correctamente',
     needNewMandate: 'Este enlace de firma ha caducado o no es válido. Genera un nuevo mandato usando el botón.',
     needSignature: 'Revise su correo. Tiene un mandato pendiente de firma.',
+    signatureDate: 'Fecha de firma',
     required: 'Este campo es necesario',
     save: 'Guardar',
     savedOk: 'Se ha guardado correctamente',
@@ -80,7 +88,8 @@ export default {
     validEmail: 'Por favor, introduce una dirección de correo electrónico válida',
     validIBAN: 'Per favor, introduce un IBAN válido',
     validNif: 'Por favor, introduce un NIF o NIE válido',
-    validPhone: 'Por favor, introduce un teléfono válido'
+    validPhone: 'Por favor, introduce un teléfono válido',
+    error: 'se ha producido un error: {error}'
   },
   home: 'Inicio',
   homePage: {
@@ -117,10 +126,27 @@ export default {
     needLogin: 'Necesitas estar identificado para poder proseguir',
     needPayment: 'Necesitas facilitar los datos de domiciliación y firmar el mandato por correo electrónico para poder proseguir',
     phone: 'Teléfono',
-    paymentData: 'Datos de domiciliación',
+    paymentData: 'Datos de pago',
+    ampaIban: 'Número de cuenta del AMPA donde has de realizar el ingreso: {iban}',
+    remove: 'Eliminar este miembro',
     removeAdmin: 'Quitar admin',
     userDataNotice: 'Cumplimenta primero los datos personales',
-    userDataNoticeBtn: 'Ir a Datos Personales'
+    userDataNoticeBtn: 'Ir a Datos Personales',
+    grade: 'Curso',
+    group: 'Grupo',
+    inactive: 'Baja',
+    add: '+ Añadir'
+  },
+  grade: {
+    infantil1: '1º Infantil',
+    infantil2: '2º Infantil',
+    infantil3: '3º Infantil',
+    primaria1: '1º Primaria',
+    primaria2: '2º Primaria',
+    primaria3: '3º Primaria',
+    primaria4: '4º Primaria',
+    primaria5: '5º Primaria',
+    primaria6: '6º Primaria'
   },
   menu: {
     AmpaServices: 'LOS SERVICIOS DEL AMPA',
@@ -190,7 +216,8 @@ export default {
     notifications: 'Notificaciones',
     push: {
       title: 'Notificaciones push',
-      deviceSpecific: 'Activa esta opción en cada dispositivo donde quieras recibir notificacions push'
+      deviceSpecific: 'Activa esta opción en cada dispositivo donde quieras recibir notificacions push',
+      notSupported: 'Tu navegador no soporta notificaciones push'
     }
   },
   update: 'ACTUALIZAR',
@@ -210,7 +237,8 @@ export default {
       description: 'Necesitas rellenar los datos familiares'
     },
     iban: {
-      title: 'Datos bancarios',
+      title: 'Datos de pago',
+      subtitle: 'Necesitas rellenar los datos de pago',
       description: 'Facilita el número de cuenta y confirma la domiciliación haciendo click en el enlace que recibirás por correo electrónico'
     }
   },
@@ -233,7 +261,14 @@ export default {
     showWithoutIban: 'Mostrar sin domiciliación',
     status: 'Estado',
     tag: 'Etiquetas',
-    type: 'Tipo'
+    type: 'Tipo',
+    birthday: 'Fecha de nacimiento',
+    children: 'Niños/as',
+    showBaixa: 'Mostrar baja',
+    showAlta: 'Mostrar alta',
+    donarBaixa: 'Dar de baja',
+    donarAlta: 'Dar de alta',
+    exportExcel: 'Exportar a Excel'
   },
   tag: {
     add: 'Añadir etiquetas',

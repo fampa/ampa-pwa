@@ -21,12 +21,18 @@ query memberById($id: String!) {
       iban
       mandateId
       signatureDate
+      fees
+      inactive
+      manualPayment
       children {
         id
         firstName
         lastName
         birthDate
         familyId
+        inactive
+        grade
+        group
         hiredServices {
           service {
             type

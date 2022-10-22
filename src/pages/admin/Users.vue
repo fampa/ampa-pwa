@@ -14,11 +14,14 @@
         :selected-rows-label="getSelectedString"
         selection="multiple"
         binary-state-sort
-        sortBy="lastName"
+        sortBy="createdAt"
         v-model:selected="selected"
       >
       <template v-slot:top>
         <h2>{{$t('table.members')}}</h2>
+        <q-space />
+        <q-btn flat icon="las la-eye" :disable="loading" :label="inactive ? $t('table.showAlta') : $t('table.showBaixa')" @click="toggleIsBaixa" />
+        <q-btn v-if="selected.length > 0" flat icon="las la-file-excel" :disable="loading" :label="$t('table.exportExcel')" @click="exportToExcel" />
         <q-btn v-if="selected.length > 0" :loading="sendingMessage" @click="openSendMessage = true" class="q-ml-sm" icon="las la-envelope" color="primary" :disable="loading" :label="$t('table.sendMessage')" />
         <q-space />
         <q-input borderless dense debounce="300" v-model="filter" clearable clear-icon="close" :placeholder="$t('table.search')">
@@ -29,16 +32,28 @@
       </template>
       <template v-slot:body-cell-isAdmin="props">
         <q-td :props="props">
-          <q-badge v-if="props.value" color="red">
+          <q-badge v-if="props.value" color="accent">
             ADMIN
+          </q-badge>
+        </q-td>
+      </template>
+      <template v-slot:body-cell-inactive="props">
+        <q-td :props="props">
+          <q-badge v-if="props.value" color="red">
+            BAIXA
           </q-badge>
         </q-td>
       </template>
 
       </q-table>
 
+      <section>
+      <p class="notice">*{{$t('admin.baixaMemberNotice')}}</p>
+      <p class="notice">*{{$t('admin.limitSendingMessagesNotice')}}</p>
+      </section>
+
       <q-page-sticky position="bottom-right" :offset="[18, 18]">
-        <q-btn fab icon="add" color="primary" to="/admin/users/edit" />
+        <q-btn fab icon="add" color="primary" to="/login" />
       </q-page-sticky>
       <!-- send message -->
       <send-message :prompt="openSendMessage" @cancel="messageCancel" @send="sendMessage($event)"></send-message>
@@ -57,6 +72,7 @@ import { useI18n } from 'vue-i18n'
 import SendMessage from 'src/components/SendMessage.vue'
 import { useStore } from 'src/services/store'
 import { useQuasar } from 'quasar'
+import { exportToSpreadsheet } from 'src/utilities/exportExcel'
 
 export default {
   name: 'AdminMembers',
@@ -73,8 +89,9 @@ export default {
     // Data
     const members = ref<Member[]>([])
     const filter = ref<string | null>(null)
+    const inactive = ref(false)
     const pagination = ref({
-      sortBy: 'id',
+      sortBy: 'createdAt',
       descending: true,
       page: 1,
       rowsPerPage: 5,
@@ -124,6 +141,14 @@ export default {
         align: 'right',
         field: 'isAdmin',
         sortable: true
+      },
+      {
+        name: 'inactive',
+        required: true,
+        label: '',
+        align: 'left',
+        field: val => val?.family?.inactive,
+        sortable: true
       }
     ])
 
@@ -149,7 +174,7 @@ export default {
       filter: filter.value
     }
     const sanitizeVariables = cleanObject(variables)
-    const { result, onResult, onError, loading, fetchMore } = adminService.getMembers(sanitizeVariables)
+    const { result, onResult, onError, loading, fetchMore, refetch } = adminService.getMembers(sanitizeVariables)
     const { mutate: sendMessageMutate } = adminService.addMessage()
     const { mutate: addMessageMembersMutate } = adminService.addMessageMembers()
     onResult(() => {
@@ -193,6 +218,12 @@ export default {
       // console.log('pagination', pagination)
     }
 
+    const toggleIsBaixa = async () => {
+      inactive.value = !inactive.value
+      await refetch({ ...variables, inactive: inactive.value })
+      // getChildren()
+    }
+
     const sendMessage = async ($event) => {
       sendingMessage.value = true
       const variables = {
@@ -233,6 +264,24 @@ export default {
       openSendMessage.value = false
     }
 
+    const exportToExcel = () => {
+      const data = [
+        ['Alta', 'Cognoms', 'Nom', 'Email', 'Baixa']
+      ]
+      members.value.forEach(c => {
+        data.push([
+          `${c.createdAt}`,
+          c.lastName,
+          c.firstName,
+          c.email,
+          c.inactive ? 'Sí' : 'No'
+
+        ])
+      })
+
+      exportToSpreadsheet(data, 'Usuaris')
+    }
+
     // Error management
 
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
@@ -253,7 +302,10 @@ export default {
       sendMessage,
       openSendMessage,
       sendingMessage,
-      messageCancel
+      messageCancel,
+      toggleIsBaixa,
+      inactive,
+      exportToExcel
     }
   }
 
@@ -261,4 +313,9 @@ export default {
 </script>
 
 <style>
+.notice {
+  margin-top: 1rem;
+  opacity: 0.5;
+  font-size: small;
+}
 </style>

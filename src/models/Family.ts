@@ -15,6 +15,10 @@ export interface Family {
   signatureDate?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
+  fees?: number
+  manualPayment?: boolean
+  observations?: string
+  inactive?: boolean
 }
 
 export interface FamilyData {

@@ -1,10 +1,10 @@
-query getFamilies($filter: String = "%%", $limit: Int, $offset: Int, $orderBy: [families_order_by!] = {createdAt: desc, name: asc}, $ibanIsNull: Boolean = false) {
-  families_aggregate(where: { signatureDate: {_is_null: $ibanIsNull}, _or: [{owner: {_or: [{firstName: {_ilike: $filter}}, {lastName: {_ilike: $filter}}, {email: {_ilike: $filter}}]}}, {name: {_ilike: $filter}}]}) {
+query getFamilies($filter: String = "%%", $limit: Int, $offset: Int, $orderBy: [families_order_by!] = {createdAt: desc, name: asc}, $ibanIsNull: Boolean = false, $inactive: Boolean = false) {
+  families_aggregate(where: { inactive: {_eq: $inactive }, signatureDate: {_is_null: $ibanIsNull}, _or: [{owner: {_or: [{firstName: {_ilike: $filter}}, {lastName: {_ilike: $filter}}, {email: {_ilike: $filter}}]}}, {name: {_ilike: $filter}}]}) {
     aggregate {
       count
     }
   }
-  families(where: {_or: [{owner: {_or: [{firstName: {_ilike: $filter}}, {lastName: {_ilike: $filter}}, {email: {_ilike: $filter}}]}}, {name: {_ilike: $filter}}], signatureDate: {_is_null: $ibanIsNull}}, limit: $limit, offset: $offset, order_by: $orderBy) {
+  families(where: {inactive: {_eq: $inactive }, _or: [{owner: {_or: [{firstName: {_ilike: $filter}}, {lastName: {_ilike: $filter}}, {email: {_ilike: $filter}}]}}, {name: {_ilike: $filter}}], signatureDate: {_is_null: $ibanIsNull}}, limit: $limit, offset: $offset, order_by: $orderBy) {
     createdAt
     id
     updatedAt
@@ -12,6 +12,9 @@ query getFamilies($filter: String = "%%", $limit: Int, $offset: Int, $orderBy: [
     iban
     mandateId
     signatureDate
+    fees
+    manualPayment
+    inactive
     members {
       id
       firstName

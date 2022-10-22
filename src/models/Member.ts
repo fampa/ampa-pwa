@@ -25,6 +25,7 @@ export interface Member {
   messages_aggregate?: Aggregate,
   joinFamilyRequest?: Record<string, unknown>
   hasRequestedJoinFamily?: boolean
+  inactive?: boolean
   createdAt?: Date
   updatedAt?: Date
 }

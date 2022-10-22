@@ -3,7 +3,7 @@ mutation updateChildren($children: [children_insert_input!]!) {
     objects: $children,
     on_conflict: {
       constraint: children_pkey,
-      update_columns: [firstName, lastName, birthDate]
+      update_columns: [firstName, lastName, birthDate, grade, group, inactive]
     }
   ) {
     affected_rows

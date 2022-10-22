@@ -1,9 +1,12 @@
-query getMembers($filter: String = "%%", $limit: Int, $offset: Int, $orderBy: [members_order_by!] = {lastName: asc, id:desc}) {
+query getMembers($filter: String = "%%", $limit: Int, $offset: Int, $orderBy: [members_order_by!] = {lastName: asc, id:desc}, $inactive: Boolean = false) {
   members_aggregate(where: {
     _or: [
       {email: {_ilike: $filter}},
       {lastName: {_ilike: $filter}}
-    ]
+    ],
+    family: {
+      inactive: {_eq: $inactive}
+    }
   }) {
     aggregate {
       count
@@ -13,7 +16,10 @@ query getMembers($filter: String = "%%", $limit: Int, $offset: Int, $orderBy: [m
     _or: [
       {email: {_ilike: $filter}},
       {lastName: {_ilike: $filter}}
-    ]
+    ],
+    family: {
+      inactive: {_eq: $inactive}
+    }
   },
     limit: $limit,
     offset: $offset,
@@ -27,6 +33,9 @@ query getMembers($filter: String = "%%", $limit: Int, $offset: Int, $orderBy: [m
     lastName
     nif
     phone
+    family {
+      inactive
+    }
     updatedAt
   }
 }

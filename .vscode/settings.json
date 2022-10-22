@@ -5,9 +5,12 @@
   "typescript.tsdk": "node_modules/typescript/lib",
   "vetur.experimental.templateInterpolationService": true,
   "cSpell.words": [
+    "fampa",
     "GRHAFTHF",
     "JCQX",
-    "fampa"
+    "officedocument",
+    "openxmlformats",
+    "spreadsheetml"
   ],
   "files.watcherExclude": {
     "**/.git/objects/**": true,

@@ -384,6 +384,11 @@ export default defineComponent({
           to: '/admin/families'
         },
         {
+          title: i18n.t('admin.children'),
+          icon: 'las la-child',
+          to: '/admin/children'
+        },
+        {
           title: i18n.t('admin.pages'),
           icon: 'las la-file-alt',
           to: '/admin/page'

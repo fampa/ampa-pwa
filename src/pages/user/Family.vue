@@ -1,6 +1,7 @@
 <template>
   <q-page padding class="bg-grey-2  q-pa-md">
     <div class="max-600">
+      <initial-steps v-if="user && loggedInMember && !loggedInMember.family?.manualPayment && !loggedInMember.family?.signatureDate" :member="loggedInMember"></initial-steps>
       <h1 class="text-h4">{{$t('member.familyData')}}</h1>
       <div v-if="!member && isLoading">
         <q-skeleton height="50px" square />
@@ -32,8 +33,10 @@
             <q-btn :loading="isLoading" flat color="white" :label="$t('family.requestJoinNoticeAccept')" @click="resolveJoin()" />
           </template>
         </q-banner>
-
-          <q-input outlined v-model="name" :label="$t('member.familyName')" bottom-slots>
+          <q-badge v-if="family?.inactive" color="red">
+            {{$t('member.inactive')}}
+          </q-badge>
+          <q-input :disable="family?.inactive" outlined v-model="name" :label="$t('member.familyName')" bottom-slots>
             <template v-slot:hint>
             {{$t('family.putChildrenLastName')}}
           </template>
@@ -43,13 +46,17 @@
           <div v-if="id">
             <h2 class="text-h4">
               {{$t('member.children')}}
-              <q-btn class="float-right" color="primary" flat label="+ Afegeix" @click="addChild" />
+              <q-btn class="float-right" color="primary" flat :label="$t('member.add')" @click="addChild" />
             </h2>
             <q-form v-if="children" ref="mForm" @submit.prevent="submitForm">
             <div v-for="child in children" :key="child.id">
-              <q-input outlined v-model="child.firstName" :label="$t('member.firstName')" :rules="[val => !!val || $t('forms.required')]" />
-              <q-input outlined v-model="child.lastName" :label="$t('member.lastName')" :rules="[val => !!val || $t('forms.required')]" />
-              <q-input outlined v-model="child.birthDate" mask="####-##-##" :rules="[val => datePattern.test(val) || $t('forms.validDate'), val => !!val || $t('forms.required')]" :label="$t('member.birthDate')">
+            <q-badge v-if="child.inactive" color="red">
+              {{$t('member.inactive')}}
+            </q-badge>
+              <q-btn rounded flat color="red" icon="delete" class="float-right" @click="deleteChild(child.id)"></q-btn>
+              <q-input :disable="child.inactive" outlined v-model="child.firstName" :label="$t('member.firstName')" :rules="[val => !!val || $t('forms.required')]" />
+              <q-input :disable="child.inactive" outlined v-model="child.lastName" :label="$t('member.lastName')" :rules="[val => !!val || $t('forms.required')]" />
+              <q-input :disable="child.inactive" outlined v-model="child.birthDate" mask="####-##-##" :label="$t('member.birthDate')">
                 <template v-slot:append>
                   <q-icon name="event" class="cursor-pointer">
                     <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
@@ -62,6 +69,15 @@
                   </q-icon>
                 </template>
               </q-input>
+              <div class="q-pa-md">
+                <div class="q-gutter-md row">
+                  <q-select :disable="child.inactive" outlined v-model="child.grade" style="width: 50%" :options="GRADES" :label="$t('member.grade')" :rules="[val => (!!val || val === 0 ) || $t('forms.required')]" emit-value map-options />
+                  <q-select :disable="child.inactive" outlined v-model="child.group" style="width: 25%" :options="['A', 'B', 'C', 'D']" :label="$t('member.group')" emit-value map-options />
+                </div>
+              </div>
+              <div v-if="isAdmin">
+                <q-checkbox outlined v-model="child.inactive" style="width: 50%" :label="$t('member.inactive')" />
+              </div>
               <br>
               <div v-if="child.hiredServices?.length > 0">
                 <h3 class="text-h5">{{$t('family.hiredServices', { name: child.firstName })}}</h3>
@@ -75,6 +91,11 @@
               <br>
             </div>
             <q-btn :loading="isLoading" :disable="children?.length === 0" color="primary" :label="$t('forms.save')" type="submit" />
+            <br>
+            <section v-if="isAdmin">
+              <h2>ADMIN</h2>
+              <q-btn color="accent" label="Usuari responsable" :to="`/admin/users/edit/${member.id}`" />
+            </section>
           </q-form>
 
         </div>
@@ -98,9 +119,13 @@ import { Member } from 'src/models/Member'
 import { useI18n } from 'vue-i18n'
 import { useStore } from 'src/services/store'
 import { fallbackContent } from 'src/utilities/fallbackContent'
+import InitialSteps from 'components/InitialSteps.vue'
 
 export default {
   name: 'PagePersonalData',
+  components: {
+    InitialSteps
+  },
   setup () {
     // utilities and initializations
     const $q = useQuasar()
@@ -112,20 +137,24 @@ export default {
     const user = computed(() => store.state.user.user)
     const isAdmin = computed(() => store.state.user.isAdmin)
     const datePattern = /^-?[\d]+-[0-1]\d-[0-3]\d$/
+    const member = ref<Member>(null)
+    const loggedInMember = store.state.user.member
 
     // Reactive data
     const familyData = reactive<Family>({
       id: undefined,
       name: '',
       iban: undefined,
-      ownerId: undefined
+      ownerId: undefined,
+      manualPayment: undefined
     })
 
     const memberData = reactive<Member>({
       familyId: undefined,
       nif: undefined,
       hasRequestedJoinFamily: false,
-      joinFamilyRequest: undefined
+      joinFamilyRequest: undefined,
+      family: undefined
     })
 
     const childrenData = reactive<ChildrenData>({
@@ -140,6 +169,22 @@ export default {
       return firebase.auth().currentUser?.uid
     })
 
+    const { mutate: deleteChildMutation } = membersService.deleteChild()
+
+    const deleteChild = async (id: number) => {
+      if (!confirm(i18n.t('family.deleteChildConfirm'))) return
+      const child = childrenData.children.find(c => c.id === id)
+      if (!child) {
+        return
+      }
+      const childIndex = childrenData.children.indexOf(child)
+      if (childIndex === -1) {
+        return
+      }
+      childrenData.children.splice(childIndex, 1)
+      await deleteChildMutation({ id })
+    }
+
     const id = computed(() => {
       const params = route.params?.id?.toString()
       if (params) {
@@ -152,17 +197,19 @@ export default {
     //
     // load data
     //
-    const { member, loading, error, onError, onResult } = membersService.getById(id.value)
+    const { member: memberResult, loading, error, onError, onResult, refetch } = membersService.getById(id.value)
 
     onResult(() => {
-      familyData.id = member.value?.familyId
-      familyData.name = member.value?.family?.name
-      familyData.ownerId = member.value?.family?.ownerId
-      memberData.familyId = member.value?.familyId
-      memberData.nif = member.value?.nif
-      memberData.hasRequestedJoinFamily = member.value?.hasRequestedJoinFamily
-      memberData.joinFamilyRequest = member.value?.joinFamilyRequest
-      const childrenTemp = member.value?.family?.children?.map(child => {
+      member.value = memberResult.value
+      familyData.id = memberResult.value?.familyId
+      familyData.name = memberResult.value?.family?.name
+      familyData.ownerId = memberResult.value?.family?.ownerId
+      memberData.familyId = memberResult.value?.familyId
+      memberData.nif = memberResult.value?.nif
+      memberData.family = memberResult.value?.family
+      memberData.hasRequestedJoinFamily = memberResult.value?.hasRequestedJoinFamily
+      memberData.joinFamilyRequest = memberResult.value?.joinFamilyRequest
+      const childrenTemp = memberResult.value?.family?.children?.map(child => {
         const tempChild: Child = { ...child }
         return tempChild
       })
@@ -174,12 +221,53 @@ export default {
     const { mutate: mutateMember, loading: updateMemberLoading, error: updateMemberError, onError: updateMemberOnError } = membersService.updateMember()
     const { mutate: mutateChildren, loading: updateChildrenLoading, error: updateChildrenError, onError: updateChildrenOnError } = membersService.updateChildren()
 
+    const GRADES = [
+      {
+        value: -2,
+        label: i18n.t('grade.infantil1')
+      },
+      {
+        value: -1,
+        label: i18n.t('grade.infantil2')
+      },
+      {
+        value: 0,
+        label: i18n.t('grade.infantil3')
+      },
+      {
+        value: 1,
+        label: i18n.t('grade.primaria1')
+      },
+      {
+        value: 2,
+        label: i18n.t('grade.primaria2')
+      },
+      {
+        value: 3,
+        label: i18n.t('grade.primaria3')
+      },
+      {
+        value: 4,
+        label: i18n.t('grade.primaria4')
+      },
+      {
+        value: 5,
+        label: i18n.t('grade.primaria5')
+      },
+      {
+        value: 6,
+        label: i18n.t('grade.primaria6')
+      }
+    ]
     // Methods
     const addChild = () => {
       const child: Child = {
         firstName: '',
         lastName: '',
-        birthDate: '',
+        birthDate: null,
+        grade: null,
+        group: null,
+        inactive: false,
         familyId: memberData.familyId
       }
       const childrenTemp = Object.assign([], childrenData.children || []) as Child[]
@@ -268,9 +356,10 @@ export default {
           await mutateChildren({ children })
           if (shouldUpdateFamilyName.value) {
             await upsertFamily()
-              .then(() => store.dispatch('user/setMember', id.value))
+            // .then(() => store.dispatch('user/setMember', id.value))
           }
           $q.notify(i18n.t('forms.savedOk'))
+          await refetch()
         } else {
         // oh no, user has filled in
         // at least one invalid value
@@ -351,6 +440,7 @@ export default {
       ...toRefs(familyData),
       ...toRefs(memberData),
       addChild,
+      memberData,
       user,
       datePattern,
       error,
@@ -363,7 +453,10 @@ export default {
       rejectJoin,
       abortJoin,
       fallbackContent,
-      isAdmin
+      isAdmin,
+      deleteChild,
+      loggedInMember,
+      GRADES
     }
   }
 }
