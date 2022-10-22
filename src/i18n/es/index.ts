@@ -216,7 +216,8 @@ export default {
     notifications: 'Notificaciones',
     push: {
       title: 'Notificaciones push',
-      deviceSpecific: 'Activa esta opción en cada dispositivo donde quieras recibir notificacions push'
+      deviceSpecific: 'Activa esta opción en cada dispositivo donde quieras recibir notificacions push',
+      notSupported: 'Tu navegador no soporta notificaciones push'
     }
   },
   update: 'ACTUALIZAR',

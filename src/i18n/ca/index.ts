@@ -187,7 +187,8 @@ export default {
     notifications: 'Notificacions',
     push: {
       title: 'Notificacions push',
-      deviceSpecific: 'Activa aquesta opció en cada dispositiu on hi vulgues rebre notificacions push'
+      deviceSpecific: 'Activa aquesta opció en cada dispositiu on hi vulgues rebre notificacions push',
+      notSupported: 'Les notificacions push no estan disponibles en aquest dispositiu'
     }
   },
   status: {
