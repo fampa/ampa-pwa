@@ -22,6 +22,7 @@
         <q-space />
         <q-btn flat icon="las la-eye" :disable="loading" :label="inactive ? $t('table.showAlta') : $t('table.showBaixa')" @click="toggleIsBaixa" />
         <q-btn flat icon="las la-eye" :disable="loading" :label="ibanIsNull ? $t('table.showWithIban') : $t('table.showWithoutIban')" @click="toggleIsIbanNull" />
+        <q-btn v-if="selected.length > 0" flat icon="las la-file-excel" :disable="loading" :label="$t('table.exportExcel')" @click="exportToExcel" />
         <q-btn v-if="selected.length > 0" :disable="ibanIsNull || loading" @click="openXmlGenerator" class="q-ml-sm" icon="las la-money-check-alt" color="primary"  :label="$t('table.remesa')" />
         <q-btn v-if="selected.length > 0 && !inactive" class="q-ml-sm" color="red" @click="donarBaixa"  :label="$t('table.donarBaixa')" />
         <q-btn v-if="selected.length > 0 && inactive" class="q-ml-sm" color="accent" @click="donarAlta"  :label="$t('table.donarAlta')" />
@@ -67,6 +68,7 @@ import { Family } from 'src/models/Family'
 import SEPA from 'sepa'
 import xmlGenerator from 'src/components/xml-generator.vue'
 import { useQuasar } from 'quasar'
+import { exportToSpreadsheet } from 'src/utilities/exportExcel'
 
 export default {
   name: 'AdminMembers',
@@ -300,6 +302,23 @@ export default {
       await router.push('/')
     })
 
+    const exportToExcel = () => {
+      const data = [
+        ['Alta', 'Familia', 'IBAN', 'Baixa']
+      ]
+      families.value.forEach(c => {
+        data.push([
+          c.createdAt as string,
+          c.name,
+          c.iban,
+          c.inactive ? 'Sí' : 'No'
+
+        ])
+      })
+
+      exportToSpreadsheet(data, 'Families')
+    }
+
     return {
       families,
       getSelectedString,
@@ -321,7 +340,8 @@ export default {
       donarBaixa,
       donarAlta,
       inactive,
-      toggleIsBaixa
+      toggleIsBaixa,
+      exportToExcel
     }
   }
 

@@ -21,7 +21,7 @@
         <h2>{{$t('table.children')}}</h2>
         <q-space />
         <q-btn flat icon="las la-eye" :disable="loading" :label="inactive ? $t('table.showAlta') : $t('table.showBaixa')" @click="toggleIsBaixa" />
-        <q-btn flat icon="las la-file-excel" :disable="loading" :label="$t('table.exportExcel')" @click="exportToExcel" />
+        <q-btn v-if="selected.length > 0" flat icon="las la-file-excel" :disable="loading" :label="$t('table.exportExcel')" @click="exportToExcel" />
         <!-- <q-select v-model="grade" :options="GRADES" @update:modelValue="gradeSelected()" :label="$t('member.grade')" emit-value map-options style="min-width: 6rem;" /> -->
         <q-btn v-if="selected.length > 0" class="q-ml-sm" color="red" @click="donarBaixa"  :label="inactive ? $t('table.donarAlta') : $t('table.donarBaixa')" />
         <q-space />
