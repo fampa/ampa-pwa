@@ -170,7 +170,7 @@ export default {
     const variables = {
       limit,
       offset,
-      orderBy: { ...orderBy, id: 'desc' },
+      orderBy: { ...orderBy, id: orderBy[pagination.value.sortBy] },
       filter: filter.value
     }
     const sanitizeVariables = cleanObject(variables)
@@ -199,7 +199,7 @@ export default {
       const variables = {
         limit,
         offset,
-        orderBy: { ...orderBy, id: 'desc' },
+        orderBy: { ...orderBy, id: orderBy[sortBy] },
         filter
       }
       const sanitizeVariables = cleanObject(variables)
