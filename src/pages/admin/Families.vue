@@ -149,7 +149,7 @@ export default {
     const variables = {
       limit,
       offset,
-      orderBy: { ...orderBy, id: 'desc' },
+      orderBy: { ...orderBy, id: orderBy[pagination.value.sortBy] },
       ibanIsNull: ibanIsNull.value,
       filter: filter.value
     }
@@ -179,7 +179,7 @@ export default {
       const variables = {
         limit,
         offset,
-        orderBy: { ...orderBy, id: 'desc' },
+        orderBy: { ...orderBy, id: orderBy[sortBy] },
         filter,
         ibanIsNull: ibanIsNull.value
       }
