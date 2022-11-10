@@ -215,7 +215,7 @@ export default {
     const variables = {
       limit,
       offset,
-      orderBy,
+      orderBy: { ...orderBy, id: 'desc' },
       grade: grade.value,
       inactive: inactive.value,
       filter: filter.value
@@ -245,7 +245,7 @@ export default {
       const variables = {
         limit,
         offset,
-        orderBy,
+        orderBy: { ...orderBy, id: 'desc' },
         grade: grade.value,
         inactive: inactive.value,
         filter
