@@ -265,12 +265,12 @@ export default {
       const doc = new SEPA.Document('pain.008.001.02')
       doc.grpHdr.id = `XMPL.${Date.now()}.TR0`
       doc.grpHdr.created = new Date()
-      doc.grpHdr.initiatorName = `AMPA ${process.env.SCHOOL_NAME}`
+      doc.grpHdr.initiatorName = `${process.env.ASSOCIATION_NAME}`
 
       const info = doc.createPaymentInfo()
       info.collectionDate = new Date()
       info.creditorIBAN = process.env.AMPA_IBAN
-      info.creditorName = `AMPA ${process.env.SCHOOL_NAME}`
+      info.creditorName = `${process.env.ASSOCIATION_NAME}`
       info.creditorId = process.env.CREDITOR_ID
       info.batchBooking = true // optional
       doc.addPaymentInfo(info)

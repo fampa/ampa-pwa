@@ -54,10 +54,10 @@ export const mandateIdText = ({ mandateId }) => {
   }
 }
 
-export const mandateText = ({ schoolName }) => {
+export const mandateText = ({ associationName }) => {
   return {
-    ca: `Mitjançant la signatura d'aquest formulari d'ordre de domiciliació, autoritzeu a (A) AMPA ${schoolName} a enviar ordres a la vostra entitat financera per debitar càrrecs al vostre compte i (B) a la seva entitat financera per debitar els imports corresponents al vostre compte d'acord amb les instruccions de l'AMPA ${schoolName}. Entre altres, teniu dret a ser reemborsat per la vostra entitat financera d'acord amb els termes i condicions del contracte subscrit amb la vostra entitat financera. En tot cas aquest reemborsament haurà de ser instat per part vostre en el termini màxim de 8 setmanes a partir de la data en que es va debitar en el seu compte.`,
-    es: `Mediante la firma de esta orden de domiciliación, el deudor autoriza a (A) AMPA ${schoolName} a enviar instrucciones a la entidad del deudor para adeudar su cuenta y (B) a la entidad para efectuar los adeudos en su cuenta siguiendo las instrucciones del AMPA ${schoolName}. Como parte de sus derechos, el deudor está legitimado al reembolso por su entidad  en los términos y condiciones del contrato suscrito con la misma. La solicitud de reembolso deberá efectuarse dentro de las ocho semanas que siguen a la fecha de adeudo en cuenta.`
+    ca: `Mitjançant la signatura d'aquest formulari d'ordre de domiciliació, autoritzeu a (A) ${associationName} a enviar ordres a la vostra entitat financera per debitar càrrecs al vostre compte i (B) a la seva entitat financera per debitar els imports corresponents al vostre compte d'acord amb les instruccions de l'${associationName}. Entre altres, teniu dret a ser reemborsat per la vostra entitat financera d'acord amb els termes i condicions del contracte subscrit amb la vostra entitat financera. En tot cas aquest reemborsament haurà de ser instat per part vostre en el termini màxim de 8 setmanes a partir de la data en que es va debitar en el seu compte.`,
+    es: `Mediante la firma de esta orden de domiciliación, el deudor autoriza a (A) ${associationName} a enviar instrucciones a la entidad del deudor para adeudar su cuenta y (B) a la entidad para efectuar los adeudos en su cuenta siguiendo las instrucciones del ${associationName}. Como parte de sus derechos, el deudor está legitimado al reembolso por su entidad  en los términos y condiciones del contrato suscrito con la misma. La solicitud de reembolso deberá efectuarse dentro de las ocho semanas que siguen a la fecha de adeudo en cuenta.`
   }
 }
 

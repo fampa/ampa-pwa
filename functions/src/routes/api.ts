@@ -178,7 +178,7 @@ appApi.post('/request/family-access', async (req: express.Request, res: express.
 appApi.get('/hello', (req: express.Request, res: express.Response) => {
   functions.logger.info('Hello logs!', { structuredData: true })
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  const variable: string = functions.config().env.template.schoolName
+  const variable: string = functions.config().env.template.associationName
   res.status(200).json({ results: 'Hola món', variable: variable })
   return res
 })
@@ -331,7 +331,7 @@ appApi.post('/mandate/send', async (req: express.Request, res:express.Response /
 
     const messageTemp = message({ mandateLink, name })
     const mandateIdTemp = mandateIdText({ mandateId })
-    const mandateTextTemp = mandateText({ schoolName: functions.config().env.template.schoolName })
+    const mandateTextTemp = mandateText({ associationName: functions.config().env.template.associationName })
 
     const pdfData = {
       title: title[language],
@@ -409,7 +409,7 @@ appApi.post('/mandate/sign', async (req: express.Request, res:express.Response /
     const mandateId = result.update_families?.returning[0]?.mandateId
     const signatureCode = result.update_families?.returning[0]?.mandateSignatureCode
     const mandateIdTemp = mandateIdText({ mandateId })
-    const mandateTextTemp = mandateText({ schoolName: functions.config().env.template.schoolName })
+    const mandateTextTemp = mandateText({ associationName: functions.config().env.template.associationName })
     const signatureDate = result.update_families?.returning[0]?.signatureDate
 
     const pdfData = {
