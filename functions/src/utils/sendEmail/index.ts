@@ -56,7 +56,7 @@ export async function sendEmail (obj: MailObject): Promise<Result> {
   transport.use('compile', hbs(options))
   // TODO renderitzar missatge com a html
   const message = {
-    from: obj.from || `AMPA <${functions.config().env.smtp.username}>`, // Sender address
+    from: obj.from || `${functions.config().env.template.associationName} <${functions.config().env.smtp.username}>`, // Sender address
     to: obj.to,
     replyTo: obj.replyTo || obj.from, // List of recipients
     bcc: obj.bcc,
@@ -65,7 +65,7 @@ export async function sendEmail (obj: MailObject): Promise<Result> {
     attachments: obj.attachments || [],
     context: {
       name: obj.name,
-      email: obj.sender || `AMPA <${functions.config().env.smtp.username}>`,
+      email: obj.sender || `${functions.config().env.template.associationName} <${functions.config().env.smtp.username}>`,
       phone: obj.phone,
       subject: obj.subject,
       message: obj.message,
