@@ -31,7 +31,7 @@ export const generatePdf = async (data: { image?: string, title?: string, mandat
           valign: 'top'
         })
       .fontSize(14)
-      .text(`AMPA ${functions.config().env.template.schoolName}`, 240, 120, { align: 'right' })
+      .text(`${functions.config().env.template.associationName}`, 240, 120, { align: 'right' })
       .fontSize(10)
       .text(`NIF ${functions.config().env.template.nif}`, 220, 155, { align: 'right' })
       .text(`Reg. Assoc.: ${functions.config().env.template.numRegAssoc}`, 220, 170, { align: 'right' })

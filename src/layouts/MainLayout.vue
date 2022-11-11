@@ -12,7 +12,7 @@
         />
 
         <q-toolbar-title>
-          AMPA {{schoolName}}
+          {{associationName}}
         </q-toolbar-title>
 
         <q-btn-dropdown aria-label="messages-button" v-if="member" flat rounded no-icon-animation>
@@ -216,7 +216,7 @@ export default defineComponent({
     }
     const contentsService = new ContentsService()
     const currentLanguage = computed(() => store.state.settings.language)
-    const schoolName = process.env.SCHOOL_NAME
+    const associationName = process.env.ASSOCIATION_NAME
     const user = computed(() => {
       return store.state.user.user
     })
@@ -440,7 +440,7 @@ export default defineComponent({
       isAdmin,
       member,
       date,
-      schoolName,
+      associationName,
       linkItems,
       goTo: (to) => window.open(to, '_blank')
     }
