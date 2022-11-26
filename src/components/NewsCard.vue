@@ -9,7 +9,7 @@
         >
           <div class="row bg-transparent">
             <div v-for="(t, index) in article.tags" :key="index">
-              <div v-for="(tr, index) in t.tag.translations" :key="index">
+              <div v-for="(tr, index) in t?.tag?.translations" :key="index">
                 <q-chip class="col" dense v-if="tr.language === $store.state.settings.language" color="accent" text-color="white" icon="las la-tag">
                   {{fallbackContent(t.tag, 'title')}}
                 </q-chip>
