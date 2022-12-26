@@ -6,7 +6,7 @@
   "author": "Josep V. Monjo <jvmonjo@gmail.com>",
   "private": true,
   "scripts": {
-    "dev": "quasar dev",
+    "dev": "export NODE_OPTIONS=--openssl-legacy-provider && quasar dev",
     "dev:functions": "cd functions && yarn serve",
     "generate:icons": "icongenie generate -i src/assets/icon.png",
     "prebuild": "browserify -t localenvify src-pwa/firebase-messaging-sw.js > public/firebase-messaging-sw.js",
