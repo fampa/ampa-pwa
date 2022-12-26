@@ -46,3 +46,6 @@ public/firebase-messaging-sw.js
 .firebaserc
 
 ui-debug.log
+
+.yarn
+.yarnrc
