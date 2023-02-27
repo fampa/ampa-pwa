@@ -219,7 +219,7 @@ export default defineComponent({
     const tagsOptions = ref<{label: string, value: number}[]>([])
     const selectedTags = ref<{label: string, value: number}[]>(props.inputContent.tags?.map(t => {
       return {
-        value: t.tag.id,
+        value: t?.tag?.id,
         label: fallbackContent(t.tag, 'title')
       }
     }))

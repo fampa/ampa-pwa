@@ -266,14 +266,16 @@ export default {
 
     const exportToExcel = () => {
       const data = [
-        ['Alta', 'Cognoms', 'Nom', 'Email', 'Baixa']
+        ['Id', 'Alta', 'Cognoms', 'Nom', 'Email', 'Família', 'Baixa']
       ]
       members.value.forEach(c => {
         data.push([
+          `${c.id}`,
           `${c.createdAt}`,
           c.lastName,
           c.firstName,
           c.email,
+          `${c.familyId}`,
           c.inactive ? 'Sí' : 'No'
 
         ])
