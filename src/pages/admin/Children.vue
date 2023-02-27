@@ -310,15 +310,17 @@ export default {
     // Export to excel
     const exportToExcel = () => {
       const data = [
-        ['Nom', 'Cognoms', 'Data naixement', 'Curs', 'Grup', 'Baixa']
+        ['Id', 'Nom', 'Cognoms', 'Data naixement', 'Curs', 'Grup', 'Família', 'Baixa']
       ]
       children.value.forEach(c => {
         data.push([
+          `${c.id}`,
           c.firstName,
           c.lastName,
           c.birthDate,
           c.grade === 0 ? 'Infantil 3' : c.grade === -1 ? 'Infantil 2' : c.grade === -2 ? 'Infantil 1' : c.grade === 1 ? 'Primària 1' : c.grade === 2 ? 'Primària 2' : c.grade === 3 ? 'Primària 3' : c.grade === 4 ? 'Primària 4' : c.grade === 5 ? 'Primària 5' : c.grade === 6 ? 'Primària 6' : '',
           c.group,
+          `${c.familyId}`,
           c.inactive ? 'Sí' : 'No'
 
         ])

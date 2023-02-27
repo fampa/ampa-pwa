@@ -304,15 +304,16 @@ export default {
 
     const exportToExcel = () => {
       const data = [
-        ['Alta', 'Familia', 'IBAN', 'Baixa']
+        ['Id', 'Alta', 'Familia', 'IBAN', 'Pagament manual', 'Baixa']
       ]
       families.value.forEach(c => {
         data.push([
+          `${c.id}`,
           c.createdAt as string,
           c.name,
           c.iban,
+          c.manualPayment ? 'Sí' : 'No',
           c.inactive ? 'Sí' : 'No'
-
         ])
       })
 
